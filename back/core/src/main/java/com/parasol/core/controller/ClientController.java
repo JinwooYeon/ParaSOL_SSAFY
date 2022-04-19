@@ -3,8 +3,8 @@ package com.parasol.core.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class UserController {
-    @PostMapping("user")
+public class ClientController {
+    @PostMapping("client")
     public String CreateUser(
             @RequestParam("name") String name,
             @RequestParam("residentNumber") String residentNumber
@@ -14,7 +14,7 @@ public class UserController {
         return "";
     }
 
-    @DeleteMapping("user")
+    @DeleteMapping("client")
     public String DeleteUser(
             @RequestParam("name") String name,
             @RequestParam("residentNumber") String residentNumber
