@@ -56,29 +56,6 @@ build/
 *noot
 *mies
 
-# Other names that would make sense
-*tests
-*testsdir
-*testsfile
-*testsfiles
-*test
-*testdir
-*testfile
-*testfiles
-*testing
-*testingdir
-*testingfile
-*testingfiles
-*temp
-*tempdir
-*tempfile
-*tempfiles
-*tmp
-*tmpdir
-*tmpfile
-*tmpfiles
-*lol
-
 ### STS ###
 .apt_generated
 .classpath
@@ -89,7 +66,6 @@ build/
 .sts4-cache
 bin/
 !**/src/main/**/bin/
-!**/src/test/**/bin/
 
 ### NetBeans ###
 /nbproject/private/
