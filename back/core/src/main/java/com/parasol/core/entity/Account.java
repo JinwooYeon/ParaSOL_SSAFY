@@ -26,6 +26,7 @@ public class Account {
     @JoinColumn(name = "clientSeq")
     private Client client;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "account")
     private List<Transaction> transactions;
 }

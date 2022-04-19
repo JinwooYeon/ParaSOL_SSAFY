@@ -23,6 +23,6 @@ public class Client {
     private String clientResidentNumber;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "account_no")
+    @OneToMany(mappedBy = "accountNo")
     List<Account> accounts;
 };
