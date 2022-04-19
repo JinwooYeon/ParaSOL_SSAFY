@@ -14,18 +14,15 @@ import java.util.List;
 @Setter
 @DynamicInsert
 @DynamicUpdate
-public class Account {
+public class Client {
     @Id
-    private String accountNo;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long clientSeq;
 
-    private Integer accountPassword;
-
+    private String clientName;
+    private String clientResidentNumber;
 
     @JsonManagedReference
-    @ManyToOne
-    @JoinColumn(name = "clientSeq")
-    private Client client;
-
-    @OneToMany(mappedBy = "account")
-    private List<Transaction> transactions;
-}
+    @OneToMany(mappedBy = "account_no")
+    List<Account> accounts;
+};
