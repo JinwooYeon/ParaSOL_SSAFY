@@ -1,5 +1,6 @@
 package com.parasol.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class Transaction {
     private Long transactionAmount;
     private String transactionAccount;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "account_no")
     private Account account;
