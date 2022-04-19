@@ -1,18 +1,27 @@
 package com.parasol.core.controller;
 
+import com.parasol.core.entity.Account;
+import com.parasol.core.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AccountController {
+    @Autowired
+    private AccountService accountService;
+
     @PostMapping("account")
     @ResponseBody
     public String CreateAccount(
             @RequestParam("clientSeq") int clientSeq,
             @RequestParam("accountPassword") int accountPassword
     ) {
-        // TODO: 계좌 개설
+        Account account = new Account();
+        account.setAccountPassword(accountPassword);
 
-        return null;
+        String result = accountService.Create(account);
+
+        return result;
     }
 
     @DeleteMapping("account")
