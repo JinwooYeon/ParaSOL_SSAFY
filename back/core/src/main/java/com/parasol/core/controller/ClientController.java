@@ -1,26 +1,36 @@
 package com.parasol.core.controller;
 
+import com.parasol.core.entity.Client;
+import com.parasol.core.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ClientController {
+
+    @Autowired
+    private ClientService clientService;
+
     @PostMapping("client")
-    public String CreateUser(
+    public Long CreateClient(
             @RequestParam("name") String name,
             @RequestParam("residentNumber") String residentNumber
     ) {
-        // TODO: 유저 생성
+        Client newClient = new Client();
+        newClient.setName(name);
+        newClient.setResidentNumber(residentNumber);
 
-        return "";
+        Long result = clientService.create(newClient);
+
+        return result;
     }
 
-    @DeleteMapping("client")
-    public String DeleteUser(
-            @RequestParam("name") String name,
-            @RequestParam("residentNumber") String residentNumber
+    @GetMapping("client")
+    public Client GetClient(
+            @RequestParam("id") Long id
     ) {
-        // TODO: 유저 삭제
+        Client result = clientService.findById(id);
 
-        return "";
+        return result;
     }
 }
