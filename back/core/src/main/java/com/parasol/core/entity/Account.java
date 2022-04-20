@@ -20,6 +20,7 @@ public class Account {
 
     private Integer accountPassword;
 
+    private Long balance;
 
     @JsonManagedReference
     @ManyToOne
