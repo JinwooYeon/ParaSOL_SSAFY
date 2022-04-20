@@ -15,7 +15,7 @@ public class AccountRequest {
     @ApiModelProperty(name = "method", example = "110-437-525252")
     private TransactionType type;
     @ApiModelProperty(name = "amount", example = "4500000000")
-    private int amount;
+    private Long amount;
     @ApiModelProperty(name = "account_from", example = "")
     private AccountInfo accountFrom;
     @ApiModelProperty(name = "account_to", example = "")
