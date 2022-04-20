@@ -17,12 +17,8 @@ import java.util.List;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long clientSeq;
+    private Long id;
 
-    private String clientName;
-    private String clientResidentNumber;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "accountNo")
-    List<Account> accounts;
+    private String name;
+    private String residentNumber;
 };
