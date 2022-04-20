@@ -1,7 +1,7 @@
-import AuthBioDELETE from "../../components/pay/authBioDELETE";
-import AuthBioPOST from "../../components/pay/authBioPOST";
-import DepositPOST from "../../components/pay/depositPOST";
-import WithdrawPOST from "../../components/pay/withdrawPOST";
+import AuthBioDELETE from "components/pay/authBioDELETE";
+import AuthBioPOST from "components/pay/authBioPOST";
+import DepositPOST from "components/pay/depositPOST";
+import WithdrawPOST from "components/pay/withdrawPOST";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 

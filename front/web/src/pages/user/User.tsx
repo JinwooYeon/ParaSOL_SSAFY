@@ -1,11 +1,11 @@
-import AuthPOST from "../../components/user/authPOST";
-import OauthDelete from "../../components/user/oauthDELETE";
-import OauthPOST from "../../components/user/oauthPOST";
-import UserDelete from "../../components/user/userDELETE";
-import UserPATCH from "../../components/user/userPATCH";
-import UserPOST from "../../components/user/userPOST";
-import UserPasswordPOST from "../../components/user/userPasswordPOST";
-import UserInfoGET from "../../components/user/userInfoGET";
+import AuthPOST from "components/user/authPOST";
+import OauthDelete from "components/user/oauthDELETE";
+import OauthPOST from "components/user/oauthPOST";
+import UserDelete from "components/user/userDELETE";
+import UserPATCH from "components/user/userPATCH";
+import UserPOST from "components/user/userPOST";
+import UserPasswordPOST from "components/user/userPasswordPOST";
+import UserInfoGET from "components/user/userInfoGET";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 

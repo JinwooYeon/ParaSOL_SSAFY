@@ -1,6 +1,6 @@
-import AccountBalanceGET from "../../components/account/accountBalanceGET";
-import AccountGET from "../../components/account/accountGET";
-import AccountHistoryGET from "../../components/account/accountHistoryGET";
+import AccountBalanceGET from "components/account/accountBalanceGET";
+import AccountGET from "components/account/accountGET";
+import AccountHistoryGET from "components/account/accountHistoryGET";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
