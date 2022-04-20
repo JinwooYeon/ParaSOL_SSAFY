@@ -46,8 +46,26 @@ public class FirmbankingService {
         firmbankingRepository.delete(firmbanking);
     }
 
-    public Optional<Firmbanking> getFirmbanking(String name) {
+    public Optional<Firmbanking> getFirmbankingByName(String name) {
         Optional<Firmbanking> result = firmbankingRepository.findFirmbankingsByFirmbankingName(name);
+
+        return Optional.ofNullable(result).orElse(Optional.of(new Firmbanking()));
+    }
+
+    public Optional<Firmbanking> getFirmbankingByNameAndType(String name, String type) {
+        Optional<Firmbanking> result = firmbankingRepository.findFirmbankingsByFirmbankingNameAndFirmbankingType(name, type);
+
+        return Optional.ofNullable(result).orElse(Optional.of(new Firmbanking()));
+    }
+
+    public Optional<Firmbanking> getFirmbankingByWithdrawAccount(String account) {
+        Optional<Firmbanking> result = firmbankingRepository.findFirmbankingsByFirmbankingWithdrawAccountNo(account);
+
+        return Optional.ofNullable(result).orElse(Optional.of(new Firmbanking()));
+    }
+
+    public Optional<Firmbanking> getFirmbankingByDeposiAccount(String account) {
+        Optional<Firmbanking> result = firmbankingRepository.findFirmbankingsByFirmbankingDepositAccountNo(account);
 
         return Optional.ofNullable(result).orElse(Optional.of(new Firmbanking()));
     }
