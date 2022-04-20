@@ -2,8 +2,10 @@ package com.parasol.core.controller;
 
 import com.parasol.core.api_model.AccountRequest;
 import com.parasol.core.entity.Account;
+import com.parasol.core.entity.Client;
 import com.parasol.core.entity.TransactionHistory;
 import com.parasol.core.service.AccountService;
+import com.parasol.core.service.ClientService;
 import com.parasol.core.service.TransactionHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,9 @@ import java.util.List;
 public class AccountController {
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     private TransactionHistoryService transactionHistoryService;
@@ -45,14 +50,14 @@ public class AccountController {
 
     // 계좌 목록 조회
     @GetMapping("account")
-    @ResponseBody
-    public String getAllAccount(
+    public List<Account> getAllAccount(
             @RequestParam("name") String name,
             @RequestParam("residentNumber") String residentNumber
     ) {
-        List<Account> result = accountService.findByClient(name, residentNumber);
+        Client client = clientService.findByNameAndResidentNumber(name, residentNumber);
+        List<Account> result = accountService.getAllAccount(client);
 
-        return "";
+        return result;
     }
 
     // 계좌 잔액 조회
@@ -83,7 +88,7 @@ public class AccountController {
     public boolean deposit(
             @RequestBody AccountRequest request
     ) {
-        // TODO: 계좌 입금.....? 페이 충전. 내 계좌에서 페이 계좌로 송금
+        // 계좌 입금. to 계좌에 입금
 
         /*
         * TODO : 유효 계좌인지 확인
@@ -102,9 +107,8 @@ public class AccountController {
     public boolean withdraw(
             @RequestBody AccountRequest request
     ) {
-        // TODO: 계좌 출금 ???  페이 사용
-
-        boolean withdraw = accountService.deposit(request);
+        // 계좌 출금. from 계좌에서 출금
+        boolean withdraw = accountService.withdraw(request);
         TransactionHistory transaction = transactionHistoryService.createAccountHistory(request);
         if(withdraw && !transaction.equals(null)) return true;
 

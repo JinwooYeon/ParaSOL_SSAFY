@@ -46,11 +46,9 @@ public class FirmbankingService {
         firmbankingRepository.delete(firmbanking);
     }
 
-    public Firmbanking getFirmbanking(String name) {
+    public Optional<Firmbanking> getFirmbanking(String name) {
         Optional<Firmbanking> result = firmbankingRepository.findFirmbankingsByFirmbankingName(name);
 
-        if(result.isEmpty())
-            return null;
-        return result.get();
+        return Optional.ofNullable(result).orElse(Optional.of(new Firmbanking()));
     }
 }

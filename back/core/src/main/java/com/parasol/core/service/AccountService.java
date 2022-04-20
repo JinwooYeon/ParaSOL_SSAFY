@@ -2,6 +2,7 @@ package com.parasol.core.service;
 
 import com.parasol.core.api_model.AccountRequest;
 import com.parasol.core.entity.Account;
+import com.parasol.core.entity.Client;
 import com.parasol.core.repository.AccountRepository;
 import com.parasol.core.utils.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,9 @@ public class AccountService {
         return account.getAccountNo();
     }
 
-    public List<Account> findByClient(String name, String residentNumber) {
-        return accountRepository.findAll();
+    public List<Account> getAllAccount(Client client) {
+        List<Account> accounts = accountRepository.findByClient(client);
+        return accounts;
     }
 
 
@@ -29,15 +31,11 @@ public class AccountService {
 
 
     public boolean deposit(AccountRequest request) {
-        Account accountFrom = accountRepository.findByAccountNo(request.getAccountFrom().getBankAccountNumber());
-
+        // to 계좌에 입금
         // 일단 같은 은행 계좌라고 생각하고 할게욥
         Account accountTo = accountRepository.findByAccountNo(request.getAccountTo().getBankAccountNumber());
 
-        Long fromBalance = accountFrom.getBalance() - request.getAmount();
         Long toBalance = accountTo.getBalance() + request.getAmount();
-        // from 계좌에서 입금 금액만큼 빼기
-        accountFrom.setBalance(fromBalance);
         // to 계좌에서 입금 금액만큼 추가
         accountTo.setBalance(toBalance);
 
@@ -45,17 +43,12 @@ public class AccountService {
     }
 
     public boolean withdraw(AccountRequest request) {
+        // from 계좌에서 출금
         Account accountFrom = accountRepository.findByAccountNo(request.getAccountFrom().getBankAccountNumber());
 
-        // 일단 같은 은행 계좌라고 생각하고 할게욥
-        Account accountTo = accountRepository.findByAccountNo(request.getAccountTo().getBankAccountNumber());
-
         Long fromBalance = accountFrom.getBalance() - request.getAmount();
-        Long toBalance = accountTo.getBalance() + request.getAmount();
         // from 계좌에서 입금 금액만큼 빼기
         accountFrom.setBalance(fromBalance);
-        // to 계좌에서 입금 금액만큼 추가
-        accountTo.setBalance(toBalance);
 
         return true;
     }

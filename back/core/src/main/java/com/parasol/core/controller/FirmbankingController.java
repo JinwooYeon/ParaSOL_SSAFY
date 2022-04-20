@@ -41,7 +41,7 @@ public class FirmbankingController {
     public ResponseEntity<Firmbanking> getFirmbanking(
             @RequestParam(name = "name", required = true) String name
     ) {
-        return ResponseEntity.status(200).body(firmbankingService.getFirmbanking(name));
+        return ResponseEntity.status(200).body(firmbankingService.getFirmbanking(name).get());
     }
 
 }
