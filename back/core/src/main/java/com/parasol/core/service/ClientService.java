@@ -23,4 +23,9 @@ public class ClientService {
         Optional<Client> result = clientRepository.findById(id);
         return result.orElse(null);
     }
+
+    public Client findByNameAndResidentNumber(String name, String residentNumber) {
+        Optional<Client> result = clientRepository.findByNameAndResidentNumber(name, residentNumber);
+        return result.orElse(null);
+    }
 }
