@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @ApiModel("AccountQueryRequest")
-public class AccountQueryRequest extends ClientInfo{
+public class AccountQueryRequest extends ClientInfo {
     @ApiModelProperty(name="account_no", example = "110-437-525252")
     private String accountNo;
 }
