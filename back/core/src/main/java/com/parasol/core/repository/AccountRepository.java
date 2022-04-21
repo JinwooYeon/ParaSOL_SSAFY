@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
-    Account findByAccountNo(String accountNo);
-    Optional<Account> findById(Long id);
+public interface AccountRepository extends JpaRepository<Account, String> {
     List<Account> findByClient(Client client);
     List<Account> findAll();
 }
