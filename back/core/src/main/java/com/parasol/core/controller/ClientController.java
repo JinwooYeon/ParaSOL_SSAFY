@@ -12,22 +12,18 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping("client")
-    public Long CreateClient(
+    public String CreateClient(
             @RequestParam("name") String name,
             @RequestParam("residentNumber") String residentNumber
     ) {
-        Client newClient = new Client();
-        newClient.setName(name);
-        newClient.setResidentNumber(residentNumber);
-
-        Long result = clientService.create(newClient);
+        String result = clientService.create(name, residentNumber);
 
         return result;
     }
 
     @GetMapping("client")
     public Client GetClient(
-            @RequestParam("id") Long id
+            @RequestParam("id") String id
     ) {
         Client result = clientService.findById(id);
 

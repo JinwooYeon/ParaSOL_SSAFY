@@ -16,7 +16,7 @@ import java.util.List;
 @DynamicUpdate
 public class Account {
     @Id
-    private String no;
+    private String id;
 
     private Integer password;
 
@@ -24,7 +24,7 @@ public class Account {
 
     @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "clientSeq")
+    @JoinColumn(name = "id2")
     private Client client;
 
     @JsonManagedReference

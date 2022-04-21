@@ -1,6 +1,5 @@
 package com.parasol.core.service;
 
-import com.parasol.core.api_model.AccountRequest;
 import com.parasol.core.eenum.TransactionType;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.TransactionHistory;
@@ -9,10 +8,9 @@ import com.parasol.core.repository.TransactionHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,14 +24,14 @@ public class TransactionHistoryService {
 
     public TransactionHistory createDepositHistory(String accountFrom, String accountTo, Long amount) {
         Long time = System.currentTimeMillis();
-        Account account = accountRepository.findByAccountNo(accountTo);
+        Optional<Account> account = accountRepository.findById(accountTo);
 
         // 입금 요청일 때 toAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
         TransactionHistory transactionHistory = TransactionHistory.builder()
-                .account(account)
-                .transactionDate(time)
-                .transactionType(TransactionType.DEPOSIT)
-                .transactionAmount(amount)
+                .account(account.get())
+                .date(time)
+                .type(TransactionType.DEPOSIT)
+                .amount(amount)
                 .transactionAccount(accountFrom)
                 .build();
 
@@ -42,14 +40,14 @@ public class TransactionHistoryService {
 
     public TransactionHistory createWithdrawHistory(String accountFrom, String accountTo, Long amount) {
         Long time = System.currentTimeMillis();
-        Account account = accountRepository.findByAccountNo(accountFrom);
+        Optional<Account> account = accountRepository.findById(accountTo);
 
         // 츌굼 요청일 때 fromAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
         TransactionHistory transactionHistory = TransactionHistory.builder()
-                .account(account)
-                .transactionDate(time)
-                .transactionType(TransactionType.WITHDRAW)
-                .transactionAmount(amount)
+                .account(account.get())
+                .date(time)
+                .type(TransactionType.WITHDRAW)
+                .amount(amount)
                 .transactionAccount(accountTo)
                 .build();
 
@@ -57,7 +55,7 @@ public class TransactionHistoryService {
     }
 
     public List<TransactionHistory> getAccountHistory(String accountNo){
-        return transactionHistoryRepository.findByAccount_AccountNo(accountNo)
-                .stream().sorted(Comparator.comparing(TransactionHistory::getTransactionDate).reversed()).collect(Collectors.toList());
+        return transactionHistoryRepository.findByAccount_Id(accountNo)
+                .stream().sorted(Comparator.comparing(TransactionHistory::getDate).reversed()).collect(Collectors.toList());
     }
 }

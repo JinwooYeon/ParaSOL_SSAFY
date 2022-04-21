@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -16,9 +17,9 @@ public class AccountService {
     private AccountRepository accountRepository;
 
     public String Create(Account account) {
-        account.setNo(AccountManager.GenerateAccountNumber());
+        account.setId(AccountManager.GenerateAccountNumber());
         accountRepository.save(account);
-        return account.getNo();
+        return account.getId();
     }
 
     public List<Account> getAllAccount(Client client) {
@@ -27,29 +28,29 @@ public class AccountService {
     }
 
     public Long getBalance(String accountNo){
-        Account account = accountRepository.findByAccountNo(accountNo);
-        return account.getBalance();
+        Optional<Account> account = accountRepository.findById(accountNo);
+        return account.get().getBalance();
     }
 
     public boolean deposit(AccountRequest request) {
         // to 계좌에 입금
         // 일단 같은 은행 계좌라고 생각하고 할게욥
-        Account accountTo = accountRepository.findByAccountNo(request.getAccountTo().getBankAccountNumber());
+        Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getBankAccountNumber());
 
-        Long toBalance = accountTo.getBalance() + request.getAmount();
+        Long toBalance = accountTo.get().getBalance() + request.getAmount();
         // to 계좌에서 입금 금액만큼 추가
-        accountTo.setBalance(toBalance);
+        accountTo.get().setBalance(toBalance);
 
         return true;
     }
 
     public boolean withdraw(AccountRequest request) {
         // from 계좌에서 출금
-        Account accountFrom = accountRepository.findByAccountNo(request.getAccountFrom().getBankAccountNumber());
+        Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
 
-        Long fromBalance = accountFrom.getBalance() - request.getAmount();
+        Long fromBalance = accountFrom.get().getBalance() - request.getAmount();
         // from 계좌에서 입금 금액만큼 빼기
-        accountFrom.setBalance(fromBalance);
+        accountFrom.get().setBalance(fromBalance);
 
         return true;
     }

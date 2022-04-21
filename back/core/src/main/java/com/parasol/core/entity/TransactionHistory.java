@@ -15,15 +15,15 @@ import javax.persistence.*;
 public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long transactionSeq;
+    private Long id;
 
-    private Long transactionDate;
-    private TransactionType transactionType;
-    private Long transactionAmount;
+    private Long date;
+    private TransactionType type;
+    private Long amount;
     private String transactionAccount;
 
     @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "account_no")
+    @JoinColumn(name = "account")
     private Account account;
 }

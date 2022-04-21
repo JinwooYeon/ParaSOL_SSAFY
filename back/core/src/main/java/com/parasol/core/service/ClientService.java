@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ClientService {
@@ -14,12 +15,17 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public Long create(Client client) {
-        clientRepository.save(client);
-        return client.getId();
+    public String create(String name, String residentNumber) {
+        Client client = Client.builder()
+                .id(UUID.randomUUID().toString())
+                .name(name)
+                .residentNumber(residentNumber)
+                .build();
+
+        return clientRepository.save(client).getId();
     }
 
-    public Client findById(Long id) {
+    public Client findById(String id) {
         Optional<Client> result = clientRepository.findById(id);
         return result.orElse(null);
     }
