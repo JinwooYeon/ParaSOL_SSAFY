@@ -16,9 +16,9 @@ import java.util.List;
 @DynamicUpdate
 public class Account {
     @Id
-    private String accountNo;
+    private String no;
 
-    private Integer accountPassword;
+    private Integer password;
 
     private Long balance;
 
