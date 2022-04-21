@@ -23,6 +23,7 @@ public class AccountController {
     @Autowired
     private TransactionHistoryService transactionHistoryService;
 
+    // 계좌 개설
     @PostMapping("account")
     @ResponseBody
     public String createAccount(
@@ -30,23 +31,22 @@ public class AccountController {
             @RequestParam("accountPassword") int accountPassword
     ) {
         Account account = new Account();
-        account.setAccountPassword(accountPassword);
+        account.setPassword(accountPassword);
 
         String result = accountService.Create(account);
 
         return result;
     }
 
-    @DeleteMapping("account")
-    @ResponseBody
-    public String deleteAccount(
-            @RequestParam("accountNo") int accountNo,
-            @RequestParam("accountPassword") int accountPassword
-    ) {
-        // TODO: 계좌 폐쇄
-
-        return null;
-    }
+    // 계좌 폐쇄
+//    @DeleteMapping("account")
+//    @ResponseBody
+//    public String deleteAccount(
+//            @RequestParam("accountNo") int accountNo,
+//            @RequestParam("accountPassword") int accountPassword
+//    ) {
+//        return null;
+//    }
 
     // 계좌 목록 조회
     @GetMapping("account")
@@ -63,14 +63,10 @@ public class AccountController {
     // 계좌 잔액 조회
     @GetMapping("account/balance")
     @ResponseBody
-    public String getAccountBalance(
-            @RequestParam("name") String name,
-            @RequestParam("residentNumber") String residentNumber,
+    public Long getBalance(
             @RequestParam("accountNo") String accountNo
     ) {
-
-
-        return name;
+        return accountService.getBalance(accountNo);
     }
 
     // 계좌 거래 내역 조회
@@ -79,37 +75,42 @@ public class AccountController {
     public List<TransactionHistory> getAccountHistory(
             @RequestParam("accountNo") String accountNo
     ) {
-        // TODO: 계좌 거래내역 조회
         return transactionHistoryService.getAccountHistory(accountNo);
     }
 
+    // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
     public boolean deposit(
             @RequestBody AccountRequest request
     ) {
-        // 계좌 입금. to 계좌에 입금
 
         /*
         * TODO : 유효 계좌인지 확인
         * */
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
+        String accountTo = request.getAccountTo().getBankAccountNumber();
+        Long amount = request.getAmount();
 
         boolean deposit = accountService.deposit(request);
-        TransactionHistory transaction = transactionHistoryService.createAccountHistory(request);
+        TransactionHistory transaction = transactionHistoryService.createDepositHistory(accountFrom, accountTo, amount);
         if(deposit && !transaction.equals(null)) return true;
 
         return false;
     }
 
+    // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
     public boolean withdraw(
             @RequestBody AccountRequest request
     ) {
-        // 계좌 출금. from 계좌에서 출금
+        String accountFrom = request.getAccountFrom().getBankAccountNumber();
+        String accountTo = request.getAccountTo().getBankAccountNumber();
+        Long amount = request.getAmount();
+
         boolean withdraw = accountService.withdraw(request);
-        TransactionHistory transaction = transactionHistoryService.createAccountHistory(request);
+        TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountTo, amount);
         if(withdraw && !transaction.equals(null)) return true;
 
         return false;
