@@ -1,11 +1,33 @@
 import { useState } from "react";
 import { Stack, Divider, Grid, Box, Button } from "@mui/material";
+import { InputController } from "components/InputController";
+import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "axios";
 
 export const AuthPOST = () => {
   const [show, setShow] = useState(false);
+  const [output, setOutput] = useState("");
+  const { handleSubmit, control } = useForm({});
 
   const handlShow = () => {
     setShow(!show);
+  };
+
+  const onSubmit: SubmitHandler<any> = async (data) => {
+    console.log(data);
+    const inputData = JSON.stringify(data);
+    await axios
+      .post("/auth", inputData, {
+        headers: {
+          "content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -54,6 +76,31 @@ export const AuthPOST = () => {
                 </Stack>
               </Grid>
             </Grid>
+            <Grid container spacing={3}>
+              <Grid item xs={5}>
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  style={styles.inputStyle}
+                >
+                  <Stack
+                    direction="column"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <InputController control={control} />
+                    <Button type="submit">출력값 확인하기</Button>
+                  </Stack>
+                </form>
+              </Grid>
+              <Grid item xs={5}>
+                <Stack alignItems="center">
+                  <Box style={styles.outputStyle}>
+                    <p>{output}</p>
+                  </Box>
+                  <Box sx={{ marginTop: "25px" }}>출력값</Box>
+                </Stack>
+              </Grid>
+            </Grid>
           </Stack>
         </Stack>
       ) : null}
@@ -95,5 +142,14 @@ const styles = {
     padding: 9,
     width: "90%",
     height: 250,
+  },
+  inputStyle: {
+    height: 250,
+  },
+  outputStyle: {
+    border: "solid green 3px",
+    padding: 9,
+    width: "90%",
+    height: 217,
   },
 };
