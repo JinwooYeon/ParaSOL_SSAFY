@@ -24,27 +24,36 @@ public class TransactionHistoryService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public TransactionHistory createAccountHistory(AccountRequest request) {
-        TransactionType type = request.getType();
-        Account account = accountRepository.findByAccountNo(request.getAccountFrom().getBankAccountNumber());
+    public TransactionHistory createDepositHistory(String accountFrom, String accountTo, Long amount) {
         Long time = System.currentTimeMillis();
+        Account account = accountRepository.findByAccountNo(accountTo);
 
-        if(type.equals(TransactionType.DEPOSIT)) {
-            // 입금 요청일 때 fromAccount에 입금 거래내역 추가
-            TransactionHistory transactionHistory = TransactionHistory.builder()
-                    .account(account)
-                    .transactionDate(time)
-                    .transactionType(type)
-                    .transactionAmount(request.getAmount())
-                    .transactionAccount(request.getAccountTo().getBankAccountNumber())
-                    .build();
+        // 입금 요청일 때 toAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
+        TransactionHistory transactionHistory = TransactionHistory.builder()
+                .account(account)
+                .transactionDate(time)
+                .transactionType(TransactionType.DEPOSIT)
+                .transactionAmount(amount)
+                .transactionAccount(accountFrom)
+                .build();
 
-        } else if(type.equals(TransactionType.WITHDRAW)) {
-            // 출금 요청일 때 fromAccount에 출금 거래내역 추가
-        }
+        return transactionHistoryRepository.save(transactionHistory);
+    }
 
+    public TransactionHistory createWithdrawHistory(String accountFrom, String accountTo, Long amount) {
+        Long time = System.currentTimeMillis();
+        Account account = accountRepository.findByAccountNo(accountFrom);
 
-        return null;
+        // 츌굼 요청일 때 fromAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
+        TransactionHistory transactionHistory = TransactionHistory.builder()
+                .account(account)
+                .transactionDate(time)
+                .transactionType(TransactionType.WITHDRAW)
+                .transactionAmount(amount)
+                .transactionAccount(accountTo)
+                .build();
+
+        return transactionHistoryRepository.save(transactionHistory);
     }
 
     public List<TransactionHistory> getAccountHistory(String accountNo){
