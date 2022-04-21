@@ -16,9 +16,9 @@ public class AccountService {
     private AccountRepository accountRepository;
 
     public String Create(Account account) {
-        account.setAccountNo(AccountManager.GenerateAccountNumber());
+        account.setNo(AccountManager.GenerateAccountNumber());
         accountRepository.save(account);
-        return account.getAccountNo();
+        return account.getNo();
     }
 
     public List<Account> getAllAccount(Client client) {
@@ -26,9 +26,10 @@ public class AccountService {
         return accounts;
     }
 
-
-
-
+    public Long getBalance(String accountNo){
+        Account account = accountRepository.findByAccountNo(accountNo);
+        return account.getBalance();
+    }
 
     public boolean deposit(AccountRequest request) {
         // to 계좌에 입금
