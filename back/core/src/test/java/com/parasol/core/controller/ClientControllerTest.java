@@ -23,7 +23,7 @@ class ClientControllerTest {
         String residentNumber = "961234-1234567";
 
         //when
-        Long creationResult = clientController.CreateClient(name, residentNumber);
+        String creationResult = clientController.CreateClient(name, residentNumber);
         Client findResult = clientController.GetClient(creationResult);
 
         //then
@@ -38,7 +38,7 @@ class ClientControllerTest {
         String residentNumber = "961234-1234567";
 
         //when
-        Long creationResult = clientController.CreateClient(name, residentNumber);
+        String creationResult = clientController.CreateClient(name, residentNumber);
         Client findResult = clientController.GetClient(creationResult);
 
         //then
