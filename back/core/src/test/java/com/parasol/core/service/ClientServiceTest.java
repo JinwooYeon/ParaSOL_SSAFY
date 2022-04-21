@@ -21,48 +21,38 @@ class ClientServiceTest {
     @Test
     void 서비스_고객_고객정보생성() {
         // Given
-        Client client = new Client();
-        client.setName("김형준");
-        client.setResidentNumber("961234-1234567");
+        final String name = "김형준";
+        final String residentNumber = "961234-1234567";
 
         // When
-        Long creationResult = clientService.create(client);
+        String creationResult = clientService.create(name, residentNumber);
         Client findResult = clientService.findById(creationResult);
 
         // Then
-        Assertions.assertThat(creationResult).isEqualTo(client.getId());
-        Assertions.assertThat(findResult.getId()).isEqualTo(client.getId());
-        Assertions.assertThat(findResult.getName()).isEqualTo(client.getName());
-        Assertions.assertThat(findResult.getResidentNumber()).isEqualTo(client.getResidentNumber());
+        Assertions.assertThat(findResult.getName()).isEqualTo(name);
+        Assertions.assertThat(findResult.getResidentNumber()).isEqualTo(residentNumber);
     }
 
     @Test
     void 서비스_고객_고객정보찾기() {
         // Given
-        Client client1 = new Client();
-        client1.setName("김형준1");
-        client1.setResidentNumber("961234-1234567");
+        final String name1 = "김형준1";
+        final String name2 = "김형준2";
+        final String name3 = "김형준3";
 
-        Client client2 = new Client();
-        client2.setName("김형준2");
-        client2.setResidentNumber("961234-1234568");
-
-        Client client3 = new Client();
-        client3.setName("김형준3");
-        client3.setResidentNumber("961234-1234569");
+        final String residentNumber1 = "961234-1234567";
+        final String residentNumber2 = "961234-1234568";
+        final String residentNumber3 = "961234-1234569";
 
         // When
-        Long creationResult1 = clientService.create(client1);
-        Long creationResult2 = clientService.create(client2);
-        Long creationResult3 = clientService.create(client3);
+        String creationResult1 = clientService.create(name1, residentNumber1);
+        String creationResult2 = clientService.create(name2, residentNumber2);
+        String creationResult3 = clientService.create(name3, residentNumber3);
         Client findResult = clientService.findById(creationResult2);
 
         // Then
-        Assertions.assertThat(creationResult1).isEqualTo(client1.getId());
-        Assertions.assertThat(creationResult2).isEqualTo(client2.getId());
-        Assertions.assertThat(creationResult3).isEqualTo(client3.getId());
-        Assertions.assertThat(findResult.getId()).isEqualTo(client2.getId());
-        Assertions.assertThat(findResult.getName()).isEqualTo(client2.getName());
-        Assertions.assertThat(findResult.getResidentNumber()).isEqualTo(client2.getResidentNumber());
+        Assertions.assertThat(findResult.getId()).isEqualTo(creationResult2);
+        Assertions.assertThat(findResult.getName()).isEqualTo(name2);
+        Assertions.assertThat(findResult.getResidentNumber()).isEqualTo(residentNumber2);
     }
 }
