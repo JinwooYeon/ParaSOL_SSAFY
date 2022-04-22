@@ -1,16 +1,33 @@
 package com.parasol.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@OneToMany
+@DynamicInsert
+@DynamicUpdate
 public class Account {
-    private String accountNo;
-    private Integer accountPassword;
+    @Id
+    private String id;
+
+    private Integer password;
+
+    private Long balance;
+
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "id2")
+    private Client client;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "account")
+    private List<TransactionHistory> transactionHistories;
 }
