@@ -3,8 +3,31 @@ import { Stack, Divider, Grid, Box, Button } from "@mui/material";
 import { InputController } from "components/InputController";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
+import { Completed } from "components/Completed";
+import { RequestBody } from "components/RequestBody";
 
 export const AuthPOST = () => {
+  const API = {
+    uri: "/auth",
+    method: "POST",
+    detail: "로그인",
+    completed: false,
+  };
+  const requestBody = {
+    LoginInfo: [
+      {
+        value: "id",
+        type: "string",
+        required: false,
+      },
+      {
+        value: "password",
+        type: "string",
+        required: true,
+      },
+    ],
+  };
+  const responseBody = {};
   const [show, setShow] = useState(false);
   const [output, setOutput] = useState("");
   const { handleSubmit, control } = useForm({});
@@ -24,6 +47,7 @@ export const AuthPOST = () => {
       })
       .then((response) => {
         console.log(response);
+        setOutput(response.data);
       })
       .catch((err) => {
         console.log(err);
@@ -33,55 +57,41 @@ export const AuthPOST = () => {
   return (
     <>
       <Button sx={styles.apiHeader} onClick={handlShow}>
-        로그인 _ AuthPOST
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          sx={{ width: "100%" }}
+        >
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Completed completed={API.completed} />
+            <Box style={styles.apiDetail}>{API.detail}</Box>
+          </Stack>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Box style={styles.apiMethod}>{API.method}</Box>
+            <Box sx={styles.apiUri}>{API.uri}</Box>
+          </Stack>
+        </Stack>
       </Button>
       {show ? (
         <Stack>
           <Divider sx={{ mt: 1, mb: 3 }} />
-          <Stack spacing={2} sx={{ p: 2 }}>
-            <Stack direction="row" justifyContent="space-between">
-              <Stack
-                direction="row"
-                justifyContent="start"
-                alignItems="center"
-                spacing={2}
-              >
-                <div style={styles.apiTitle}>/auth</div>
-                <div style={styles.apiMethod}>GET</div>
-              </Stack>
-              <div style={styles.apiDetail}>로그인</div>
+          <Stack spacing={2} sx={styles.api}>
+            <Stack direction="column">
+              <Box style={styles.apiContent}>API 요청</Box>
+              <Box style={styles.apiContentDetail}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <Stack direction="column" spacing={3}>
+                    <RequestBody requestBody={requestBody} />
+                    <Button variant="contained" type="submit" color="success">
+                      출력값 확인하기
+                    </Button>
+                  </Stack>
+                </form>
+              </Box>
             </Stack>
-            <Grid container spacing={3}>
+            {/* <Grid container spacing={3}>
               <Grid item xs={5}>
-                <Stack direction="column">
-                  <Box style={styles.apiContent}>API 요청</Box>
-                  <Box style={styles.apiContentDetail}>
-                    <Box>요청 모델명</Box>
-                    <Box>종류</Box>
-                    <Box>타입</Box>
-                    <Box>속성명</Box>
-                    <Box>속성타입</Box>
-                    <Box>헤더</Box>
-                  </Box>
-                </Stack>
-              </Grid>
-              <Grid item xs={5}>
-                <Stack direction="column">
-                  <Box style={styles.apiContent}>API 응답</Box>
-                  <Box style={styles.apiContentDetail}>
-                    <Box>반환 모델명</Box>
-                    <Box>반환 설명</Box>
-                    <Box>반환 코드</Box>
-                  </Box>
-                </Stack>
-              </Grid>
-            </Grid>
-            <Grid container spacing={3}>
-              <Grid item xs={5}>
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  style={styles.inputStyle}
-                >
+                <form onSubmit={handleSubmit(onSubmit)}>
                   <Stack
                     direction="column"
                     justifyContent="space-between"
@@ -97,10 +107,10 @@ export const AuthPOST = () => {
                   <Box style={styles.outputStyle}>
                     <p>{output}</p>
                   </Box>
-                  <Box sx={{ marginTop: "25px" }}>출력값</Box>
+                  <Box sx={{ marginTop: "5px" }}>출력값</Box>
                 </Stack>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Stack>
         </Stack>
       ) : null}
@@ -109,26 +119,31 @@ export const AuthPOST = () => {
 };
 
 const styles = {
+  api: {
+    // margin: "auto 10px",
+    padding: "2px 40px",
+  },
   apiHeader: {
     width: "100%",
     justifyContent: "start",
     color: "black",
   },
-  apiTitle: {
+  apiUri: {
     color: "blue",
-    fontSize: 25,
-    padding: 4,
+    fontSize: 15,
     alignItems: "center",
+    textTransform: "lowercase",
   },
   apiMethod: {
     background: "green",
     color: "white",
-    padding: 2,
+    padding: "4px 10px",
     fontSize: 13,
+    borderRadius: 20,
   },
   apiDetail: {
-    color: "grey",
-    fontSize: 15,
+    fontSize: 20,
+    fontWeight: "bold",
     padding: 4,
     alignItems: "center",
   },
@@ -138,13 +153,11 @@ const styles = {
   },
   apiContentDetail: {
     backgroundColor: "#D8D6D6",
-    margin: "10px auto",
-    padding: 9,
-    width: "90%",
-    height: 250,
-  },
-  inputStyle: {
-    height: 250,
+    borderRadius: 10,
+    margin: "15px auto",
+    padding: 13,
+    width: "100%",
+    height: "100%",
   },
   outputStyle: {
     border: "solid green 3px",
