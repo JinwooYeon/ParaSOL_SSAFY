@@ -4,10 +4,10 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useState } from "react";
-import User from "./pages/user";
-import Account from "./pages/account";
-import Pay from "./pages/pay";
-import Header from "./pages/header";
+import User from "pages/user";
+import Account from "pages/account";
+import Pay from "pages/pay";
+import Header from "pages/header";
 
 function App() {
   const [value, setValue] = useState("1");

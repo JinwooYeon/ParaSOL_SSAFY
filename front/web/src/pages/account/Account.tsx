@@ -1,6 +1,6 @@
-import AccountBalanceGET from "../../components/account/accountBalanceGET";
-import AccountGET from "../../components/account/accountGET";
-import AccountHistoryGET from "../../components/account/accountHistoryGET";
+import AccountBalanceGET from "components/account/accountBalanceGET";
+import AccountGET from "components/account/accountGET";
+import AccountHistoryGET from "components/account/accountHistoryGET";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -10,6 +10,7 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: "left",
   color: theme.palette.text.secondary,
+  fontSize: 20,
 }));
 
 export const Account = () => {
