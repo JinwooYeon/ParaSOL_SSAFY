@@ -17,6 +17,14 @@ export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
   const formData = props.formData;
   const setter = props.setFormData;
 
+  // let defaultObject = {};
+  // Object.values(myRequest).map((val: any) => {
+  //   val.map((v: any) => {
+  //     const tempObj = { [v.value]: "" };
+  //     defaultObject = Object.assign(defaultObject, tempObj);
+  //   });
+  // });
+
   const [inputData, setInputData] = useState(formData);
 
   // console.log(props.requestBody.LoginInfo);
@@ -24,33 +32,37 @@ export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
 
   const handleChange = (key: string, value: string) => {
     // console.log(key, value);
-    switch (key) {
-      case "id": {
-        setInputData({
-          ...inputData,
-          id: value,
-        });
-        return;
-      }
-      case "password": {
-        setInputData({
-          ...inputData,
-          password: value,
-        });
-        return;
-      }
-      case "name": {
-        setInputData({
-          ...inputData,
-          name: value,
-        });
-        return;
-      }
-      default: {
-        setInputData(inputData);
-        return;
-      }
-    }
+    setInputData({
+      ...inputData,
+      [key]: value,
+    });
+    // switch (key) {
+    //   case "id": {
+    //     setInputData({
+    //       ...inputData,
+    //       id: value,
+    //     });
+    //     return;
+    //   }
+    //   case "password": {
+    //     setInputData({
+    //       ...inputData,
+    //       password: value,
+    //     });
+    //     return;
+    //   }
+    //   case "name": {
+    //     setInputData({
+    //       ...inputData,
+    //       name: value,
+    //     });
+    //     return;
+    //   }
+    //   default: {
+    //     setInputData(inputData);
+    //     return;
+    //   }
+    // }
   };
 
   useEffect(() => {
