@@ -27,14 +27,24 @@ export const AuthPOST = () => {
       },
     ],
   };
+
+  let defaultObject = {};
+  Object.values(requestBody).map((val) => {
+    val.map((v) => {
+      const tempObj = { [v.value]: "" };
+      defaultObject = Object.assign(defaultObject, tempObj);
+    });
+  });
+
   const responseBody = {};
   const [show, setShow] = useState(false);
   const [output, setOutput] = useState("");
   // const { handleSubmit, control } = useForm({});
-  const [formData, setFormData] = useState({
-    id: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState(defaultObject);
+  // const [formData, setFormData] = useState({
+  //   id: "",
+  //   password: "",
+  // });
 
   const handlShow = () => {
     setShow(!show);

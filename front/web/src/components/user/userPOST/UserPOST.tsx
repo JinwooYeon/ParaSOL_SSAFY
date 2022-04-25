@@ -32,13 +32,23 @@ export const UserPOST = () => {
       },
     ],
   };
+
+  let defaultObject = {};
+  Object.values(requestBody).map((val) => {
+    val.map((v) => {
+      const tempObj = { [v.value]: "" };
+      defaultObject = Object.assign(defaultObject, tempObj);
+    });
+  });
+
   const [show, setShow] = useState(false);
   const [output, setOutput] = useState("");
-  const [formData, setFormData] = useState({
-    id: "",
-    password: "",
-    name: "",
-  });
+  const [formData, setFormData] = useState(defaultObject);
+  // const [formData, setFormData] = useState({
+  //   id: "",
+  //   password: "",
+  //   name: "",
+  // });
 
   const handlShow = () => {
     setShow(!show);
