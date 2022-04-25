@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Stack, Divider, Grid, Box, Button } from "@mui/material";
-import { InputController } from "components/InputController";
+import { Stack, Divider, Box, Button } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { Completed } from "components/Completed";
-import { RequestBody } from "components/RequestBody";
+
+import { InputController } from "components/InputController";
 
 export const AuthPOST = () => {
+  ////////////// 입력해야하는 부분 ///////////
   const API = {
     uri: "/auth",
     method: "POST",
@@ -18,7 +19,7 @@ export const AuthPOST = () => {
       {
         value: "id",
         type: "string",
-        required: false,
+        required: true,
       },
       {
         value: "password",
@@ -27,7 +28,8 @@ export const AuthPOST = () => {
       },
     ],
   };
-  const responseBody = {};
+  ///////////////////////////////////
+
   const [show, setShow] = useState(false);
   const [output, setOutput] = useState("");
   const { handleSubmit, control } = useForm({});
@@ -64,7 +66,7 @@ export const AuthPOST = () => {
         >
           <Stack direction="row" alignItems="center" spacing={2}>
             <Completed completed={API.completed} />
-            <Box style={styles.apiDetail}>{API.detail}</Box>
+            <Box style={styles.apiTitle}>{API.detail}</Box>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Box style={styles.apiMethod}>{API.method}</Box>
@@ -77,11 +79,57 @@ export const AuthPOST = () => {
           <Divider sx={{ mt: 1, mb: 3 }} />
           <Stack spacing={2} sx={styles.api}>
             <Stack direction="column">
-              <Box style={styles.apiContent}>API 요청</Box>
-              <Box style={styles.apiContentDetail}>
+              <Box style={{ fontWeight: "bold" }}>API 요청</Box>
+              <Box style={styles.apiRequest}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Stack direction="column" spacing={3}>
-                    <RequestBody requestBody={requestBody} />
+                    {requestBody ? (
+                      <Box>
+                        {requestBody.LoginInfo.map((re: any, index) => {
+                          return (
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                              spacing={5}
+                              sx={{ marginTop: 1 }}
+                              key={index}
+                            >
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                alignItems="center"
+                                justifyContent="space-between"
+                                sx={{ width: "70%" }}
+                              >
+                                <div>
+                                  <span
+                                    style={{ fontSize: 20, fontWeight: "bold" }}
+                                  >
+                                    {re.value}
+                                  </span>
+                                  <span
+                                    style={{ marginLeft: 10, opacity: "70%" }}
+                                  >
+                                    {re.type}
+                                  </span>
+                                </div>
+                                {re.required ? (
+                                  <div style={{ color: "blue" }}>required</div>
+                                ) : (
+                                  <div style={{ color: "red" }}>
+                                    not required
+                                  </div>
+                                )}
+                              </Stack>
+                              <InputController
+                                control={control}
+                                label={re.value}
+                              ></InputController>
+                            </Stack>
+                          );
+                        })}
+                      </Box>
+                    ) : null}
                     <Button variant="contained" type="submit" color="success">
                       출력값 확인하기
                     </Button>
@@ -89,28 +137,12 @@ export const AuthPOST = () => {
                 </form>
               </Box>
             </Stack>
-            {/* <Grid container spacing={3}>
-              <Grid item xs={5}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <Stack
-                    direction="column"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <InputController control={control} />
-                    <Button type="submit">출력값 확인하기</Button>
-                  </Stack>
-                </form>
-              </Grid>
-              <Grid item xs={5}>
-                <Stack alignItems="center">
-                  <Box style={styles.outputStyle}>
-                    <p>{output}</p>
-                  </Box>
-                  <Box sx={{ marginTop: "5px" }}>출력값</Box>
-                </Stack>
-              </Grid>
-            </Grid> */}
+            <Stack justifyContent="center" alignItems="center">
+              <Box sx={{ fontWeight: "bold" }}>출력값</Box>
+              <Box style={styles.apiResponse}>
+                <p>{output}</p>
+              </Box>
+            </Stack>
           </Stack>
         </Stack>
       ) : null}
@@ -120,8 +152,8 @@ export const AuthPOST = () => {
 
 const styles = {
   api: {
-    // margin: "auto 10px",
-    padding: "2px 40px",
+    padding: "2px 40px 0px 40px",
+    color: "black",
   },
   apiHeader: {
     width: "100%",
@@ -141,28 +173,24 @@ const styles = {
     fontSize: 13,
     borderRadius: 20,
   },
-  apiDetail: {
+  apiTitle: {
     fontSize: 20,
     fontWeight: "bold",
     padding: 4,
     alignItems: "center",
   },
-  apiContent: {
-    color: "black",
-    fontWeight: "bold",
-  },
-  apiContentDetail: {
-    backgroundColor: "#D8D6D6",
+  apiRequest: {
     borderRadius: 10,
-    margin: "15px auto",
+    marginTop: 10,
     padding: 13,
-    width: "100%",
     height: "100%",
   },
-  outputStyle: {
-    border: "solid green 3px",
-    padding: 9,
-    width: "90%",
-    height: 217,
+  apiResponse: {
+    border: "solid green 2px",
+    borderRadius: 10,
+    marginTop: 10,
+    padding: 5,
+    width: "95%",
+    height: 100,
   },
 };
