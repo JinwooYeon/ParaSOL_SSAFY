@@ -30,7 +30,11 @@ export const AuthPOST = () => {
   const responseBody = {};
   const [show, setShow] = useState(false);
   const [output, setOutput] = useState("");
-  const { handleSubmit, control } = useForm({});
+  // const { handleSubmit, control } = useForm({});
+  const [formData, setFormData] = useState({
+    id: "",
+    password: "",
+  });
 
   const handlShow = () => {
     setShow(!show);
@@ -38,7 +42,8 @@ export const AuthPOST = () => {
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     console.log(data);
-    const inputData = JSON.stringify(data);
+    // const inputData = JSON.stringify(data);
+    const inputData = data;
     await axios
       .post("/auth", inputData, {
         headers: {
@@ -79,14 +84,23 @@ export const AuthPOST = () => {
             <Stack direction="column">
               <Box style={styles.apiContent}>API 요청</Box>
               <Box style={styles.apiContentDetail}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <Stack direction="column" spacing={3}>
-                    <RequestBody requestBody={requestBody} />
-                    <Button variant="contained" type="submit" color="success">
-                      출력값 확인하기
-                    </Button>
-                  </Stack>
-                </form>
+                {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+                <Stack direction="column" spacing={3}>
+                  <RequestBody
+                    requestBody={requestBody}
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                  <Button
+                    variant="contained"
+                    type="button"
+                    color="success"
+                    onClick={() => onSubmit(formData)}
+                  >
+                    출력값 확인하기
+                  </Button>
+                </Stack>
+                {/* </form> */}
               </Box>
             </Stack>
             {/* <Grid container spacing={3}>
