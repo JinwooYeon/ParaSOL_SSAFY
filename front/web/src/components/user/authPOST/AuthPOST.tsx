@@ -3,8 +3,8 @@ import { Stack, Divider, Box, Button } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { Completed } from "components/Completed";
-
 import { InputController } from "components/InputController";
+import "../../Styles.css";
 
 export const AuthPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -85,14 +85,14 @@ export const AuthPOST = () => {
                   <Stack direction="column" spacing={3}>
                     {requestBody ? (
                       <Box>
-                        {requestBody.LoginInfo.map((re: any, index) => {
-                          return (
+                        {Object.values(requestBody).map((arr: any) =>
+                          arr.map((re: any) => (
                             <Stack
                               direction="row"
                               justifyContent="space-between"
                               spacing={5}
                               sx={{ marginTop: 1 }}
-                              key={index}
+                              key={re.value}
                             >
                               <Stack
                                 direction="row"
@@ -126,11 +126,11 @@ export const AuthPOST = () => {
                                 label={re.value}
                               ></InputController>
                             </Stack>
-                          );
-                        })}
+                          ))
+                        )}
                       </Box>
                     ) : null}
-                    <Button variant="contained" type="submit" color="success">
+                    <Button variant="contained" type="submit" color="primary">
                       출력값 확인하기
                     </Button>
                   </Stack>
@@ -167,7 +167,7 @@ const styles = {
     textTransform: "lowercase",
   },
   apiMethod: {
-    background: "green",
+    background: "blue",
     color: "white",
     padding: "4px 10px",
     fontSize: 13,
@@ -186,7 +186,7 @@ const styles = {
     height: "100%",
   },
   apiResponse: {
-    border: "solid green 2px",
+    border: "solid blue 2px",
     borderRadius: 10,
     marginTop: 10,
     padding: 5,
