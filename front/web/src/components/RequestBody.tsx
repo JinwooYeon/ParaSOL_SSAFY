@@ -7,12 +7,14 @@ interface IMyprops {
   requestBody: any;
   formData: any;
   setFormData: (formDate: any) => void;
+  onSubmit: (a: any) => void;
 }
 
 export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
   const myRequest = props.requestBody;
   const formData = props.formData;
   const setter = props.setFormData;
+  const onSubmit = props.onSubmit;
 
   const handleChange = (key: string, v: string) => {
     setter({
@@ -54,13 +56,6 @@ export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
                             <div style={styles.apiType}>{re.type}</div>
                           )}
                         </div>
-                        {/* {re.required ? (
-                        <div style={styles.apiRequired.required}>required</div>
-                      ) : (
-                        <div style={styles.apiRequired.notRequired}>
-                          not required
-                        </div>
-                      )} */}
                       </Stack>
                     </Grid>
                     <Grid item xs={1.5}>
@@ -95,61 +90,20 @@ export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
                       ></TextField>
                     </Grid>
                   </Grid>
-                  // <Stack
-                  //   direction="row"
-                  //   justifyContent="space-between"
-                  //   spacing={3}
-                  //   sx={{ marginTop: 1 }}
-                  //   key={index}
-                  // >
-                  //   <Stack
-                  //     direction="row"
-                  //     spacing={1}
-                  //     alignItems="center"
-                  //     justifyContent="space-between"
-                  //     sx={{ width: "40%" }}
-                  //   >
-                  //     <div>
-                  //       {re.value && (
-                  //         <span style={styles.apiTitle}>{re.value}</span>
-                  //       )}
-                  //       {re.type && <span style={styles.apiType}>{re.type}</span>}
-                  //     </div>
-                  //     {re.required ? (
-                  //       <div style={styles.apiRequired.required}>required</div>
-                  //     ) : (
-                  //       <div style={styles.apiRequired.notRequired}>
-                  //         not required
-                  //       </div>
-                  //     )}
-                  //   </Stack>
-                  //   <TextField
-                  //     label={re.value}
-                  //     style={{ width: "55%" }}
-                  //     size="small"
-                  //     type="text"
-                  //     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  //       handleChange(re.value, e.target.value);
-                  //     }}
-                  //     value={formData[re.value] || ""}
-                  //     InputProps={{
-                  //       endAdornment: (
-                  //         <IconButton
-                  //           size="small"
-                  //           onClick={() => clearValue(re.value)}
-                  //         >
-                  //           <DeleteIcon />
-                  //         </IconButton>
-                  //       ),
-                  //     }}
-                  //   ></TextField>
-                  // </Stack>
                 );
               })
             )}
-          </Box>
+          </Box>{" "}
           <Button variant="outlined" color="error" onClick={() => setter({})}>
-            초기화
+            입력값 초기화
+          </Button>
+          <Button
+            variant="contained"
+            type="button"
+            color="primary"
+            onClick={() => onSubmit(formData)}
+          >
+            출력값 확인하기
           </Button>
         </>
       ) : null}
