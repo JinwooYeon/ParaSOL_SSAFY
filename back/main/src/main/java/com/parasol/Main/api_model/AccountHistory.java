@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@Builder
 public class AccountHistory {
     private LocalDateTime txDatetime;
     private TransactionType txMethod;

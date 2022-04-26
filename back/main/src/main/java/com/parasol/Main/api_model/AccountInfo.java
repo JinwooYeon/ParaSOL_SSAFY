@@ -8,7 +8,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Builder
 public class AccountInfo {
     private String bankName;
     private String bankAccountNumber;
