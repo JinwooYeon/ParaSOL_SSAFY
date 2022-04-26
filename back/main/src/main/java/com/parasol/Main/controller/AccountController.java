@@ -15,12 +15,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private ClientService clientService;
-
-    @Autowired
-    private TransactionHistoryService transactionHistoryService;
-
     // 계좌 개설
     @PostMapping("account")
     @ResponseBody
@@ -35,8 +29,9 @@ public class AccountController {
     // 계좌 목록 조회
     @GetMapping("account")
     @ResponseBody
-    public AccountBalance getBalance(
-            @RequestParam("name") String name
+    public String getBalance(
+            @RequestParam("name") String name,
+            @RequestParam("residentNumber") String residentNumber
     ) {
         return null;
     }
@@ -44,7 +39,7 @@ public class AccountController {
     // 계좌 잔액 조회
     @GetMapping("account/balance")
     @ResponseBody
-    public AccountBalance getBalance(
+    public String getBalance(
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String accountNo
     ) {
@@ -54,7 +49,7 @@ public class AccountController {
     // 계좌 거래내역 조회
     @GetMapping("account/history")
     @ResponseBody
-    public AccountBalance getBalance(
+    public String getBalance(
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String accountNo
     ) {
@@ -63,7 +58,8 @@ public class AccountController {
 
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
-    public boolean deposit(
+    @ResponseBody
+    public String deposit(
             @RequestBody AccountRequest request
     ) {
         return false;
@@ -72,7 +68,7 @@ public class AccountController {
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public boolean withdraw(
+    public String withdraw(
             @RequestBody AccountRequest request
     ) {
 
