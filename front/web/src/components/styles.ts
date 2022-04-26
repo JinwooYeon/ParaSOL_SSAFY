@@ -15,7 +15,8 @@ const styles = {
     color: "black",
   },
   apiUri: {
-    color: "blue",
+    // color: "blue",
+    color: "#105CF0",
     fontSize: 15,
     alignItems: "center",
     textTransform: "lowercase",

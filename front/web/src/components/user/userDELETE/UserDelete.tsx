@@ -5,6 +5,7 @@ import axios from "axios";
 import { Completed } from "components/Completed";
 import { RequestBody } from "components/RequestBody";
 import styles from "components/styles";
+import { ApiMethod } from "components/Components.styled";
 
 export const UserDELETE = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -55,18 +56,18 @@ export const UserDELETE = () => {
       });
   };
 
-  const showMethod = (m: string) => {
-    console.log(m);
-    if (m === "POST")
-      return <Box style={styles.apiMethod.post}>{API.method}</Box>;
-    else if (m === "PATCH")
-      return <Box style={styles.apiMethod.patch}>{API.method}</Box>;
-    else if (m === "DELETE")
-      return <Box style={styles.apiMethod.delete}>{API.method}</Box>;
-    else if (m === "GET")
-      return <Box style={styles.apiMethod.get}>{API.method}</Box>;
-    return <Box style={styles.apiMethod.least}>{API.method}</Box>;
-  };
+  // const showMethod = (m: string) => {
+  //   console.log(m);
+  //   if (m === "POST")
+  //     return <Box style={styles.apiMethod.post}>{API.method}</Box>;
+  //   else if (m === "PATCH")
+  //     return <Box style={styles.apiMethod.patch}>{API.method}</Box>;
+  //   else if (m === "DELETE")
+  //     return <Box style={styles.apiMethod.delete}>{API.method}</Box>;
+  //   else if (m === "GET")
+  //     return <Box style={styles.apiMethod.get}>{API.method}</Box>;
+  //   return <Box style={styles.apiMethod.least}>{API.method}</Box>;
+  // };
 
   return (
     <>
@@ -81,8 +82,9 @@ export const UserDELETE = () => {
             <Box style={styles.apiDetail}>{API.detail}</Box>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Box>{showMethod(API.method)}</Box>
+            {/* <Box>{showMethod(API.method)}</Box> */}
             <Box sx={styles.apiUri}>{API.uri}</Box>
+            <ApiMethod method={API.method}>{API.method}</ApiMethod>
           </Stack>
         </Stack>
       </Button>
