@@ -1,7 +1,8 @@
 package com.parasol.Main.controller;
 
-import com.parasol.Main.api_model.AccountBalance;
-import com.parasol.Main.api_model.AccountRequest;
+import com.parasol.Main.api_model.AccountBalanceResponse;
+import com.parasol.Main.api_model.AccountCloseRequest;
+import com.parasol.Main.api_model.TransactionRequest;
 import com.parasol.Main.service.AccountService;
 import com.parasol.Main.service.ClientService;
 import com.parasol.Main.service.TransactionHistoryService;
@@ -29,7 +30,7 @@ public class AccountController {
     // 계좌 목록 조회
     @GetMapping("account")
     @ResponseBody
-    public String getBalance(
+    public String getList(
             @RequestParam("name") String name,
             @RequestParam("residentNumber") String residentNumber
     ) {
@@ -49,7 +50,7 @@ public class AccountController {
     // 계좌 거래내역 조회
     @GetMapping("account/history")
     @ResponseBody
-    public String getBalance(
+    public String getHistory(
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String accountNo
     ) {
@@ -60,19 +61,19 @@ public class AccountController {
     @PostMapping("account/deposit")
     @ResponseBody
     public String deposit(
-            @RequestBody AccountRequest request
+            @RequestBody TransactionRequest request
     ) {
-        return false;
+        return null;
     }
 
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
     public String withdraw(
-            @RequestBody AccountRequest request
+            @RequestBody TransactionRequest request
     ) {
 
-        return false;
+        return null;
     }
 
 }
