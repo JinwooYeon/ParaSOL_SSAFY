@@ -1,4 +1,4 @@
-package com.parasol.Main.api_model;
+package com.parasol.Main.api_request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,8 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class AccountCloseRequest {
-    private String accountNumber;
+public class AccountOpenRequest {
     private String residentNumber;
     private int accountPassword;
 }
