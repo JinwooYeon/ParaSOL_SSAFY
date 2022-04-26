@@ -9,7 +9,6 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class AccountInfo {
-    private String bankName;
-    private String bankAccountNumber;
+public class AccountHistoriesResponse {
+    private AccountHistory[] accountHistories;
 }

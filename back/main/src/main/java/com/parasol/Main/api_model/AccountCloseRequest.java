@@ -9,7 +9,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class AccountInfo {
-    private String bankName;
-    private String bankAccountNumber;
+public class AccountCloseRequest {
+    private String accountNumber;
+    private String residentNumber;
+    private int accountPassword;
 }
