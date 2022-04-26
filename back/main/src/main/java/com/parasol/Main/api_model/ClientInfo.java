@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AuthToken {
-    AccessToken accessToken;
-    RefreshToken refreshToken;
+public class ClientInfo {
+    private String name;
+    private String residentNumber;
 }

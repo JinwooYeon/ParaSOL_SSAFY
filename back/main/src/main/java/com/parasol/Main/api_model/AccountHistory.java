@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 public class AccountHistory {
     private LocalDateTime txDatetime;
-    private TransactionType txType;
+    private TransactionType txMethod;
     private Long amount;
-    private String accountTo;
+    private AccountInfo accountTo;
     private Long balance;
 }

@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
 @ToString
-public class AuthToken {
-    AccessToken accessToken;
-    RefreshToken refreshToken;
+public class RefreshToken {
+    private String refreshToken;
+    private Timestamp accessTokenExpiredAt;
 }
