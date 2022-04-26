@@ -1,6 +1,13 @@
+import { blue, red } from "@mui/material/colors";
+
 const styles = {
   api: {
     padding: "2px 40px",
+  },
+  // api == apiSection
+  apiSection: {
+    padding: "0px 40px",
+    color: "black",
   },
   apiHeader: {
     width: "100%",
@@ -14,7 +21,41 @@ const styles = {
     textTransform: "lowercase",
   },
   apiMethod: {
-    background: "green",
+    post: {
+      background: "blue",
+      color: "white",
+      padding: "4px 10px",
+      fontSize: 13,
+      borderRadius: 20,
+    },
+    patch: {
+      background: "green",
+      color: "white",
+      padding: "4px 10px",
+      fontSize: 13,
+      borderRadius: 20,
+    },
+    delete: {
+      background: "red",
+      color: "white",
+      padding: "4px 10px",
+      fontSize: 13,
+      borderRadius: 20,
+    },
+    get: {
+      background: "purple",
+      color: "white",
+      padding: "4px 10px",
+      fontSize: 13,
+      borderRadius: 20,
+    },
+    least: {
+      background: "black",
+      color: "white",
+      padding: "4px 10px",
+      fontSize: 13,
+      borderRadius: 20,
+    },
     color: "white",
     padding: "4px 10px",
     fontSize: 13,
@@ -26,22 +67,39 @@ const styles = {
     padding: 4,
     alignItems: "center",
   },
-  apiContent: {
-    color: "black",
+  apiTitle: {
+    fontSize: 20,
     fontWeight: "bold",
+    marginRight: 15,
   },
-  apiContentDetail: {
-    backgroundColor: "#D8D6D6",
-    borderRadius: 10,
-    margin: "15px auto",
-    padding: 13,
+  apiType: {
+    color: "grey",
+  },
+  apiRequired: {
+    required: {
+      color: "blue",
+    },
+    notRequired: {
+      color: "red",
+    },
+  },
+  outputHeader: {
+    marginBottom: 12,
     width: "100%",
-    height: "100%",
+  },
+  responseStatus: {
+    success: {
+      color: "blue",
+    },
+    failed: {
+      color: "red",
+    },
   },
   outputStyle: {
-    border: "solid green 3px",
-    padding: 9,
-    width: "90%",
+    border: "dotted blue 1px",
+    borderRadius: 10,
+    padding: 15,
+    width: "100%",
     height: 217,
   },
 };

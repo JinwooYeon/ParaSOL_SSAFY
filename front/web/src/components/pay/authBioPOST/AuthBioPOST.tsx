@@ -35,6 +35,7 @@ export const AuthBioPOST = () => {
   const [show, setShow] = useState(false);
   const [output, setOutput] = useState("");
   const [formData, setFormData] = useState({});
+  const [responseStatus, setResponseStatus] = useState<number>();
 
   const handlShow = () => {
     setShow(!show);
@@ -52,11 +53,27 @@ export const AuthBioPOST = () => {
       })
       .then((response) => {
         console.log(response);
-        setOutput(response.data);
+        setResponseStatus(response.status);
+        setOutput(response.data.toString());
       })
       .catch((err) => {
+        setResponseStatus(err.response.status);
+        setOutput(err.toString());
         console.log(err);
       });
+  };
+
+  const showMethod = (m: string) => {
+    console.log(m);
+    if (m === "POST")
+      return <Box style={styles.apiMethod.post}>{API.method}</Box>;
+    else if (m === "PATCH")
+      return <Box style={styles.apiMethod.patch}>{API.method}</Box>;
+    else if (m === "DELETE")
+      return <Box style={styles.apiMethod.delete}>{API.method}</Box>;
+    else if (m === "GET")
+      return <Box style={styles.apiMethod.get}>{API.method}</Box>;
+    return <Box style={styles.apiMethod.least}>{API.method}</Box>;
   };
 
   return (
@@ -72,7 +89,7 @@ export const AuthBioPOST = () => {
             <Box style={styles.apiDetail}>{API.detail}</Box>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Box style={styles.apiMethod}>{API.method}</Box>
+            <Box>{showMethod(API.method)}</Box>
             <Box sx={styles.apiUri}>{API.uri}</Box>
           </Stack>
         </Stack>
@@ -80,10 +97,9 @@ export const AuthBioPOST = () => {
       {show ? (
         <Stack>
           <Divider sx={{ mt: 1, mb: 3 }} />
-          <Stack spacing={2} sx={styles.api}>
+          <Stack spacing={2} sx={styles.apiSection}>
             <Stack direction="column">
-              <Box style={styles.apiContent}>API 요청</Box>
-              <Box style={styles.apiContentDetail}>
+              <Box>
                 <Stack direction="column" spacing={3}>
                   <RequestBody
                     requestBody={requestBody}
@@ -93,7 +109,7 @@ export const AuthBioPOST = () => {
                   <Button
                     variant="contained"
                     type="button"
-                    color="success"
+                    color="primary"
                     onClick={() => onSubmit(formData)}
                   >
                     출력값 확인하기
@@ -102,9 +118,28 @@ export const AuthBioPOST = () => {
               </Box>
             </Stack>
             <Stack justifyContent="center" alignItems="center">
-              <Box sx={{ fontWeight: "bold" }}>출력값</Box>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                style={styles.outputHeader}
+              >
+                <Box sx={{ fontWeight: "bold", fontSize: 20 }}>출력값</Box>
+                <Stack direction="row" spacing={2}>
+                  <Box>응답코드</Box>
+                  {responseStatus === 201 || responseStatus === 200 ? (
+                    <Box style={styles.responseStatus.success}>
+                      {responseStatus && responseStatus}
+                    </Box>
+                  ) : (
+                    <Box style={styles.responseStatus.failed}>
+                      {responseStatus && responseStatus}
+                    </Box>
+                  )}
+                </Stack>
+              </Stack>
               <Box style={styles.outputStyle}>
-                <p>{output}</p>
+                <Box sx={{ wordWrap: "break-word" }}>{output}</Box>
               </Box>
             </Stack>
           </Stack>

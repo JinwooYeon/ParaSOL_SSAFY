@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Stack, TextField, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import styles from "./styles";
 
 interface IMyprops {
   requestBody: any;
@@ -49,12 +50,17 @@ export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
                     sx={{ width: "40%" }}
                   >
                     <div>
-                      {re.value} : {re.type}
+                      {re.value && (
+                        <span style={styles.apiTitle}>{re.value}</span>
+                      )}
+                      {re.type && <span style={styles.apiType}>{re.type}</span>}
                     </div>
                     {re.required ? (
-                      <div style={{ color: "blue" }}>required</div>
+                      <div style={styles.apiRequired.required}>required</div>
                     ) : (
-                      <div style={{ color: "red" }}>not required</div>
+                      <div style={styles.apiRequired.notRequired}>
+                        not required
+                      </div>
                     )}
                   </Stack>
                   <TextField
