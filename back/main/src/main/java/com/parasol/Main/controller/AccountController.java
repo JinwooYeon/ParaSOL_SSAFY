@@ -1,7 +1,121 @@
 package com.parasol.Main.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.parasol.Main.api_model.AccountBalance;
+import com.parasol.Main.api_model.AccountRequest;
+import com.parasol.Main.service.AccountService;
+import com.parasol.Main.service.ClientService;
+import com.parasol.Main.service.TransactionHistoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AccountController {
+    // TODO : 일단 오류 나는 거 다 주석처리 했습니다
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private TransactionHistoryService transactionHistoryService;
+
+
+
+    // 계좌 개설
+    @PostMapping("account")
+    @ResponseBody
+    public String createAccount(
+            @RequestParam("clientSeq") int clientSeq,
+            @RequestParam("accountPassword") int accountPassword
+    ) {
+//        Account account = new Account();
+//        account.setPassword(accountPassword);
+//
+//        String result = accountService.Create(account);
+//
+//        return result;
+        return null;
+    }
+
+    // 계좌 폐쇄
+//    @DeleteMapping("account")
+//    @ResponseBody
+//    public String deleteAccount(
+//            @RequestParam("accountNo") int accountNo,
+//            @RequestParam("accountPassword") int accountPassword
+//    ) {
+//        return null;
+//    }
+
+    // 계좌 목록 조회
+//    @GetMapping("account")
+//    public List<Account> getAllAccount(
+//            @RequestParam("name") String name,
+//            @RequestParam("residentNumber") String residentNumber
+//    ) {
+//        Client client = clientService.findByNameAndResidentNumber(name, residentNumber);
+//        List<Account> result = accountService.getAllAccount(client);
+//
+//        return result;
+//    }
+
+    // 계좌 잔액 조회
+    @GetMapping("account/balance")
+    @ResponseBody
+    public AccountBalance getBalance(
+            @RequestParam("bankName") String bankName,
+            @RequestParam("bankAccountNumber") String accountNo
+    ) {
+        return accountService.getBalance(accountNo);
+    }
+
+    // 계좌 거래 내역 조회
+//    @GetMapping("account/history")
+//    @ResponseBody
+//    public List<TransactionHistory> getAccountHistory(
+//            @RequestParam("accountNo") String accountNo
+//    ) {
+//        return transactionHistoryService.getAccountHistory(accountNo);
+//    }
+
+    // 계좌 입금. to 계좌에 입금
+    @PostMapping("account/deposit")
+    @ResponseBody
+    public boolean deposit(
+            @RequestBody AccountRequest request
+    ) {
+
+        /*
+         * TODO : 유효 계좌인지 확인
+         * */
+//        String accountFrom = request.getAccountFrom().getBankAccountNumber();
+//        String accountTo = request.getAccountTo().getBankAccountNumber();
+//        Long amount = request.getAmount();
+//
+//        boolean deposit = accountService.deposit(request);
+//        TransactionHistory transaction = transactionHistoryService.createDepositHistory(accountFrom, accountTo, amount);
+//        if(deposit && !transaction.equals(null)) return true;
+
+        return false;
+    }
+
+    // 계좌 출금. from 계좌에서 출금
+    @PostMapping("account/withdraw")
+    @ResponseBody
+    public boolean withdraw(
+            @RequestBody AccountRequest request
+    ) {
+//        String accountFrom = request.getAccountFrom().getBankAccountNumber();
+//        String accountTo = request.getAccountTo().getBankAccountNumber();
+//        Long amount = request.getAmount();
+//
+//        boolean withdraw = accountService.withdraw(request);
+//        TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountTo, amount);
+//        if(withdraw && !transaction.equals(null)) return true;
+
+        return false;
+    }
+
 }
