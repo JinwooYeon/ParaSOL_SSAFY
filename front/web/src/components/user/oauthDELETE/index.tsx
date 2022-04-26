@@ -1,3 +1,3 @@
-import { OauthDelete } from "./OauthDelete";
+import { OauthDELETE } from "./OauthDELETE";
 
-export default OauthDelete;
+export default OauthDELETE;

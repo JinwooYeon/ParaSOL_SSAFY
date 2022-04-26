@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Stack, Divider, Box, Button } from "@mui/material";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { Completed } from "components/Completed";
 import { RequestBody } from "components/RequestBody";
@@ -28,24 +28,11 @@ export const AuthPOST = () => {
       },
     ],
   };
+  ///////////////////////////////////
 
-  // let defaultObject = {};
-  // Object.values(requestBody).map((val) => {
-  //   val.map((v) => {
-  //     const tempObj = { [v.value]: "" };
-  //     defaultObject = Object.assign(defaultObject, tempObj);
-  //   });
-  // });
-
-  const responseBody = {};
   const [show, setShow] = useState(false);
   const [output, setOutput] = useState("");
-  // const { handleSubmit, control } = useForm({});
   const [formData, setFormData] = useState({});
-  // const [formData, setFormData] = useState({
-  //   id: "",
-  //   password: "",
-  // });
 
   const handlShow = () => {
     setShow(!show);
@@ -53,10 +40,9 @@ export const AuthPOST = () => {
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     console.log(data);
-    // const inputData = JSON.stringify(data);
     const inputData = data;
     await axios
-      .post("/auth", inputData, {
+      .post(API.uri, inputData, {
         headers: {
           "content-Type": "application/json",
         },
@@ -80,7 +66,7 @@ export const AuthPOST = () => {
         >
           <Stack direction="row" alignItems="center" spacing={2}>
             <Completed completed={API.completed} />
-            <Box style={styles.apiTitle}>{API.detail}</Box>
+            <Box style={styles.apiDetail}>{API.detail}</Box>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Box style={styles.apiMethod}>{API.method}</Box>
@@ -95,7 +81,6 @@ export const AuthPOST = () => {
             <Stack direction="column">
               <Box style={styles.apiContent}>API 요청</Box>
               <Box style={styles.apiContentDetail}>
-                {/* <form onSubmit={handleSubmit(onSubmit)}> */}
                 <Stack direction="column" spacing={3}>
                   <RequestBody
                     requestBody={requestBody}
@@ -111,12 +96,11 @@ export const AuthPOST = () => {
                     출력값 확인하기
                   </Button>
                 </Stack>
-                {/* </form> */}
               </Box>
             </Stack>
             <Stack justifyContent="center" alignItems="center">
               <Box sx={{ fontWeight: "bold" }}>출력값</Box>
-              <Box style={styles.apiResponse}>
+              <Box style={styles.outputStyle}>
                 <p>{output}</p>
               </Box>
             </Stack>
@@ -126,52 +110,3 @@ export const AuthPOST = () => {
     </>
   );
 };
-
-// const styles = {
-//   api: {
-//     // margin: "auto 10px",
-//     padding: "2px 40px",
-//   },
-//   apiHeader: {
-//     width: "100%",
-//     justifyContent: "start",
-//     color: "black",
-//   },
-//   apiUri: {
-//     color: "blue",
-//     fontSize: 15,
-//     alignItems: "center",
-//     textTransform: "lowercase",
-//   },
-//   apiMethod: {
-//     background: "green",
-//     color: "white",
-//     padding: "4px 10px",
-//     fontSize: 13,
-//     borderRadius: 20,
-//   },
-//   apiDetail: {
-//     fontSize: 20,
-//     fontWeight: "bold",
-//     padding: 4,
-//     alignItems: "center",
-//   },
-//   apiContent: {
-//     color: "black",
-//     fontWeight: "bold",
-//   },
-//   apiContentDetail: {
-//     backgroundColor: "#D8D6D6",
-//     borderRadius: 10,
-//     margin: "15px auto",
-//     padding: 13,
-//     width: "100%",
-//     height: "100%",
-//   },
-//   outputStyle: {
-//     border: "solid green 3px",
-//     padding: 9,
-//     width: "90%",
-//     height: 217,
-//   },
-// };

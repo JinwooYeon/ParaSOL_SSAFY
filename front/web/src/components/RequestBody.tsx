@@ -1,73 +1,31 @@
-import React, { useState } from "react";
-import { Box, Stack, TextField } from "@mui/material";
-import { useEffect } from "react";
+import React from "react";
+import { Box, Stack, TextField, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface IMyprops {
   requestBody: any;
-  // requestBody: {
-  //   LoginInfo: Array<object>;
-  // };
-  formData: object;
+  formData: any;
   setFormData: (formDate: any) => void;
 }
 
 export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
-  // const myRequest = props.requestBody.LoginInfo;
   const myRequest = props.requestBody;
   const formData = props.formData;
   const setter = props.setFormData;
 
-  // let defaultObject = {};
-  // Object.values(myRequest).map((val: any) => {
-  //   val.map((v: any) => {
-  //     const tempObj = { [v.value]: "" };
-  //     defaultObject = Object.assign(defaultObject, tempObj);
-  //   });
-  // });
-
-  const [inputData, setInputData] = useState(formData);
-
-  // console.log(props.requestBody.LoginInfo);
-  // console.log(JSON.stringify(props.requestBody));
-
-  const handleChange = (key: string, value: string) => {
-    // console.log(key, value);
-    setInputData({
-      ...inputData,
-      [key]: value,
+  const handleChange = (key: string, v: string) => {
+    setter({
+      ...formData,
+      [key]: v,
     });
-    // switch (key) {
-    //   case "id": {
-    //     setInputData({
-    //       ...inputData,
-    //       id: value,
-    //     });
-    //     return;
-    //   }
-    //   case "password": {
-    //     setInputData({
-    //       ...inputData,
-    //       password: value,
-    //     });
-    //     return;
-    //   }
-    //   case "name": {
-    //     setInputData({
-    //       ...inputData,
-    //       name: value,
-    //     });
-    //     return;
-    //   }
-    //   default: {
-    //     setInputData(inputData);
-    //     return;
-    //   }
-    // }
   };
 
-  useEffect(() => {
-    setter(inputData);
-  }, [inputData]);
+  const clearValue = (key: string) => {
+    setter({
+      ...formData,
+      [key]: "",
+    });
+  };
 
   return (
     <>
@@ -101,52 +59,28 @@ export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
                   </Stack>
                   <TextField
                     label={re.value}
-                    style={{ width: "60%" }}
+                    style={{ width: "55%" }}
                     size="small"
-                    onChange={(e) => {
+                    type="text"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       handleChange(re.value, e.target.value);
+                    }}
+                    value={formData[re.value] || ""}
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton
+                          size="small"
+                          onClick={() => clearValue(re.value)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      ),
                     }}
                   ></TextField>
                 </Stack>
               );
             })
           )}
-          {/* {myRequest.map((re: any, index: any) => {
-            return (
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                spacing={3}
-                sx={{ marginTop: 1 }}
-                key={index}
-              >
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                  justifyContent="space-between"
-                  sx={{ width: "40%" }}
-                >
-                  <div>
-                    {re.value} : {re.type}
-                  </div>
-                  {re.required ? (
-                    <div style={{ color: "blue" }}>required</div>
-                  ) : (
-                    <div style={{ color: "red" }}>not required</div>
-                  )}
-                </Stack>
-                <TextField
-                  label={re.value}
-                  style={{ width: "60%" }}
-                  size="small"
-                  onChange={(e) => {
-                    handleChange(re.value, e.target.value);
-                  }}
-                ></TextField>
-              </Stack>
-            );
-          })} */}
         </Box>
       ) : null}
     </>

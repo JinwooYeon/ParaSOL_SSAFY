@@ -1,6 +1,5 @@
 const styles = {
   api: {
-    // margin: "auto 10px",
     padding: "2px 40px",
   },
   apiHeader: {

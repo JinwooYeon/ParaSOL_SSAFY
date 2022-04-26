@@ -1,25 +1,25 @@
 import { useState } from "react";
-import { Stack, Divider, Grid, Box, Button } from "@mui/material";
-import { InputController } from "components/InputController";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { Stack, Divider, Box, Button } from "@mui/material";
+import { SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { Completed } from "components/Completed";
 import { RequestBody } from "components/RequestBody";
 import styles from "components/styles";
 
 export const UserPOST = () => {
+  ////////////// 입력해야하는 부분 ///////////
   const API = {
     uri: "/client",
     method: "POST",
     detail: "회원가입",
-    completed: true,
+    completed: false,
   };
   const requestBody = {
     ClientInfo: [
       {
         value: "id",
         type: "string",
-        required: false,
+        required: true,
       },
       {
         value: "password",
@@ -33,23 +33,11 @@ export const UserPOST = () => {
       },
     ],
   };
-
-  // let defaultObject = {};
-  // Object.values(requestBody).map((val) => {
-  //   val.map((v) => {
-  //     const tempObj = { [v.value]: "" };
-  //     defaultObject = Object.assign(defaultObject, tempObj);
-  //   });
-  // });
+  ///////////////////////////////////
 
   const [show, setShow] = useState(false);
   const [output, setOutput] = useState("");
   const [formData, setFormData] = useState({});
-  // const [formData, setFormData] = useState({
-  //   id: "",
-  //   password: "",
-  //   name: "",
-  // });
 
   const handlShow = () => {
     setShow(!show);
@@ -59,7 +47,7 @@ export const UserPOST = () => {
     console.log(data);
     const inputData = data;
     await axios
-      .post("/client", inputData, {
+      .post(API.uri, inputData, {
         headers: {
           "content-Type": "application/json",
         },
@@ -121,52 +109,3 @@ export const UserPOST = () => {
     </>
   );
 };
-
-// const styles = {
-//   api: {
-//     // margin: "auto 10px",
-//     padding: "2px 40px",
-//   },
-//   apiHeader: {
-//     width: "100%",
-//     justifyContent: "start",
-//     color: "black",
-//   },
-//   apiUri: {
-//     color: "blue",
-//     fontSize: 15,
-//     alignItems: "center",
-//     textTransform: "lowercase",
-//   },
-//   apiMethod: {
-//     background: "green",
-//     color: "white",
-//     padding: "4px 10px",
-//     fontSize: 13,
-//     borderRadius: 20,
-//   },
-//   apiDetail: {
-//     fontSize: 20,
-//     fontWeight: "bold",
-//     padding: 4,
-//     alignItems: "center",
-//   },
-//   apiContent: {
-//     color: "black",
-//     fontWeight: "bold",
-//   },
-//   apiContentDetail: {
-//     backgroundColor: "#D8D6D6",
-//     borderRadius: 10,
-//     margin: "15px auto",
-//     padding: 13,
-//     width: "100%",
-//     height: "100%",
-//   },
-//   outputStyle: {
-//     border: "solid green 3px",
-//     padding: 9,
-//     width: "90%",
-//     height: 217,
-//   },
-// };
