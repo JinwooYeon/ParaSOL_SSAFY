@@ -21,7 +21,7 @@ class ClientServiceTest {
     @Test
     void 서비스_고객_고객정보생성() {
         // Given
-        final String name = "김형준";
+        final String name = "김형준0";
         final String residentNumber = "961234-1234567";
 
         // When
