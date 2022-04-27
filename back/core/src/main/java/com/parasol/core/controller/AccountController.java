@@ -10,6 +10,7 @@ import com.parasol.core.service.TransactionHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -86,7 +87,7 @@ public class AccountController {
     @PostMapping("account/deposit")
     @ResponseBody
     public boolean deposit(
-            @RequestBody AccountRequest request
+            @RequestBody @Valid AccountRequest request
     ) {
 
         /*
@@ -107,7 +108,7 @@ public class AccountController {
     @PostMapping("account/withdraw")
     @ResponseBody
     public boolean withdraw(
-            @RequestBody AccountRequest request
+            @RequestBody @Valid AccountRequest request
     ) {
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
         String accountTo = request.getAccountTo().getBankAccountNumber();
@@ -124,7 +125,7 @@ public class AccountController {
     @PostMapping("account/remit")
     @ResponseBody
     public boolean remit(
-            @RequestBody AccountRequest request
+            @RequestBody @Valid AccountRequest request
     ){
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
         String accountTo = request.getAccountTo().getBankAccountNumber();
