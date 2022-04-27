@@ -1,5 +1,6 @@
 package com.parasol.Main.controller;
 
+import com.parasol.Main.api_model.ClientInfo;
 import com.parasol.Main.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +22,11 @@ public class ClientController {
     }
 
     @GetMapping("client")
-    public String getClient(
+    public ClientInfo getClient(
             @RequestParam("id") String id
     ) {
-        return null;
+        ClientInfo result = clientService.findById(id);
+        return result;
     }
 
 }

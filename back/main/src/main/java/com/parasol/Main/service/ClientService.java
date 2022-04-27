@@ -18,11 +18,11 @@ public class ClientService {
         clientFixed.createAddClientRequest(request);
     }
 
-    public String findById(String id){
+    public ClientInfo findById(String id){
         return null;
     }
 
-    public String findByResidentNumber(String residentNumber){
+    public ClientInfo findByResidentNumber(String residentNumber){
         return null;
     }
 }

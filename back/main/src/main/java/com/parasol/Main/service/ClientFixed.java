@@ -1,7 +1,6 @@
 package com.parasol.Main.service;
 
 import com.parasol.Main.api_model.ClientResponse;
-import com.parasol.Main.api_model.RegisterRequest;
 import com.parasol.Main.api_request.AccountCloseRequest;
 import com.parasol.Main.api_request.ClientRegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
