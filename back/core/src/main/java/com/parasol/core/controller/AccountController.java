@@ -121,7 +121,7 @@ public class AccountController {
     }
 
     // 송금, from 계좌에서 출금, to 계좌에 입금
-    @PostMapping
+    @PostMapping("account/remit")
     @ResponseBody
     public boolean remit(
             @RequestBody AccountRequest request
