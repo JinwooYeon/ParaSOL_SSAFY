@@ -27,10 +27,14 @@ public class AccountController {
     @PostMapping("account")
     @ResponseBody
     public String createAccount(
-            @RequestParam("clientSeq") int clientSeq,
+            @RequestParam("name") String name,
+            @RequestParam("residentNumber") String residentNumber,
             @RequestParam("accountPassword") int accountPassword
     ) {
+        Client client = clientService.findByNameAndResidentNumber(name, residentNumber);
+
         Account account = new Account();
+        account.setClient(client);
         account.setPassword(accountPassword);
 
         String result = accountService.Create(account);
