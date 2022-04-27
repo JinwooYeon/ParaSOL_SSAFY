@@ -1,12 +1,13 @@
 package com.parasol.Main.api_model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
-public class Client {
-    private String id;
+public class ClientInfo {
     private String name;
     private String residentNumber;
-};
+}

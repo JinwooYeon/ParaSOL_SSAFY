@@ -7,8 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Account {
+public class LoginInfo {
     private String id;
-    private Integer password;
-    private Long balance;
+    private String password;
 }
