@@ -13,7 +13,8 @@ interface PropsType {
 
 export const Components: React.FC<PropsType> = (props: PropsType) => {
   const BASE_URL = "";
-  const JWToken = "";
+  const JWTtoken = localStorage.getItem("jwt");
+  // const JWTtoken = localStorage.getItem("jwt");
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({});
   const [responseData, setResponseData] = useState({
@@ -33,7 +34,6 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           method: "get",
           url: props.API.uri,
           baseURL: BASE_URL,
-          headers: { JWT: JWToken },
           // `proxy`는 프록시 서버의 호스트이름, 포트, 프로토콜을 정의합니다.
           // 기존의 `http_proxy`와 `https_proxy` 환경 변수를 사용하여
           // 프록시를 정의할 수도 있습니다.
@@ -74,7 +74,6 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           method: "post",
           url: props.API.uri,
           baseURL: BASE_URL,
-          headers: { JWT: JWToken },
           data,
         })
           .then((response) => {
@@ -83,6 +82,11 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
               status: response.status.toString(),
               output: response.data.toString(),
             });
+            if (props.API.detail === "로그인") {
+              localStorage.setItem("jwt", response.data.token);
+              axios.defaults.headers.common["Authorization"] =
+                "Bearer " + response.data.token;
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -97,7 +101,6 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           method: "patch",
           url: props.API.uri,
           baseURL: BASE_URL,
-          headers: { JWT: JWToken },
           data,
         })
           .then((response) => {
@@ -120,7 +123,6 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           method: "delete",
           url: props.API.uri,
           baseURL: BASE_URL,
-          headers: { JWT: JWToken },
           data,
         })
           .then((response) => {
