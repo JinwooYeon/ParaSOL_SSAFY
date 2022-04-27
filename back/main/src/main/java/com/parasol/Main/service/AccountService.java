@@ -2,7 +2,7 @@ package com.parasol.Main.service;
 
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.Main.api_response.AccountHistoryQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
 import com.parasol.Main.api_response.AccountListQueryResultResponse;
 import com.parasol.Main.api_response.TransactionExecuteResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class AccountService {
         return null;
     }
 
-    public AccountHistoryQueryResultResponse getHistory(AccountHistoryQueryRequest request) {
+    public AccountHistoriesQueryResultResponse getHistory(AccountHistoryQueryRequest request) {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 

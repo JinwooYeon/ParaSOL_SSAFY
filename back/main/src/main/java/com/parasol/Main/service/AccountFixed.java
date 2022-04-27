@@ -2,7 +2,7 @@ package com.parasol.Main.service;
 
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.Main.api_response.AccountHistoryQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
 import com.parasol.Main.api_response.AccountListQueryResultResponse;
 import com.parasol.Main.api_response.TransactionExecuteResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class AccountFixed {
         return null;
     }
 
-    public AccountHistoryQueryResultResponse createQueryAccountHistoryRequest(AccountHistoryQueryRequest saveInfo) {
+    public AccountHistoriesQueryResultResponse createQueryAccountHistoryRequest(AccountHistoryQueryRequest saveInfo) {
         // 코어 뱅킹 시스템 rest api 호출
         return null;
     }

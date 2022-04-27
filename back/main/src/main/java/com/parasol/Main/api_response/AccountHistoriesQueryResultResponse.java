@@ -1,6 +1,6 @@
 package com.parasol.Main.api_response;
 
-import com.parasol.Main.api_model.AccountHistory;
+import com.parasol.Main.api_model.AccountHistoryList;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,5 +8,5 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AccountHistoryQueryResultResponse extends AccountHistory {
+public class AccountHistoriesQueryResultResponse extends AccountHistoryList {
 }
