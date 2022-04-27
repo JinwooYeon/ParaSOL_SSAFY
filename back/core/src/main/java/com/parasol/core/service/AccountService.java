@@ -8,6 +8,8 @@ import com.parasol.core.utils.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +29,7 @@ public class AccountService {
         return accounts;
     }
 
-    public Long getBalance(String accountNo){
+    public Long getBalance(String accountNo) {
         Optional<Account> account = accountRepository.findById(accountNo);
         return account.get().getBalance();
     }
@@ -60,7 +62,9 @@ public class AccountService {
         Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getBankAccountNumber());
         Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
 
+        @PositiveOrZero
         Long toBalance = accountTo.get().getBalance() + request.getAmount();
+        @PositiveOrZero
         Long fromBalance = accountFrom.get().getBalance() - request.getAmount();
 
         accountTo.get().setBalance(toBalance);
