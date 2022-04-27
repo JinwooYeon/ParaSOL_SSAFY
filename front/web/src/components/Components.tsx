@@ -13,8 +13,9 @@ interface PropsType {
 
 export const Components: React.FC<PropsType> = (props: PropsType) => {
   const BASE_URL = "";
-  const JWTtoken = "";
-  // const JWTtoken = localStorage.getItem("jwt");
+  const JWTtoken = localStorage.getItem("jwt")
+    ? localStorage.getItem("jwt")
+    : "";
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({});
   const [responseData, setResponseData] = useState({
