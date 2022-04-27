@@ -42,7 +42,7 @@ public class TransactionHistoryService {
         Long time = System.currentTimeMillis();
         Optional<Account> account = accountRepository.findById(accountTo);
 
-        // 츌굼 요청일 때 fromAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
+        // 출금 요청일 때 fromAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
         TransactionHistory transactionHistory = TransactionHistory.builder()
                 .account(account.get())
                 .date(time)
@@ -54,7 +54,23 @@ public class TransactionHistoryService {
         return transactionHistoryRepository.save(transactionHistory);
     }
 
-    public List<TransactionHistory> getAccountHistory(String accountNo){
+    public TransactionHistory createRemitHistory(String accountFrom, String accountTo, Long amount) {
+        Long time = System.currentTimeMillis();
+        Optional<Account> account = accountRepository.findById(accountTo);
+
+        // 송금 요청일 때 toAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
+        TransactionHistory transactionHistory = TransactionHistory.builder()
+                .account(account.get())
+                .date(time)
+                .type(TransactionType.DEPOSIT)
+                .amount(amount)
+                .transactionAccount(accountFrom)
+                .build();
+
+        return transactionHistoryRepository.save(transactionHistory);
+    }
+
+    public List<TransactionHistory> getAccountHistory(String accountNo) {
         return transactionHistoryRepository.findByAccount_Id(accountNo)
                 .stream().sorted(Comparator.comparing(TransactionHistory::getDate).reversed()).collect(Collectors.toList());
     }
