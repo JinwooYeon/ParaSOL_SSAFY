@@ -1,22 +1,17 @@
 import { Components } from "components/Components";
 
-export const AuthPOST = () => {
+export const OauthDELETE = () => {
   ////////////// 입력해야하는 부분 ///////////
   const API = {
-    uri: "/auth",
-    method: "POST",
-    detail: "로그인",
+    uri: "/oauth",
+    method: "DELETE",
+    detail: "OAuth 회원 탈퇴",
     completed: false,
   };
   const requestBody = {
-    LoginInfo: [
+    token: [
       {
-        value: "id",
-        type: "string",
-        required: true,
-      },
-      {
-        value: "password",
+        value: "jwt",
         type: "string",
         required: true,
       },
