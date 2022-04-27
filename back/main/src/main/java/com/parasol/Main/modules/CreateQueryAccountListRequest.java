@@ -15,7 +15,7 @@ public class CreateQueryAccountListRequest {
     @Qualifier(value = "fixedText")
     private WebClient webClient;
 
-    public AccountListQueryResultResponse createQueryAccountListResponse(AccountListQueryRequest request) {
+    public AccountListQueryResultResponse createQueryAccountListRequest(AccountListQueryRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.GET);
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account")
