@@ -16,11 +16,11 @@ public class AccountService {
     public void create(AccountOpenRequest request) {
         String resident = request.getResidentNumber();
         int password = request.getAccountPassword();
-        accountFixed.createOpenAccountRequest();
+        accountFixed.createOpenAccountRequest(request);
     }
 
     public AccountListQueryResultResponse getAllAccount(AccountListQueryRequest request) {
-        accountFixed.createQueryAccountListRequest();
+        accountFixed.createQueryAccountListRequest(request);
         return null;
     }
 
@@ -28,7 +28,7 @@ public class AccountService {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 
-        accountFixed.createQueryAccountBalanceRequest();
+        accountFixed.createQueryAccountBalanceRequest(request);
         return null;
     }
 
@@ -36,17 +36,17 @@ public class AccountService {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 
-        accountFixed.createQueryAccountHistoryRequest();
+        accountFixed.createQueryAccountHistoryRequest(request);
         return null;
     }
 
     public TransactionExecuteResultResponse deposit(DepositRequest request) {
-        accountFixed.createDepositRequest();
+        accountFixed.createDepositRequest(request);
         return null;
     }
 
     public TransactionExecuteResultResponse withdraw(WithdrawRequest request) {
-        accountFixed.createWithdrawRequest();
+        accountFixed.createWithdrawRequest(request);
         return null;
     }
 }
