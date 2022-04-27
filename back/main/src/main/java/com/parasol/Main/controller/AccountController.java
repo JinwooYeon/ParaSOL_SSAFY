@@ -1,13 +1,9 @@
 package com.parasol.Main.controller;
 
-import com.parasol.Main.api_model.AccountBalanceResponse;
-import com.parasol.Main.api_model.AccountCloseRequest;
-import com.parasol.Main.api_model.TransactionRequest;
+import com.parasol.Main.api_request.DepositRequest;
+import com.parasol.Main.api_request.WithdrawRequest;
 import com.parasol.Main.service.AccountService;
-import com.parasol.Main.service.ClientService;
-import com.parasol.Main.service.TransactionHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -61,7 +57,7 @@ public class AccountController {
     @PostMapping("account/deposit")
     @ResponseBody
     public String deposit(
-            @RequestBody TransactionRequest request
+            @RequestBody DepositRequest request
     ) {
         return null;
     }
@@ -70,7 +66,7 @@ public class AccountController {
     @PostMapping("account/withdraw")
     @ResponseBody
     public String withdraw(
-            @RequestBody TransactionRequest request
+            @RequestBody WithdrawRequest request
     ) {
 
         return null;
