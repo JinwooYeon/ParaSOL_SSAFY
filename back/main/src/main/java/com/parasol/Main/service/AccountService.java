@@ -5,22 +5,35 @@ import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
 import com.parasol.Main.api_response.AccountListQueryResultResponse;
 import com.parasol.Main.api_response.TransactionExecuteResultResponse;
+import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {
     @Autowired
-    private AccountFixed accountFixed;
+    private CreateOpenAccountRequest openAccountRequestFactory;
+    @Autowired
+    private CreateCloseAccountRequest closeAccountRequestFactory;
+    @Autowired
+    private CreateQueryAccountBalanceRequest queryAccountBalanceRequestFactory;
+    @Autowired
+    private CreateQueryAccountListRequest queryAccountListRequestFactory;
+    @Autowired
+    private CreateQueryAccountHistoryRequest queryAccountHistoryRequestFactory;
+    @Autowired
+    private CreateDepositRequest depositRequestFactory;
+    @Autowired
+    private CreateWithdrawRequest withdrawRequestFactory;
 
     public void create(AccountOpenRequest request) {
         String resident = request.getResidentNumber();
         int password = request.getAccountPassword();
-        accountFixed.createOpenAccountRequest(request);
+        openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
     public AccountListQueryResultResponse getAllAccount(AccountListQueryRequest request) {
-        accountFixed.createQueryAccountListRequest(request);
+        queryAccountListRequestFactory.createQueryAccountListRequest(request);
         return null;
     }
 
@@ -28,7 +41,7 @@ public class AccountService {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 
-        accountFixed.createQueryAccountBalanceRequest(request);
+        queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
         return null;
     }
 
@@ -36,17 +49,19 @@ public class AccountService {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 
-        accountFixed.createQueryAccountHistoryRequest(request);
+        queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request);
         return null;
     }
 
     public TransactionExecuteResultResponse deposit(DepositRequest request) {
-        accountFixed.createDepositRequest(request);
+        // TODO: 메소드명 수정 필요 @선민기
+        //depositRequestFactory.createDepositRequest(request);
         return null;
     }
 
     public TransactionExecuteResultResponse withdraw(WithdrawRequest request) {
-        accountFixed.createWithdrawRequest(request);
+        // TODO: 구현 수정 필요 @선민기
+        //withdrawRequestFactory.createWithdrawRequest(request);
         return null;
     }
 }
