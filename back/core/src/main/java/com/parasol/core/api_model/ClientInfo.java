@@ -6,13 +6,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @ToString
 @ApiModel("ClientInfo")
 public class ClientInfo {
     @ApiModelProperty(name="name", example="김싸피")
+    @NotBlank
     private String name;
     @ApiModelProperty(name="resident_number", example = "000000-0000000")
+    @NotBlank
     private String residentNumber;
 }
