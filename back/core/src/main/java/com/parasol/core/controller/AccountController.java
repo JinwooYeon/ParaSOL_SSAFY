@@ -119,4 +119,22 @@ public class AccountController {
 
         return false;
     }
+
+    // 송금, from 계좌에서 출금, to 계좌에 입금
+    @PostMapping
+    @ResponseBody
+    public boolean remit(
+            @RequestBody AccountRequest request
+    ){
+        String accountFrom = request.getAccountFrom().getBankAccountNumber();
+        String accountTo = request.getAccountTo().getBankAccountNumber();
+        Long amount = request.getAmount();
+
+        // 송금하기 (출금 + 입금)
+        boolean remit = accountService.remit(request);
+        TransactionHistory transaction = transactionHistoryService.createRemitHistory(accountFrom, accountTo, amount);
+        if(remit && !transaction.equals(null)) return true;
+
+        return false;
+    }
 }
