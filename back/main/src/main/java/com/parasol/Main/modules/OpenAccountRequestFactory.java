@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
-public class CreateOpenAccountRequest {
+public class OpenAccountRequestFactory {
     @Autowired
     @Qualifier(value = "fixedText")
     WebClient webClient;

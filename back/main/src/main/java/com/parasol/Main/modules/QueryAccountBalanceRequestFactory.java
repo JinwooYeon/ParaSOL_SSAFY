@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
-public class CreateQueryAccountBalanceRequest {
+public class QueryAccountBalanceRequestFactory {
     @Autowired
     @Qualifier(value = "fixedText")
     private WebClient webClient;

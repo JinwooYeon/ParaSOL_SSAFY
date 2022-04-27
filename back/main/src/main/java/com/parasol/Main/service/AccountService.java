@@ -12,19 +12,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountService {
     @Autowired
-    private CreateOpenAccountRequest openAccountRequestFactory;
+    private OpenAccountRequestFactory openAccountRequestFactory;
     @Autowired
-    private CreateCloseAccountRequest closeAccountRequestFactory;
+    private CloseAccountRequestFactory closeAccountRequestFactory;
     @Autowired
-    private CreateQueryAccountBalanceRequest queryAccountBalanceRequestFactory;
+    private QueryAccountBalanceRequestFactory queryAccountBalanceRequestFactory;
     @Autowired
-    private CreateQueryAccountListRequest queryAccountListRequestFactory;
+    private QueryAccountListRequestFactory queryAccountListRequestFactory;
     @Autowired
-    private CreateQueryAccountHistoryRequest queryAccountHistoryRequestFactory;
+    private QueryAccountHistoryRequestFactory queryAccountHistoryRequestFactory;
     @Autowired
-    private CreateDepositRequest depositRequestFactory;
+    private DepositRequestFactory depositRequestFactory;
     @Autowired
-    private CreateWithdrawRequest withdrawRequestFactory;
+    private WithdrawRequestFactory withdrawRequestFactory;
 
     public void create(AccountOpenRequest request) {
         String resident = request.getResidentNumber();

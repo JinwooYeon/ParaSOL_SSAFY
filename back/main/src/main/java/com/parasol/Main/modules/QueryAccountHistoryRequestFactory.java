@@ -1,7 +1,7 @@
 package com.parasol.Main.modules;
 
-import com.parasol.Main.api_request.AccountListQueryRequest;
-import com.parasol.Main.api_response.AccountListQueryResultResponse;
+import com.parasol.Main.api_request.AccountHistoryQueryRequest;
+import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
@@ -10,20 +10,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
-public class CreateQueryAccountListRequest {
+public class QueryAccountHistoryRequestFactory {
     @Autowired
     @Qualifier(value = "fixedText")
     private WebClient webClient;
 
-    public AccountListQueryResultResponse createQueryAccountListRequest(AccountListQueryRequest request) {
+    public AccountHistoriesQueryResultResponse createQueryAccountHistoryRequest(AccountHistoryQueryRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.GET);
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
-                .path("/account")
-                .queryParam("name", request.getName())
-                .queryParam("residentNumber", request.getResidentNumber())
+                .path("/account/history")
+                .queryParam("accountNo", request.getBankAccountNumber())
                 .build());
 
-        Mono<AccountListQueryResultResponse> response = bodySpec.retrieve().bodyToMono(AccountListQueryResultResponse.class);
+        Mono<AccountHistoriesQueryResultResponse> response = bodySpec.retrieve().bodyToMono(AccountHistoriesQueryResultResponse.class);
 
         return response.block();
     }

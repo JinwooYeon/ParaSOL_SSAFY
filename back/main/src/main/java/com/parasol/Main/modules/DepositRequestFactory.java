@@ -1,6 +1,5 @@
 package com.parasol.Main.modules;
 
-import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.DepositRequest;
 import com.parasol.Main.api_response.TransactionExecuteResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import org.springframework.web.reactive.function.client.WebClient.RequestHeaders
 import reactor.core.publisher.Mono;
 
 @Component
-public class CreateDepositRequest {
+public class DepositRequestFactory {
     @Autowired
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
