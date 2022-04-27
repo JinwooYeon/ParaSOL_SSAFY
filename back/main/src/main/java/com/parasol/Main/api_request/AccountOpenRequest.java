@@ -10,6 +10,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class AccountOpenRequest {
+    private String name;
     private String residentNumber;
     private int accountPassword;
 }
