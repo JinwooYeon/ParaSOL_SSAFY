@@ -1,0 +1,12 @@
+package com.parasol.BaaS.api_model;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class AccountBalance {
+    private String bankName;
+    private String bankAccountName;
+    private Long balance;
+}
