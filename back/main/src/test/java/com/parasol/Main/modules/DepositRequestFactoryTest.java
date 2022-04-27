@@ -5,14 +5,12 @@ import com.parasol.Main.api_request.DepositRequest;
 import com.parasol.Main.eenum.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-class CreateDepositRequestTest {
+class DepositRequestFactoryTest {
     @Autowired
-    private CreateDepositRequest createDepositRequest;
+    private DepositRequestFactory depositRequestFactory;
 
     @Test
     void run() {
@@ -31,6 +29,6 @@ class CreateDepositRequestTest {
         saveInfo.setAccountFrom(from);
         saveInfo.setAccountTo(to);
 
-        createDepositRequest.run(saveInfo);
+        depositRequestFactory.run(saveInfo);
     }
 }
