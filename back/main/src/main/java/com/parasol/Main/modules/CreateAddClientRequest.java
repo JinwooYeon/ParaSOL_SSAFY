@@ -17,14 +17,14 @@ public class CreateAddClientRequest {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    void createAddClientRequest() {
+    public void createAddClientRequest(ClientRegisterRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/client")
                 .build()
         ).body(BodyInserters
-                .fromFormData("name", "sun")
-                .with("residentNumber", "202204261234567")
+                .fromFormData("name", request.getName())
+                .with("residentNumber", request.getResidentNumber())
         );
         // ClientResponse에 응답 데이터 로드
         Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
