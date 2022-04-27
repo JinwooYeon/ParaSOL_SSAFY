@@ -56,11 +56,14 @@ public class AccountService {
     }
 
     public boolean remit(AccountRequest request) {
-        // from 계좌에서 출금
+
+        Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getBankAccountNumber());
         Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
 
+        Long toBalance = accountTo.get().getBalance() + request.getAmount();
         Long fromBalance = accountFrom.get().getBalance() - request.getAmount();
-        // from 계좌에서 입금 금액만큼 빼기
+
+        accountTo.get().setBalance(toBalance);
         accountFrom.get().setBalance(fromBalance);
 
         return true;
