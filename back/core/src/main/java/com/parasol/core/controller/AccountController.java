@@ -10,6 +10,7 @@ import com.parasol.core.service.TransactionHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -86,7 +87,7 @@ public class AccountController {
     @PostMapping("account/deposit")
     @ResponseBody
     public boolean deposit(
-            @RequestBody AccountRequest request
+            @RequestBody @Valid AccountRequest request
     ) {
 
         /*
@@ -107,7 +108,7 @@ public class AccountController {
     @PostMapping("account/withdraw")
     @ResponseBody
     public boolean withdraw(
-            @RequestBody AccountRequest request
+            @RequestBody @Valid AccountRequest request
     ) {
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
         String accountTo = request.getAccountTo().getBankAccountNumber();
@@ -116,6 +117,24 @@ public class AccountController {
         boolean withdraw = accountService.withdraw(request);
         TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountTo, amount);
         if(withdraw && !transaction.equals(null)) return true;
+
+        return false;
+    }
+
+    // 송금, from 계좌에서 출금, to 계좌에 입금
+    @PostMapping("account/remit")
+    @ResponseBody
+    public boolean remit(
+            @RequestBody @Valid AccountRequest request
+    ){
+        String accountFrom = request.getAccountFrom().getBankAccountNumber();
+        String accountTo = request.getAccountTo().getBankAccountNumber();
+        Long amount = request.getAmount();
+
+        // 송금하기 (출금 + 입금)
+        boolean remit = accountService.remit(request);
+        TransactionHistory transaction = transactionHistoryService.createRemitHistory(accountFrom, accountTo, amount);
+        if(remit && !transaction.equals(null)) return true;
 
         return false;
     }
