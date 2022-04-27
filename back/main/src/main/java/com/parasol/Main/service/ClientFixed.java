@@ -1,6 +1,8 @@
 package com.parasol.Main.service;
 
 import com.parasol.Main.api_model.ClientResponse;
+import com.parasol.Main.api_model.RegisterRequest;
+import com.parasol.Main.api_request.AccountCloseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
@@ -16,7 +18,6 @@ public class ClientFixed {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    /*
     public ClientResponse createAddClientRequest(RegisterRequest clientInfo) {
         // 코어 뱅킹 시스템 rest api 호출
         // http://corebank.com/client   - POST
@@ -33,9 +34,7 @@ public class ClientFixed {
 
         return null;
     }
-    */
 
-    /*
     public List<ClientResponse> createRemoveClientRequest(AccountCloseRequest clientInfo) {
         // 코어 뱅킹 시스템 rest api 호출
         // http://corebank.com/client?id=아이디   - Get
@@ -52,5 +51,4 @@ public class ClientFixed {
 
         return null;
     }
-    */
 };
