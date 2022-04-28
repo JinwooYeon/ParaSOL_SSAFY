@@ -8,18 +8,16 @@ import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
 import com.parasol.BaaS.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("account")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/account/balance")
+    @GetMapping("balance")
     @ResponseBody
     public AccountBalanceQueryResultResponse getBalance(
             @RequestParam("bankName") String bankName,
@@ -33,7 +31,7 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/account")
+    @GetMapping
     @ResponseBody
     public AccountListQueryResultResponse getAccountList(
             @RequestParam("bankName") String bankName
@@ -45,7 +43,7 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/account/history")
+    @GetMapping("history")
     @ResponseBody
     public AccountHistoryQueryResultResponse getAccountHistory(
             @RequestParam("bankName") String bankName,
@@ -59,7 +57,7 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/account/deposit")
+    @PostMapping("deposit")
     @ResponseBody
     public TransactionExecuteResultResponse deposit(
             @RequestParam DepositRequest request
@@ -68,7 +66,7 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/account/withdraw")
+    @PostMapping("withdraw")
     @ResponseBody
     public TransactionExecuteResultResponse withdraw(
             @RequestParam WithdrawRequest request
