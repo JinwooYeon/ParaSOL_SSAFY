@@ -60,7 +60,7 @@ public class AccountController {
     @PostMapping("deposit")
     @ResponseBody
     public TransactionExecuteResultResponse deposit(
-            @RequestParam DepositRequest request
+            @RequestBody DepositRequest request
     ) {
         TransactionExecuteResultResponse result = accountService.deposit(request);
         return result;
@@ -69,7 +69,7 @@ public class AccountController {
     @PostMapping("withdraw")
     @ResponseBody
     public TransactionExecuteResultResponse withdraw(
-            @RequestParam WithdrawRequest request
+            @RequestBody WithdrawRequest request
     ) {
         TransactionExecuteResultResponse result = accountService.withdraw(request);
         return result;
