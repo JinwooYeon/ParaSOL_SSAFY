@@ -1,6 +1,9 @@
 package com.parasol.core.controller;
 
+import com.parasol.core.api_model.AccountOpenRequest;
 import com.parasol.core.api_model.AccountRequest;
+import com.parasol.core.api_model.ClientId;
+import com.parasol.core.api_model.ClientInfo;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.Client;
 import com.parasol.core.entity.TransactionHistory;
@@ -28,16 +31,13 @@ public class AccountController {
     @PostMapping("account")
     @ResponseBody
     public String createAccount(
-            @RequestParam("name") String name,
-            @RequestParam("residentNumber") String residentNumber,
-            @RequestParam("accountPassword") int accountPassword
+            @RequestBody @Valid AccountOpenRequest accountOpenRequest
     ) {
-        Client client = clientService.findByNameAndResidentNumber(name, residentNumber);
+        Client client = clientService.findByNameAndResidentNumber(accountOpenRequest.getName(), accountOpenRequest.getResidentNumber());
 
         Account account = new Account();
         account.setClient(client);
-        account.setPassword(accountPassword);
-        account.setBalance(0L);
+        account.setPassword(accountOpenRequest.getAccountPassword());
 
         String result = accountService.Create(account);
 
@@ -55,12 +55,11 @@ public class AccountController {
 //    }
 
     // 계좌 목록 조회
-    @GetMapping("account")
+    @PostMapping("account")
     public List<Account> getAllAccount(
-            @RequestParam("name") String name,
-            @RequestParam("residentNumber") String residentNumber
+            @RequestBody @Valid ClientInfo clientInfo
     ) {
-        Client client = clientService.findByNameAndResidentNumber(name, residentNumber);
+        Client client = clientService.findByNameAndResidentNumber(clientInfo.getName(), clientInfo.getResidentNumber());
         List<Account> result = accountService.getAllAccount(client);
 
         return result;
