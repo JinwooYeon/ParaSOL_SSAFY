@@ -1,15 +1,14 @@
 package com.parasol.BaaS.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
-import com.parasol.BaaS.api_request.QueryAccountHistoryRequest;
-import com.parasol.BaaS.api_request.QueryAccountListRequest;
+import com.parasol.BaaS.api_model.AccountInfo;
+import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountHistoryQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
-import com.parasol.BaaS.modules.QueryAccountBalanceRequestFactory;
-import com.parasol.BaaS.modules.QueryAccountHistoryRequestFactory;
-import com.parasol.BaaS.modules.QueryAccountListRequestFactory;
+import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
+import com.parasol.BaaS.enums.TransactionType;
+import com.parasol.BaaS.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +23,12 @@ public class AccountService {
 
     @Autowired
     QueryAccountHistoryRequestFactory queryAccountHistoryRequestFactory;
+
+    @Autowired
+    DepositRequestFactory depositRequestFactory;
+
+    @Autowired
+    WithdrawRequestFactory withdrawRequestFactory;
 
     public AccountBalanceQueryResultResponse getBalance(QueryAccountBalanceRequest request) {
         String bankName = request.getBankName();
@@ -69,6 +74,36 @@ public class AccountService {
             if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
 
             AccountHistoryQueryResultResponse response = queryAccountHistoryRequestFactory.create(request);
+            return response;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return null;
+        }
+    }
+
+    public TransactionExecuteResultResponse deposit(DepositRequest request) {
+        TransactionType method = request.getMethod();
+        Long amount = request.getAmount();
+        AccountInfo accountFrom = request.getAccountFrom();
+        AccountInfo accountTo = request.getAccountTo();
+
+        try {
+            TransactionExecuteResultResponse response = depositRequestFactory.create(request);
+            return response;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return null;
+        }
+    }
+
+    public TransactionExecuteResultResponse withdraw(WithdrawRequest request) {
+        TransactionType method = request.getMethod();
+        Long amount = request.getAmount();
+        AccountInfo accountFrom = request.getAccountFrom();
+        AccountInfo accountTo = request.getAccountTo();
+
+        try {
+            TransactionExecuteResultResponse response = withdrawRequestFactory.create(request);
             return response;
         } catch (Exception e) {
             System.out.println(e.toString());
