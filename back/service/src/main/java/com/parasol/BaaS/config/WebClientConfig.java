@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WebClientConfig {
     // application.properties에 있는 값 읽어오기
-    @Value("${external-server.core-banking}")
+    @Value("${sbj-api-server.base-url}")
     private String serverAddress;
     @Value("${webclient.timeout.connect}")
     private int connTimeout;
