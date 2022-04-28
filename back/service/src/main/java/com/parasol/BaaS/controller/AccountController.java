@@ -1,7 +1,9 @@
 package com.parasol.BaaS.controller;
 
 import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
+import com.parasol.BaaS.api_request.QueryAccountListRequest;
 import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
 import com.parasol.BaaS.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,18 @@ public class AccountController {
         request.setBankAccountNumber(bankAccountNumber);
 
         AccountBalanceQueryResultResponse result = accountService.getBalance(request);
+        return result;
+    }
+
+    @GetMapping("/account")
+    @ResponseBody
+    public AccountListQueryResultResponse getAccountList(
+            @RequestParam("bankName") String bankName
+    ) {
+        QueryAccountListRequest request = new QueryAccountListRequest();
+        request.setBankName(bankName);
+
+        AccountListQueryResultResponse result = accountService.getAccountList(request);
         return result;
     }
 }
