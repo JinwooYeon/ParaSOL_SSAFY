@@ -37,6 +37,7 @@ public class AccountController {
         Account account = new Account();
         account.setClient(client);
         account.setPassword(accountPassword);
+        account.setBalance(0L);
 
         String result = accountService.Create(account);
 
