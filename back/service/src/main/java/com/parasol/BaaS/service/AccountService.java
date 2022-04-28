@@ -18,7 +18,7 @@ public class AccountService {
         String accountNo = request.getBankAccountNumber();
 
         try {
-            if (bankName != "SBJ") throw new IllegalArgumentException("We can support SBJ Bank only.");
+            if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
 
             AccountBalanceQueryResultResponse response = queryAccountBalanceRequestFactory.create(request);
             return response;
