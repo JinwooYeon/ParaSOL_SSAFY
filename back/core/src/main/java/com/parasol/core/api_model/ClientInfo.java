@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -18,5 +19,6 @@ public class ClientInfo {
     private String name;
     @ApiModelProperty(name="resident_number", example = "000000-0000000")
     @NotBlank
+    @Size(max=14, min=14)
     private String residentNumber;
 }
