@@ -2,10 +2,13 @@ package com.parasol.BaaS.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
+import com.parasol.BaaS.api_request.QueryAccountHistoryRequest;
 import com.parasol.BaaS.api_request.QueryAccountListRequest;
 import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.BaaS.api_response.AccountHistoryQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
 import com.parasol.BaaS.modules.QueryAccountBalanceRequestFactory;
+import com.parasol.BaaS.modules.QueryAccountHistoryRequestFactory;
 import com.parasol.BaaS.modules.QueryAccountListRequestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,9 @@ public class AccountService {
 
     @Autowired
     QueryAccountListRequestFactory queryAccountListRequestFactory;
+
+    @Autowired
+    QueryAccountHistoryRequestFactory queryAccountHistoryRequestFactory;
 
     public AccountBalanceQueryResultResponse getBalance(QueryAccountBalanceRequest request) {
         String bankName = request.getBankName();
@@ -48,6 +54,21 @@ public class AccountService {
             if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
 
             AccountListQueryResultResponse response = queryAccountListRequestFactory.create(request);
+            return response;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return null;
+        }
+    }
+
+    public AccountHistoryQueryResultResponse getAccountHistory(QueryAccountHistoryRequest request) {
+        String bankName = request.getBankName();
+        String bankAccountNumber = request.getBankAccountNumber();
+
+        try {
+            if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
+
+            AccountHistoryQueryResultResponse response = queryAccountHistoryRequestFactory.create(request);
             return response;
         } catch (Exception e) {
             System.out.println(e.toString());
