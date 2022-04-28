@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ClientInfo extends LoginInfo{
+public class UserInfo extends LoginInfo{
     private String name;
 }
