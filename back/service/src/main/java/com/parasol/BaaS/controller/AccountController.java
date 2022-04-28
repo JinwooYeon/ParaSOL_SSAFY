@@ -8,10 +8,7 @@ import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
 import com.parasol.BaaS.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AccountController {
@@ -59,7 +56,7 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/account/deposit")
+    @PostMapping("/account/deposit")
     @ResponseBody
     public TransactionExecuteResultResponse deposit(
             @RequestBody DepositRequest request
@@ -68,7 +65,7 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/account/withdraw")
+    @PostMapping("/account/withdraw")
     @ResponseBody
     public TransactionExecuteResultResponse withdraw(
             @RequestBody WithdrawRequest request
