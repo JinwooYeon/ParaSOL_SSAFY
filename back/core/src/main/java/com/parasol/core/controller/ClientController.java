@@ -5,6 +5,8 @@ import com.parasol.core.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 public class ClientController {
 
@@ -13,10 +15,9 @@ public class ClientController {
 
     @PostMapping("client")
     public String CreateClient(
-            @RequestParam("name") String name,
-            @RequestParam("residentNumber") String residentNumber
+            @RequestBody @Valid Client client
     ) {
-        String result = clientService.create(name, residentNumber);
+        String result = clientService.create(client.getName(), client.getResidentNumber());
 
         return result;
     }

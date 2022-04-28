@@ -54,7 +54,8 @@ public class AccountService {
         // from 계좌에서 출금
         Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
 
-        Long fromBalance = accountFrom.get().getBalance() - request.getAmount();
+        // Long fromBalance = accountFrom.get().getBalance() - request.getAmount();
+        Long fromBalance = validationService.calculateBalance(new Balance(accountFrom.get().getBalance() - request.getAmount()));
         // from 계좌에서 입금 금액만큼 빼기
         accountFrom.get().setBalance(fromBalance);
 
