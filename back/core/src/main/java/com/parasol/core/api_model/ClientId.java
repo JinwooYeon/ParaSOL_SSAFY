@@ -9,8 +9,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@ApiModel("AccountOpenRequest")
-public class AccountOpenRequest extends ClientInfo {
-    @ApiModelProperty(name="account_password", example = "0809")
-    private int accountPassword;
+@ApiModel("ClientId")
+public class ClientId {
+    @ApiModelProperty(name="id", example = "nini3306")
+    private String id;
 }
