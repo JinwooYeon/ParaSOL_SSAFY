@@ -1,11 +1,10 @@
 package com.parasol.BaaS.controller;
 
-import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
-import com.parasol.BaaS.api_request.QueryAccountHistoryRequest;
-import com.parasol.BaaS.api_request.QueryAccountListRequest;
+import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountHistoryQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
+import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
 import com.parasol.BaaS.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,6 +56,24 @@ public class AccountController {
         request.setBankAccountNumber(bankAccountNumber);
 
         AccountHistoryQueryResultResponse result = accountService.getAccountHistory(request);
+        return result;
+    }
+
+    @GetMapping("/account/deposit")
+    @ResponseBody
+    public TransactionExecuteResultResponse deposit(
+            @RequestParam DepositRequest request
+    ) {
+        TransactionExecuteResultResponse result = accountService.deposit(request);
+        return result;
+    }
+
+    @GetMapping("/account/withdraw")
+    @ResponseBody
+    public TransactionExecuteResultResponse withdraw(
+            @RequestParam WithdrawRequest request
+    ) {
+        TransactionExecuteResultResponse result = accountService.withdraw(request);
         return result;
     }
 }
