@@ -11,12 +11,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("account")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/account/balance")
+    @GetMapping("balance")
     @ResponseBody
     public AccountBalanceQueryResultResponse getBalance(
             @RequestParam("bankName") String bankName,
@@ -30,7 +31,7 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/account")
+    @GetMapping
     @ResponseBody
     public AccountListQueryResultResponse getAccountList(
             @RequestParam("bankName") String bankName
@@ -42,7 +43,7 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/account/history")
+    @GetMapping("history")
     @ResponseBody
     public AccountHistoryQueryResultResponse getAccountHistory(
             @RequestParam("bankName") String bankName,
@@ -56,7 +57,7 @@ public class AccountController {
         return result;
     }
 
-    @PostMapping("/account/deposit")
+    @PostMapping("deposit")
     @ResponseBody
     public TransactionExecuteResultResponse deposit(
             @RequestBody DepositRequest request
@@ -65,7 +66,7 @@ public class AccountController {
         return result;
     }
 
-    @PostMapping("/account/withdraw")
+    @PostMapping("withdraw")
     @ResponseBody
     public TransactionExecuteResultResponse withdraw(
             @RequestBody WithdrawRequest request
