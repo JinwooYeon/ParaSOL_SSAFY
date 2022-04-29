@@ -14,7 +14,7 @@ public class ClientController {
 
     @PostMapping("client")
     public String createClient(
-            @RequestBody ClientInfo clientInfo
+            @RequestBody @Valid ClientInfo clientInfo
     ) {
         return null;
     }

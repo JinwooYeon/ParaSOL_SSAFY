@@ -58,7 +58,7 @@ public class AccountController {
     @PostMapping("account/deposit")
     @ResponseBody
     public String deposit(
-            @RequestBody DepositRequest request
+            @RequestBody @Valid DepositRequest request
     ) {
         return null;
     }
@@ -67,7 +67,7 @@ public class AccountController {
     @PostMapping("account/withdraw")
     @ResponseBody
     public String withdraw(
-            @RequestBody WithdrawRequest request
+            @RequestBody @Valid WithdrawRequest request
     ) {
 
         return null;
