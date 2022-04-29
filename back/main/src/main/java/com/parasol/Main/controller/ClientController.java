@@ -3,10 +3,9 @@ package com.parasol.Main.controller;
 import com.parasol.Main.api_model.ClientInfo;
 import com.parasol.Main.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController("/client")
 public class ClientController {
@@ -15,8 +14,7 @@ public class ClientController {
 
     @PostMapping("client")
     public String createClient(
-            @RequestParam("name") String name,
-            @RequestParam("residentNumber") String residentNumber
+            @RequestBody ClientInfo clientInfo
     ) {
         return null;
     }
