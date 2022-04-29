@@ -3,6 +3,7 @@ package com.parasol.BaaS.controller;
 import com.parasol.BaaS.api_model.UserInfo;
 import com.parasol.BaaS.api_request.LoginRequest;
 import com.parasol.BaaS.api_request.UserRegisterRequest;
+import com.parasol.BaaS.api_request.UserUpdateRequest;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,6 @@ public class UserController {
     public UserInfo registerUser(
             @RequestBody UserRegisterRequest request
     ) {
-        System.out.println("request.getName() = " + request.getName());
         User user = userService.createUser(request);
 
         if(user == null) return null;
@@ -43,6 +43,18 @@ public class UserController {
                 .build();
     }
 
+    @PatchMapping
+    public UserInfo updateUser(
+            @RequestBody UserUpdateRequest request
+    ){
+        User user = userService.updateUser(request);
+
+        if(user == null) return null;
+        return UserInfo.builder()
+                .id(user.getUserId())
+                .name(user.getUserName())
+                .build();
+    }
 
 
 }
