@@ -6,6 +6,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserInfo extends LoginInfo{
     private String name;
 }
