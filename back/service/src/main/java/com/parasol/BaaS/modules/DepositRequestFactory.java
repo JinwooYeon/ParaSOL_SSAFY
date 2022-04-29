@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -33,7 +34,8 @@ public class DepositRequestFactory {
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
                 .build()
-        ).body(BodyInserters
+        ).contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters
                 .fromFormData("method", request.getMethod().toString())
                 .with("amount", request.getAmount().toString())
                 .with("accountFrom", request.getAccountFrom().toString())
