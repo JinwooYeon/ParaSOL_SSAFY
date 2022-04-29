@@ -56,5 +56,14 @@ public class UserController {
                 .build();
     }
 
+    @DeleteMapping("/{userId}")
+    public String deleteUser(
+            @PathVariable String userId
+    ){
+        boolean result = userService.deleteUser(userId);
+        if(result) return "탈퇴 성공";
+        return "탈퇴 실패";
+    }
+
 
 }
