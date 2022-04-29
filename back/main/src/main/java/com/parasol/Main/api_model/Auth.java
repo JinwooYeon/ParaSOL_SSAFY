@@ -11,6 +11,7 @@ import java.util.UUID;
 @Setter
 @ToString
 public class Auth {
+    // Todo : Validation
     private String id;  // UUID
     private String apiKey;
     private String refreshToken;

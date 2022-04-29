@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 @ApiModel("AuthToken")
 public class AuthToken {
+    // Todo : validation
     @ApiModelProperty(name = "accessToken", example = "")
     AccessToken accessToken;
     @ApiModelProperty(name = "refreshToken", example = "")
