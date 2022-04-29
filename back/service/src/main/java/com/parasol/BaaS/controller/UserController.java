@@ -26,7 +26,7 @@ public class UserController {
         UserInfo user = userService.getUserByUserId(id);
         if(user == null) return null;
 
-        // 나중에 토큰 반환
+        // TODO : 토큰 반환
         if(password.equals(user.getPassword())) return "성공";
         return "실패";
     }
@@ -35,6 +35,7 @@ public class UserController {
     public UserInfoQueryResultResponse getUser(
             @PathVariable String userId
     ){
+        // TODO : PathVariable -> 토큰에서 userId 받기
         UserInfo user = userService.getUserByUserId(userId);
 
         if(user == null) return null;
@@ -62,6 +63,7 @@ public class UserController {
     public UserInfo updateUser(
             @RequestBody UserUpdateRequest request
     ){
+        // TODO : 토큰에서 userId 받기
         User user = userService.updateUser(request);
 
         if(user == null) return null;
@@ -75,6 +77,7 @@ public class UserController {
     public String deleteUser(
             @PathVariable String userId
     ){
+        // TODO : PathVariable -> 토큰에서 userId 받기
         boolean result = userService.deleteUser(userId);
         if(result) return "탈퇴 성공";
         return "탈퇴 실패";
