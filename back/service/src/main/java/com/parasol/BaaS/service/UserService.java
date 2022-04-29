@@ -8,6 +8,7 @@ import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
@@ -55,6 +56,13 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public boolean deleteUser(String userId) {
+        Long delete = userRepository.deleteByUserId(userId);
+        if(delete > 0) return true;
+        return false;
     }
 
 }
