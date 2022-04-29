@@ -10,5 +10,5 @@ WORKDIR /app
 COPY --from=builder /app/build /app/build
 RUN rm /etc/nginx/conf.d/default.conf
 COPY ./nginx.conf /etc/nginx/conf.d
-EXPOSE 3000
+EXPOSE 80
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
