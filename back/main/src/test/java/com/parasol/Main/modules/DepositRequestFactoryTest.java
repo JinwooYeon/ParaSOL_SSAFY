@@ -21,16 +21,18 @@ class DepositRequestFactoryTest {
         AccountInfo to = new AccountInfo();
 
         from.setBankName("noname");
-        from.setBankAccountNumber("jun1");
+        from.setBankAccountNumber("188-158-441077");
 
         to.setBankName("noname");
-        to.setBankAccountNumber("sun1");
+        to.setBankAccountNumber("225-169-673608");
 
         saveInfo.setMethod(TransactionType.DEPOSIT);
         saveInfo.setAmount(50);
         saveInfo.setAccountFrom(from);
         saveInfo.setAccountTo(to);
 
-        depositRequestFactory.run(saveInfo);
+        boolean result = depositRequestFactory.run(saveInfo);
+
+        System.out.println(result);
     }
 }
