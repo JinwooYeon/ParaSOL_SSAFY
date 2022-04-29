@@ -19,7 +19,6 @@ public class UserService {
     private UserRepository userRepository;
 
     public UserInfo getUserByUserId(String id) {
-
         Optional<User> oUser = userRepository.findByUserId(id);
         if(!oUser.isPresent()) return null;
         User user = oUser.get();
@@ -64,5 +63,4 @@ public class UserService {
         if(delete > 0) return true;
         return false;
     }
-
 }
