@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
-@Component
+//@Component
 public class CreateRemoveClientRequest {
 //    public List<ClientResponse> createRemoveClientRequest(AccountCloseRequest clientInfo) {
 //        // 코어 뱅킹 시스템 rest api 호출
