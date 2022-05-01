@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 public class AccountService {
     @Autowired
     private OpenAccountRequestFactory openAccountRequestFactory;
-    @Autowired
-    private CloseAccountRequestFactory closeAccountRequestFactory;
+//    @Autowired
+//    private CloseAccountRequestFactory closeAccountRequestFactory;
     @Autowired
     private QueryAccountBalanceRequestFactory queryAccountBalanceRequestFactory;
     @Autowired
