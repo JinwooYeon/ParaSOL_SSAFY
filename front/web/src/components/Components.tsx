@@ -55,6 +55,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           //     password: 'rapunz3l'
           //   }
           // },
+          params: data,
         })
           .then((response) => {
             console.log(response);
