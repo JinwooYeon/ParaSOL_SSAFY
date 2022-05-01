@@ -1,4 +1,5 @@
 import { Components } from "components/Components";
+import { BankInfo, Token } from "model/Model";
 
 export const AccountGET = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -9,25 +10,8 @@ export const AccountGET = () => {
     completed: false,
   };
   const requestBody = {
-    AuthorizedClientInfo: [
-      {
-        value: "access_token",
-        type: "string",
-        required: true,
-      },
-      {
-        value: "hashed_resident_number",
-        type: "hash_string",
-        required: true,
-      },
-    ],
-    token: [
-      {
-        value: "jwt",
-        type: "string",
-        required: true,
-      },
-    ],
+    BankInfo,
+    Token,
   };
   ///////////////////////////////////
 

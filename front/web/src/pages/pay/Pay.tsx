@@ -1,9 +1,8 @@
 import AuthBioDELETE from "components/pay/authBioDELETE";
 import AuthBioPOST from "components/pay/authBioPOST";
-import DepositPOST from "components/pay/depositPOST";
-import WithdrawPOST from "components/pay/withdrawPOST";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import BankPOST from "components/bank/bankPOST";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -20,16 +19,13 @@ export const Pay = () => {
       <Box sx={{ width: "100%" }}>
         <Stack spacing={2}>
           <Item>
+            <BankPOST />
+          </Item>
+          <Item>
             <AuthBioPOST />
           </Item>
           <Item>
             <AuthBioDELETE />
-          </Item>
-          <Item>
-            <DepositPOST />
-          </Item>
-          <Item>
-            <WithdrawPOST />
           </Item>
         </Stack>
       </Box>

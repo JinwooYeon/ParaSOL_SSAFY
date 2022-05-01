@@ -1,15 +1,16 @@
 import { Components } from "components/Components";
-import { Token } from "model/Model";
+import { BankInfo, Token } from "model/Model";
 
-export const UserDELETE = () => {
+export const BankPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
   const API = {
-    uri: "/user",
-    method: "DELETE",
-    detail: "회원 탈퇴",
+    uri: "/bank",
+    method: "POST",
+    detail: "은행 연결",
     completed: false,
   };
   const requestBody = {
+    BankInfo,
     Token,
   };
   ///////////////////////////////////

@@ -10,7 +10,7 @@ interface IMyprops {
   onSubmit: (a: any) => void;
 }
 
-export const RequestBody: React.FC<IMyprops> = (props: IMyprops) => {
+export const Request: React.FC<IMyprops> = (props: IMyprops) => {
   const myRequest = props.requestBody;
   const formData = props.formData;
   const setter = props.setFormData;

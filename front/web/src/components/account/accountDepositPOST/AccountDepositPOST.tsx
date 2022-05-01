@@ -1,15 +1,16 @@
 import { Components } from "components/Components";
-import { Token } from "model/Model";
+import { Transaction, Token } from "model/Model";
 
-export const UserDELETE = () => {
+export const AccountDepositPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
   const API = {
-    uri: "/user",
-    method: "DELETE",
-    detail: "회원 탈퇴",
+    uri: "account/deposit",
+    method: "POST",
+    detail: "입금",
     completed: false,
   };
   const requestBody = {
+    Transaction,
     Token,
   };
   ///////////////////////////////////

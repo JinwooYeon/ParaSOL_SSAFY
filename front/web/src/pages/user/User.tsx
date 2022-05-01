@@ -1,11 +1,11 @@
-import AuthPOST from "components/user/authPOST";
+import UserLoginPOST from "components/user/userLoginPOST";
 import OauthDelete from "components/user/oauthDELETE";
 import OauthPOST from "components/user/oauthPOST";
 import UserDelete from "components/user/userDELETE";
 import UserPATCH from "components/user/userPATCH";
-import UserPOST from "components/user/userPOST";
+import UserRegisterPOST from "components/user/userRegisterPOST";
 import UserPasswordPOST from "components/user/userPasswordPOST";
-import UserInfoGET from "components/user/userInfoGET";
+import UserGET from "components/user/userGET";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -24,10 +24,10 @@ export const User = () => {
       <Box sx={{ width: "100%" }}>
         <Stack spacing={2}>
           <Item>
-            <AuthPOST />
+            <UserLoginPOST />
           </Item>
           <Item>
-            <UserPOST />
+            <UserRegisterPOST />
           </Item>
           <Item>
             <UserPATCH />
@@ -36,6 +36,9 @@ export const User = () => {
             <UserDelete />
           </Item>
           <Item>
+            <UserGET />
+          </Item>
+          {/* <Item>
             <OauthPOST />
           </Item>
           <Item>
@@ -43,10 +46,7 @@ export const User = () => {
           </Item>
           <Item>
             <UserPasswordPOST />
-          </Item>
-          <Item>
-            <UserInfoGET />
-          </Item>
+          </Item> */}
         </Stack>
       </Box>
     </>
