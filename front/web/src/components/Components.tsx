@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Box, Divider, Stack } from "@mui/material";
 import { DropdownButton } from "./DropdownButton";
-import { RequestBody } from "./RequestBody";
+import { Request } from "./Request";
 import { Response } from "./Response";
 import styles from "./styles";
 import axios from "axios";
@@ -12,7 +12,7 @@ interface PropsType {
 }
 
 export const Components: React.FC<PropsType> = (props: PropsType) => {
-  const BASE_URL = "";
+  const BASE_URL = "http://k6s101.p.ssafy.io:8080";
   const JWTtoken = localStorage.getItem("jwt")
     ? localStorage.getItem("jwt")
     : "";
@@ -158,7 +158,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
             <Stack direction="column">
               <Box>
                 <Stack direction="column" spacing={3}>
-                  <RequestBody
+                  <Request
                     requestBody={props.requestBody}
                     formData={formData}
                     setFormData={setFormData}
