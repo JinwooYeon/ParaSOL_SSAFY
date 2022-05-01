@@ -40,6 +40,8 @@ public class QueryAccountBalanceRequestFactory {
         Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
 
         AccountBalanceQueryResultResponse formattedResponse = objectMapper.readValue(response.block(), AccountBalanceQueryResultResponse.class);
+        formattedResponse.setBankName(request.getBankName());
+        formattedResponse.setBankAccountName(request.getBankAccountNumber());
 
         return formattedResponse;
     }
