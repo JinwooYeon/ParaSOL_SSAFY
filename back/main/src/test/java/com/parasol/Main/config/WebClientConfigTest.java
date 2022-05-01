@@ -23,8 +23,8 @@ class WebClientConfigTest {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.GET);
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account/")
-                .queryParam("name", "sun")
-                .queryParam("residentNumber", "202204261234567")
+                .queryParam("name", "ssafy")
+                .queryParam("residentNumber", "220428-2000000")
                 .build());
         Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
 

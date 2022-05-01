@@ -1,10 +1,14 @@
 package com.parasol.Main.controller;
 
+import com.parasol.Main.api_model.ClientInfo;
+import com.parasol.Main.api_request.AccountOpenRequest;
 import com.parasol.Main.api_request.DepositRequest;
 import com.parasol.Main.api_request.WithdrawRequest;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class AccountController {
@@ -16,10 +20,8 @@ public class AccountController {
     @PostMapping("account")
     @ResponseBody
     public String createAccount(
-            @RequestParam("residentNumber") String residentNumber,
-            @RequestParam("accountPassword") int accountPassword
+            @RequestBody @Valid AccountOpenRequest accountOpenRequest
     ) {
-
         return null;
     }
 
@@ -27,8 +29,7 @@ public class AccountController {
     @GetMapping("account")
     @ResponseBody
     public String getList(
-            @RequestParam("name") String name,
-            @RequestParam("residentNumber") String residentNumber
+            @RequestBody @Valid ClientInfo clientInfo
     ) {
         return null;
     }
@@ -57,7 +58,7 @@ public class AccountController {
     @PostMapping("account/deposit")
     @ResponseBody
     public String deposit(
-            @RequestBody DepositRequest request
+            @RequestBody @Valid DepositRequest request
     ) {
         return null;
     }
@@ -66,7 +67,7 @@ public class AccountController {
     @PostMapping("account/withdraw")
     @ResponseBody
     public String withdraw(
-            @RequestBody WithdrawRequest request
+            @RequestBody @Valid WithdrawRequest request
     ) {
 
         return null;
