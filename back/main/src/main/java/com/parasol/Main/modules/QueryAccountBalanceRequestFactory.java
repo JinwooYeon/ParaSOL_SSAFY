@@ -22,8 +22,11 @@ public class QueryAccountBalanceRequestFactory {
                 .queryParam("accountNo", request.getBankAccountNumber())
                 .build());
 
-        Mono<AccountBalanceQueryResultResponse> response = bodySpec.retrieve().bodyToMono(AccountBalanceQueryResultResponse.class);
+        // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
+        Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
+        AccountBalanceQueryResultResponse accountBalanceQueryResultResponse = new AccountBalanceQueryResultResponse();
+        accountBalanceQueryResultResponse.setBalance(Long.getLong(response.block()));
 
-        return response.block();
+        return accountBalanceQueryResultResponse;
     }
 }

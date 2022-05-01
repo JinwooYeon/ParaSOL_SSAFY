@@ -1,9 +1,11 @@
 package com.parasol.Main.controller;
 
 import com.parasol.Main.api_model.ClientInfo;
+import com.parasol.Main.api_request.AccountBalanceQueryRequest;
 import com.parasol.Main.api_request.AccountOpenRequest;
 import com.parasol.Main.api_request.DepositRequest;
 import com.parasol.Main.api_request.WithdrawRequest;
+import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,11 +39,16 @@ public class AccountController {
     // 계좌 잔액 조회
     @GetMapping("account/balance")
     @ResponseBody
-    public String getBalance(
+    public AccountBalanceQueryResultResponse getBalance(
             @RequestParam("bankName") String bankName,
-            @RequestParam("bankAccountNumber") String accountNo
+            @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
-        return null;
+        AccountBalanceQueryRequest request = new AccountBalanceQueryRequest();
+        request.setBankName(bankName);
+        request.setBankAccountNumber(bankAccountNumber);
+
+        AccountBalanceQueryResultResponse result = accountService.getBalance(request);
+        return result;
     }
 
     // 계좌 거래내역 조회
