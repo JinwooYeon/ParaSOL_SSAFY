@@ -1,21 +1,16 @@
 import { Components } from "components/Components";
+import { LoginInfo } from "model/Model";
 
-export const UserInfoGET = () => {
+export const UserLoginPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
   const API = {
-    uri: "/client/my-info",
-    method: "GET",
-    detail: "내 정보 조회",
+    uri: "/user/login",
+    method: "POST",
+    detail: "로그인",
     completed: false,
   };
   const requestBody = {
-    token: [
-      {
-        value: "jwt",
-        type: "string",
-        required: true,
-      },
-    ],
+    LoginInfo,
   };
   ///////////////////////////////////
 

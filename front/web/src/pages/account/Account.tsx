@@ -3,6 +3,8 @@ import AccountGET from "components/account/accountGET";
 import AccountHistoryGET from "components/account/accountHistoryGET";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import AccountDepositPOST from "components/account/accountDepositPOST";
+import AccountWithdrawPOST from "components/account/accountWithdrawPOST";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -26,6 +28,12 @@ export const Account = () => {
           </Item>
           <Item>
             <AccountHistoryGET />
+          </Item>
+          <Item>
+            <AccountDepositPOST />
+          </Item>
+          <Item>
+            <AccountWithdrawPOST />
           </Item>
         </Stack>
       </Box>

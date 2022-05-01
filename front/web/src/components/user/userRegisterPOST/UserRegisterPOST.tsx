@@ -1,16 +1,16 @@
 import { Components } from "components/Components";
-import { Token } from "model/Model";
+import { UserInfo } from "model/Model";
 
-export const UserDELETE = () => {
+export const UserRegisterPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
   const API = {
-    uri: "/user",
-    method: "DELETE",
-    detail: "회원 탈퇴",
+    uri: "/user/register",
+    method: "POST",
+    detail: "회원 등록",
     completed: false,
   };
   const requestBody = {
-    Token,
+    UserInfo,
   };
   ///////////////////////////////////
 

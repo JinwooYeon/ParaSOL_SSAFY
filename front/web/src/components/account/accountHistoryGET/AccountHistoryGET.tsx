@@ -1,4 +1,5 @@
 import { Components } from "components/Components";
+import { AccountInfo, Token } from "model/Model";
 
 export const AccountHistoryGET = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -9,25 +10,8 @@ export const AccountHistoryGET = () => {
     completed: false,
   };
   const requestBody = {
-    AuthorizedClientAccountInfo: [
-      {
-        value: "access_token",
-        type: "string",
-        required: true,
-      },
-      {
-        value: "account_info",
-        type: "string",
-        required: true,
-      },
-    ],
-    token: [
-      {
-        value: "jwt",
-        type: "string",
-        required: true,
-      },
-    ],
+    AccountInfo,
+    Token,
   };
   ///////////////////////////////////
 
