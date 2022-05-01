@@ -38,7 +38,7 @@ export const User = () => {
           <Item>
             <UserGET />
           </Item>
-          {/* <Item>
+          <Item>
             <OauthPOST />
           </Item>
           <Item>
@@ -46,7 +46,7 @@ export const User = () => {
           </Item>
           <Item>
             <UserPasswordPOST />
-          </Item> */}
+          </Item>
         </Stack>
       </Box>
     </>
