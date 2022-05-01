@@ -55,7 +55,7 @@ public class AccountController {
 //    }
 
     // 계좌 목록 조회
-    @PostMapping("account")
+    @PostMapping("account/list")
     public List<Account> getAllAccount(
             @RequestBody @Valid ClientInfo clientInfo
     ) {
