@@ -41,8 +41,7 @@ public class AccountService {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 
-        queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
-        return null;
+        return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
     }
 
     public AccountHistoriesQueryResultResponse getHistory(AccountHistoryQueryRequest request) {
