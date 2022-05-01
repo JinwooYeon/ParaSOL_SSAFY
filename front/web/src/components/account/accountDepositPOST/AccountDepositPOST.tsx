@@ -4,7 +4,7 @@ import { Transaction, Token } from "model/Model";
 export const AccountDepositPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
   const API = {
-    uri: "account/deposit",
+    uri: "/account/deposit",
     method: "POST",
     detail: "입금",
     completed: false,

@@ -12,7 +12,7 @@ export const Completed: React.FC<IMyprops> = (props: IMyprops) => {
         <Box
           sx={{
             borderRadius: "50%",
-            backgroundColor: "green",
+            backgroundColor: "#53E76C",
             width: 15,
             height: 15,
           }}
