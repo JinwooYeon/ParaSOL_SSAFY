@@ -4,7 +4,7 @@ import { Transaction, Token } from "model/Model";
 export const AccountWithdrawPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
   const API = {
-    uri: "account/withdraw",
+    uri: "/account/withdraw",
     method: "POST",
     detail: "결제",
     completed: false,
