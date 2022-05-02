@@ -1,12 +1,12 @@
 package com.parasol.Main.modules;
 
-import com.parasol.Main.api_model.ClientResponse;
+import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_response.ClientResponse;
 import com.parasol.Main.api_request.ClientRegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -17,19 +17,20 @@ public class CreateAddClientRequest {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    public void createAddClientRequest(ClientRegisterRequest request) {
+    public Mono<String> createAddClientRequest(ClientRegisterRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
-        WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
+        WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/client")
-                .build()
-        ).body(BodyInserters
-                .fromFormData("name", request.getName())
-                .with("residentNumber", request.getResidentNumber())
-        );
-        // ClientResponse에 응답 데이터 로드
-        Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
+                .build());
 
-        System.out.println(response.block());
+        WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
+
+        // ClientResponse에 응답 데이터 로드
+        Mono<String> response = headersSpec.retrieve().bodyToMono(String.class);
+
+        return response
+                .filter(s -> true)
+                .flatMap(s -> Mono.just(s));
     }
 
 //    public ClientResponse createAddClientRequest(ClientRegisterRequest clientInfo) {

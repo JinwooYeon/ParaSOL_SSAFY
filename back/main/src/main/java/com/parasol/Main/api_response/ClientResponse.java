@@ -1,4 +1,4 @@
-package com.parasol.Main.api_model;
+package com.parasol.Main.api_response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,10 +13,10 @@ import javax.validation.constraints.NotBlank;
 public class ClientResponse {
     @ApiModelProperty(name="id",example = "")
     private String id;
-    @ApiModelProperty(name="name",example = "")
-    @NotBlank
-    private String name;
-    @ApiModelProperty(name="residentNumber",example = "")
-    @NotBlank
-    private String residentNumber;
+//    @ApiModelProperty(name="name",example = "")
+//    @NotBlank
+//    private String name;
+//    @ApiModelProperty(name="residentNumber",example = "")
+//    @NotBlank
+//    private String residentNumber;
 };
