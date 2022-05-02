@@ -15,7 +15,7 @@ public class QueryAccountBalanceRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient webClient;
 
-    public AccountBalanceQueryResultResponse createQueryAccountBalanceRequest(AccountBalanceQueryRequest request) {
+    public Mono<AccountBalanceQueryResultResponse> createQueryAccountBalanceRequest(AccountBalanceQueryRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.GET);
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account/balance")
@@ -24,12 +24,13 @@ public class QueryAccountBalanceRequestFactory {
 
         // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
         Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
-        String response_string = response.block();
-        Long balance = Long.getLong(response_string);
 
-        AccountBalanceQueryResultResponse accountBalanceQueryResultResponse = new AccountBalanceQueryResultResponse();
-        accountBalanceQueryResultResponse.setBalance(balance);
-
-        return accountBalanceQueryResultResponse;
+        return response
+                .filter(s -> !s.isEmpty())
+                .flatMap(s -> {
+                    AccountBalanceQueryResultResponse accountBalanceQueryResultResponse = new AccountBalanceQueryResultResponse();
+                    accountBalanceQueryResultResponse.setBalance(Long.parseLong(s));
+                    return Mono.just(accountBalanceQueryResultResponse);
+                });
     }
 }

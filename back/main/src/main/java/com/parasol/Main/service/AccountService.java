@@ -8,6 +8,7 @@ import com.parasol.Main.api_response.TransactionExecuteResultResponse;
 import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class AccountService {
@@ -37,7 +38,7 @@ public class AccountService {
         return null;
     }
 
-    public AccountBalanceQueryResultResponse getBalance(AccountBalanceQueryRequest request) {
+    public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 
