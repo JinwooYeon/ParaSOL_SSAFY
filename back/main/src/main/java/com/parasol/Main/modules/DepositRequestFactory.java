@@ -18,7 +18,7 @@ public class DepositRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    public boolean run(DepositRequest saveInfo) {
+    public Mono<Boolean> run(DepositRequest saveInfo) {
         /* Http 통신 */
         UriSpec<RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
@@ -38,9 +38,6 @@ public class DepositRequestFactory {
             return null;
         });
 
-        if (exchange != null && exchange.block())
-            return true;
-
-        return false;
+        return exchange;
     }
 }
