@@ -7,7 +7,7 @@ export const AccountBalanceGET = () => {
     uri: "/account/balance",
     method: "GET",
     detail: "계좌 잔액 조회",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
     AccountInfo,

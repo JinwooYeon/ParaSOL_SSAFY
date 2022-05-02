@@ -34,12 +34,13 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           url: props.API.uri,
           // baseURL: BASE_URL,
           headers: { Authroization: `Bearer ${JWTtoken}` },
-          // params: data,
+          params: data,
         })
           .then((response) => {
+            console.log(response);
             setResponseData({
               status: response.status.toString(),
-              output: response.data.toString(),
+              output: JSON.stringify(response.data),
             });
           })
           .catch((err) => {
