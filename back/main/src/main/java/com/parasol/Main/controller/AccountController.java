@@ -9,6 +9,7 @@ import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 
@@ -39,7 +40,7 @@ public class AccountController {
     // 계좌 잔액 조회
     @GetMapping("account/balance")
     @ResponseBody
-    public AccountBalanceQueryResultResponse getBalance(
+    public Mono<AccountBalanceQueryResultResponse> getBalance(
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
@@ -47,7 +48,7 @@ public class AccountController {
         request.setBankName(bankName);
         request.setBankAccountNumber(bankAccountNumber);
 
-        AccountBalanceQueryResultResponse result = accountService.getBalance(request);
+        Mono<AccountBalanceQueryResultResponse> result = accountService.getBalance(request);
         return result;
     }
 
