@@ -61,7 +61,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           .then((response) => {
             setResponseData({
               status: response.status.toString(),
-              output: response.data.toString(),
+              output: JSON.stringify(response.data),
             });
             if (props.API.detail === "로그인") {
               localStorage.setItem("jwt", response.data.token);
@@ -110,7 +110,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           .then((response) => {
             setResponseData({
               status: response.status.toString(),
-              output: response.data.toString(),
+              output: JSON.stringify(response.data),
             });
           })
           .catch((err) => {
@@ -131,7 +131,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           .then((response) => {
             setResponseData({
               status: response.status.toString(),
-              output: response.data.toString(),
+              output: JSON.stringify(response.data),
             });
           })
           .catch((err) => {
