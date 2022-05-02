@@ -15,16 +15,19 @@ public class OpenAccountRequestFactory {
     @Qualifier(value = "fixedText")
     WebClient webClient;
 
-    public void createOpenAccountRequest(AccountOpenRequest request) {
+    public Mono<String> createOpenAccountRequest(AccountOpenRequest request) {
+        /* Http 통신 */
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.POST);
-        WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri("/account")
-                .body(BodyInserters
-                        .fromFormData("name", request.getName())
-                        .with("residentNumber", request.getResidentNumber())
-                        .with("accountPassword", String.valueOf(request.getAccountPassword()))
-                );
-        Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
+        WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
+                .path("/account")
+                .build());
+        WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
 
-        System.out.println(response.block());
+        // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
+        Mono<String> response = headersSpec.retrieve().bodyToMono(String.class);
+
+        return response
+                .filter(s -> true)
+                .flatMap(s -> Mono.just(s));
     }
 }
