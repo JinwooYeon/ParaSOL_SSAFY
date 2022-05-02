@@ -1,8 +1,11 @@
 package com.parasol.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Value;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -20,7 +23,7 @@ public class Account {
 
     private Integer password;
 
-    private Long balance;
+    private Long balance = Long.valueOf(0);
 
     @JsonManagedReference
     @ManyToOne
