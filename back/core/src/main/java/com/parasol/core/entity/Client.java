@@ -23,4 +23,8 @@ public class Client {
     private String name;
     @NotBlank
     private String residentNumber;
+
+    @OneToOne
+    @JoinColumn(name="bank_user_id")
+    private BankUser bankUser;
 };
