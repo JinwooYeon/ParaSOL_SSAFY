@@ -4,7 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -15,16 +16,12 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client {
+public class BankUser {
     @Id
     private String id;
 
     @NotBlank
-    private String name;
+    private String username;
     @NotBlank
-    private String residentNumber;
-
-    @OneToOne
-    @JoinColumn(name="bank_user_id")
-    private BankUser bankUser;
+    private String password;
 };
