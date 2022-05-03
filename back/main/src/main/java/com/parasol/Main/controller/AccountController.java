@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class AccountController {
@@ -67,7 +68,7 @@ public class AccountController {
     // 계좌 거래내역 조회
     @GetMapping("account/history")
     @ResponseBody
-    public Mono<AccountHistoriesQueryResultResponse> getHistory(
+    public Mono<List<AccountHistory>> getHistory(
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
@@ -75,7 +76,7 @@ public class AccountController {
         request.setBankName(bankName);
         request.setBankAccountNumber(bankAccountNumber);
 
-        Mono<AccountHistoriesQueryResultResponse> result = accountService.getHistory(request);
+        Mono<List<AccountHistory>> result = accountService.getHistory(request);
         return result;
     }
 

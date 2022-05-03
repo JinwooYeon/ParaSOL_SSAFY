@@ -1,5 +1,6 @@
 package com.parasol.Main.service;
 
+import com.parasol.Main.api_model.AccountHistory;
 import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
@@ -11,6 +12,8 @@ import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class AccountService {
@@ -50,7 +53,7 @@ public class AccountService {
         return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
     }
 
-    public Mono<AccountHistoriesQueryResultResponse> getHistory(AccountHistoryQueryRequest request) {
+    public Mono<List<AccountHistory>> getHistory(AccountHistoryQueryRequest request) {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 
