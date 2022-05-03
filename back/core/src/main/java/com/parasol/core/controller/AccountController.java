@@ -1,9 +1,6 @@
 package com.parasol.core.controller;
 
-import com.parasol.core.api_model.AccountOpenRequest;
-import com.parasol.core.api_model.AccountRequest;
-import com.parasol.core.api_model.ClientId;
-import com.parasol.core.api_model.ClientInfo;
+import com.parasol.core.api_model.*;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.Client;
 import com.parasol.core.entity.TransactionHistory;
@@ -77,7 +74,7 @@ public class AccountController {
     // 계좌 거래 내역 조회
     @GetMapping("account/history")
     @ResponseBody
-    public List<TransactionHistory> getAccountHistory(
+    public List<AccountHistory> getAccountHistory(
             @RequestParam("accountNo") String accountNo
     ) {
         return transactionHistoryService.getAccountHistory(accountNo);
