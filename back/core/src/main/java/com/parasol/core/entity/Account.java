@@ -1,7 +1,9 @@
 package com.parasol.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +32,7 @@ public class Account {
     @JoinColumn(name = "id2")
     private Client client;
 
-    @JsonManagedReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @OneToMany(mappedBy = "account")
     private List<TransactionHistory> transactionHistories;
 }
