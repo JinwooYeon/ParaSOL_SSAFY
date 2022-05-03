@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -21,9 +23,14 @@ class ClientControllerTest {
         //given
         String name = "김형준";
         String residentNumber = "961234-1234567";
+        Client client = Client.builder()
+                .id(UUID.randomUUID().toString())
+                .name(name)
+                .residentNumber(residentNumber)
+                .build();
 
         //when
-        String creationResult = clientController.CreateClient(name, residentNumber);
+        String creationResult = clientController.CreateClient(client);
         Client findResult = clientController.GetClient(creationResult);
 
         //then
@@ -36,9 +43,14 @@ class ClientControllerTest {
         //given
         String name = "김형준";
         String residentNumber = "961234-1234567";
+        Client client = Client.builder()
+                .id(UUID.randomUUID().toString())
+                .name(name)
+                .residentNumber(residentNumber)
+                .build();
 
         //when
-        String creationResult = clientController.CreateClient(name, residentNumber);
+        String creationResult = clientController.CreateClient(client);
         Client findResult = clientController.GetClient(creationResult);
 
         //then
