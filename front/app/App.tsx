@@ -1,18 +1,18 @@
-import {
-  NavigationContainer,
-  DarkTheme,
-  DefaultTheme,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
+import { useState } from "react";
+import Header from "./components/Header";
 import Tabs from "./navigation/Tabs";
-import { useColorScheme } from "react-native";
 
 export default function App() {
-  const isDark = useColorScheme() === "dark";
+  const [login, setLogin] = useState(true);
 
-  return (
-    <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
-      <Tabs />
-    </NavigationContainer>
-  );
+  if (login) {
+    return (
+      <NavigationContainer>
+        <Header />
+        <Tabs />
+      </NavigationContainer>
+    );
+  }
 }
