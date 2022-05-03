@@ -1,6 +1,6 @@
 package com.parasol.Main.modules;
 
-import com.parasol.Main.api_model.ClientResponse;
+import com.parasol.Main.api_response.ClientResponse;
 import com.parasol.Main.api_request.AccountCloseRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
