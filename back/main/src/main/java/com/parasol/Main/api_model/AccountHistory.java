@@ -1,5 +1,6 @@
 package com.parasol.Main.api_model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.parasol.Main.eenum.TransactionType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,10 +20,16 @@ import java.time.LocalDateTime;
 @ToString
 @ApiModel("AccountHistory")
 public class AccountHistory {
-    @ApiModelProperty(name= "txDatetime", example ="2022-04-28 18:43:22:03" )
+    @ApiModelProperty(name= "id", example ="2" )
+    @JsonProperty("id")
     @NotNull
-    private LocalDateTime txDatetime;
+    private Long txId;
+    @ApiModelProperty(name= "txDatetime", example ="2022-04-28 18:43:22:03" )
+    @JsonProperty("date")
+    @NotNull
+    private Long txDatetime;
     @ApiModelProperty(name= "txMethod", example ="1" )
+    @JsonProperty("type")
     @NotNull
     private TransactionType txMethod;
     @ApiModelProperty(name = "amount", example = "4500000000")
@@ -31,7 +38,8 @@ public class AccountHistory {
     @ApiModelProperty(name = "account_to", example = "110-437-525252")
     @NotNull
     private AccountInfo accountTo;
-    @ApiModelProperty(name = "balance", example = "5000")
+
+    @ApiModelProperty(name = "transactionAccount")
     @NotBlank
-    private Long balance;
+    private String transactionAccount;
 }
