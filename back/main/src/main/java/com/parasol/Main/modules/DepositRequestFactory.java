@@ -1,6 +1,7 @@
 package com.parasol.Main.modules;
 
 import com.parasol.Main.api_request.DepositRequest;
+import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
@@ -26,18 +27,11 @@ public class DepositRequestFactory {
                 .build());
         RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(saveInfo));
 
-        /* 응답 결과 반환 */
-        Mono<Boolean> exchange = headersSpec.exchangeToMono(response -> {
-            if (response.statusCode().is2xxSuccessful()) {
-                return response.bodyToMono(Boolean.class);
-            } else if (response.statusCode().is4xxClientError()) {
-                return null;
-            } else if (response.statusCode().is5xxServerError()) {
-                return null;
-            }
-            return null;
-        });
+        // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
+        Mono<Boolean> response = headersSpec.retrieve().bodyToMono(Boolean.class);
 
-        return exchange;
+        return response
+                .filter(s -> true)
+                .flatMap(s -> Mono.just(s));
     }
 }

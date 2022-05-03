@@ -4,6 +4,7 @@ import com.parasol.core.entity.Client;
 import com.parasol.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,8 @@ public class ClientService {
 
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private ValidationService validationService;
 
     public String create(String name, String residentNumber) {
         Client client = Client.builder()
@@ -32,6 +35,7 @@ public class ClientService {
 
     public Client findByNameAndResidentNumber(String name, String residentNumber) {
         Optional<Client> result = clientRepository.findByNameAndResidentNumber(name, residentNumber);
-        return result.orElse(null);
+
+        return validationService.generateClient(result.orElse(new Client()));
     }
 }

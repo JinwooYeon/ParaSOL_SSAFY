@@ -16,20 +16,19 @@ public class WithdrawRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    public TransactionExecuteResultResponse run(WithdrawRequest saveInfo){
+    public Mono<Boolean> run(WithdrawRequest saveInfo){
         /* Http 통신 */
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account/withdraw")
                 .build());
         WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(saveInfo));
+
+        // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
         Mono<Boolean> response = headersSpec.retrieve().bodyToMono(Boolean.class);
 
-        /* TransactionExecuteResultResponse 에 응답 결과 담기 */
-        // Todo: ...
-
-        System.out.println(response.block());
-
-        return null;
+        return response
+                .filter(s -> true)
+                .flatMap(s -> Mono.just(s));
     }
 }

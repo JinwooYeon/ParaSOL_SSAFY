@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -18,6 +19,8 @@ public class Client {
     @Id
     private String id;
 
+    @NotBlank
     private String name;
+    @NotBlank
     private String residentNumber;
 };

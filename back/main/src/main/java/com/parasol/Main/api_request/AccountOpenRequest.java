@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
-@Builder
 @ApiModel("AccountOpenRequest")
 public class AccountOpenRequest extends ClientInfo {
     @ApiModelProperty(name="account_password", example = "0809")

@@ -16,16 +16,18 @@ public class QueryAccountListRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient webClient;
 
-    public AccountListQueryResultResponse createQueryAccountListRequest(AccountListQueryRequest request) {
+    public Mono<AccountListQueryResultResponse> createQueryAccountListRequest(AccountListQueryRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.POST);
-        WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri("/account/list")
-                .body(BodyInserters
-                        .fromFormData("name", request.getName())
-                        .with("residentNumber", request.getResidentNumber())
-                );
+        WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
+                .path("/account/list")
+                .build());
 
-        Mono<AccountListQueryResultResponse> response = bodySpec.retrieve().bodyToMono(AccountListQueryResultResponse.class);
+        WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
 
-        return response.block();
+        Mono<AccountListQueryResultResponse> response = headersSpec.retrieve().bodyToMono(AccountListQueryResultResponse.class);
+
+        return response
+                .filter(s -> true)
+                .flatMap(s -> Mono.just(s));
     }
 }
