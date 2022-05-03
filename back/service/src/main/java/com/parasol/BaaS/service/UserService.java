@@ -18,16 +18,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserInfo getUserByUserId(String id) {
+    public User getUserByUserId(String id) {
         Optional<User> oUser = userRepository.findByUserId(id);
         if(!oUser.isPresent()) return null;
         User user = oUser.get();
 
-        return UserInfo.builder()
-                .id(user.getUserId())
-                .password(user.getUserPassword())
-                .name(user.getUserName())
-                .build();
+        return user;
     }
 
     public User createUser(UserRegisterRequest request) {

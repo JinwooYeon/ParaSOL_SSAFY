@@ -5,9 +5,12 @@ import com.parasol.BaaS.api_request.LoginRequest;
 import com.parasol.BaaS.api_request.UserRegisterRequest;
 import com.parasol.BaaS.api_request.UserUpdateRequest;
 import com.parasol.BaaS.api_response.UserInfoQueryResultResponse;
+import com.parasol.BaaS.auth.jwt.UserDetail;
+import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,11 +26,14 @@ public class UserController {
         String id = request.getId();
         String password = request.getPassword();
 
-        UserInfo user = userService.getUserByUserId(id);
+        User user = userService.getUserByUserId(id);
         if(user == null) return null;
 
         // TODO : 토큰 반환
-        if(password.equals(user.getPassword())) return "성공";
+        if(password.equals(user.getUserPassword())) {
+            String jwt = JwtTokenUtil.getToken(request.getId());
+            return "성공";
+        }
         return "실패";
     }
 
@@ -36,13 +42,13 @@ public class UserController {
             @PathVariable String userId
     ){
         // TODO : PathVariable -> 토큰에서 userId 받기
-        UserInfo user = userService.getUserByUserId(userId);
+        User user = userService.getUserByUserId(userId);
 
         if(user == null) return null;
         return UserInfoQueryResultResponse.builder()
-                .id(user.getId())
+                .id(user.getUserId())
 //                .password(user.getPassword())
-                .name(user.getName())
+                .name(user.getUserName())
                 .build();
     }
 
