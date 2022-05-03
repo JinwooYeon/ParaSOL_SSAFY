@@ -1,14 +1,19 @@
 package com.parasol.Main.service;
 
+import com.parasol.Main.api_model.AccountHistory;
+import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
 import com.parasol.Main.api_response.AccountListQueryResultResponse;
 import com.parasol.Main.api_response.TransactionExecuteResultResponse;
+import com.parasol.Main.eenum.TransactionType;
 import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class AccountService {
@@ -27,15 +32,18 @@ public class AccountService {
     @Autowired
     private WithdrawRequestFactory withdrawRequestFactory;
 
-    public void create(AccountOpenRequest request) {
+    public Mono<String> create(AccountOpenRequest request) {
         String resident = request.getResidentNumber();
         int password = request.getAccountPassword();
-        openAccountRequestFactory.createOpenAccountRequest(request);
+        String name = request.getName();
+        return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
-    public AccountListQueryResultResponse getAllAccount(AccountListQueryRequest request) {
-        queryAccountListRequestFactory.createQueryAccountListRequest(request);
-        return null;
+    public Mono<AccountListQueryResultResponse> getAllAccount(AccountListQueryRequest request) {
+        String name = request.getName();
+        String residentNumber = request.getResidentNumber();
+
+        return queryAccountListRequestFactory.createQueryAccountListRequest(request);
     }
 
     public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
@@ -45,23 +53,33 @@ public class AccountService {
         return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
     }
 
-    public AccountHistoriesQueryResultResponse getHistory(AccountHistoryQueryRequest request) {
+    public Mono<List<AccountHistory>> getHistory(AccountHistoryQueryRequest request) {
         String bankName = request.getBankName();
         String accountNo = request.getBankAccountNumber();
 
-        queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request);
-        return null;
+        return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request);
     }
 
-    public TransactionExecuteResultResponse deposit(DepositRequest request) {
+    public Mono<Boolean> deposit(DepositRequest request) {
         // TODO: 메소드명 수정 필요 @선민기
         //depositRequestFactory.createDepositRequest(request);
-        return null;
+        AccountInfo accountFrom = request.getAccountFrom();
+        AccountInfo accountTo = request.getAccountTo();
+        long amount = request.getAmount();
+        TransactionType method = request.getMethod();
+
+        return depositRequestFactory.run(request);
     }
 
-    public TransactionExecuteResultResponse withdraw(WithdrawRequest request) {
+    public Mono<Boolean> withdraw(WithdrawRequest request) {
         // TODO: 구현 수정 필요 @선민기
         //withdrawRequestFactory.createWithdrawRequest(request);
-        return null;
+
+        AccountInfo accountFrom = request.getAccountFrom();
+        AccountInfo accountTo = request.getAccountTo();
+        long amount = request.getAmount();
+        TransactionType method = request.getMethod();
+
+        return withdrawRequestFactory.run(request);
     }
 }

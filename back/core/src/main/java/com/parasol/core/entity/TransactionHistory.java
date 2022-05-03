@@ -1,6 +1,8 @@
 package com.parasol.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.parasol.core.eenum.TransactionType;
 import lombok.*;
 
@@ -22,7 +24,7 @@ public class TransactionHistory {
     private Long amount;
     private String transactionAccount;
 
-    @JsonManagedReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @ManyToOne
     @JoinColumn(name = "account")
     private Account account;

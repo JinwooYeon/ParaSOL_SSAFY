@@ -1,40 +1,53 @@
 package com.parasol.Main.controller;
 
+import com.parasol.Main.api_model.AccountHistory;
 import com.parasol.Main.api_model.ClientInfo;
-import com.parasol.Main.api_request.AccountBalanceQueryRequest;
-import com.parasol.Main.api_request.AccountOpenRequest;
-import com.parasol.Main.api_request.DepositRequest;
-import com.parasol.Main.api_request.WithdrawRequest;
+import com.parasol.Main.api_model.Transaction;
+import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
+import com.parasol.Main.api_response.AccountListQueryResultResponse;
+import com.parasol.Main.api_response.TransactionExecuteResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class AccountController {
-    // TODO : 일단 오류 나는 거 다 주석처리 했습니다
     @Autowired
     private AccountService accountService;
 
     // 계좌 개설
     @PostMapping("account")
     @ResponseBody
-    public String createAccount(
+    public Mono<String> createAccount(
             @RequestBody @Valid AccountOpenRequest accountOpenRequest
     ) {
-        return null;
+        AccountOpenRequest request = new AccountOpenRequest();
+        request.setName(accountOpenRequest.getName());
+        request.setResidentNumber(accountOpenRequest.getResidentNumber());
+        request.setAccountPassword(accountOpenRequest.getAccountPassword());
+
+        Mono<String> result = accountService.create(request);
+        return result;
     }
 
     // 계좌 목록 조회
     @GetMapping("account")
     @ResponseBody
-    public String getList(
-            @RequestBody @Valid ClientInfo clientInfo
+    public Mono<AccountListQueryResultResponse> getList(
+            @RequestBody @Valid AccountListQueryRequest accountListQueryRequest
     ) {
-        return null;
+        AccountListQueryRequest request = new AccountListQueryRequest();
+        request.setName(accountListQueryRequest.getName());
+        request.setResidentNumber(accountListQueryRequest.getResidentNumber());
+
+        Mono<AccountListQueryResultResponse> result = accountService.getAllAccount(request);
+        return result;
     }
 
     // 계좌 잔액 조회
@@ -55,30 +68,51 @@ public class AccountController {
     // 계좌 거래내역 조회
     @GetMapping("account/history")
     @ResponseBody
-    public String getHistory(
+    public Mono<List<AccountHistory>> getHistory(
             @RequestParam("bankName") String bankName,
-            @RequestParam("bankAccountNumber") String accountNo
+            @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
-        return null;
+        AccountHistoryQueryRequest request = new AccountHistoryQueryRequest();
+        request.setBankName(bankName);
+        request.setBankAccountNumber(bankAccountNumber);
+
+        Mono<List<AccountHistory>> result = accountService.getHistory(request);
+        return result;
     }
 
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
-    public String deposit(
-            @RequestBody @Valid DepositRequest request
+    public Mono<Boolean> deposit(
+            @RequestBody @Valid DepositRequest depositRequest
     ) {
-        return null;
+        DepositRequest request = new DepositRequest();
+        request.setAccountFrom(depositRequest.getAccountFrom());
+        request.setAccountTo(depositRequest.getAccountTo());
+        request.setAmount(depositRequest.getAmount());
+        request.setMethod(depositRequest.getMethod());
+
+        Mono<Boolean> result = accountService.deposit(request);
+
+        return result;
     }
 
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public String withdraw(
-            @RequestBody @Valid WithdrawRequest request
+    public Mono<Boolean> withdraw(
+            @RequestBody @Valid WithdrawRequest withdrawRequest
     ) {
+        WithdrawRequest request = new WithdrawRequest();
 
-        return null;
+        request.setAccountFrom(withdrawRequest.getAccountFrom());
+        request.setAccountTo(withdrawRequest.getAccountTo());
+        request.setAmount(withdrawRequest.getAmount());
+        request.setMethod(withdrawRequest.getMethod());
+
+        Mono<Boolean> result = accountService.withdraw(request);
+
+        return result;
     }
 
 }

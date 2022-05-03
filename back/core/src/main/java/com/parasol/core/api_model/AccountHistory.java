@@ -1,19 +1,16 @@
-package com.parasol.Main.api_model;
+package com.parasol.core.api_model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.parasol.Main.eenum.TransactionType;
+import com.parasol.core.eenum.TransactionType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

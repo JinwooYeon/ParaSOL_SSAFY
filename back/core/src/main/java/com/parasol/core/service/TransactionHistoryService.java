@@ -1,5 +1,7 @@
 package com.parasol.core.service;
 
+import com.parasol.core.api_model.AccountHistory;
+import com.parasol.core.api_model.AccountInfo;
 import com.parasol.core.eenum.TransactionType;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.TransactionHistory;
@@ -8,6 +10,7 @@ import com.parasol.core.repository.TransactionHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -70,8 +73,26 @@ public class TransactionHistoryService {
         return transactionHistoryRepository.save(transactionHistory);
     }
 
-    public List<TransactionHistory> getAccountHistory(String accountNo) {
-        return transactionHistoryRepository.findByAccount_Id(accountNo)
-                .stream().sorted(Comparator.comparing(TransactionHistory::getDate).reversed()).collect(Collectors.toList());
+    public List<AccountHistory> getAccountHistory(String accountNo) {
+        List<AccountHistory> result = new ArrayList<>();
+
+        for(TransactionHistory e : transactionHistoryRepository.findByAccount_Id(accountNo)
+                .stream().sorted(Comparator.comparing(TransactionHistory::getDate).reversed()).collect(Collectors.toList())){
+            AccountHistory ele = new AccountHistory();
+            AccountInfo accountInfo = new AccountInfo();
+
+            accountInfo.setBankAccountNumber(e.getAccount().getId());
+
+            ele.setTxId(e.getId());
+            ele.setTxDatetime(e.getDate());
+            ele.setTxMethod(e.getType());
+            ele.setAmount(e.getAmount());
+            ele.setAccountTo(accountInfo);
+            ele.setTransactionAccount(e.getTransactionAccount());
+
+            result.add(ele);
+        }
+
+        return result;
     }
 }
