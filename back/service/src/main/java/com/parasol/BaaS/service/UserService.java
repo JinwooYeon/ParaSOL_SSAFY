@@ -67,6 +67,8 @@ public class UserService {
 
         Token token = checkToken.get();
 
+        JwtTokenUtil.handleError(refreshToken);
+
         if(refreshToken.equals(token.getRefreshToken())) {
             AuthToken authToken = JwtTokenUtil.getToken(id);
             String newRefreshToken = authToken.getRefreshToken().getRefreshToken();
