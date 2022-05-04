@@ -23,8 +23,4 @@ public class User {
     private String userId;
     private String userPassword;
     private String userName;
-
-    @OneToOne(mappedBy = "user")
-    private Token token;
-
 }
