@@ -5,6 +5,7 @@ import Home from "../screens/Home";
 import Mypage from "../screens/Mypage";
 import Remit from "../screens/Remit";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { mainBlue } from "../color";
 
 const Tab = createBottomTabNavigator();
 
@@ -13,9 +14,10 @@ const Tabs = () => (
     initialRouteName="홈"
     screenOptions={{
       tabBarLabelStyle: { fontWeight: "bold" },
-      tabBarActiveTintColor: "#105CF0",
+      tabBarActiveTintColor: mainBlue,
       tabBarInactiveTintColor: "black",
       headerShown: false,
+      tabBarHideOnKeyboard: true,
     }}
     sceneContainerStyle={{
       backgroundColor: "white",
