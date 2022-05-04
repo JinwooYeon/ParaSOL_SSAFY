@@ -14,13 +14,15 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Token {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userSeq;
+    private Long tokenId;
 
-    private String userId;
-    private String userPassword;
-    private String userName;
+    private String refreshToken;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "user_seq")
+    private User user;
 }
