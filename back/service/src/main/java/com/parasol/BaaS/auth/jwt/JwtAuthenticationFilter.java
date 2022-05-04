@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Autowired
     private UserService userService;
 	
-	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, @Lazy UserService userService) {
+	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
 		super(authenticationManager);
 		this.userService = userService;
 	}
@@ -62,11 +61,11 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             if (userId != null) {
             		User user = userService.getUserByUserId(userId);
                 if(user != null) {
-                		UserDetail userDetails = new UserDetail(user);
-                		UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(userId,
-                				null, userDetails.getAuthorities());
-                		jwtAuthentication.setDetails(userDetails);
-                		return jwtAuthentication;
+                    UserDetail userDetails = new UserDetail(user);
+                    UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(userId,
+                            null, userDetails.getAuthorities());
+                    jwtAuthentication.setDetails(userDetails);
+                    return jwtAuthentication;
                 }
             }
             return null;
