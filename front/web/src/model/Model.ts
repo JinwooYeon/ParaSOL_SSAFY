@@ -30,13 +30,23 @@ export const Transaction = [
     required: true,
   },
   {
-    value: "accountFrom",
-    type: "[AccountInfo]",
+    value: "bankName",
+    type: "[AccountInfo.accountFrom]",
     required: true,
   },
   {
-    value: "accountTo",
-    type: "[AccountInfo]",
+    value: "bankAccountNumber",
+    type: "[AccountInfo.accountFrom]",
+    required: true,
+  },
+  {
+    value: "bankName",
+    type: "[AccountInfo.accountTo]",
+    required: true,
+  },
+  {
+    value: "bankAccountNumber",
+    type: "[AccountInfo.accountTo]",
     required: true,
   },
 ];
