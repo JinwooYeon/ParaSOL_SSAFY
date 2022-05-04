@@ -8,7 +8,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ApiKeyAuthManager implements AuthenticationManager {
-    private final String TEST_KEY = "test";
+    private String TEST_KEY;
+
+    public ApiKeyAuthManager() {
+    }
+
+    public ApiKeyAuthManager(String TEST_KEY) {
+        this.TEST_KEY = TEST_KEY;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

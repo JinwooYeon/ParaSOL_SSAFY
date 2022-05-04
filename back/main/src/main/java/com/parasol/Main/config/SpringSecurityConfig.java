@@ -2,6 +2,7 @@ package com.parasol.Main.config;
 
 import com.parasol.Main.security.filter.ApiKeyAuthFilter;
 import com.parasol.Main.security.filter.ApiKeyAuthManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -31,10 +32,12 @@ public class SpringSecurityConfig {
     @Order(0)
     @Configuration
     class Filter1 extends WebSecurityConfigurerAdapter {
+        @Value("${authentication.account-key}")
+        private String accountKey;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            filter.setAuthenticationManager(new ApiKeyAuthManager());
+            filter.setAuthenticationManager(new ApiKeyAuthManager(accountKey));
             http
                     .antMatcher("/account/**")
                     .csrf().disable()
@@ -52,6 +55,8 @@ public class SpringSecurityConfig {
     @Order(1)
     @Configuration
     class Filter2 extends WebSecurityConfigurerAdapter {
+        @Value("${authentication.client-key}")
+        private String clientKey;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -60,7 +65,7 @@ public class SpringSecurityConfig {
             //Todo : CORS는 하드코딩 부터 구현 해보기
             //Todo : 하드코딩으로 잘 되면 -> application.properties로 관리하기
 
-            filter.setAuthenticationManager(new ApiKeyAuthManager());
+            filter.setAuthenticationManager(new ApiKeyAuthManager(clientKey));
             http
                     .antMatcher("/client/**")
                     .csrf().disable()
