@@ -19,10 +19,10 @@ public class Token {
     @Id
     private Long tokenId;
 
+    private String refreshToken;
+
     @OneToOne
     @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_seq")
     private User user;
-
-    private String refreshToken;
 }
