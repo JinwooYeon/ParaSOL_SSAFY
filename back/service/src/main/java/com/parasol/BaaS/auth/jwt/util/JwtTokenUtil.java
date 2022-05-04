@@ -24,7 +24,7 @@ public class JwtTokenUtil {
 
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
-    public static final String ISSUER = "parasol.com";
+    public static final String ISSUER = "ssafy-parasol.com";
     
     @Autowired
 	public JwtTokenUtil(
