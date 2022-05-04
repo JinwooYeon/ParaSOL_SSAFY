@@ -59,6 +59,27 @@ public class UserService {
         return null;
     }
 
+    // 새로운 AuthToken 발급
+    public AuthToken issueAuthToken(String id, String refreshToken) {
+        Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
+
+        if(!checkToken.isPresent()) return null;
+
+        Token token = checkToken.get();
+
+        if(refreshToken.equals(token.getRefreshToken())) {
+            AuthToken authToken = JwtTokenUtil.getToken(id);
+            String newRefreshToken = authToken.getRefreshToken().getRefreshToken();
+            token.setRefreshToken(newRefreshToken);
+
+            tokenRepository.save(token);
+            return authToken;
+        }
+
+        return null;
+    }
+
+
     public User getUserByUserId(String id) {
         Optional<User> oUser = userRepository.findByUserId(id);
         if(!oUser.isPresent()) return null;

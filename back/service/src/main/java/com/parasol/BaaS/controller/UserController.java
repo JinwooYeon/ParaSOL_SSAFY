@@ -1,12 +1,14 @@
 package com.parasol.BaaS.controller;
 
+import com.parasol.BaaS.api_model.AuthToken;
+import com.parasol.BaaS.api_model.RefreshToken;
 import com.parasol.BaaS.api_model.UserInfo;
 import com.parasol.BaaS.api_request.LoginRequest;
 import com.parasol.BaaS.api_request.UserRegisterRequest;
 import com.parasol.BaaS.api_request.UserUpdateRequest;
+import com.parasol.BaaS.api_response.AuthTokenResponse;
 import com.parasol.BaaS.api_response.UserInfoQueryResultResponse;
 import com.parasol.BaaS.auth.jwt.UserDetail;
-import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +21,49 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("login")
-    public String login(
+    @PostMapping("/login")
+    public AuthTokenResponse login(
             @RequestBody LoginRequest request
     ) {
-        String id = request.getId();
-        String password = request.getPassword();
 
-        User user = userService.getUserByUserId(id);
-        if(user == null) return null;
+        AuthToken token = userService.login(request);
+
+        if(token == null) {
+            return null;
+        }
 
         // TODO : 토큰 반환
-        if(password.equals(user.getUserPassword())) {
-            String jwt = JwtTokenUtil.getToken(request.getId());
-            return "성공";
-        }
-        return "실패";
+        return AuthTokenResponse.builder()
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
+                .build();
     }
 
-    @GetMapping("{userId}")
+    @PostMapping("/token")
+    private AuthTokenResponse issueNewToken (
+            Authentication authentication,
+            @RequestBody RefreshToken refreshToken
+    ) {
+        if(authentication == null) {
+            return null;
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String userId = userDetail.getUsername();
+
+        AuthToken token = userService.issueAuthToken(userId, refreshToken.getRefreshToken());
+
+        if(token == null) {
+            return null;
+        }
+
+        return AuthTokenResponse.builder()
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
+                .build();
+    }
+
+    @GetMapping("/{userId}")
     public UserInfoQueryResultResponse getUser(
             @PathVariable String userId
     ){
