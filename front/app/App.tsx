@@ -1,12 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
-import { useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import React, { useState } from "react";
 import Header from "./components/Header";
 import Tabs from "./navigation/Tabs";
+import Login from "./screens/Login";
 
 export default function App() {
-  const [login, setLogin] = useState(true);
+  const [login, setLogin] = useState(false);
 
   if (login) {
     return (
@@ -17,5 +17,7 @@ export default function App() {
         </NavigationContainer>
       </SafeAreaProvider>
     );
+  } else {
+    return <Login setLogin={setLogin} />;
   }
 }
