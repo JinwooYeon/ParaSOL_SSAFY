@@ -1,9 +1,9 @@
-import { View, Text } from "react-native";
+import { LayoutContainer, HeaderText } from "./styled";
 
 const Mypage = () => (
-  <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <Text>Mypage</Text>
-  </View>
+  <LayoutContainer>
+    <HeaderText>메뉴</HeaderText>
+  </LayoutContainer>
 );
 
 export default Mypage;

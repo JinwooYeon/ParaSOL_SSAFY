@@ -1,9 +1,25 @@
-import { View, Text } from "react-native";
+import BalanceBox from "../components/BalanceBox";
+import {
+  ContentContainer,
+  FooterContainer,
+  HeaderContainer,
+  LayoutContainer,
+  HeaderText,
+} from "./styled";
 
-const History = () => (
-  <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <Text>History</Text>
-  </View>
-);
+const History = () => {
+  const balance = "999,999";
+
+  return (
+    <LayoutContainer>
+      <HeaderContainer>
+        <HeaderText>거래 내역</HeaderText>
+        <BalanceBox num={balance} />
+      </HeaderContainer>
+      <ContentContainer></ContentContainer>
+      <FooterContainer></FooterContainer>
+    </LayoutContainer>
+  );
+};
 
 export default History;

@@ -1,16 +1,25 @@
-import { Text } from "react-native";
-import styled from "styled-components/native";
+import BalanceBox from "../components/BalanceBox";
+import {
+  ContentContainer,
+  FooterContainer,
+  HeaderContainer,
+  LayoutContainer,
+  HeaderText,
+} from "./styled";
 
-const ContentContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+const Home = () => {
+  const balance = "999,999";
 
-const Home = () => (
-  <ContentContainer>
-    <Text>Home</Text>
-  </ContentContainer>
-);
+  return (
+    <LayoutContainer>
+      <HeaderContainer>
+        <HeaderText>PAY 잔액</HeaderText>
+        <BalanceBox num={balance} />
+      </HeaderContainer>
+      <ContentContainer></ContentContainer>
+      <FooterContainer></FooterContainer>
+    </LayoutContainer>
+  );
+};
 
 export default Home;
