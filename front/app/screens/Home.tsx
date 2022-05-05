@@ -1,10 +1,12 @@
 import BalanceBox from "../components/BalanceBox";
+import BtnBox from "../components/BtnBox";
 import {
   ContentContainer,
   FooterContainer,
   HeaderContainer,
   LayoutContainer,
   HeaderText,
+  ContentFooterContainer,
 } from "./styled";
 
 const Home = () => {
@@ -13,11 +15,23 @@ const Home = () => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderText>PAY 잔액</HeaderText>
+        <HeaderText>파라솔 PAY</HeaderText>
         <BalanceBox num={balance} />
       </HeaderContainer>
-      <ContentContainer></ContentContainer>
-      <FooterContainer></FooterContainer>
+      <ContentFooterContainer>
+        <ContentContainer></ContentContainer>
+        <FooterContainer>
+          <BtnBox color="blue" text="충전하기" />
+          <BtnBox color="blue" text="출금하기" />
+          <BtnBox color="blue" text="결제하기" />
+          <BtnBox color="blue" text="정보 수정" />
+          <BtnBox color="blue" text="수정 완료" />
+          <BtnBox color="blue" text="비밀번호 수정" />
+          <BtnBox color="red" text="회원 탈퇴" />
+          <BtnBox color="red" text="초기화" />
+          <BtnBox color="white" text="뒤로" />
+        </FooterContainer>
+      </ContentFooterContainer>
     </LayoutContainer>
   );
 };
