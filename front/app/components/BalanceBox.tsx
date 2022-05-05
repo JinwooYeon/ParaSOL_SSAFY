@@ -1,11 +1,14 @@
-import { Balance, BalanceContainer } from "../screens/styled";
+import { Balance, BoxContainer, BalanceTextContainer } from "../screens/styled";
 
 const BalanceBox = ({ num }: any) => {
   return (
-    <BalanceContainer>
-      <Balance>{num}</Balance>
-      <Balance>원</Balance>
-    </BalanceContainer>
+    <BoxContainer>
+      <Balance>잔액</Balance>
+      <BalanceTextContainer>
+        <Balance>{num}</Balance>
+        <Balance>원</Balance>
+      </BalanceTextContainer>
+    </BoxContainer>
   );
 };
 
