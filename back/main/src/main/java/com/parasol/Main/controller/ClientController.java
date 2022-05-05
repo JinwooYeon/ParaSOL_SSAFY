@@ -1,5 +1,6 @@
 package com.parasol.Main.controller;
 
+import com.parasol.Main.api_model.Client;
 import com.parasol.Main.api_model.ClientInfo;
 import com.parasol.Main.api_request.ClientRegisterRequest;
 import com.parasol.Main.service.ClientService;
@@ -9,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 
-@RestController("/client")
+@RestController
 public class ClientController {
     @Autowired
     private ClientService clientService;
@@ -22,11 +23,10 @@ public class ClientController {
     }
 
     @GetMapping("client")
-    public ClientInfo getClient(
+    public Mono<Client> getClient(
             @RequestParam("id") String id
     ) {
-        ClientInfo result = clientService.findById(id);
-        return result;
+       return clientService.findById(id);
     }
 
 }
