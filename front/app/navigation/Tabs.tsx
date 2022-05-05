@@ -3,7 +3,7 @@ import Charge from "../screens/Charge";
 import History from "../screens/History";
 import Home from "../screens/Home";
 import Mypage from "../screens/Mypage";
-import Remit from "../screens/Remit";
+import Withdraw from "../screens/Withdraw";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { mainBlue } from "../color";
 
@@ -39,8 +39,8 @@ const Tabs = () => (
       }}
     />
     <Tab.Screen
-      name="송금"
-      component={Remit}
+      name="출금"
+      component={Withdraw}
       options={{
         tabBarIcon: ({ focused, color, size }) => {
           return (
