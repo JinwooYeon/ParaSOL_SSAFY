@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import React, { useState } from "react";
-import Header from "./components/Header";
+import Logo from "./components/Logo";
 import Tabs from "./navigation/Tabs";
 import Login from "./screens/Login";
 
@@ -12,7 +12,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <NavigationContainer>
-          <Header />
+          <Logo />
           <Tabs />
         </NavigationContainer>
       </SafeAreaProvider>
