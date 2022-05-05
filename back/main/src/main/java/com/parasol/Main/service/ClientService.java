@@ -5,6 +5,7 @@ import com.parasol.Main.api_request.ClientRegisterRequest;
 import com.parasol.Main.modules.CreateAddClientRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class ClientService {
@@ -12,11 +13,8 @@ public class ClientService {
     @Autowired
     private CreateAddClientRequest addClientRequest;
 
-    public void create(ClientRegisterRequest request) {
-        String name = request.getName();
-        String resident = request.getResidentNumber();
-
-        addClientRequest.createAddClientRequest(request);
+    public Mono<String> create(ClientRegisterRequest request) {
+        return addClientRequest.createAddClientRequest(request);
     }
 
     public ClientInfo findById(String id){
