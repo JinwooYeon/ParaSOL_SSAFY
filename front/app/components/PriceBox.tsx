@@ -16,6 +16,7 @@ interface PropsType {
 
 const PriceBox: React.FC<PropsType> = ({ price, setPrice }) => {
   const onChangeText = (s: string) => {
+    s = s.replace(/[^0-9]/g, "");
     if (s === "") s = "0";
     let temp = s.slice(0, 1);
     if (s.length > 1 && temp === "0") {
