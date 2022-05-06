@@ -13,9 +13,13 @@ import {
 
 interface PropsType {
   balance: string;
+  navigation: any;
 }
 
-const Withdraw: React.FC<PropsType> = ({ balance }) => {
+const Withdraw: React.FC<PropsType> = ({
+  balance,
+  navigation: { navigate },
+}) => {
   const [price, setPrice] = useState("0");
   const [bankInfo, setBankInfo] = useState({
     bankImg: "",
@@ -30,11 +34,11 @@ const Withdraw: React.FC<PropsType> = ({ balance }) => {
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer>
-          <ConnectedAccountBox bankInfo={bankInfo} />
+          <ConnectedAccountBox bankInfo={bankInfo} navigate={navigate} />
           <PriceBox price={price} setPrice={setPrice} />
         </ContentContainer>
         <FooterContainer>
-          <BtnBox color="blue" text="출금하기" />
+          <BtnBox color="blue" text="출금하기" navigate={navigate} />
           <BtnBox color="red" text="초기화" setPrice={setPrice} />
         </FooterContainer>
       </ContentFooterContainer>

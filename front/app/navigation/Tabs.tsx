@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Charge from "../screens/Charge";
 import History from "../screens/History";
 import Home from "../screens/Home";
-import Mypage from "../screens/Mypage";
-import Withdraw from "../screens/Withdraw";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { mainBlue } from "../color";
 import { useState } from "react";
+import ChargeStack from "./ChargeStack";
+import MypageStack from "./MypageStack";
+import WithdrawStack from "./WithdrawStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +17,7 @@ const Tabs = () => {
     <Tab.Navigator
       initialRouteName="홈"
       screenOptions={{
-        tabBarLabelStyle: { fontWeight: "bold" },
+        tabBarLabelStyle: { fontWeight: "bold", fontSize: 13 },
         tabBarActiveTintColor: mainBlue,
         tabBarInactiveTintColor: "black",
         headerShown: false,
@@ -28,8 +28,9 @@ const Tabs = () => {
       }}
     >
       <Tab.Screen
-        name="충전"
+        name="Charge"
         options={{
+          title: "충전",
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <MaterialCommunityIcons
@@ -41,11 +42,12 @@ const Tabs = () => {
           },
         }}
       >
-        {(props) => <Charge {...props} balance={balance} />}
+        {(props) => <ChargeStack {...props} balance={balance} />}
       </Tab.Screen>
       <Tab.Screen
-        name="출금"
+        name="Withdraw"
         options={{
+          title: "출금",
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <MaterialCommunityIcons
@@ -57,11 +59,12 @@ const Tabs = () => {
           },
         }}
       >
-        {(props) => <Withdraw {...props} balance={balance} />}
+        {(props) => <WithdrawStack {...props} balance={balance} />}
       </Tab.Screen>
       <Tab.Screen
-        name="홈"
+        name="Home"
         options={{
+          title: "홈",
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <MaterialCommunityIcons
@@ -76,8 +79,9 @@ const Tabs = () => {
         {(props) => <Home {...props} balance={balance} />}
       </Tab.Screen>
       <Tab.Screen
-        name="거래 내역"
+        name="History"
         options={{
+          title: "거래 내역",
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <MaterialCommunityIcons
@@ -92,9 +96,10 @@ const Tabs = () => {
         {(props) => <History {...props} balance={balance} />}
       </Tab.Screen>
       <Tab.Screen
-        name="내 정보"
-        component={Mypage}
+        name="Mypage"
+        component={MypageStack}
         options={{
+          title: "내 정보",
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <MaterialCommunityIcons

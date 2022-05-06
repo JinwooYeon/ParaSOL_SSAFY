@@ -4,16 +4,19 @@ interface PropsType {
   color: string;
   text: string;
   setPrice?: (a: string) => void;
+  navigate?: (a: any) => void;
 }
 
-const BtnBox: React.FC<PropsType> = ({ color, text, setPrice }) => {
+const BtnBox: React.FC<PropsType> = ({ color, text, setPrice, navigate }) => {
   const onPress = () => {
     switch (text) {
       case "충전하기":
         console.log("charge");
+        navigate?.("Charging");
         break;
       case "출금하기":
         console.log("withdraw");
+        navigate?.("Withdrawing");
         break;
       case "결제하기":
         console.log("pay");
