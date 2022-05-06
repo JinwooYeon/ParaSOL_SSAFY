@@ -118,8 +118,11 @@ public class UserService {
 
     @Transactional
     public boolean deleteUser(String userId) {
+        // refreshToken 먼저 삭제 -> user 삭제
+        Long tokenDelete = tokenRepository.deleteByUserUserId(userId);
+
         Long delete = userRepository.deleteByUserId(userId);
-        if(delete > 0) return true;
+        if(tokenDelete > 0 && delete > 0) return true;
         return false;
     }
 }
