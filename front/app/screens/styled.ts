@@ -29,17 +29,16 @@ export const LayoutContainer = styled.View`
 `;
 export const HeaderContainer = styled.View`
   /* background-color: red; */
-  height: 100px;
+  height: 110px;
   margin-bottom: 8%;
 `;
 export const ContentFooterContainer = styled.View`
+  /* background-color: black; */
   justify-content: space-between;
   flex: 1;
 `;
 export const ContentContainer = styled.View`
   /* background-color: green; */
-  /* margin-right: 2%;
-  margin-left: 2%; */
 `;
 export const FooterContainer = styled.View`
   /* background-color: blue; */
