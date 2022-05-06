@@ -13,6 +13,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import BtnBox from "../components/BtnBox";
 import IdController from "../components/Controller/IdController";
 import PasswordController from "../components/Controller/PasswordController";
+import PasswordConfirmController from "../components/Controller/PasswordConfirmController";
+import EmailController from "../components/Controller/EmailController";
+import BirthController from "../components/Controller/BirthController";
 
 const ContentContainer = styled.View`
   flex: 1;
@@ -25,32 +28,41 @@ interface PropsType {
   navigation: any;
 }
 
-const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
+const Register: React.FC<PropsType> = ({
+  setLogin,
+  navigation: { navigate },
+}) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const url = "http://k6S101.p.ssafy.io:8080/user/login";
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [email, setEmail] = useState("");
+  const [birth, setBirth] = useState("");
+  const url = "http://k6S101.p.ssafy.io:8080/user/Register";
 
   const onSubmit = async (id: string, password: string) => {
     const data = {
       id: id,
       password: password,
+      passwordConfirm: passwordConfirm,
+      email: email,
+      birth: birth,
     };
     console.log(data);
-    await axios
-      .post(url, data, {
-        headers: {
-          "Content-Type": "Application/json",
-        },
-      })
-      .then((res: any) => {
-        console.log(res);
-        const token = res.data.token;
-        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-        AsyncStorage.setItem("token", token);
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
+    // await axios
+    //   .post(url, data, {
+    //     headers: {
+    //       "Content-Type": "Application/json",
+    //     },
+    //   })
+    //   .then((res: any) => {
+    //     console.log(res);
+    //     const token = res.data.token;
+    //     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+    //     AsyncStorage.setItem("token", token);
+    //   })
+    //   .catch((err: any) => {
+    //     console.log(err);
+    //   });
     setId("");
     setPassword("");
   };
@@ -61,9 +73,12 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
 
   return (
     <ContentContainer>
-      <Text>Login</Text>
+      <Text>Register</Text>
       <IdController setId={setId} />
       <PasswordController setPassword={setPassword} />
+      <PasswordConfirmController setPasswordConfirm={setPasswordConfirm} />
+      <EmailController setEmail={setEmail} />
+      <BirthController setBirth={setBirth} />
       <Button title="Submit" onPress={() => onSubmit(id, password)}></Button>
       <Button title="LOGIN" onPress={onLoginTemp}></Button>
 
@@ -91,4 +106,4 @@ const styles = StyleSheet.create({
   textBtn: {},
 });
 
-export default Login;
+export default Register;

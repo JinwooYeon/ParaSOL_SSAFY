@@ -39,6 +39,9 @@ const BtnBox: React.FC<PropsType> = ({ color, text, setPrice }) => {
       case "뒤로":
         console.log("back");
         break;
+      case "로그인":
+        console.log("login");
+        break;
       default:
         console.log("set text props");
     }
