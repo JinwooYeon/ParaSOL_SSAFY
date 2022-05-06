@@ -8,12 +8,14 @@ import {
   FooterContainer,
   HeaderContainer,
   LayoutContainer,
-  HeaderText,
   ContentFooterContainer,
 } from "./styled";
 
-const Withdraw = () => {
-  const [balance, setBalance] = useState("999,999");
+interface PropsType {
+  balance: string;
+}
+
+const Withdraw: React.FC<PropsType> = ({ balance }) => {
   const [price, setPrice] = useState("0");
   const [bankInfo, setBankInfo] = useState({
     bankImg: "",

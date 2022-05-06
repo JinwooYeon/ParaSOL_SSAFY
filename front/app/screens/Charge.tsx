@@ -11,8 +11,11 @@ import {
   ContentFooterContainer,
 } from "./styled";
 
-const Charge = () => {
-  const [balance, setBalance] = useState("999,999");
+interface PropsType {
+  balance: string;
+}
+
+const Charge: React.FC<PropsType> = ({ balance }) => {
   const [price, setPrice] = useState("0");
   const [bankInfo, setBankInfo] = useState({
     bankImg:

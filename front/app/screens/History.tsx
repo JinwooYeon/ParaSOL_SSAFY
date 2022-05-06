@@ -6,9 +6,11 @@ import {
   LayoutContainer,
 } from "./styled";
 
-const History = () => {
-  const balance = "999,999";
+interface PropsType {
+  balance: string;
+}
 
+const History: React.FC<PropsType> = ({ balance }) => {
   return (
     <LayoutContainer>
       <HeaderContainer>

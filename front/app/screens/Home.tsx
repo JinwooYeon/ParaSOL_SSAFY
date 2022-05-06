@@ -1,4 +1,3 @@
-import { useState } from "react";
 import BalanceBox from "../components/BalanceBox";
 import BtnBox from "../components/BtnBox";
 import {
@@ -9,9 +8,11 @@ import {
   ContentFooterContainer,
 } from "./styled";
 
-const Home = () => {
-  const [balance, setBalance] = useState("999,999");
+interface PropsType {
+  balance: string;
+}
 
+const Home: React.FC<PropsType> = ({ balance }) => {
   return (
     <LayoutContainer>
       <HeaderContainer>
