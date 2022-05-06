@@ -6,26 +6,29 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class ApiKeyAuthManager implements AuthenticationManager {
     private String TEST_KEY;
     private WebClient query;
+    private HttpServletRequest request;
 
     public ApiKeyAuthManager() {
 
     }
 
-    public ApiKeyAuthManager(String TEST_KEY, WebClient query) {
+    public ApiKeyAuthManager(String TEST_KEY, WebClient query, HttpServletRequest request) {
         this.TEST_KEY = TEST_KEY;
         this.query = query;
+        this.request = request;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String principal = (String) authentication.getPrincipal();
-        /* JWT 토큰 검증 */
-        /* 1. 서명 검증 */
-        /* 2. 권한 확인 */
-        if (!TEST_KEY.equals(principal)) {
+        String ipAddr = request.getRemoteAddr();
+
+        if (false) {
             throw new BadCredentialsException("The API key was not found or not the expected value.");
         }
         authentication.setAuthenticated(true);

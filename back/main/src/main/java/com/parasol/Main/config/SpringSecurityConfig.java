@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 @Configuration
@@ -33,6 +34,8 @@ public class SpringSecurityConfig {
     private final AccountApiKeyAuthFilter accountApiKeyAuthFilter;
     @Autowired
     private final ClientApiKeyAuthFilter clientApiKeyAuthFilter;
+    @Autowired
+    private HttpServletRequest request;
 
     // 필터1
     @Order(0)
@@ -43,7 +46,7 @@ public class SpringSecurityConfig {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            accountApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(accountKey, accountQuery));
+            accountApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(accountKey, accountQuery, request));
             http
                     .antMatcher("/account/**")
                     .csrf().disable()
@@ -71,7 +74,7 @@ public class SpringSecurityConfig {
             //Todo : CORS는 하드코딩 부터 구현 해보기
             //Todo : 하드코딩으로 잘 되면 -> application.properties로 관리하기
 
-            clientApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(clientKey, clientQuery));
+            clientApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(clientKey, clientQuery, request));
             http
                     .antMatcher("/client/**")
                     .csrf().disable()
