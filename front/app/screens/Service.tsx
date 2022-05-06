@@ -1,4 +1,4 @@
-import { HeaderText, LayoutContainer } from "../styled";
+import { HeaderText, LayoutContainer } from "./styled";
 
 const Service = () => (
   <LayoutContainer>
