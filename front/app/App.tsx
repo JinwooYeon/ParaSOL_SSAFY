@@ -6,6 +6,7 @@ import Logo from "./components/Logo";
 import Tabs from "./navigation/Tabs";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
+import ForgetPassword from "./screens/ForgetPassword";
 
 export default function App() {
   const [login, setLogin] = useState(false);
@@ -32,6 +33,7 @@ export default function App() {
             {/* <Stack.Screen name="Login" component={Login} /> */}
 
             <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

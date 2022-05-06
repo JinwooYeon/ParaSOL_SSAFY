@@ -73,6 +73,12 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
       >
         <Text>회원이 아니신가요?</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.textBtn}
+        onPress={() => navigate("ForgetPassword")}
+      >
+        <Text>비밀번호를 잊으셨나요?</Text>
+      </TouchableOpacity>
     </ContentContainer>
   );
 };
