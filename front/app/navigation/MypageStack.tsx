@@ -1,22 +1,22 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Mypage from "../screens/Mypage";
-import AuthBio from "../screens/Mypage/authBio";
-import ConnectAccount from "../screens/Mypage/ConnectAccount";
-import Oauth from "../screens/Mypage/Oauth";
-import Profile from "../screens/Mypage/Profile";
-import Service from "../screens/Mypage/Service";
+import AuthBio from "../screens/AuthBio";
+import ConnectAccount from "../screens/ConnectAccount";
+import Oauth from "../screens/Oauth";
+import Profile from "../screens/Profile";
+import Service from "../screens/Service";
 
 const Stack = createNativeStackNavigator();
 
 const MypageStack = () => {
   return (
     <Stack.Navigator
+      initialRouteName="MypageMain"
       screenOptions={{
         contentStyle: { backgroundColor: "white" },
         animation: "slide_from_right",
         headerShown: false,
       }}
-      initialRouteName="MypageMain"
     >
       <Stack.Screen name="MypageMain" component={Mypage} />
       <Stack.Screen name="Profile" component={Profile} />

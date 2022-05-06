@@ -15,7 +15,7 @@ const Tabs = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="홈"
+      initialRouteName="Home"
       screenOptions={{
         tabBarLabelStyle: { fontWeight: "bold", fontSize: 13 },
         tabBarActiveTintColor: mainBlue,
