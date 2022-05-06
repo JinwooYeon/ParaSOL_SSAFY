@@ -44,7 +44,6 @@ public class UserController {
             @RequestBody RefreshToken refreshToken
     ) {
         if(authentication == null) {
-            System.out.println("헤더널");
             return null;
         }
 
