@@ -45,6 +45,7 @@ public class UserController {
             @RequestBody RefreshToken refreshToken
     ) {
         if(authentication == null) {
+            System.out.println("헤더널");
             return null;
         }
 
@@ -63,14 +64,23 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping
     public UserInfoQueryResultResponse getUser(
-            @PathVariable String userId
+            Authentication authentication
     ){
-        // TODO : PathVariable -> 토큰에서 userId 받기
+        if(authentication == null) {
+            return null;
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String userId = userDetail.getUsername();
+
         User user = userService.getUserByUserId(userId);
 
-        if(user == null) return null;
+        if(user == null) {
+            return null;
+        }
+
         return UserInfoQueryResultResponse.builder()
                 .id(user.getUserId())
 //                .password(user.getPassword())
