@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, Button, Alert } from "react-native";
+import {
+  Text,
+  TextInput,
+  StyleSheet,
+  Button,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import styled from "styled-components/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BtnBox from "../components/BtnBox";
+import IdController from "../components/Controller/IdController";
+import PasswordController from "../components/Controller/PasswordController";
 
 const ContentContainer = styled.View`
   flex: 1;
@@ -12,9 +22,10 @@ const ContentContainer = styled.View`
 
 interface PropsType {
   setLogin: (a: any) => void;
+  navigation: any;
 }
 
-const Home: React.FC<PropsType> = ({ setLogin }) => {
+const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const url = "http://k6S101.p.ssafy.io:8080/user/login";
@@ -24,7 +35,7 @@ const Home: React.FC<PropsType> = ({ setLogin }) => {
       id: id,
       password: password,
     };
-    Alert.alert("hi");
+    console.log(data);
     await axios
       .post(url, data, {
         headers: {
@@ -51,20 +62,23 @@ const Home: React.FC<PropsType> = ({ setLogin }) => {
   return (
     <ContentContainer>
       <Text>Login</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={setId}
-        value={id}
-        placeholder="아이디"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={setPassword}
-        value={password}
-        placeholder="비밀번호"
-      />
+      <IdController setId={setId} />
+      <PasswordController setPassword={setPassword} />
       <Button title="Submit" onPress={() => onSubmit(id, password)}></Button>
       <Button title="LOGIN" onPress={onLoginTemp}></Button>
+
+      <TouchableOpacity
+        style={styles.textBtn}
+        onPress={() => navigate("Register")}
+      >
+        <Text>회원이 아니신가요?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.textBtn}
+        onPress={() => navigate("ForgetPassword")}
+      >
+        <Text>비밀번호를 잊으셨나요?</Text>
+      </TouchableOpacity>
     </ContentContainer>
   );
 };
@@ -80,6 +94,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
   },
+  textBtn: {},
 });
 
-export default Home;
+export default Login;
