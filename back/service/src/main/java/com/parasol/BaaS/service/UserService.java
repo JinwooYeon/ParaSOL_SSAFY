@@ -101,8 +101,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(UserUpdateRequest request) {
-        String userId = request.getId();
+    public User updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findByUserId(userId).get();
 
         if(StringUtils.hasText(request.getName())) {
@@ -119,8 +118,11 @@ public class UserService {
 
     @Transactional
     public boolean deleteUser(String userId) {
+        // refreshToken 먼저 삭제 -> user 삭제
+        Long tokenDelete = tokenRepository.deleteByUserUserId(userId);
+
         Long delete = userRepository.deleteByUserId(userId);
-        if(delete > 0) return true;
+        if(tokenDelete > 0 && delete > 0) return true;
         return false;
     }
 }

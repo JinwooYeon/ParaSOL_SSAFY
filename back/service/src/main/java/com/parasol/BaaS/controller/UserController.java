@@ -32,7 +32,6 @@ public class UserController {
             return null;
         }
 
-        // TODO : 토큰 반환
         return AuthTokenResponse.builder()
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
@@ -63,14 +62,23 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping
     public UserInfoQueryResultResponse getUser(
-            @PathVariable String userId
+            Authentication authentication
     ){
-        // TODO : PathVariable -> 토큰에서 userId 받기
+        if(authentication == null) {
+            return null;
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String userId = userDetail.getUsername();
+
         User user = userService.getUserByUserId(userId);
 
-        if(user == null) return null;
+        if(user == null) {
+            return null;
+        }
+
         return UserInfoQueryResultResponse.builder()
                 .id(user.getUserId())
 //                .password(user.getPassword())
@@ -93,10 +101,17 @@ public class UserController {
 
     @PatchMapping
     public UserInfo updateUser(
+            Authentication authentication,
             @RequestBody UserUpdateRequest request
     ){
-        // TODO : 토큰에서 userId 받기
-        User user = userService.updateUser(request);
+        if(authentication == null) {
+            return null;
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String userId = userDetail.getUsername();
+
+        User user = userService.updateUser(userId, request);
 
         if(user == null) return null;
         return UserInfo.builder()
@@ -105,11 +120,17 @@ public class UserController {
                 .build();
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     public String deleteUser(
-            @PathVariable String userId
+            Authentication authentication
     ){
-        // TODO : PathVariable -> 토큰에서 userId 받기
+        if(authentication == null) {
+            return null;
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String userId = userDetail.getUsername();
+
         boolean result = userService.deleteUser(userId);
         if(result) return "탈퇴 성공";
         return "탈퇴 실패";
