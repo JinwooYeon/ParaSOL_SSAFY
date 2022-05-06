@@ -121,11 +121,17 @@ public class UserController {
                 .build();
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     public String deleteUser(
-            @PathVariable String userId
+            Authentication authentication
     ){
-        // TODO : PathVariable -> 토큰에서 userId 받기
+        if(authentication == null) {
+            return null;
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String userId = userDetail.getUsername();
+
         boolean result = userService.deleteUser(userId);
         if(result) return "탈퇴 성공";
         return "탈퇴 실패";
