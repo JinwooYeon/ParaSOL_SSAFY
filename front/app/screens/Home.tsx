@@ -1,3 +1,4 @@
+import { useState } from "react";
 import BalanceBox from "../components/BalanceBox";
 import BtnBox from "../components/BtnBox";
 import {
@@ -5,18 +6,16 @@ import {
   FooterContainer,
   HeaderContainer,
   LayoutContainer,
-  HeaderText,
   ContentFooterContainer,
 } from "./styled";
 
 const Home = () => {
-  const balance = "999,999";
+  const [balance, setBalance] = useState("999,999");
 
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderText>파라솔 PAY</HeaderText>
-        <BalanceBox num={balance} />
+        <BalanceBox category="파라솔 PAY" num={balance} />
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer></ContentContainer>

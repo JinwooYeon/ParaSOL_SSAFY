@@ -8,7 +8,6 @@ import {
   FooterContainer,
   HeaderContainer,
   LayoutContainer,
-  HeaderText,
   ContentFooterContainer,
 } from "./styled";
 
@@ -25,8 +24,7 @@ const Charge = () => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderText>PAY 충전</HeaderText>
-        <BalanceBox num={balance} />
+        <BalanceBox category="PAY 충전" num={balance} />
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer>

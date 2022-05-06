@@ -4,7 +4,6 @@ import {
   FooterContainer,
   HeaderContainer,
   LayoutContainer,
-  HeaderText,
 } from "./styled";
 
 const History = () => {
@@ -13,8 +12,7 @@ const History = () => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderText>거래 내역</HeaderText>
-        <BalanceBox num={balance} />
+        <BalanceBox category="거래 내역" num={balance} />
       </HeaderContainer>
       <ContentContainer></ContentContainer>
       <FooterContainer></FooterContainer>

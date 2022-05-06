@@ -24,8 +24,7 @@ const Withdraw = () => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderText>PAY 출금</HeaderText>
-        <BalanceBox num={balance} />
+        <BalanceBox category="PAY 출금" num={balance} />
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer>
