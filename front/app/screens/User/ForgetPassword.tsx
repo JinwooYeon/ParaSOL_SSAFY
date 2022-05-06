@@ -8,12 +8,17 @@ const ContentContainer = styled.View`
   align-items: center;
 `;
 
-const ForgetPassword: React.FC = () => {
+interface PropsType {
+  navigation: any;
+}
+
+const ForgetPassword: React.FC<PropsType> = ({ navigation: { goBack } }) => {
   return (
     <ContentContainer>
       <Text>ForgetPassword</Text>
 
       <Button title="Submit"></Button>
+      <Button onPress={() => goBack()} title="뒤로" />
     </ContentContainer>
   );
 };

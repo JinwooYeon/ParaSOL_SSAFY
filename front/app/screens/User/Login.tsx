@@ -1,18 +1,11 @@
 import React, { useState } from "react";
-import {
-  Text,
-  TextInput,
-  StyleSheet,
-  Button,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, Button, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import BtnBox from "../components/BtnBox";
-import IdController from "../components/Controller/IdController";
-import PasswordController from "../components/Controller/PasswordController";
+import IdController from "../../components/Controller/IdController";
+import PasswordController from "../../components/Controller/PasswordController";
+import { LayoutContainer, HeaderText } from "../styled";
 
 const ContentContainer = styled.View`
   flex: 1;
@@ -60,26 +53,28 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
   };
 
   return (
-    <ContentContainer>
-      <Text>Login</Text>
-      <IdController setId={setId} />
-      <PasswordController setPassword={setPassword} />
-      <Button title="Submit" onPress={() => onSubmit(id, password)}></Button>
-      <Button title="LOGIN" onPress={onLoginTemp}></Button>
+    <LayoutContainer>
+      <HeaderText>로그인</HeaderText>
+      <ContentContainer>
+        <IdController setId={setId} />
+        <PasswordController setPassword={setPassword} />
+        <Button title="Submit" onPress={() => onSubmit(id, password)}></Button>
+        <Button title="LOGIN" onPress={onLoginTemp}></Button>
 
-      <TouchableOpacity
-        style={styles.textBtn}
-        onPress={() => navigate("Register")}
-      >
-        <Text>회원이 아니신가요?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.textBtn}
-        onPress={() => navigate("ForgetPassword")}
-      >
-        <Text>비밀번호를 잊으셨나요?</Text>
-      </TouchableOpacity>
-    </ContentContainer>
+        <TouchableOpacity
+          style={styles.textBtn}
+          onPress={() => navigate("Register")}
+        >
+          <Text>회원이 아니신가요?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.textBtn}
+          onPress={() => navigate("ForgetPassword")}
+        >
+          <Text>비밀번호를 잊으셨나요?</Text>
+        </TouchableOpacity>
+      </ContentContainer>
+    </LayoutContainer>
   );
 };
 

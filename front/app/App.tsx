@@ -4,9 +4,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import Logo from "./components/Logo";
 import Tabs from "./navigation/Tabs";
-import Login from "./screens/Login";
-import Register from "./screens/Register";
-import ForgetPassword from "./screens/ForgetPassword";
+import Login from "./screens/User/Login";
+import Register from "./screens/User/Register";
+import ForgetPassword from "./screens/User/ForgetPassword";
 
 export default function App() {
   const [login, setLogin] = useState(false);
@@ -26,12 +26,15 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Logo />
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
             <Stack.Screen name="Login">
               {(props) => <Login {...props} setLogin={setLogin} />}
             </Stack.Screen>
-            {/* <Stack.Screen name="Login" component={Login} /> */}
-
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
           </Stack.Navigator>
