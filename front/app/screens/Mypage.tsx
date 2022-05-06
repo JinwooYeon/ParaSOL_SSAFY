@@ -1,9 +1,31 @@
-import { LayoutContainer, HeaderText } from "./styled";
+import MypageMenuBox from "../components/MypageMenuBox";
+import { LayoutContainer, HeaderText, MypageMenuContainer } from "./styled";
 
-const Mypage = () => (
-  <LayoutContainer>
-    <HeaderText>메뉴</HeaderText>
-  </LayoutContainer>
-);
+interface PropsType {
+  navigation: any;
+}
+
+const Mypage: React.FC<PropsType> = ({ navigation }) => {
+  const menus = [
+    "회원정보",
+    "계좌 관리하기",
+    "공동인증 발급/재발급",
+    "생체인증 발급/재발급",
+    "고객 문의",
+    "회원 탈퇴",
+    "로그아웃",
+  ];
+
+  return (
+    <LayoutContainer>
+      <HeaderText>내 정보</HeaderText>
+      <MypageMenuContainer>
+        {menus.map((menu, idx) => (
+          <MypageMenuBox key={idx} menu={menu} navigation={navigation} />
+        ))}
+      </MypageMenuContainer>
+    </LayoutContainer>
+  );
+};
 
 export default Mypage;

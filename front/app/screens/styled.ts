@@ -3,8 +3,9 @@ import { mainBlue, balanceGrey } from "../color";
 
 // Container
 export const LogoContainer = styled.View`
+  /* background-color: black; */
   margin-top: 10%;
-  margin-bottom: 5%;
+  margin-bottom: 4%;
   margin-left: 5%;
   flex-direction: row;
 `;
@@ -23,6 +24,7 @@ export const BoxContainer = styled.View`
   padding-left: 3%;
 `;
 export const LayoutContainer = styled.View`
+  /* background-color: teal; */
   flex: 1;
   margin-right: 5%;
   margin-left: 5%;
@@ -147,6 +149,28 @@ export const PriceBtn = styled.TouchableOpacity`
 export const PriceBtnText = styled.Text`
   font-size: 17px;
   color: ${mainBlue};
+`;
+
+// Content _ MypageMenu
+export const MypageMenuContainer = styled.View`
+  /* background-color: red; */
+  flex: 1;
+  margin-top: 12%;
+  margin-bottom: 22%;
+  padding-right: 5%;
+  padding-left: 5%;
+  justify-content: space-between;
+`;
+export const MypageMenuTextContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5%;
+`;
+export const MypageMenuBtn = styled.TouchableOpacity``;
+export const MypageMenuText = styled.Text`
+  font-size: 30px;
+  font-weight: bold;
 `;
 
 // Footer _ Button
