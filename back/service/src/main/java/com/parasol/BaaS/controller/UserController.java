@@ -32,7 +32,6 @@ public class UserController {
             return null;
         }
 
-        // TODO : 토큰 반환
         return AuthTokenResponse.builder()
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
@@ -103,10 +102,17 @@ public class UserController {
 
     @PatchMapping
     public UserInfo updateUser(
+            Authentication authentication,
             @RequestBody UserUpdateRequest request
     ){
-        // TODO : 토큰에서 userId 받기
-        User user = userService.updateUser(request);
+        if(authentication == null) {
+            return null;
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String userId = userDetail.getUsername();
+
+        User user = userService.updateUser(userId, request);
 
         if(user == null) return null;
         return UserInfo.builder()

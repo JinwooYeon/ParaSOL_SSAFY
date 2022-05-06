@@ -101,8 +101,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(UserUpdateRequest request) {
-        String userId = request.getId();
+    public User updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findByUserId(userId).get();
 
         if(StringUtils.hasText(request.getName())) {
