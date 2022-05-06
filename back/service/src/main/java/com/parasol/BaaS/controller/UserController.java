@@ -3,6 +3,7 @@ package com.parasol.BaaS.controller;
 import com.parasol.BaaS.api_model.AuthToken;
 import com.parasol.BaaS.api_model.RefreshToken;
 import com.parasol.BaaS.api_model.UserInfo;
+import com.parasol.BaaS.api_request.IdCheckRequest;
 import com.parasol.BaaS.api_request.LoginRequest;
 import com.parasol.BaaS.api_request.UserRegisterRequest;
 import com.parasol.BaaS.api_request.UserUpdateRequest;
@@ -14,6 +15,8 @@ import com.parasol.BaaS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -36,6 +39,17 @@ public class UserController {
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
                 .build();
+    }
+
+    @PostMapping("/idcheck")
+    public boolean idCheck(
+            @RequestBody IdCheckRequest request
+    ){
+        User user = userService.getUserByUserId(request.getId());
+        if(user == null) {
+            return true;
+        }
+        return false;
     }
 
     @PostMapping("/token")
