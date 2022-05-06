@@ -1,11 +1,13 @@
 package com.parasol.Main.config;
 
 import com.parasol.Main.security.filter.*;
+import com.parasol.Main.service.AuthenticateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -27,8 +28,8 @@ import java.util.Arrays;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
-    private WebClient accountQuery;
-    private WebClient clientQuery;
+    @Autowired
+    private AuthenticateService authenticateService;
 
     @Autowired
     private final AccountApiKeyAuthFilter accountApiKeyAuthFilter;
@@ -41,12 +42,9 @@ public class SpringSecurityConfig {
     @Order(0)
     @Configuration
     class Filter1 extends WebSecurityConfigurerAdapter {
-        @Value("${authentication.baas.account-key}")
-        private String accountKey;
-
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            accountApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(accountKey, accountQuery, request));
+            accountApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(authenticateService, request));
             http
                     .antMatcher("/account/**")
                     .csrf().disable()
@@ -64,9 +62,6 @@ public class SpringSecurityConfig {
     @Order(1)
     @Configuration
     class Filter2 extends WebSecurityConfigurerAdapter {
-        @Value("${authentication.baas.client-key}")
-        private String clientKey;
-
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
@@ -74,7 +69,7 @@ public class SpringSecurityConfig {
             //Todo : CORS는 하드코딩 부터 구현 해보기
             //Todo : 하드코딩으로 잘 되면 -> application.properties로 관리하기
 
-            clientApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(clientKey, clientQuery, request));
+            clientApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(authenticateService, request));
             http
                     .antMatcher("/client/**")
                     .csrf().disable()
