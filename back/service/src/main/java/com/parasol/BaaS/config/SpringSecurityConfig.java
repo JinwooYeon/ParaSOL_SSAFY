@@ -26,23 +26,26 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private final UserService userService;
+    private UserDetailService userDetailService;
 
     @Autowired
-    private UserDetailService userDetailService;
+    public SpringSecurityConfig(@Lazy UserService userService, UserDetailService userDetailService) {
+        this.userService = userService;
+        this.userDetailService = userDetailService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .cors()
-                .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
-                .authorizeRequests()
-                .anyRequest().permitAll();
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .cors()
+            .and()
+            .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
+            .authorizeRequests()
+            .anyRequest().permitAll();
     }
 
     @Bean
@@ -68,7 +71,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(this.userDetailService);
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
 

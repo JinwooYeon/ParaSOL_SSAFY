@@ -13,6 +13,7 @@ import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.TokenRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -27,6 +28,9 @@ public class UserService {
     @Autowired
     private TokenRepository tokenRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public AuthToken login(LoginRequest request) {
         String id = request.getId();
         String password = request.getPassword();
@@ -37,7 +41,7 @@ public class UserService {
             return null;
         }
 
-        if(password.equals(user.getUserPassword())) {
+        if(passwordEncoder.matches(password, user.getUserPassword())) {
             AuthToken authToken = JwtTokenUtil.getToken(id);
             String refreshToken = authToken.getRefreshToken().getRefreshToken();
 
@@ -91,10 +95,9 @@ public class UserService {
     }
 
     public User createUser(UserRegisterRequest request) {
-        // TODO : 비밀번호 암호화
         User user = User.builder()
                 .userId(request.getId())
-                .userPassword(request.getPassword())
+                .userPassword(passwordEncoder.encode(request.getPassword()))
                 .userName(request.getName())
                 .build();
 
@@ -110,7 +113,7 @@ public class UserService {
 
         // TODO : 비밀번호 암호화
         if(StringUtils.hasText(request.getPassword())) {
-            user.setUserPassword(request.getPassword());
+            user.setUserPassword(passwordEncoder.encode(request.getPassword()));
         }
 
         return userRepository.save(user);
