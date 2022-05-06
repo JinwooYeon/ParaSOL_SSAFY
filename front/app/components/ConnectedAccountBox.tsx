@@ -15,14 +15,15 @@ import {
 
 interface PropsType {
   bankInfo?: any;
+  navigate: (a: any, b: any) => void;
 }
 
-const ConnectedAccountBox: React.FC<PropsType> = ({ bankInfo }) => {
+const ConnectedAccountBox: React.FC<PropsType> = ({ bankInfo, navigate }) => {
   const { bankImg, bankName, bankNum } = bankInfo;
   const [empty, setEmpty] = useState(true);
 
   const onPress = () => {
-    empty ? console.log("add") : console.log("setting");
+    navigate("Mypage", { screen: "ConnectAccount" });
   };
 
   useEffect(() => {
