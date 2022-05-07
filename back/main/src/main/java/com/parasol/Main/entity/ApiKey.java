@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Getter
@@ -28,7 +29,6 @@ public class ApiKey {
     private String clientId;
 
     @NotBlank
-    @Min(value = 7)
-    @Max(value = 15)
+    @Size(min = 7, max = 15)
     private String ipAddr;
 }
