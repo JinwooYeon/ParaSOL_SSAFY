@@ -19,24 +19,28 @@ public class AuthenticateService {
         this.methodHash = new HashMap<>();
         MethodType[] values = MethodType.values();
 
-        for(int i = 0;i < MethodType.values().length;i++)
+        for (int i = 0; i < MethodType.values().length; i++)
             methodHash.put(values[i].toString(), values[i]);
     }
 
-    public boolean isValid(String ipAddr, String method, String endpoint, String clientId){
-
-//        System.out.println(ipAddr);
-//        System.out.println(methodHash.get(method));
-//        System.out.println(endpoint);
-//        System.out.println(clientId);
-
+    public boolean isValid(String ipAddr, String method, String endpoint, String clientId) {
         Optional<ApiKey> apiKey = apiKeyRepository.findById(clientId);
 
-        if(apiKey.isEmpty())
+        if (apiKey.isEmpty())
             return false;
-        if(!apiKey.get().getIpAddr().equals(ipAddr))
+        if (!apiKey.get().getIpAddr().equals(ipAddr))
             return false;
 
         return true;
+    }
+
+    public MethodType getMethodType(String method) {
+        return methodHash.get(method);
+    }
+
+    public String getSubpath(String prefix, String path) {
+        String subpath = path.substring(prefix.length());
+
+        return subpath.length() == 0?"/":subpath;
     }
 }

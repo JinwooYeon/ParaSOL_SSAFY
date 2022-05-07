@@ -1,13 +1,12 @@
 package com.parasol.Main.config;
 
 import com.parasol.Main.security.filter.*;
-import com.parasol.Main.service.AuthenticateService;
+import com.parasol.Main.service.AccountAuthenticateService;
+import com.parasol.Main.service.ClientAuthenticateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -29,8 +28,9 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
     @Autowired
-    private AuthenticateService authenticateService;
-
+    private AccountAuthenticateService accountAuthenticateService;
+    @Autowired
+    private ClientAuthenticateService clientAuthenticateService;
     @Autowired
     private final AccountApiKeyAuthFilter accountApiKeyAuthFilter;
     @Autowired
@@ -44,7 +44,7 @@ public class SpringSecurityConfig {
     class Filter1 extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            accountApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(authenticateService, request));
+            accountApiKeyAuthFilter.setAuthenticationManager(new AccountApiKeyAuthManager(accountAuthenticateService, request));
             http
                     .antMatcher("/account/**")
                     .csrf().disable()
@@ -69,7 +69,7 @@ public class SpringSecurityConfig {
             //Todo : CORS는 하드코딩 부터 구현 해보기
             //Todo : 하드코딩으로 잘 되면 -> application.properties로 관리하기
 
-            clientApiKeyAuthFilter.setAuthenticationManager(new ApiKeyAuthManager(authenticateService, request));
+            clientApiKeyAuthFilter.setAuthenticationManager(new ClientApiKeyAuthManager(clientAuthenticateService, request));
             http
                     .antMatcher("/client/**")
                     .csrf().disable()
