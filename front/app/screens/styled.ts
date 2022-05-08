@@ -151,6 +151,17 @@ export const PriceBtnText = styled.Text`
   color: ${mainBlue};
 `;
 
+// Content _ Benefit
+export const BenefitContainer = styled.View`
+  /* background-color: grey; */
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+export const BenefitText = styled.Text`
+  font-size: 55px;
+`;
+
 // Content _ MypageMenu
 export const MypageMenuContainer = styled.View`
   /* background-color: red; */
@@ -178,6 +189,11 @@ export const BtnContainer = styled.View`
   margin-top: 2%;
   margin-bottom: 2%;
 `;
+export const BtnContainerRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
 export const Btn = styled.TouchableOpacity<{ color: string }>`
   background-color: ${({ color }) => {
     if (color === "blue") {
@@ -193,7 +209,9 @@ export const Btn = styled.TouchableOpacity<{ color: string }>`
   justify-content: center;
   align-items: center;
   padding-top: 2%;
+  padding-right: 15%;
   padding-bottom: 2%;
+  padding-left: 15%;
 `;
 export const BtnText = styled.Text<{ white: boolean }>`
   font-size: 20px;

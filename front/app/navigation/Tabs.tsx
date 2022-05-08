@@ -4,9 +4,10 @@ import Home from "../screens/Home";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { mainBlue } from "../color";
 import { useState } from "react";
-import ChargeStack from "./ChargeStack";
+import PayStack from "./PayStack";
 import MypageStack from "./MypageStack";
 import WithdrawStack from "./WithdrawStack";
+import Benefit from "../screens/Benefit";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,9 +29,26 @@ const Tabs = () => {
       }}
     >
       <Tab.Screen
-        name="Charge"
+        name="History"
         options={{
-          title: "충전",
+          title: "거래 내역",
+          tabBarIcon: ({ focused, color, size }) => {
+            return (
+              <MaterialCommunityIcons
+                name="newspaper-variant-multiple-outline"
+                size={size}
+                color={color}
+              />
+            );
+          },
+        }}
+      >
+        {(props) => <History {...props} balance={balance} />}
+      </Tab.Screen>
+      <Tab.Screen
+        name="Pay"
+        options={{
+          title: "페이",
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <MaterialCommunityIcons
@@ -42,24 +60,7 @@ const Tabs = () => {
           },
         }}
       >
-        {(props) => <ChargeStack {...props} balance={balance} />}
-      </Tab.Screen>
-      <Tab.Screen
-        name="Withdraw"
-        options={{
-          title: "출금",
-          tabBarIcon: ({ focused, color, size }) => {
-            return (
-              <MaterialCommunityIcons
-                name="lightning-bolt-outline"
-                size={size}
-                color={color}
-              />
-            );
-          },
-        }}
-      >
-        {(props) => <WithdrawStack {...props} balance={balance} />}
+        {(props) => <PayStack {...props} balance={balance} />}
       </Tab.Screen>
       <Tab.Screen
         name="Home"
@@ -79,22 +80,21 @@ const Tabs = () => {
         {(props) => <Home {...props} balance={balance} />}
       </Tab.Screen>
       <Tab.Screen
-        name="History"
+        name="Benefit"
+        component={Benefit}
         options={{
-          title: "거래 내역",
+          title: "혜택",
           tabBarIcon: ({ focused, color, size }) => {
             return (
               <MaterialCommunityIcons
-                name="newspaper-variant-multiple-outline"
+                name="lightning-bolt-outline"
                 size={size}
                 color={color}
               />
             );
           },
         }}
-      >
-        {(props) => <History {...props} balance={balance} />}
-      </Tab.Screen>
+      />
       <Tab.Screen
         name="Mypage"
         component={MypageStack}
