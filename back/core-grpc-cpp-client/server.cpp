@@ -109,6 +109,8 @@ int main(int argc, char **argv) {
 
                 std::cout << "plbuf.msg: " << plbuf.msg << "\n";
                 std::cout << "plbuf.len: " << plbuf.len << "\n";
+
+                write(clnt_sock, &status, sizeof(status));
             } else if (payload_len == sizeof(struct payload_b)) {
                 struct payload_b plbuf;
                 memcpy(&plbuf, &sock_buf, sizeof(payload_b));
@@ -121,9 +123,9 @@ int main(int argc, char **argv) {
                 std::string account_number = account_number_buf;
                 std::string response = client.getBalance(account_number);
                 std::cout << "The balance: " << response << "\n";
-            }
 
-            write(clnt_sock, &status, sizeof(status));
+                write(clnt_sock, response.c_str(), response.size());
+            }
         }
 
         close(clnt_sock);
