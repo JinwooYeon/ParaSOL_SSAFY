@@ -10,9 +10,10 @@ import {
 
 interface PropsType {
   balance: string;
+  navigation: any;
 }
 
-const Home: React.FC<PropsType> = ({ balance }) => {
+const Home: React.FC<PropsType> = ({ balance, navigation }) => {
   return (
     <LayoutContainer>
       <HeaderContainer>
@@ -21,15 +22,9 @@ const Home: React.FC<PropsType> = ({ balance }) => {
       <ContentFooterContainer>
         <ContentContainer></ContentContainer>
         <FooterContainer>
-          <BtnBox color="blue" text="충전하기" />
-          <BtnBox color="blue" text="출금하기" />
-          <BtnBox color="blue" text="결제하기" />
-          <BtnBox color="blue" text="정보 수정" />
-          <BtnBox color="blue" text="수정 완료" />
-          <BtnBox color="blue" text="비밀번호 수정" />
-          <BtnBox color="red" text="회원 탈퇴" />
-          <BtnBox color="red" text="초기화" />
-          <BtnBox color="white" text="뒤로" />
+          <BtnBox color="blue" text="결제하기" navigation={navigation} />
+          <BtnBox color="red" text="초기화" navigation={navigation} />
+          <BtnBox color="white" text="뒤로" navigation={navigation} />
         </FooterContainer>
       </ContentFooterContainer>
     </LayoutContainer>

@@ -3,9 +3,10 @@ import { LayoutContainer, HeaderText, MypageMenuContainer } from "./styled";
 
 interface PropsType {
   navigation: any;
+  setLogin: (a: any) => void;
 }
 
-const Mypage: React.FC<PropsType> = ({ navigation }) => {
+const Mypage: React.FC<PropsType> = ({ navigation, setLogin }) => {
   const menus = [
     "회원정보",
     "계좌 관리하기",
@@ -21,7 +22,12 @@ const Mypage: React.FC<PropsType> = ({ navigation }) => {
       <HeaderText>내 정보</HeaderText>
       <MypageMenuContainer>
         {menus.map((menu, idx) => (
-          <MypageMenuBox key={idx} menu={menu} navigation={navigation} />
+          <MypageMenuBox
+            key={idx}
+            menu={menu}
+            navigation={navigation}
+            setLogin={setLogin}
+          />
         ))}
       </MypageMenuContainer>
     </LayoutContainer>

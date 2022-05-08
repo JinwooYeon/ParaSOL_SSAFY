@@ -4,19 +4,19 @@ interface PropsType {
   color: string;
   text: string;
   setPrice?: (a: string) => void;
-  navigate?: (a: any) => void;
+  navigation?: any;
 }
 
-const BtnBox: React.FC<PropsType> = ({ color, text, setPrice, navigate }) => {
+const BtnBox: React.FC<PropsType> = ({ color, text, setPrice, navigation }) => {
   const onPress = () => {
     switch (text) {
       case "충전하기":
         console.log("charge");
-        navigate?.("Charging");
+        navigation?.navigate("Charging");
         break;
       case "출금하기":
         console.log("withdraw");
-        navigate?.("Withdrawing");
+        navigation?.navigate("Withdrawing");
         break;
       case "결제하기":
         console.log("pay");
@@ -34,12 +34,11 @@ const BtnBox: React.FC<PropsType> = ({ color, text, setPrice, navigate }) => {
         console.log("delete info");
         break;
       case "초기화":
-        {
-          console.log("reset");
-          setPrice?.("0");
-        }
+        console.log("reset");
+        setPrice?.("0");
         break;
       case "뒤로":
+        navigation?.goBack();
         console.log("back");
         break;
       case "로그인":

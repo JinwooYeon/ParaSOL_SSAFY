@@ -9,9 +9,13 @@ import MypageStack from "./MypageStack";
 import WithdrawStack from "./WithdrawStack";
 import Benefit from "../screens/Benefit";
 
+interface PropsType {
+  setLogin: (a: any) => void;
+}
+
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const Tabs: React.FC<PropsType> = ({ setLogin }) => {
   const [balance, setBalance] = useState("999,999");
 
   return (
@@ -97,7 +101,6 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Mypage"
-        component={MypageStack}
         options={{
           title: "내 정보",
           tabBarIcon: ({ focused, color, size }) => {
@@ -110,7 +113,9 @@ const Tabs = () => {
             );
           },
         }}
-      />
+      >
+        {(props) => <MypageStack {...props} setLogin={setLogin} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };

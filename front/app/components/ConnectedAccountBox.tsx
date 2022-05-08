@@ -15,10 +15,13 @@ import {
 
 interface PropsType {
   bankInfo?: any;
-  navigate: (a: any) => void;
+  navigation: any;
 }
 
-const ConnectedAccountBox: React.FC<PropsType> = ({ bankInfo, navigate }) => {
+const ConnectedAccountBox: React.FC<PropsType> = ({
+  bankInfo,
+  navigation: { navigate },
+}) => {
   const { bankImg, bankName, bankNum } = bankInfo;
   const [empty, setEmpty] = useState(true);
 

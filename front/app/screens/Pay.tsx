@@ -17,7 +17,7 @@ interface PropsType {
   navigation: any;
 }
 
-const Pay: React.FC<PropsType> = ({ balance, navigation: { navigate } }) => {
+const Pay: React.FC<PropsType> = ({ balance, navigation }) => {
   const [price, setPrice] = useState("0");
   const [bankInfo, setBankInfo] = useState({
     bankImg:
@@ -33,13 +33,13 @@ const Pay: React.FC<PropsType> = ({ balance, navigation: { navigate } }) => {
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer>
-          <ConnectedAccountBox bankInfo={bankInfo} navigate={navigate} />
+          <ConnectedAccountBox bankInfo={bankInfo} navigation={navigation} />
           <PriceBox price={price} setPrice={setPrice} />
         </ContentContainer>
         <FooterContainer>
           <BtnContainerRow>
-            <BtnBox color="white" text="출금하기" navigate={navigate} />
-            <BtnBox color="blue" text="충전하기" navigate={navigate} />
+            <BtnBox color="white" text="출금하기" navigation={navigation} />
+            <BtnBox color="blue" text="충전하기" navigation={navigation} />
           </BtnContainerRow>
           <BtnBox color="red" text="초기화" setPrice={setPrice} />
         </FooterContainer>

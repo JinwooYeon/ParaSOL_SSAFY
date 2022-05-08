@@ -7,16 +7,17 @@ import {
   LayoutContainer,
 } from "./styled";
 
-const Oauth = ({ navigation }: any) => (
+const Delete = ({ navigation }: any) => (
   <LayoutContainer>
-    <HeaderText>공동인증 발급/재발급</HeaderText>
+    <HeaderText>회원탈퇴</HeaderText>
     <ContentFooterContainer>
       <ContentContainer></ContentContainer>
       <FooterContainer>
+        <BtnBox color="red" text="회원 탈퇴" navigation={navigation} />
         <BtnBox color="white" text="뒤로" navigation={navigation} />
       </FooterContainer>
     </ContentFooterContainer>
   </LayoutContainer>
 );
 
-export default Oauth;
+export default Delete;

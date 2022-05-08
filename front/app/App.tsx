@@ -18,7 +18,7 @@ export default function App() {
       <SafeAreaProvider>
         <NavigationContainer>
           <Logo />
-          <Tabs />
+          <Tabs setLogin={setLogin} />
         </NavigationContainer>
       </SafeAreaProvider>
     );
