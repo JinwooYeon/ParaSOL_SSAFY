@@ -1,54 +1,85 @@
 #include <iostream>
-#include <string>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <cstring>
+using namespace std;
 
-#include <grpc++/grpc++.h>
+#define BUF_SIZE 256
 
-#include "core_api.pb.h"
-#include "core_api.grpc.pb.h"
+struct payload_a {
+	char msg[10];
+	char len[2];
+};
 
-using grpc::Channel;
-using grpc::ClientContext;
-using grpc::Status;
-using core_api::CoreAPI;
-using core_api::AccountBalanceQueryRequest;
-using core_api::AccountBalanceQueryResponse;
-
-class CoreAPIClient {
-    public:
-    CoreAPIClient(std::shared_ptr<Channel> channel) : stub_(CoreAPI::NewStub(channel)) {}
-
-    std::string getBalance(const std::string& account_number) {
-        AccountBalanceQueryRequest request;
-        request.set_accountnumber(account_number);
-
-        AccountBalanceQueryResponse response;
-        ClientContext context;
-
-        Status status = stub_->getBalance(&context, request, &response);
-        if (status.ok()) {
-            return response.balance();
-        } else {
-            return "RPC Failed";
-        }
-    }
-
-    private:
-    std::unique_ptr<CoreAPI::Stub> stub_;
+struct payload_b {
+	char account_number[14];
 };
 
 int main(int argc, char **argv) {
-    std::string buf;
-    std::cout << "Input account number: ";
-    std::cin >> buf;
+	int sock;
+	struct sockaddr_in serv_addr;
+	char message[BUF_SIZE];
+	int str_len;
 
-    std::string baseURL = "localhost:9090";
+	if (argc != 3) {
+		cout << "Usage: " << argv[0] << " <IP> <PORT>" << "\n";
+		exit(1);
+	}
 
-    CoreAPIClient client(
-        grpc::CreateChannel(baseURL, grpc::InsecureChannelCredentials())
-    );
+	char *host = argv[1];
+	int port = atoi(argv[2]);
 
-    std::string response = client.getBalance(buf);
-    std::cout << "The balance: " << response << "\n";
+	sock = socket(PF_INET, SOCK_STREAM, 0);
+	if (sock == -1) {
+		cout << "socket() error" << "\n";
+		exit(1);
+	}
 
-    return 0;
+	memset(&serv_addr, 0, sizeof(serv_addr));
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
+	serv_addr.sin_port = htons(port);
+
+	if (connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == -1) {
+		cout << "connect() error" << "\n";
+		exit(1);
+	}
+
+	int recv_cnt, recv_len;
+	while(1) {
+		fputs("Input message(Q to quit): ", stdout);
+		fgets(message, BUF_SIZE, stdin);
+		cout << "My message: " << message << "\n";
+		message[strlen(message) - 1] = 0;
+	
+		if (!strcmp(message, "Q\n")) break;
+		
+		struct payload_a test_payload_a = { "test", "4" };
+		//str_len=write(sock, message, strlen(message));
+		str_len=write(sock, &test_payload_a, sizeof(test_payload_a));
+		memset(message, 0, sizeof(message));
+
+		int status = 0;
+		recv_len = read(sock, &status, sizeof(status));
+
+		message[str_len] = 0;
+		
+		cout << "Message from server: " << status << "\n";
+		
+		struct payload_b test_payload_b = { "352-115-72535" };
+		test_payload_b.account_number[13] = '6';
+		//str_len=write(sock, message, strlen(message));
+		str_len=write(sock, &test_payload_b, sizeof(test_payload_b));
+
+		status = 0;
+		recv_len = read(sock, &status, sizeof(status));
+
+		cout << "Message from server: " << status << "\n";
+	}
+
+	close(sock);
+	return 0;
 }
+
+
