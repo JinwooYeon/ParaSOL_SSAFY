@@ -22,7 +22,16 @@ cc_grpc_library(
 )
 
 cc_binary(
-    name = "core_api_cc",
+    name = "core_api_server_cc",
+    srcs = ["server.cpp"],
+    deps = [
+        "@com_github_grpc_grpc//:grpc++",
+        ":core_api_cc_grpc"
+    ]
+)
+
+cc_binary(
+    name = "core_api_client_cc",
     srcs = ["client.cpp"],
     deps = [
         "@com_github_grpc_grpc//:grpc++",
