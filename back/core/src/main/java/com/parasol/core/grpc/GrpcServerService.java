@@ -16,7 +16,7 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
 
     @Override
     public void getBalance(AccountBalanceQueryRequest request, StreamObserver<AccountBalanceQueryResponse> responseObserver) {
-        String accountNumber = request.toString();
+        String accountNumber = request.getAccountNumber();
 
         Long balance = accountService.getBalance(accountNumber);
 
