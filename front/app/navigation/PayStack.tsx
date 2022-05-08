@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import Charge from "../screens/Charge";
+import Pay from "../screens/Pay";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,18 +12,30 @@ interface PropsType {
 
 const Charging: React.FC<PropsType> = ({ navigation: { navigate } }) => {
   useEffect(() => {
-    setTimeout(() => navigate?.("ChargeMain"), 2000);
+    setTimeout(() => navigate?.("PayMain"), 2000);
   }, []);
   return (
     <View>
-      <TouchableOpacity onPress={() => navigate?.("ChargeMain")}>
+      <TouchableOpacity onPress={() => navigate?.("PayMain")}>
         <Text>충전중~</Text>
       </TouchableOpacity>
     </View>
   );
 };
+const Withdrawing: React.FC<PropsType> = ({ navigation: { navigate } }) => {
+  useEffect(() => {
+    setTimeout(() => navigate?.("PayMain"), 2000);
+  }, []);
+  return (
+    <View>
+      <TouchableOpacity onPress={() => navigate?.("PayMain")}>
+        <Text>출금중~</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
-const ChargeStack: React.FC<PropsType> = ({ balance, navigation }) => {
+const PayStack: React.FC<PropsType> = ({ balance, navigation }) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -32,14 +44,15 @@ const ChargeStack: React.FC<PropsType> = ({ balance, navigation }) => {
         animation: "slide_from_bottom",
       }}
     >
-      <Stack.Screen name="ChargeMain">
+      <Stack.Screen name="PayMain">
         {(props) => (
-          <Charge {...props} balance={balance} navigation={navigation} />
+          <Pay {...props} balance={balance} navigation={navigation} />
         )}
       </Stack.Screen>
       <Stack.Screen name="Charging" component={Charging} />
+      <Stack.Screen name="Withdrawing" component={Withdrawing} />
     </Stack.Navigator>
   );
 };
 
-export default ChargeStack;
+export default PayStack;

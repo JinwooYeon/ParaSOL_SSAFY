@@ -9,6 +9,7 @@ import {
   HeaderContainer,
   LayoutContainer,
   ContentFooterContainer,
+  BtnContainerRow,
 } from "./styled";
 
 interface PropsType {
@@ -16,7 +17,7 @@ interface PropsType {
   navigation: any;
 }
 
-const Charge: React.FC<PropsType> = ({ balance, navigation: { navigate } }) => {
+const Pay: React.FC<PropsType> = ({ balance, navigation: { navigate } }) => {
   const [price, setPrice] = useState("0");
   const [bankInfo, setBankInfo] = useState({
     bankImg:
@@ -28,7 +29,7 @@ const Charge: React.FC<PropsType> = ({ balance, navigation: { navigate } }) => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <BalanceBox category="PAY 충전" num={balance} />
+        <BalanceBox category="PAY 충전 / 출금" num={balance} />
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer>
@@ -36,7 +37,10 @@ const Charge: React.FC<PropsType> = ({ balance, navigation: { navigate } }) => {
           <PriceBox price={price} setPrice={setPrice} />
         </ContentContainer>
         <FooterContainer>
-          <BtnBox color="blue" text="충전하기" navigate={navigate} />
+          <BtnContainerRow>
+            <BtnBox color="white" text="출금하기" navigate={navigate} />
+            <BtnBox color="blue" text="충전하기" navigate={navigate} />
+          </BtnContainerRow>
           <BtnBox color="red" text="초기화" setPrice={setPrice} />
         </FooterContainer>
       </ContentFooterContainer>
@@ -44,4 +48,4 @@ const Charge: React.FC<PropsType> = ({ balance, navigation: { navigate } }) => {
   );
 };
 
-export default Charge;
+export default Pay;
