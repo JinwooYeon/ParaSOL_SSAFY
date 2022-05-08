@@ -6,8 +6,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <stdlib.h>
-#include <signal.h>
 
 #include <grpc++/grpc++.h>
 
@@ -61,7 +59,6 @@ int main(int argc, char **argv) {
     
     int serv_sock;
     int clnt_sock;
-    pid_t pid;
     
     struct sockaddr_in serv_addr;
 
@@ -90,48 +87,43 @@ int main(int argc, char **argv) {
     struct sockaddr_in clnt_addr;
     socklen_t clnt_addr_size = sizeof(clnt_addr);
     
-    while ((clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size)) >= 0) {
-	    if (clnt_sock < 0) {
+    while (1) {
+	    int payload_len = 0;
+	    
+	    clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
+	    if (clnt_sock == -1) {
 		    std::cout << "accept() error" << "\n";
 		    exit(1);
 	    }
 
-        pid = fork();
-        if (pid) {
-            close(clnt_sock);
-        } else {
-            close(serv_sock);
-
             char sock_buf[BUF_SIZE];
-            int payload_len = 0;
+	    
+	    while((payload_len=read(clnt_sock, &sock_buf, BUF_SIZE)) != 0) {
+		    int status = 200;
+		    if (payload_len == sizeof(struct payload_a)) {
+		        struct payload_a plbuf;
+		        memcpy(&plbuf, &sock_buf, sizeof(payload_a));
 
-            while((payload_len = read(clnt_sock, &sock_buf, BUF_SIZE)) != 0) {
-                int status = 200;
-                if (payload_len == sizeof(struct payload_a)) {
-                    struct payload_a plbuf;
-                    memcpy(&plbuf, &sock_buf, sizeof(payload_a));
+                        std::cout << "plbuf.msg: " << plbuf.msg << "\n";
+                        std::cout << "plbuf.len: " << plbuf.len << "\n";
+		    } else if (payload_len == sizeof(struct payload_b)) {
+		        struct payload_b plbuf;
+		        memcpy(&plbuf, &sock_buf, sizeof(payload_b));
 
-                    std::cout << "plbuf.msg: " << plbuf.msg << "\n";
-                    std::cout << "plbuf.len: " << plbuf.len << "\n";
-                } else if (payload_len == sizeof(struct payload_b)) {
-                    struct payload_b plbuf;
-                    memcpy(&plbuf, &sock_buf, sizeof(payload_b));
+                        std::cout << "plbuf.account_number: " << plbuf.account_number << "\n";
 
-                    std::cout << "plbuf.account_number: " << plbuf.account_number << "\n";
+			char account_number_buf[15] = "";
+			memcpy(&account_number_buf, &plbuf.account_number, 14);
 
-                    char account_number_buf[15] = "";
-                    memcpy(&account_number_buf, &plbuf.account_number, 14);
+    		        std::string account_number = account_number_buf;
+                        std::string response = client.getBalance(account_number);
+                        std::cout << "The balance: " << response << "\n";
+		    }
 
-                    std::string account_number = account_number_buf;
-                    std::string response = client.getBalance(account_number);
-                    std::cout << "The balance: " << response << "\n";
-                }
+		    write(clnt_sock, &status, sizeof(status));
+		}
 
-                write(clnt_sock, &status, sizeof(status));
-            }
-            close(clnt_sock);
-            exit(0);
-        }
+		close(clnt_sock);
 	}
 
 	close(serv_sock);
