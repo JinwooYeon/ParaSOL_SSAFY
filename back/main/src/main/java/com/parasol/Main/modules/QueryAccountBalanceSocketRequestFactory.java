@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 @Component
 public class QueryAccountBalanceSocketRequestFactory {
@@ -18,16 +19,15 @@ public class QueryAccountBalanceSocketRequestFactory {
     private BufferedReader reader;
     private PrintWriter writer;
 
-    @Value("{core.interface.ip}")
+    @Value("${core.interface.ip}")
     private String coreIp;
 
-    @Value("{core.interface.port}")
-    private int corePort;
+    @Value("${core.interface.port}")
+    private String corePort;
 
     public Mono<AccountBalanceQueryResultResponse> createQueryAccountBalanceRequest(AccountBalanceQueryRequest request) {
         try {
-            socket = new Socket(coreIp, corePort);
-            System.out.println(socket.getInetAddress().getHostAddress() + "에 연결");
+            socket = new Socket(coreIp, Integer.parseInt(corePort));
 
             char[] payload = new char[14];
             for (int i = 0; i < request.getBankAccountNumber().length(); i++)
@@ -36,16 +36,27 @@ public class QueryAccountBalanceSocketRequestFactory {
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());
 
-            writer.println(payload);
+            writer.print(payload);
             writer.flush();
 
-            Mono<String> response = Mono.just(reader.readLine());
+            char[] sockBuf = new char[100];
+            int responseLen = reader.read(sockBuf);
+            if (responseLen == -1) throw new IllegalStateException("으앙");
+
+            long balance = 0L;
+            for (char sockChar : sockBuf)
+                if (sockChar != 0) {
+                    balance *= 10;
+                    balance += sockChar - '0';
+                } else {
+                    break;
+                }
+            Mono<Long> response = Mono.just(balance);
 
             return response
-                    .filter(s -> !s.isEmpty())
                     .flatMap(s -> {
                         AccountBalanceQueryResultResponse accountBalanceQueryResultResponse = new AccountBalanceQueryResultResponse();
-                        accountBalanceQueryResultResponse.setBalance(Long.parseLong(s));
+                        accountBalanceQueryResultResponse.setBalance(s);
                         return Mono.just(accountBalanceQueryResultResponse);
                     });
         } catch (IOException e) {
