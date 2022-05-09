@@ -13,8 +13,11 @@ interface PropsType {
 
 export const Components: React.FC<PropsType> = (props: PropsType) => {
   // const BASE_URL = "http://k6S101.p.ssafy.io:8080/";
-  const JWTtoken = localStorage.getItem("jwt")
-    ? localStorage.getItem("jwt")
+  const accessToken = localStorage.getItem("accessToken")
+    ? localStorage.getItem("accessToken")
+    : "";
+  const refreshToken = localStorage.getItem("refreshToken")
+    ? localStorage.getItem("refreshToken")
     : "";
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({});
@@ -33,7 +36,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           method: "get",
           url: props.API.uri,
           // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${JWTtoken}` },
+          headers: { Authroization: `Bearer ${accessToken}` },
           params: data,
         })
           .then((response) => {
@@ -55,17 +58,19 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           method: "post",
           url: props.API.uri,
           // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${JWTtoken}` },
+          headers: { Authroization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
+            if (props.API.detail === "로그인") {
+              console.log(response.data);
+              localStorage.setItem("accessToken", response.data.accessToken);
+              localStorage.setItem("refreshToken", response.data.refreshToken);
+            }
             setResponseData({
               status: response.status.toString(),
               output: JSON.stringify(response.data),
             });
-            if (props.API.detail === "로그인") {
-              localStorage.setItem("jwt", response.data.token);
-            }
           })
           // .catch(function (error) {
           //   console.log(error);
@@ -104,7 +109,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           method: "patch",
           url: props.API.uri,
           // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${JWTtoken}` },
+          headers: { Authroization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
@@ -125,7 +130,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           method: "delete",
           url: props.API.uri,
           // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${JWTtoken}` },
+          headers: { Authroization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
