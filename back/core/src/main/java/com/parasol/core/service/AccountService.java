@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,7 @@ public class AccountService {
         return account.get().getBalance();
     }
 
+    @Transactional
     public boolean deposit(@Valid AccountRequest request) {
         // to 계좌에 입금
         // 일단 같은 은행 계좌라고 생각하고 할게욥
