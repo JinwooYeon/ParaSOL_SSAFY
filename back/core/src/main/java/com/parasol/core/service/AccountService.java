@@ -66,14 +66,14 @@ public class AccountService {
 
     public boolean remit(@Valid AccountRequest request) {
 
-        Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getBankAccountNumber());
+        /*Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getBankAccountNumber());
         Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
 
         Long toBalance = validationService.calculateBalance(new Balance(accountTo.get().getBalance() + request.getAmount()));
         Long fromBalance = validationService.calculateBalance(new Balance(accountFrom.get().getBalance() - request.getAmount()));
 
         accountTo.get().setBalance(toBalance);
-        accountFrom.get().setBalance(fromBalance);
+        accountFrom.get().setBalance(fromBalance);*/
 
         return true;
     }
