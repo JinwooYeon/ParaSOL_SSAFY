@@ -1,32 +1,26 @@
-package com.parasol.core.entity;
+package com.parasol.Main.api_model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-@Entity
 @Getter
 @Setter
-@DynamicInsert
-@DynamicUpdate
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
+@ApiModel("Client")
 public class Client {
-    @Id
+    @ApiModelProperty(name = "id")
     private String id;
 
     @NotBlank
+    @ApiModelProperty(name = "name")
     private String name;
     @NotBlank
-    @Column(unique=true)
+    @ApiModelProperty(name = "residentNumber")
     private String residentNumber;
-
-    @OneToOne
-    @JoinColumn(name="bank_user_id")
-    private BankUser bankUser;
 };

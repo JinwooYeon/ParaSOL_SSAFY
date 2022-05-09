@@ -61,25 +61,10 @@ public class AccountService {
     }
 
     public Mono<Boolean> deposit(DepositRequest request) {
-        // TODO: 메소드명 수정 필요 @선민기
-        //depositRequestFactory.createDepositRequest(request);
-        AccountInfo accountFrom = request.getAccountFrom();
-        AccountInfo accountTo = request.getAccountTo();
-        long amount = request.getAmount();
-        TransactionType method = request.getMethod();
-
         return depositRequestFactory.run(request);
     }
 
     public Mono<Boolean> withdraw(WithdrawRequest request) {
-        // TODO: 구현 수정 필요 @선민기
-        //withdrawRequestFactory.createWithdrawRequest(request);
-
-        AccountInfo accountFrom = request.getAccountFrom();
-        AccountInfo accountTo = request.getAccountTo();
-        long amount = request.getAmount();
-        TransactionType method = request.getMethod();
-
         return withdrawRequestFactory.run(request);
     }
 }
