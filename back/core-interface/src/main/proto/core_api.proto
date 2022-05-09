@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package core_api;
+
+option java_multiple_files = true;
+option java_package = "com.parasol.core.lib";
+option java_outer_classname = "CoreAPIProto";
+
+service CoreAPI {
+  rpc getBalance(AccountBalanceQueryRequest) returns (AccountBalanceQueryResponse) {}
+}
+
+message AccountBalanceQueryRequest {
+  string accountNumber = 1;
+}
+
+message AccountBalanceQueryResponse {
+  string balance = 1;
+}
