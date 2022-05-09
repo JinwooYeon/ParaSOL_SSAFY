@@ -37,60 +37,200 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
           <Box>
             {Object.keys(myRequest).map((key: string) =>
               myRequest[key].map((re: any, index: string) => {
-                return (
-                  <Grid
-                    container
-                    rowSpacing={2}
-                    columnSpacing={3}
-                    sx={{ width: "100%", marginTop: 1 }}
-                    alignItems="center"
-                    key={index}
-                  >
-                    <Grid item xs={5}>
-                      <Stack direction="row" spacing={1} sx={{ width: "40%" }}>
-                        <div style={{ width: "100%", whiteSpace: "normal" }}>
-                          {re.value && (
-                            <div style={styles.apiTitle}>{re.value}</div>
-                          )}
-                          {re.type && (
-                            <div style={styles.apiType}>{re.type}</div>
-                          )}
-                        </div>
-                      </Stack>
+                if (re.value === "accessToken") {
+                  let accessToken = localStorage.getItem("accessToken");
+                  return (
+                    <Grid
+                      container
+                      rowSpacing={2}
+                      columnSpacing={3}
+                      sx={{ width: "100%", marginTop: 1 }}
+                      alignItems="center"
+                      key={index}
+                    >
+                      <Grid item xs={5}>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          sx={{ width: "40%" }}
+                        >
+                          <div style={{ width: "100%", whiteSpace: "normal" }}>
+                            {re.value && (
+                              <div style={styles.apiTitle}>{re.value}</div>
+                            )}
+                            {re.type && (
+                              <div style={styles.apiType}>{re.type}</div>
+                            )}
+                          </div>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={1.5}>
+                        {re.required ? (
+                          <div style={styles.apiRequired.required}>
+                            required
+                          </div>
+                        ) : (
+                          <div style={styles.apiRequired.notRequired}>
+                            not required
+                          </div>
+                        )}
+                      </Grid>
+                      <Grid item xs={5.5}>
+                        <TextField
+                          label={re.value}
+                          disabled
+                          size="small"
+                          type="text"
+                          sx={{ width: "100%" }}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            handleChange(re.value, e.target.value);
+                          }}
+                          value={accessToken || "로그인을 해야합니다!"}
+                          InputProps={{
+                            endAdornment: (
+                              <IconButton
+                                size="small"
+                                onClick={() => clearValue(re.value)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            ),
+                          }}
+                        />
+                      </Grid>
                     </Grid>
-                    <Grid item xs={1.5}>
-                      {re.required ? (
-                        <div style={styles.apiRequired.required}>required</div>
-                      ) : (
-                        <div style={styles.apiRequired.notRequired}>
-                          not required
-                        </div>
-                      )}
+                  );
+                } else if (re.value === "refreshToken") {
+                  let refreshToken = localStorage.getItem("refreshToken");
+                  return (
+                    <Grid
+                      container
+                      rowSpacing={2}
+                      columnSpacing={3}
+                      sx={{ width: "100%", marginTop: 1 }}
+                      alignItems="center"
+                      key={index}
+                    >
+                      <Grid item xs={5}>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          sx={{ width: "40%" }}
+                        >
+                          <div style={{ width: "100%", whiteSpace: "normal" }}>
+                            {re.value && (
+                              <div style={styles.apiTitle}>{re.value}</div>
+                            )}
+                            {re.type && (
+                              <div style={styles.apiType}>{re.type}</div>
+                            )}
+                          </div>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={1.5}>
+                        {re.required ? (
+                          <div style={styles.apiRequired.required}>
+                            required
+                          </div>
+                        ) : (
+                          <div style={styles.apiRequired.notRequired}>
+                            not required
+                          </div>
+                        )}
+                      </Grid>
+                      <Grid item xs={5.5}>
+                        <TextField
+                          label={re.value}
+                          disabled
+                          size="small"
+                          type="text"
+                          sx={{ width: "100%" }}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            handleChange(re.value, e.target.value);
+                          }}
+                          value={refreshToken || "로그인을 해야합니다!"}
+                          InputProps={{
+                            endAdornment: (
+                              <IconButton
+                                size="small"
+                                onClick={() => clearValue(re.value)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            ),
+                          }}
+                        />
+                      </Grid>
                     </Grid>
-                    <Grid item xs={5.5}>
-                      <TextField
-                        label={re.value}
-                        size="small"
-                        type="text"
-                        sx={{ width: "100%" }}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          handleChange(re.value, e.target.value);
-                        }}
-                        value={formData[re.value] || ""}
-                        InputProps={{
-                          endAdornment: (
-                            <IconButton
-                              size="small"
-                              onClick={() => clearValue(re.value)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          ),
-                        }}
-                      ></TextField>
+                  );
+                } else {
+                  return (
+                    <Grid
+                      container
+                      rowSpacing={2}
+                      columnSpacing={3}
+                      sx={{ width: "100%", marginTop: 1 }}
+                      alignItems="center"
+                      key={index}
+                    >
+                      <Grid item xs={5}>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          sx={{ width: "40%" }}
+                        >
+                          <div style={{ width: "100%", whiteSpace: "normal" }}>
+                            {re.value && (
+                              <div style={styles.apiTitle}>{re.value}</div>
+                            )}
+                            {re.type && (
+                              <div style={styles.apiType}>{re.type}</div>
+                            )}
+                          </div>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={1.5}>
+                        {re.required ? (
+                          <div style={styles.apiRequired.required}>
+                            required
+                          </div>
+                        ) : (
+                          <div style={styles.apiRequired.notRequired}>
+                            not required
+                          </div>
+                        )}
+                      </Grid>
+                      <Grid item xs={5.5}>
+                        <TextField
+                          label={re.value}
+                          size="small"
+                          type="text"
+                          sx={{ width: "100%" }}
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            handleChange(re.value, e.target.value);
+                          }}
+                          value={formData[re.value] || ""}
+                          InputProps={{
+                            endAdornment: (
+                              <IconButton
+                                size="small"
+                                onClick={() => clearValue(re.value)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            ),
+                          }}
+                        />
+                      </Grid>
                     </Grid>
-                  </Grid>
-                );
+                  );
+                }
               })
             )}
           </Box>{" "}

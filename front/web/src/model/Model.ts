@@ -142,3 +142,55 @@ export const Token = [
     required: true,
   },
 ];
+export const AccessToken = [
+  {
+    value: "accessToken",
+    type: "string",
+    required: true,
+  },
+];
+export const RefreshToken = [
+  {
+    value: "refreshToken",
+    type: "string",
+    required: true,
+  },
+];
+export const AuthToken = [...AccessToken, ...RefreshToken];
+
+////////////////////////////////////////////////////////////
+//// JwtHeader
+export const JwtHeader = [...AccessToken];
+//// Request
+export const LoginRequest = [...LoginInfo];
+export const BankConnectionRequest = [...BankInfo];
+export const UserRegisterRequest = [...UserInfo];
+export const UserUpdateRequest = [...UserInfo];
+export const DepositRequest = [...Transaction];
+export const WithdrawRequest = [...Transaction];
+export const PasswordResetRequest = [...Password];
+export const QueryAccountListRequest = [...BankInfo];
+export const QueryAccountBalanceRequest = [...AccountInfo];
+export const QueryAccountHistoryRequest = [...AccountInfo];
+export const ReissueTokenRequest = [
+  ...RefreshToken,
+  {
+    value: "id",
+    type: "string",
+    required: true,
+  },
+];
+export const IdCheckRequest = [
+  {
+    value: "id",
+    type: "string",
+    required: true,
+  },
+];
+//// Response
+export const AuthTokenResponse = [...AuthToken];
+export const AccountListQueryResultResponse = [...AccountList];
+export const AccountBalanceQueryResultResponse = [...AccountBalance];
+export const AccountHistoryQueryResultResponse = [...AccountHistories];
+export const TransactionExecuteResultResponse = [...Transaction];
+export const UserInfoQueryResultResponse = [...UserInfo];

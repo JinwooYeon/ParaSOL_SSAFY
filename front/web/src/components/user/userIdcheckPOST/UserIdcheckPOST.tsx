@@ -1,17 +1,16 @@
 import { Components } from "components/Components";
-import { QueryAccountHistoryRequest, JwtHeader } from "model/Model";
+import { IdCheckRequest } from "model/Model";
 
-export const AccountHistoryGET = () => {
+export const UserIdcheckPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
   const API = {
-    uri: "/account/history",
-    method: "GET",
-    detail: "계좌 거래내역 조회",
-    completed: false,
+    uri: "/user/idcheck",
+    method: "POST",
+    detail: "아이디 중복 체크",
+    completed: true,
   };
   const requestBody = {
-    QueryAccountHistoryRequest,
-    JwtHeader,
+    IdCheckRequest,
   };
   ///////////////////////////////////
 

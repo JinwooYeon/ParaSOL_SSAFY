@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { LoginInfo } from "model/Model";
+import { LoginRequest } from "model/Model";
 
 export const UserLoginPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -7,10 +7,10 @@ export const UserLoginPOST = () => {
     uri: "/user/login",
     method: "POST",
     detail: "로그인",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
-    LoginInfo,
+    LoginRequest,
   };
   ///////////////////////////////////
 
