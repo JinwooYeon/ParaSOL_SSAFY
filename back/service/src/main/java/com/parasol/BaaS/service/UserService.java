@@ -70,15 +70,7 @@ public class UserService {
     }
 
     // AuthToken 재발급
-    public AuthToken reissueAuthToken(ReissueTokenRequest request) {
-        String refreshToken = request.getRefreshToken();
-        String id;
-        try {
-            id = JwtTokenUtil.getUserId(refreshToken);
-        } catch (Exception ex) {
-            return null;
-        }
-        
+    public AuthToken reissueAuthToken(String id, String refreshToken) {
         Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
 
         if(!checkToken.isPresent()) {
@@ -87,8 +79,8 @@ public class UserService {
 
         Token token = checkToken.get();
         String originRefreshToken = token.getRefreshToken();
-
         String message = JwtTokenUtil.handleError(originRefreshToken);
+
         if("success".equals(message)) {
             if(originRefreshToken.equals(refreshToken)) {
                 AuthToken authToken = JwtTokenUtil.getToken(id);
