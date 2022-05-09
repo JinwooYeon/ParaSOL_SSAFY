@@ -180,6 +180,14 @@ export const ReissueTokenRequest = [
     required: true,
   },
 ];
+export const PasswordUpdateRequest = [
+  ...Password,
+  {
+    value: "NewPassword",
+    type: "string",
+    required: true,
+  },
+];
 export const IdCheckRequest = [
   {
     value: "id",
