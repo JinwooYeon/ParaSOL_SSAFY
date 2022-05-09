@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { JwtHeader } from "model/Model";
+import { JwtHeader, Password } from "model/Model";
 
 export const UserDELETE = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -10,6 +10,7 @@ export const UserDELETE = () => {
     completed: true,
   };
   const requestBody = {
+    Password,
     JwtHeader,
   };
   ///////////////////////////////////
