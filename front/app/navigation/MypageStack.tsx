@@ -1,12 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Mypage from "../screens/Mypage";
 import AuthBio from "../screens/AuthBio";
-import ConnectAccount from "../screens/ConnectAccount";
+import ConnectAccount from "../screens/Account/ConnectAccount";
 import Oauth from "../screens/Oauth";
 import Profile from "../screens/User/Profile";
 import Service from "../screens/Service";
 import Delete from "../screens/User/Delete";
-import UpdateProfile from "../screens/User/UpdateProfile";
 
 interface PropsType {
   setLogin: (a: any) => void;
@@ -28,7 +27,6 @@ const MypageStack: React.FC<PropsType> = ({ setLogin }) => {
         {(props) => <Mypage {...props} setLogin={setLogin} />}
       </Stack.Screen>
       <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
       <Stack.Screen name="ConnectAccount" component={ConnectAccount} />
       <Stack.Screen name="Oauth" component={Oauth} />
       <Stack.Screen name="AuthBio" component={AuthBio} />

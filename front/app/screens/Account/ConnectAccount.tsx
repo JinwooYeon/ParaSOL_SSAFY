@@ -1,11 +1,11 @@
-import BtnBox from "../components/BtnBox";
+import BtnBox from "../../components/BtnBox";
 import {
   ContentContainer,
   ContentFooterContainer,
   FooterContainer,
   HeaderText,
   LayoutContainer,
-} from "./styled";
+} from "../styled";
 
 const ConnectAccount = ({ navigation }: any) => (
   <LayoutContainer>
