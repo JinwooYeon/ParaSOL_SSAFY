@@ -35,8 +35,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
         await axios({
           method: "get",
           url: props.API.uri,
-          // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${accessToken}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
           params: data,
         })
           .then((response) => {
@@ -57,13 +56,11 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
         await axios({
           method: "post",
           url: props.API.uri,
-          // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${accessToken}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
             if (props.API.detail === "로그인") {
-              // console.log(response.data);
               localStorage.setItem("accessToken", response.data.accessToken);
               localStorage.setItem("refreshToken", response.data.refreshToken);
             }
@@ -72,31 +69,6 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
               output: JSON.stringify(response.data),
             });
           })
-          // .catch(function (error) {
-          //   console.log(error);
-          //   if (error.response) {
-          //     // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-          //     console.log("first");
-          //     console.log(error.response.data);
-          //     console.log(error.response.status);
-          //     console.log(error.response.headers);
-          //   } else if (error.request) {
-          //     // 요청이 이루어 졌으나 응답을 받지 못했습니다.
-          //     // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
-          //     // Node.js의 http.ClientRequest 인스턴스입니다.
-          //     console.log("second");
-          //     console.log(error.request);
-          //   } else {
-          //     // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-          //     console.log("third");
-          //     console.log("Error", error.message);
-          //   }
-          //   console.log(error.config);
-          //   setResponseData({
-          //     status: error.response.status.toString(),
-          //     output: error.response.data.toString(),
-          //   });
-          // });
           .catch((err) => {
             setResponseData({
               status: err.response.status.toString(),
@@ -108,8 +80,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
         await axios({
           method: "patch",
           url: props.API.uri,
-          // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${accessToken}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
@@ -129,8 +100,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
         await axios({
           method: "delete",
           url: props.API.uri,
-          // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${accessToken}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
