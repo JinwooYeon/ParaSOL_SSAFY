@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { Transaction, Token } from "model/Model";
+import { DepositRequest, JwtHeader } from "model/Model";
 
 export const AccountDepositPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -10,8 +10,8 @@ export const AccountDepositPOST = () => {
     completed: false,
   };
   const requestBody = {
-    Transaction,
-    Token,
+    DepositRequest,
+    JwtHeader,
   };
   ///////////////////////////////////
 

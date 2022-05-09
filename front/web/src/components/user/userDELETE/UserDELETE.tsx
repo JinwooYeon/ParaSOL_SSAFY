@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { Token } from "model/Model";
+import { JwtHeader } from "model/Model";
 
 export const UserDELETE = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -7,10 +7,10 @@ export const UserDELETE = () => {
     uri: "/user",
     method: "DELETE",
     detail: "회원 탈퇴",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
-    Token,
+    JwtHeader,
   };
   ///////////////////////////////////
 

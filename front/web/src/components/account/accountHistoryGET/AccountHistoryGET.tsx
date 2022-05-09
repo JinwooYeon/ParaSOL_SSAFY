@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { AccountInfo, Token } from "model/Model";
+import { QueryAccountHistoryRequest, JwtHeader } from "model/Model";
 
 export const AccountHistoryGET = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -10,8 +10,8 @@ export const AccountHistoryGET = () => {
     completed: false,
   };
   const requestBody = {
-    AccountInfo,
-    Token,
+    QueryAccountHistoryRequest,
+    JwtHeader,
   };
   ///////////////////////////////////
 

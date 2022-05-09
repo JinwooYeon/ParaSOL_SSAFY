@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { UserInfo, Token } from "model/Model";
+import { UserUpdateRequest, JwtHeader } from "model/Model";
 
 export const UserPATCH = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -7,11 +7,11 @@ export const UserPATCH = () => {
     uri: "/user",
     method: "PATCH",
     detail: "회원 수정",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
-    UserInfo,
-    Token,
+    UserUpdateRequest,
+    JwtHeader,
   };
   ///////////////////////////////////
 
