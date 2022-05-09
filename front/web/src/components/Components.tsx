@@ -63,7 +63,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
         })
           .then((response) => {
             if (props.API.detail === "로그인") {
-              console.log(response.data);
+              // console.log(response.data);
               localStorage.setItem("accessToken", response.data.accessToken);
               localStorage.setItem("refreshToken", response.data.refreshToken);
             }
