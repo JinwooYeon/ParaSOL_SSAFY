@@ -4,9 +4,11 @@ import styled from "styled-components/native";
 import IdController from "../../components/Controller/IdController";
 import PasswordController from "../../components/Controller/PasswordController";
 import PasswordConfirmController from "../../components/Controller/PasswordConfirmController";
-import EmailController from "../../components/Controller/EmailController";
+import NameController from "../../components/Controller/NameController";
 import BirthController from "../../components/Controller/BirthController";
 import { LayoutContainer, HeaderText } from "../styled";
+import axios from "axios";
+import BtnBox from "../../components/BtnBox";
 
 const ContentContainer = styled.View`
   flex: 1;
@@ -18,28 +20,36 @@ interface PropsType {
   navigation: any;
 }
 
-const Register: React.FC<PropsType> = ({ navigation: { goBack } }) => {
+const Register: React.FC<PropsType> = ({ navigation }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [email, setEmail] = useState("");
-  const [birth, setBirth] = useState("");
+  const [name, setName] = useState("");
+  const url = "http://k6S101.p.ssafy.io:8080/user/register";
 
   const onSubmit = async () => {
     const data = {
       id: id,
       password: password,
       passwordConfirm: passwordConfirm,
-      email: email,
-      birth: birth,
+      name: name,
     };
     console.log(data);
+
+    await axios
+      .post(url, data)
+      .then((res) => {
+        console.log(res);
+        navigation.navigate("Login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     setId("");
     setPassword("");
     setPasswordConfirm("");
-    setEmail("");
-    setBirth("");
+    setName("");
   };
 
   return (
@@ -50,10 +60,9 @@ const Register: React.FC<PropsType> = ({ navigation: { goBack } }) => {
         <IdController setId={setId} />
         <PasswordController setPassword={setPassword} />
         <PasswordConfirmController setPasswordConfirm={setPasswordConfirm} />
-        <EmailController setEmail={setEmail} />
-        <BirthController setBirth={setBirth} />
-        <Button title="Submit" onPress={() => onSubmit()}></Button>
-        <Button onPress={() => goBack()} title="뒤로" />
+        <NameController setName={setName} />
+        <BtnBox color="white" text="회원가입" onSubmit={onSubmit}></BtnBox>
+        <BtnBox color="white" text="뒤로" navigation={navigation}></BtnBox>
       </ContentContainer>
     </LayoutContainer>
   );
