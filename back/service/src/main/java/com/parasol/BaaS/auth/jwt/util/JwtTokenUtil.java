@@ -87,7 +87,7 @@ public class JwtTokenUtil {
     		return new Date(now.getTime() + expirationTime);
     }
 
-    public static void handleError(String token) {
+    public static String handleError(String token) {
         JWTVerifier verifier = JWT
                 .require(Algorithm.HMAC512(secretKey.getBytes()))
                 .withIssuer(ISSUER)
@@ -96,24 +96,25 @@ public class JwtTokenUtil {
         try {
             verifier.verify(token.replace(TOKEN_PREFIX, ""));
         } catch (AlgorithmMismatchException ex) {
-            throw ex;
+            return null;
         } catch (InvalidClaimException ex) {
-            throw ex;
+            return null;
         } catch (SignatureGenerationException ex) {
-            throw ex;
+            return null;
         } catch (SignatureVerificationException ex) {
-            throw ex;
+            return null;
         } catch (TokenExpiredException ex) {
-            throw ex;
+            return "expired";
         } catch (JWTCreationException ex) {
-            throw ex;
+            return null;
         } catch (JWTDecodeException ex) {
-            throw ex;
+            return null;
         } catch (JWTVerificationException ex) {
-            throw ex;
+            return null;
         } catch (Exception ex) {
-            throw ex;
+            return null;
         }
+        return "success";
     }
 
     public static void handleError(JWTVerifier verifier, String token) {
