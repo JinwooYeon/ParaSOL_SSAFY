@@ -1,16 +1,22 @@
 package com.parasol.BaaS.service;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.parasol.BaaS.api_model.AuthToken;
 import com.parasol.BaaS.api_request.LoginRequest;
 import com.parasol.BaaS.api_request.ReissueTokenRequest;
 import com.parasol.BaaS.api_request.UserRegisterRequest;
 import com.parasol.BaaS.api_request.UserUpdateRequest;
+import com.parasol.BaaS.auth.jwt.JwtAuthenticationFilter;
+import com.parasol.BaaS.auth.jwt.UserDetail;
 import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
 import com.parasol.BaaS.db.entity.Token;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.TokenRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +34,8 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public AuthToken login(LoginRequest request) {
         String id = request.getId();
@@ -63,12 +71,19 @@ public class UserService {
 
     // AuthToken 재발급
     public AuthToken reissueAuthToken(ReissueTokenRequest request) {
-        String id = request.getId();
         String refreshToken = request.getRefreshToken();
-
+        String id;
+        try {
+            id = JwtTokenUtil.getUserId(refreshToken);
+        } catch (Exception ex) {
+            return null;
+        }
+        
         Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
 
-        if(!checkToken.isPresent()) return null;
+        if(!checkToken.isPresent()) {
+            return null;
+        }
 
         Token token = checkToken.get();
         String originRefreshToken = token.getRefreshToken();
