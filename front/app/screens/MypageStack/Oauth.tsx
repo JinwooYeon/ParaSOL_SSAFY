@@ -1,15 +1,15 @@
-import BtnBox from "../components/BtnBox";
+import BtnBox from "../../components/BtnBox";
 import {
   ContentContainer,
   ContentFooterContainer,
   FooterContainer,
   HeaderText,
   LayoutContainer,
-} from "./styled";
+} from "../styled";
 
-const ConnectAccount = ({ navigation }: any) => (
+const Oauth = ({ navigation }: any) => (
   <LayoutContainer>
-    <HeaderText>계좌 관리하기</HeaderText>
+    <HeaderText>공동인증 발급/재발급</HeaderText>
     <ContentFooterContainer>
       <ContentContainer></ContentContainer>
       <FooterContainer>
@@ -19,4 +19,4 @@ const ConnectAccount = ({ navigation }: any) => (
   </LayoutContainer>
 );
 
-export default ConnectAccount;
+export default Oauth;

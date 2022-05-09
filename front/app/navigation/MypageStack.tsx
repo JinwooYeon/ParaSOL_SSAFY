@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Mypage from "../screens/Mypage";
-import AuthBio from "../screens/AuthBio";
-import ConnectAccount from "../screens/ConnectAccount";
-import Oauth from "../screens/Oauth";
-import Profile from "../screens/Profile";
-import Service from "../screens/Service";
-import Delete from "../screens/Delete";
+import Mypage from "../screens/MypageStack/Mypage";
+import AuthBio from "../screens/MypageStack/AuthBio";
+import ConnectAccount from "../screens/MypageStack/ConnectAccount";
+import Oauth from "../screens/MypageStack/Oauth";
+import Profile from "../screens/MypageStack/Profile";
+import Service from "../screens/MypageStack/Service";
+import Delete from "../screens/MypageStack/Delete";
 
 interface PropsType {
   setLogin: (a: any) => void;

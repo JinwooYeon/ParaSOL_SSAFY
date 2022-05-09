@@ -1,15 +1,15 @@
-import BtnBox from "../components/BtnBox";
+import BtnBox from "../../components/BtnBox";
 import {
   ContentContainer,
   ContentFooterContainer,
   FooterContainer,
   HeaderText,
   LayoutContainer,
-} from "./styled";
+} from "../styled";
 
-const AuthBio = ({ navigation }: any) => (
+const ConnectAccount = ({ navigation }: any) => (
   <LayoutContainer>
-    <HeaderText>생체인증 발급/재발급</HeaderText>
+    <HeaderText>계좌 관리하기</HeaderText>
     <ContentFooterContainer>
       <ContentContainer></ContentContainer>
       <FooterContainer>
@@ -19,4 +19,4 @@ const AuthBio = ({ navigation }: any) => (
   </LayoutContainer>
 );
 
-export default AuthBio;
+export default ConnectAccount;

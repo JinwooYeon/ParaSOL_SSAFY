@@ -1,5 +1,5 @@
-import MypageMenuBox from "../components/MypageMenuBox";
-import { LayoutContainer, HeaderText, MypageMenuContainer } from "./styled";
+import MypageMenuBox from "../../components/MypageMenuBox";
+import { LayoutContainer, HeaderText, MypageMenuContainer } from "../styled";
 
 interface PropsType {
   navigation: any;
