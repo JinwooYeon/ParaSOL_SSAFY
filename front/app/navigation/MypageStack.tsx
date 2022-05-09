@@ -5,7 +5,7 @@ import ConnectAccount from "../screens/ConnectAccount";
 import Oauth from "../screens/Oauth";
 import Profile from "../screens/User/Profile";
 import Service from "../screens/Service";
-import Delete from "../screens/Delete";
+import Delete from "../screens/User/Delete";
 import UpdateProfile from "../screens/User/UpdateProfile";
 
 interface PropsType {

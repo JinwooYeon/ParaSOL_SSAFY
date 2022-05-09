@@ -14,7 +14,7 @@ const ContentContainer = styled.View`
 `;
 
 interface PropsType {
-  setLogin: (a: any) => void;
+  setLogin: (a: boolean) => void;
   navigation: any;
 }
 
