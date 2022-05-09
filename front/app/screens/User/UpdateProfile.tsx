@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import BtnBox from "../components/BtnBox";
+import BtnBox from "../../components/BtnBox";
 import {
   ContentContainer,
   ContentFooterContainer,
   FooterContainer,
   HeaderText,
   LayoutContainer,
-} from "./styled";
-import { Text } from "react-native";
+} from "../styled";
+import { Text, TextInput } from "react-native";
 import axios from "axios";
 
-const Profile = ({ navigation }: any) => {
+const UpdateProfile = ({ navigation }: any) => {
   const [myInfo, setMyInfo] = useState([]);
   const url = "http://k65101.p.ssafy.io:8080/user";
 
@@ -36,13 +36,11 @@ const Profile = ({ navigation }: any) => {
       <ContentFooterContainer>
         <ContentContainer>
           {myInfo.map((info) => {
-            return <Text>{info}</Text>;
+            return <TextInput>{info}</TextInput>;
           })}
         </ContentContainer>
         <FooterContainer>
-          <BtnBox color="blue" text="정보 수정" navigation={navigation} />
           <BtnBox color="blue" text="수정 완료" navigation={navigation} />
-          <BtnBox color="blue" text="비밀번호 수정" navigation={navigation} />
           <BtnBox color="white" text="뒤로" navigation={navigation} />
         </FooterContainer>
       </ContentFooterContainer>
@@ -50,4 +48,4 @@ const Profile = ({ navigation }: any) => {
   );
 };
 
-export default Profile;
+export default UpdateProfile;

@@ -4,10 +4,17 @@ interface PropsType {
   color: string;
   text: string;
   setPrice?: (a: string) => void;
+  setIsUpdate?: (a: boolean) => void;
   navigation?: any;
 }
 
-const BtnBox: React.FC<PropsType> = ({ color, text, setPrice, navigation }) => {
+const BtnBox: React.FC<PropsType> = ({
+  color,
+  text,
+  setPrice,
+  setIsUpdate,
+  navigation,
+}) => {
   const onPress = () => {
     switch (text) {
       case "충전하기":
@@ -23,9 +30,12 @@ const BtnBox: React.FC<PropsType> = ({ color, text, setPrice, navigation }) => {
         break;
       case "정보 수정":
         console.log("update info");
+        // navigation?.navigate("UpdateProfile");
+        setIsUpdate?.(true);
         break;
       case "수정 완료":
         console.log("complete update");
+        setIsUpdate?.(false);
         break;
       case "비밀번호 수정":
         console.log("update password");
