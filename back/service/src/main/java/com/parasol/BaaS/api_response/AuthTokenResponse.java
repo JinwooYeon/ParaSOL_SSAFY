@@ -1,8 +1,13 @@
 package com.parasol.BaaS.api_response;
 
-import com.parasol.BaaS.api_model.AuthToken;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-@SuperBuilder
-public class AuthTokenResponse extends AuthToken {
+@Getter
+@Setter
+@Builder
+public class AuthTokenResponse {
+    private String accessToken;
+    private String refreshToken;
 }

@@ -30,8 +30,8 @@ public class UserController {
         }
 
         return AuthTokenResponse.builder()
-                .accessToken(token.getAccessToken())
-                .refreshToken(token.getRefreshToken())
+                .accessToken(token.getAccessToken().getAccessToken())
+                .refreshToken(token.getRefreshToken().getRefreshToken())
                 .build();
     }
 
@@ -57,8 +57,8 @@ public class UserController {
         }
 
         return AuthTokenResponse.builder()
-                .accessToken(token.getAccessToken())
-                .refreshToken(token.getRefreshToken())
+                .accessToken(token.getAccessToken().getAccessToken())
+                .refreshToken(token.getRefreshToken().getRefreshToken())
                 .build();
     }
 
