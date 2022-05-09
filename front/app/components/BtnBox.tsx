@@ -6,6 +6,7 @@ interface PropsType {
   setPrice?: (a: string) => void;
   setIsUpdate?: (a: boolean) => void;
   setLogin?: (a: boolean) => void;
+  onSubmit?: any;
   deleteUser?: any;
   navigation?: any;
 }
@@ -16,6 +17,7 @@ const BtnBox: React.FC<PropsType> = ({
   setPrice,
   setIsUpdate,
   setLogin,
+  onSubmit,
   deleteUser,
   navigation,
 }) => {
@@ -60,6 +62,9 @@ const BtnBox: React.FC<PropsType> = ({
       case "로그인":
         console.log("login");
         break;
+      case "회원가입":
+        console.log("register");
+        onSubmit?.();
       default:
         console.log("set text props");
     }
