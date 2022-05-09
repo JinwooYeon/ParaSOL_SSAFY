@@ -8,6 +8,8 @@ import UserPasswordPOST from "components/user/userPasswordPOST";
 import UserGET from "components/user/userGET";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import UserIdcheckPOST from "components/user/userIdcheckPOST";
+import UserTokenPOST from "components/user/userTokenPOST";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -27,6 +29,9 @@ export const User = () => {
             <UserLoginPOST />
           </Item>
           <Item>
+            <UserIdcheckPOST />
+          </Item>
+          <Item>
             <UserRegisterPOST />
           </Item>
           <Item>
@@ -37,6 +42,9 @@ export const User = () => {
           </Item>
           <Item>
             <UserGET />
+          </Item>
+          <Item>
+            <UserTokenPOST />
           </Item>
           <Item>
             <OauthPOST />
