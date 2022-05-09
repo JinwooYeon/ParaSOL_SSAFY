@@ -1,12 +1,12 @@
 package com.parasol.BaaS.auth.jwt;
 
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -54,12 +54,15 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(JwtTokenUtil.HEADER_STRING);
         if (token != null) {
             JWTVerifier verifier = JwtTokenUtil.getVerifier();
-            JwtTokenUtil.handleError(token);
+            String message = JwtTokenUtil.handleError(token);
+            if(message == null || "expired".equals(message)) {
+                return null;
+            }
+
             DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
             String userId = decodedJWT.getSubject();
-            
             if (userId != null) {
-            		User user = userService.getUserByUserId(userId);
+                User user = userService.getUserByUserId(userId);
                 if(user != null) {
                     UserDetail userDetails = new UserDetail(user);
                     UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(userId,

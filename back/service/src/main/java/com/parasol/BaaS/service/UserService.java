@@ -1,10 +1,8 @@
 package com.parasol.BaaS.service;
 
 import com.parasol.BaaS.api_model.AuthToken;
-import com.parasol.BaaS.api_model.LoginInfo;
-import com.parasol.BaaS.api_model.RefreshToken;
-import com.parasol.BaaS.api_model.UserInfo;
 import com.parasol.BaaS.api_request.LoginRequest;
+import com.parasol.BaaS.api_request.ReissueTokenRequest;
 import com.parasol.BaaS.api_request.UserRegisterRequest;
 import com.parasol.BaaS.api_request.UserUpdateRequest;
 import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
@@ -63,25 +61,29 @@ public class UserService {
         return null;
     }
 
-    // 새로운 AuthToken 발급
-    public AuthToken issueAuthToken(String id, String refreshToken) {
+    // AuthToken 재발급
+    public AuthToken reissueAuthToken(ReissueTokenRequest request) {
+        String id = request.getId();
+        String refreshToken = request.getRefreshToken();
+
         Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
 
         if(!checkToken.isPresent()) return null;
 
         Token token = checkToken.get();
+        String originRefreshToken = token.getRefreshToken();
 
-        JwtTokenUtil.handleError(refreshToken);
+        String message = JwtTokenUtil.handleError(originRefreshToken);
+        if("success".equals(message)) {
+            if(originRefreshToken.equals(refreshToken)) {
+                AuthToken authToken = JwtTokenUtil.getToken(id);
+                String newRefreshToken = authToken.getRefreshToken().getRefreshToken();
+                token.setRefreshToken(newRefreshToken);
 
-        if(refreshToken.equals(token.getRefreshToken())) {
-            AuthToken authToken = JwtTokenUtil.getToken(id);
-            String newRefreshToken = authToken.getRefreshToken().getRefreshToken();
-            token.setRefreshToken(newRefreshToken);
-
-            tokenRepository.save(token);
-            return authToken;
+                tokenRepository.save(token);
+                return authToken;
+            }
         }
-
         return null;
     }
 

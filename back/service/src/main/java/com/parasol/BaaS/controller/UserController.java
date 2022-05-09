@@ -1,12 +1,8 @@
 package com.parasol.BaaS.controller;
 
 import com.parasol.BaaS.api_model.AuthToken;
-import com.parasol.BaaS.api_model.RefreshToken;
 import com.parasol.BaaS.api_model.UserInfo;
-import com.parasol.BaaS.api_request.IdCheckRequest;
-import com.parasol.BaaS.api_request.LoginRequest;
-import com.parasol.BaaS.api_request.UserRegisterRequest;
-import com.parasol.BaaS.api_request.UserUpdateRequest;
+import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.AuthTokenResponse;
 import com.parasol.BaaS.api_response.UserInfoQueryResultResponse;
 import com.parasol.BaaS.auth.jwt.UserDetail;
@@ -51,18 +47,10 @@ public class UserController {
     }
 
     @PostMapping("/token")
-    private AuthTokenResponse issueNewToken (
-            Authentication authentication,
-            @RequestBody RefreshToken refreshToken
+    private AuthTokenResponse reissueToken (
+            @RequestBody ReissueTokenRequest request
     ) {
-        if(authentication == null) {
-            return null;
-        }
-
-        UserDetail userDetail = (UserDetail) authentication.getDetails();
-        String userId = userDetail.getUsername();
-
-        AuthToken token = userService.issueAuthToken(userId, refreshToken.getRefreshToken());
+        AuthToken token = userService.reissueAuthToken(request);
 
         if(token == null) {
             return null;
