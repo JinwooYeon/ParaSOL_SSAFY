@@ -141,22 +141,4 @@ public class JwtTokenUtil {
             throw ex;
         }
     }
-
-    public static String getUserId(String token) throws Exception {
-        if (token != null) {
-            JWTVerifier verifier = JwtTokenUtil.getVerifier();
-            String message = JwtTokenUtil.handleError(token);
-            if(message == null || "expired".equals(message)) {
-                return null;
-            }
-
-            DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
-            String userId = decodedJWT.getSubject();
-            if (userId != null) {
-                return userId;
-            }
-            return null;
-        }
-        return null;
-    }
 }
