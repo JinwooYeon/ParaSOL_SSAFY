@@ -46,11 +46,19 @@ public class UserController {
         return false;
     }
 
-    @PostMapping("/token")
+    @GetMapping("/token")
     private AuthTokenResponse reissueToken (
-            @RequestBody ReissueTokenRequest request
+            Authentication authentication
     ) {
-        AuthToken token = userService.reissueAuthToken(request);
+        if(authentication == null) {
+            return null;
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+        String refreshToken = authentication.getPrincipal().toString();
+
+        AuthToken token = userService.reissueAuthToken(id, refreshToken);
 
         if(token == null) {
             return null;
