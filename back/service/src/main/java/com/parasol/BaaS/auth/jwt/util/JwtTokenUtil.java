@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.parasol.BaaS.api_model.AccessToken;
 import com.parasol.BaaS.api_model.AuthToken;
 import com.parasol.BaaS.api_model.RefreshToken;
@@ -61,7 +62,7 @@ public class JwtTokenUtil {
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
 
         String refreshToken = JWT.create()
-//                .withSubject(userId)
+                .withSubject(userId)
                 .withExpiresAt(refreshExpires)
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
