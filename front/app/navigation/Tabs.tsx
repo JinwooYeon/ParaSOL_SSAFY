@@ -1,13 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import History from "../screens/History";
-import Home from "../screens/Home";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { mainBlue } from "../color";
 import { useState } from "react";
 import PayStack from "./PayStack";
 import MypageStack from "./MypageStack";
-import WithdrawStack from "./WithdrawStack";
 import Benefit from "../screens/Benefit";
+import HomeStack from "./HomeStack";
 
 interface PropsType {
   setLogin: (a: any) => void;
@@ -81,7 +80,7 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
           },
         }}
       >
-        {(props) => <Home {...props} balance={balance} />}
+        {(props) => <HomeStack {...props} balance={balance} />}
       </Tab.Screen>
       <Tab.Screen
         name="Benefit"

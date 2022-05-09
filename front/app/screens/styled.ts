@@ -72,6 +72,33 @@ export const Balance = styled.Text`
   margin-left: 2%;
 `;
 
+// Content _ Home
+export const QRcodeContainer = styled.View`
+  border-width: 2px;
+  border-radius: 10px;
+  border-color: ${mainBlue};
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15%;
+  margin-bottom: 20%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+`;
+export const QRcodeInfoContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+`;
+export const QRcodeInfoName = styled.Text`
+  font-size: 35px;
+  color: black;
+`;
+export const QRcodeInfoNum = styled.TouchableOpacity``;
+export const QRcodeInfoNumText = styled.Text`
+  font-size: 30px;
+  color: ${mainBlue};
+`;
+
 // Content _ ConnectedAccount
 export const ConnectedAccountContainer = styled(BoxContainer)`
   flex-direction: column;
@@ -126,6 +153,7 @@ export const PriceInputText = styled.Text`
   padding-left: 1%;
 `;
 export const PriceInput = styled.TextInput`
+  width: 220px;
   height: 30px;
   font-size: 25px;
 `;

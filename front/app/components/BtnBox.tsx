@@ -18,8 +18,12 @@ const BtnBox: React.FC<PropsType> = ({ color, text, setPrice, navigation }) => {
         console.log("withdraw");
         navigation?.navigate("Withdrawing");
         break;
-      case "결제하기":
-        console.log("pay");
+      case "송금하기":
+        console.log("transaction");
+        navigation?.navigate("Transaction");
+        break;
+      case "QR 스캔":
+        console.log("QR scan");
         break;
       case "정보 수정":
         console.log("update info");
