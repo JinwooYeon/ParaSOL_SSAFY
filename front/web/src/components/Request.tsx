@@ -15,6 +15,8 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
   const formData = props.formData;
   const setter = props.setFormData;
   const onSubmit = props.onSubmit;
+  const accessToken = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refreshToken");
 
   const handleChange = (key: string, v: string) => {
     setter({
@@ -37,45 +39,81 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
           <Box>
             {Object.keys(myRequest).map((key: string) =>
               myRequest[key].map((re: any, index: string) => {
-                if (re.value === "accessToken") {
-                  let accessToken = localStorage.getItem("accessToken");
-                  return (
-                    <Grid
-                      container
-                      rowSpacing={2}
-                      columnSpacing={3}
-                      sx={{ width: "100%", marginTop: 1 }}
-                      alignItems="center"
-                      key={index}
-                    >
-                      <Grid item xs={5}>
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          sx={{ width: "40%" }}
-                        >
-                          <div style={{ width: "100%", whiteSpace: "normal" }}>
-                            {re.value && (
-                              <div style={styles.apiTitle}>{re.value}</div>
-                            )}
-                            {re.type && (
-                              <div style={styles.apiType}>{re.type}</div>
-                            )}
-                          </div>
-                        </Stack>
-                      </Grid>
-                      <Grid item xs={1.5}>
-                        {re.required ? (
-                          <div style={styles.apiRequired.required}>
-                            required
-                          </div>
-                        ) : (
-                          <div style={styles.apiRequired.notRequired}>
-                            not required
-                          </div>
-                        )}
-                      </Grid>
-                      <Grid item xs={5.5}>
+                return (
+                  <Grid
+                    container
+                    rowSpacing={2}
+                    columnSpacing={3}
+                    sx={{ width: "100%", marginTop: 1 }}
+                    alignItems="center"
+                    key={index}
+                  >
+                    <Grid item xs={5}>
+                      <Stack direction="row" spacing={1} sx={{ width: "40%" }}>
+                        <div style={{ width: "100%", whiteSpace: "normal" }}>
+                          {re.value && (
+                            <div style={styles.apiTitle}>{re.value}</div>
+                          )}
+                          {re.type && (
+                            <div style={styles.apiType}>{re.type}</div>
+                          )}
+                        </div>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={1.5}>
+                      {re.required ? (
+                        <div style={styles.apiRequired.required}>required</div>
+                      ) : (
+                        <div style={styles.apiRequired.notRequired}>
+                          not required
+                        </div>
+                      )}
+                    </Grid>
+                    <Grid item xs={5.5}>
+                      <TextField
+                        label={re.value}
+                        disabled={
+                          re.value === "accessToken" ||
+                          re.value === "refreshToken"
+                            ? true
+                            : false
+                        }
+                        size="small"
+                        type="text"
+                        sx={{ width: "100%" }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          handleChange(re.value, e.target.value);
+                        }}
+                        value={
+                          // re.value === "accessToken" ||
+                          // re.value === "refreshToken"
+                          //   ? `${re.value}` === undefined
+                          //     ? "로그인을 해야합니다!"
+                          //     : `${re.value}` === "accessToken"
+                          //     ? accessToken || ""
+                          //     : refreshToken || ""
+                          //   : formData[re.value] || ""
+                          re.value === "accessToken" ||
+                          re.value === "refreshToken"
+                            ? accessToken || refreshToken
+                              ? re.value === "accessToken"
+                                ? accessToken
+                                : refreshToken
+                              : "로그인을 해야합니다!"
+                            : formData[re.value] || ""
+                        }
+                        InputProps={{
+                          endAdornment: (
+                            <IconButton
+                              size="small"
+                              onClick={() => clearValue(re.value)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          ),
+                        }}
+                      />
+                      {/* {re.value === "accessToken" && (
                         <TextField
                           label={re.value}
                           disabled
@@ -99,48 +137,8 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
                             ),
                           }}
                         />
-                      </Grid>
-                    </Grid>
-                  );
-                } else if (re.value === "refreshToken") {
-                  let refreshToken = localStorage.getItem("refreshToken");
-                  return (
-                    <Grid
-                      container
-                      rowSpacing={2}
-                      columnSpacing={3}
-                      sx={{ width: "100%", marginTop: 1 }}
-                      alignItems="center"
-                      key={index}
-                    >
-                      <Grid item xs={5}>
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          sx={{ width: "40%" }}
-                        >
-                          <div style={{ width: "100%", whiteSpace: "normal" }}>
-                            {re.value && (
-                              <div style={styles.apiTitle}>{re.value}</div>
-                            )}
-                            {re.type && (
-                              <div style={styles.apiType}>{re.type}</div>
-                            )}
-                          </div>
-                        </Stack>
-                      </Grid>
-                      <Grid item xs={1.5}>
-                        {re.required ? (
-                          <div style={styles.apiRequired.required}>
-                            required
-                          </div>
-                        ) : (
-                          <div style={styles.apiRequired.notRequired}>
-                            not required
-                          </div>
-                        )}
-                      </Grid>
-                      <Grid item xs={5.5}>
+                      )}
+                      {re.value === "refreshToken" && (
                         <TextField
                           label={re.value}
                           disabled
@@ -164,73 +162,35 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
                             ),
                           }}
                         />
-                      </Grid>
+                      )}
+                      {re.value !== "accessToken" &&
+                        re.value !== "refreshToken" && (
+                          <TextField
+                            label={re.value}
+                            size="small"
+                            type="text"
+                            sx={{ width: "100%" }}
+                            onChange={(
+                              e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              handleChange(re.value, e.target.value);
+                            }}
+                            value={formData[re.value] || ""}
+                            InputProps={{
+                              endAdornment: (
+                                <IconButton
+                                  size="small"
+                                  onClick={() => clearValue(re.value)}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              ),
+                            }}
+                          />
+                        )} */}
                     </Grid>
-                  );
-                } else {
-                  return (
-                    <Grid
-                      container
-                      rowSpacing={2}
-                      columnSpacing={3}
-                      sx={{ width: "100%", marginTop: 1 }}
-                      alignItems="center"
-                      key={index}
-                    >
-                      <Grid item xs={5}>
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          sx={{ width: "40%" }}
-                        >
-                          <div style={{ width: "100%", whiteSpace: "normal" }}>
-                            {re.value && (
-                              <div style={styles.apiTitle}>{re.value}</div>
-                            )}
-                            {re.type && (
-                              <div style={styles.apiType}>{re.type}</div>
-                            )}
-                          </div>
-                        </Stack>
-                      </Grid>
-                      <Grid item xs={1.5}>
-                        {re.required ? (
-                          <div style={styles.apiRequired.required}>
-                            required
-                          </div>
-                        ) : (
-                          <div style={styles.apiRequired.notRequired}>
-                            not required
-                          </div>
-                        )}
-                      </Grid>
-                      <Grid item xs={5.5}>
-                        <TextField
-                          label={re.value}
-                          size="small"
-                          type="text"
-                          sx={{ width: "100%" }}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            handleChange(re.value, e.target.value);
-                          }}
-                          value={formData[re.value] || ""}
-                          InputProps={{
-                            endAdornment: (
-                              <IconButton
-                                size="small"
-                                onClick={() => clearValue(re.value)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  );
-                }
+                  </Grid>
+                );
               })
             )}
           </Box>{" "}

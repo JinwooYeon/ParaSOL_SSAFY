@@ -168,7 +168,7 @@ export const UserRegisterRequest = [...UserInfo];
 export const UserUpdateRequest = [...UserInfo];
 export const DepositRequest = [...Transaction];
 export const WithdrawRequest = [...Transaction];
-export const PasswordResetRequest = [...Password];
+export const PasswordResetRequest = [...UserInfo];
 export const QueryAccountListRequest = [...BankInfo];
 export const QueryAccountBalanceRequest = [...AccountInfo];
 export const QueryAccountHistoryRequest = [...AccountInfo];
@@ -176,6 +176,14 @@ export const ReissueTokenRequest = [
   ...RefreshToken,
   {
     value: "id",
+    type: "string",
+    required: true,
+  },
+];
+export const PasswordUpdateRequest = [
+  ...Password,
+  {
+    value: "NewPassword",
     type: "string",
     required: true,
   },
