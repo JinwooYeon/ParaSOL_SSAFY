@@ -16,14 +16,14 @@ public class BankUserController {
     @Autowired
     private BankUserService bankUserService;
 
-    @PostMapping
+    @PostMapping("register")
     public String createBankUser(@RequestBody @Valid BankUserCreateRequest request) {
 
         String result = bankUserService.createBankUser(request);
         return result;
     }
 
-    @PostMapping
+    @PostMapping("login")
     @ResponseBody
     public BankUserLoginResponse login(@RequestBody @Valid BankUserLoginRequest request) {
 

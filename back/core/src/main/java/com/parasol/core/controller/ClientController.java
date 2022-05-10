@@ -1,5 +1,6 @@
 package com.parasol.core.controller;
 
+import com.parasol.core.api_model.ClientCreateRequest;
 import com.parasol.core.api_model.ClientInfo;
 import com.parasol.core.entity.Client;
 import com.parasol.core.service.ClientService;
@@ -16,7 +17,7 @@ public class ClientController {
 
     @PostMapping("client")
     public String CreateClient(
-            @RequestBody @Valid ClientInfo client
+            @RequestBody @Valid ClientCreateRequest client
     ) {
         String result = clientService.create(client.getName(), client.getResidentNumber());
 
