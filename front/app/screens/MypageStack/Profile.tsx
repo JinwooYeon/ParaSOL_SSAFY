@@ -49,7 +49,7 @@ const Profile = ({ navigation }: any) => {
                 color="blue"
                 text="정보 수정"
                 navigation={navigation}
-                setIsUpdate={setIsUpdate}
+                setter={setIsUpdate}
               />
               <BtnBox
                 color="blue"
@@ -62,7 +62,7 @@ const Profile = ({ navigation }: any) => {
               color="blue"
               text="수정 완료"
               navigation={navigation}
-              setIsUpdate={setIsUpdate}
+              setter={setIsUpdate}
             />
           )}
           <BtnBox color="white" text="뒤로" navigation={navigation} />

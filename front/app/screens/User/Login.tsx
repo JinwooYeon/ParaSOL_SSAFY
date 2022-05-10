@@ -56,8 +56,8 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
     <LayoutContainer>
       <HeaderText>로그인</HeaderText>
       <ContentContainer>
-        <IdController setId={setId} />
-        <PasswordController setPassword={setPassword} />
+        <IdController setId={setId} text="아이디" />
+        <PasswordController setPassword={setPassword} text="비밀번호" />
         <Button title="Submit" onPress={() => onSubmit(id, password)}></Button>
         <Button title="LOGIN" onPress={onLoginTemp}></Button>
 

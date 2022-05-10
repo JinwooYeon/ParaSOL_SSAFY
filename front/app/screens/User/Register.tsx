@@ -57,11 +57,11 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
       <HeaderText>회원가입</HeaderText>
       <ContentContainer>
         <Text>Register</Text>
-        <IdController setId={setId} />
-        <PasswordController setPassword={setPassword} />
+        <IdController setId={setId} text="아이디" />
+        <PasswordController setPassword={setPassword} text="비밀번호" />
         <PasswordConfirmController setPasswordConfirm={setPasswordConfirm} />
-        <NameController setName={setName} />
-        <BtnBox color="white" text="회원가입" onSubmit={onSubmit}></BtnBox>
+        <NameController setName={setName} text="이름" />
+        <BtnBox color="white" text="회원가입" setter={onSubmit}></BtnBox>
         <BtnBox color="white" text="뒤로" navigation={navigation}></BtnBox>
       </ContentContainer>
     </LayoutContainer>

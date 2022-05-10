@@ -34,7 +34,7 @@ const Delete = ({ navigation }: any) => {
             color="red"
             text="회원 탈퇴"
             navigation={navigation}
-            deleteUser={deleteUser}
+            setter={deleteUser}
           />
           <BtnBox color="white" text="뒤로" navigation={navigation} />
         </FooterContainer>
