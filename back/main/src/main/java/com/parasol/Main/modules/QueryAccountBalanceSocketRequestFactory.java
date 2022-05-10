@@ -30,8 +30,8 @@ public class QueryAccountBalanceSocketRequestFactory {
             socket = new Socket(coreIp, Integer.parseInt(corePort));
 
             char[] payload = new char[14];
-            for (int i = 0; i < request.getBankAccountNumber().length(); i++)
-                payload[i] = request.getBankAccountNumber().charAt(i);
+            for (int i = 0; i < request.getAccountNo().length(); i++)
+                payload[i] = request.getAccountNo().charAt(i);
 
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());
