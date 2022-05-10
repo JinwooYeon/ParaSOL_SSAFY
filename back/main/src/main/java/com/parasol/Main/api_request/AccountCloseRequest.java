@@ -24,7 +24,6 @@ public class AccountCloseRequest {
     private String residentNumber;
     @ApiModelProperty(name="account_password", example = "0809")
     @NotNull
-    @Min(value = 0)
-    @Max(value = 9999)
-    private int accountPassword;
+    @Size(min = 4, max = 4)
+    private String accountPassword;
 }

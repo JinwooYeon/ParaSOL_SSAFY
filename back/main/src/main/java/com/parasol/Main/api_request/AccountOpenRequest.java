@@ -1,6 +1,7 @@
 package com.parasol.Main.api_request;
 
 import com.parasol.Main.api_model.Client;
+import com.parasol.Main.api_model.ClientInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 @Setter
 @ToString
 @ApiModel("AccountOpenRequest")
-public class AccountOpenRequest extends Client {
+public class AccountOpenRequest extends ClientInfo {
     @ApiModelProperty(name="account_password", example = "0809")
     @NotNull
     @Size(min = 4, max = 4)
