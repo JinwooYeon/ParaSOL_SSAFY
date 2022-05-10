@@ -60,7 +60,7 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
     <LayoutContainer>
       <HeaderText>로그인</HeaderText>
       <ContentContainer>
-        <View style={{ marginBottom: 80 }}>
+        <View style={{ marginBottom: 150 }}>
           <IdController setId={setId} text="아이디" value={id} />
           <PasswordController
             setPassword={setPassword}
