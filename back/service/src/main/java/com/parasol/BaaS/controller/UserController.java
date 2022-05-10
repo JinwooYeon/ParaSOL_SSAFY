@@ -35,6 +35,19 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/login/oauth")
+    public AuthTokenResponse loginOauth(@RequestParam String id) {
+        if(id == null) {
+            return null;
+        }
+        AuthToken token = userService.loginOauth(id);
+
+        return AuthTokenResponse.builder()
+                .accessToken(token.getAccessToken().getAccessToken())
+                .refreshToken(token.getRefreshToken().getRefreshToken())
+                .build();
+    }
+
     @PostMapping("/idcheck")
     public boolean idCheck(
             @RequestBody IdCheckRequest request
