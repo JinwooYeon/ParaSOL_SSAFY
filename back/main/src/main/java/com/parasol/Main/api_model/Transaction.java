@@ -8,7 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 
 @Getter
@@ -25,7 +24,7 @@ public class Transaction {
     @ApiModelProperty(name = "account_from", example = "110-437-525252")
     @Nullable
     private AccountInfo accountFrom;
-    @ApiModelProperty(name = "name_to", example = "110-437-525252")
-    @NotBlank
-    private String nameTo;
+    @ApiModelProperty(name = "account_to", example = "110-437-525252")
+    @Nullable
+    private AccountInfo accountTo;
 }
