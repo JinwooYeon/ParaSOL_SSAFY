@@ -52,7 +52,7 @@ public class AccountController {
     }
 
     // 계좌 잔액 조회
-    @GetMapping("account/balance")
+    @PostMapping("account/balance")
     @ResponseBody
     public Long getBalance(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
@@ -61,7 +61,7 @@ public class AccountController {
     }
 
     // 계좌 거래 내역 조회
-    @GetMapping("account/history")
+    @PostMapping("account/history")
     @ResponseBody
     public List<AccountHistory> getAccountHistory(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
