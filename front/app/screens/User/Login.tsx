@@ -10,7 +10,7 @@ import BtnBox from "../../components/BtnBox";
 
 const ContentContainer = styled.View`
   flex: 1;
-  margin: 20px auto;
+  margin: 30px auto;
   width: 80%;
 `;
 
@@ -60,7 +60,7 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
     <LayoutContainer>
       <HeaderText>로그인</HeaderText>
       <ContentContainer>
-        <View style={{ marginBottom: 150 }}>
+        <View style={{ marginBottom: 200 }}>
           <IdController setId={setId} text="아이디" value={id} />
           <PasswordController
             setPassword={setPassword}

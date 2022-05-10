@@ -73,7 +73,7 @@ const BtnBox: React.FC<PropsType> = ({
         console.log("register");
         setter?.();
         break;
-      case "비밀번호 재발급":
+      case "비밀번호 재설정":
         console.log("new Password");
         setter?.();
         break;
