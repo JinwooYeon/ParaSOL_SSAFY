@@ -2,7 +2,7 @@ package com.parasol.core.grpc;
 
 import com.parasol.core.api_model.BankUserLoginRequest;
 import com.parasol.core.api_model.BankUserLoginResponse;
-import com.parasol.core.lib.*;
+import com.parasol.core_interface.*;
 import com.parasol.core.service.AccountService;
 import com.parasol.core.service.BankUserService;
 import io.grpc.stub.StreamObserver;
