@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 
 const Delete = ({ navigation }: any) => {
-  const url = "http://k65101.p.ssafy.io:8080/user";
+  const url = "http://k6s101.p.ssafy.io:8080/user";
 
   const deleteUser = async () => {
     await axios
