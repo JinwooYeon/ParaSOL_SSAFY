@@ -1,9 +1,7 @@
 package com.parasol.core.service;
 
 import com.parasol.core.VO.Balance;
-import com.parasol.core.api_model.AccountOpenRequest;
-import com.parasol.core.api_model.AccountRequest;
-import com.parasol.core.api_model.ClientInfo;
+import com.parasol.core.api_model.*;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.Client;
 import com.parasol.core.repository.AccountRepository;
@@ -14,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,10 +42,18 @@ public class AccountService {
     }
 
 
-    public List<Account> getAllAccount(@Valid ClientInfo clientInfo) {
-        Client client = clientService.findById(clientInfo.getId());
+    public List<AccountInfo> getAllAccount(@Valid AccountListQueryRequest request) {
+        Client client = clientService.findById(request.getId());
+        List<AccountInfo> result = new ArrayList<>();
 
-        return accountRepository.findByClient(client);
+        for(Account element : accountRepository.findByClient(client)){
+            AccountInfo accountInfo = new AccountInfo();
+
+            accountInfo.setBankAccountNumber(element.getId());
+            result.add(accountInfo);
+        }
+
+        return result;
     }
 
 
@@ -67,11 +74,10 @@ public class AccountService {
         return true;
     }
 
+    @Transactional
     public boolean withdraw(@Valid AccountRequest request) {
         // from 계좌에서 출금
         Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
-
-        // Long fromBalance = accountFrom.get().getBalance() - request.getAmount();
         Long fromBalance = validationService.calculateBalance(new Balance(accountFrom.get().getBalance() - request.getAmount()));
         // from 계좌에서 입금 금액만큼 빼기
         accountFrom.get().setBalance(fromBalance);

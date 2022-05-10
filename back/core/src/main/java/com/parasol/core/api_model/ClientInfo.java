@@ -1,14 +1,25 @@
 package com.parasol.core.api_model;
 
-import com.parasol.core.entity.Client;
+import com.parasol.core.entity.BankUser;
 import io.swagger.annotations.ApiModel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.lang.Nullable;
+
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel("ClientInfo")
-public class ClientInfo extends Client {
+public class ClientInfo {
+    @Nullable
+    private String id;
+
+    @NotBlank
+    private String name;
+
+    @Nullable
+    private BankUser bankUser;
 }

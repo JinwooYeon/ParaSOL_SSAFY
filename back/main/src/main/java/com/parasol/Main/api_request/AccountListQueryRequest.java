@@ -1,14 +1,19 @@
 package com.parasol.Main.api_request;
 
-import com.parasol.Main.api_model.ClientInfo;
 import io.swagger.annotations.ApiModel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel("AccountListQueryRequest")
-public class AccountListQueryRequest extends ClientInfo {
+public class AccountListQueryRequest{
+    @ApiModelProperty(name = "id")
+    @NotBlank
+    private String id;
 }

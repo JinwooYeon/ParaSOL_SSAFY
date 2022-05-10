@@ -19,8 +19,6 @@ import java.util.List;
 public class AccountService {
     @Autowired
     private OpenAccountRequestFactory openAccountRequestFactory;
-//    @Autowired
-//    private CloseAccountRequestFactory closeAccountRequestFactory;
     @Autowired
     private QueryAccountBalanceRequestFactory queryAccountBalanceRequestFactory;
     @Autowired
@@ -33,53 +31,27 @@ public class AccountService {
     private WithdrawRequestFactory withdrawRequestFactory;
 
     public Mono<String> create(AccountOpenRequest request) {
-        String resident = request.getResidentNumber();
-        int password = request.getAccountPassword();
-        String name = request.getName();
         return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
-    public Mono<AccountListQueryResultResponse> getAllAccount(AccountListQueryRequest request) {
-        String name = request.getName();
-        String residentNumber = request.getResidentNumber();
-
+    public Mono<List<AccountInfo>> getAllAccount(AccountListQueryRequest request) {
         return queryAccountListRequestFactory.createQueryAccountListRequest(request);
     }
 
     public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
-        String bankName = request.getBankName();
-        String accountNo = request.getBankAccountNumber();
 
         return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
     }
 
     public Mono<List<AccountHistory>> getHistory(AccountHistoryQueryRequest request) {
-        String bankName = request.getBankName();
-        String accountNo = request.getBankAccountNumber();
-
         return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request);
     }
 
     public Mono<Boolean> deposit(DepositRequest request) {
-        // TODO: 메소드명 수정 필요 @선민기
-        //depositRequestFactory.createDepositRequest(request);
-        AccountInfo accountFrom = request.getAccountFrom();
-        AccountInfo accountTo = request.getAccountTo();
-        long amount = request.getAmount();
-        TransactionType method = request.getMethod();
-
         return depositRequestFactory.run(request);
     }
 
     public Mono<Boolean> withdraw(WithdrawRequest request) {
-        // TODO: 구현 수정 필요 @선민기
-        //withdrawRequestFactory.createWithdrawRequest(request);
-
-        AccountInfo accountFrom = request.getAccountFrom();
-        AccountInfo accountTo = request.getAccountTo();
-        long amount = request.getAmount();
-        TransactionType method = request.getMethod();
-
         return withdrawRequestFactory.run(request);
     }
 }
