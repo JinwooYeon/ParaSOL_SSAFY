@@ -9,6 +9,7 @@ interface PropsType {
   onSubmit?: any;
   deleteUser?: any;
   navigation?: any;
+  setMethod?: (a: boolean) => void;
 }
 
 const BtnBox: React.FC<PropsType> = ({
@@ -20,16 +21,19 @@ const BtnBox: React.FC<PropsType> = ({
   onSubmit,
   deleteUser,
   navigation,
+  setMethod,
 }) => {
   const onPress = () => {
     switch (text) {
       case "충전하기":
         console.log("charge");
-        navigation?.navigate("Charging");
+        setMethod?.(true);
+        navigation?.navigate("Waiting");
         break;
       case "출금하기":
         console.log("withdraw");
-        navigation?.navigate("Withdrawing");
+        setMethod?.(false);
+        navigation?.navigate("Waiting");
         break;
       case "송금하기":
         console.log("transaction");

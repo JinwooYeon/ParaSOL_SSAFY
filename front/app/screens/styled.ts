@@ -31,8 +31,8 @@ export const LayoutContainer = styled.View`
 `;
 export const HeaderContainer = styled.View`
   /* background-color: red; */
-  height: 110px;
-  margin-bottom: 8%;
+  height: 20%;
+  margin-bottom: 3%;
 `;
 export const ContentFooterContainer = styled.View`
   /* background-color: black; */
@@ -72,6 +72,14 @@ export const Balance = styled.Text`
   margin-left: 2%;
 `;
 
+// Content _ Pay
+export const WaitingContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  margin: 20%;
+`;
+
 // Content _ Home
 export const QRcodeContainer = styled.View`
   border-width: 2px;
@@ -79,8 +87,8 @@ export const QRcodeContainer = styled.View`
   border-color: ${mainBlue};
   justify-content: space-between;
   align-items: center;
-  margin-top: 15%;
-  margin-bottom: 20%;
+  /* margin-top: 18%; */
+  /* margin-bottom: 18%; */
   padding-top: 5%;
   padding-bottom: 5%;
 `;
