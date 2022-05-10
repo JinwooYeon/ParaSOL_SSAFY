@@ -10,6 +10,7 @@ import com.parasol.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class BankUserService {
     @Autowired
     private BankUserRepository bankUserRepository;
 
+    @Transactional
     public String createBankUser(@Valid BankUserCreateRequest request) throws IllegalStateException{
         BankUser bankUser = BankUser.builder()
                 .id(UUID.randomUUID().toString())
