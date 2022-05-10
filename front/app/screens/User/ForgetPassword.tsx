@@ -20,7 +20,7 @@ interface PropsType {
 const ForgetPassword: React.FC<PropsType> = ({ navigation }) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const url = "http://k6s101.p.ssafy.io:8080/client/password";
+  const url = "http://k6S101.p.ssafy.io:8080/client/password";
 
   const getNewPassword = async () => {
     const data = {
