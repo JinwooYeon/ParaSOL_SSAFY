@@ -22,6 +22,9 @@ public class Client {
 
     @NotBlank
     private String name;
+    @NotBlank
+    @Column(unique=true)
+    private String residentNumber;
 
     @OneToOne
     @JoinColumn(name="bank_user_id")

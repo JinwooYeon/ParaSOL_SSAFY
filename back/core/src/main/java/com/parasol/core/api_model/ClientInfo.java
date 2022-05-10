@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -23,4 +24,6 @@ public class ClientInfo {
     @NotBlank
     @Size(max=14, min=14)
     private String residentNumber;
+    @Nullable
+    private String id;
 }

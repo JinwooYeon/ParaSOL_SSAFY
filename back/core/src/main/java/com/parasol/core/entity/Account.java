@@ -21,7 +21,7 @@ import java.util.List;
 public class Account {
     @Id
     private String id;
-
+    
     @NotBlank
     @Size(min = 4, max = 4)
     private String password;
