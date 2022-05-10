@@ -2,6 +2,8 @@ package com.parasol.BaaS.config;
 
 import com.parasol.BaaS.auth.jwt.JwtAuthenticationFilter;
 import com.parasol.BaaS.auth.jwt.UserDetailService;
+import com.parasol.BaaS.auth.oauth.OAuth2SuccessHandler;
+import com.parasol.BaaS.auth.oauth.ParasolOauth2UserService;
 import com.parasol.BaaS.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private UserDetailService userDetailService;
+    private final ParasolOauth2UserService parasolOauth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Autowired
-    public SpringSecurityConfig(@Lazy UserService userService, UserDetailService userDetailService) {
+    public SpringSecurityConfig(@Lazy UserService userService, UserDetailService userDetailService,
+                                ParasolOauth2UserService parasolOauth2UserService, OAuth2SuccessHandler oAuth2SuccessHandler) {
         this.userService = userService;
         this.userDetailService = userDetailService;
+        this.parasolOauth2UserService = parasolOauth2UserService;
+        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
     }
 
     @Override
@@ -44,7 +51,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
             .authorizeRequests()
-            .anyRequest().permitAll();
+            .anyRequest().permitAll()
+            .and()
+            .oauth2Login()
+            .successHandler(oAuth2SuccessHandler)
+            .userInfoEndpoint()
+            .userService(parasolOauth2UserService);
     }
 
     @Bean
