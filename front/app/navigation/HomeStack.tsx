@@ -1,14 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import BalanceBox from "../components/BalanceBox";
-import BtnBox from "../components/BtnBox";
-import Home from "../screens/Home";
-import {
-  ContentContainer,
-  ContentFooterContainer,
-  FooterContainer,
-  HeaderContainer,
-  LayoutContainer,
-} from "../screens/styled";
+import Home from "../screens/HomeStack/Home";
+import Transaction from "../screens/HomeStack/Transaction";
 
 interface PropsType {
   balance: string;
@@ -16,24 +8,6 @@ interface PropsType {
 }
 
 const Stack = createNativeStackNavigator();
-
-const Transaction: React.FC<PropsType> = ({ balance, navigation }) => {
-  return (
-    <LayoutContainer>
-      <HeaderContainer>
-        <BalanceBox category="파라솔 PAY" num={balance} />
-      </HeaderContainer>
-      <ContentFooterContainer>
-        <ContentContainer></ContentContainer>
-        <FooterContainer>
-          <BtnBox color="blue" text="QR 스캔" navigation={navigation} />
-          <BtnBox color="white" text="뒤로" navigation={navigation} />
-          {/* <BtnBox color="red" text="초기화" navigation={navigation} /> */}
-        </FooterContainer>
-      </ContentFooterContainer>
-    </LayoutContainer>
-  );
-};
 
 const HomeStack: React.FC<PropsType> = ({ balance }) => {
   return (
