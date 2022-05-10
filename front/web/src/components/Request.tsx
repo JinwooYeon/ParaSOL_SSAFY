@@ -85,13 +85,21 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
                           handleChange(re.value, e.target.value);
                         }}
                         value={
+                          // re.value === "accessToken" ||
+                          // re.value === "refreshToken"
+                          //   ? `${re.value}` === undefined
+                          //     ? "로그인을 해야합니다!"
+                          //     : `${re.value}` === "accessToken"
+                          //     ? accessToken || ""
+                          //     : refreshToken || ""
+                          //   : formData[re.value] || ""
                           re.value === "accessToken" ||
                           re.value === "refreshToken"
-                            ? `${re.value}` === undefined
-                              ? "로그인을 해야합니다!"
-                              : `${re.value}` === "accessToken"
-                              ? accessToken
-                              : refreshToken
+                            ? accessToken || refreshToken
+                              ? re.value === "accessToken"
+                                ? accessToken
+                                : refreshToken
+                              : "로그인을 해야합니다!"
                             : formData[re.value] || ""
                         }
                         InputProps={{
