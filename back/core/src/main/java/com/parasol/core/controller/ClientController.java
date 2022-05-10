@@ -1,5 +1,6 @@
 package com.parasol.core.controller;
 
+import com.parasol.core.api_model.ClientInfo;
 import com.parasol.core.entity.Client;
 import com.parasol.core.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +16,15 @@ public class ClientController {
 
     @PostMapping("client")
     public String CreateClient(
-            @RequestBody @Valid Client client
+            @RequestBody @Valid ClientInfo client
     ) {
-        String result = clientService.create(client.getName(), client.getResidentNumber());
-
-        return result;
+        return clientService.create(client.getName());
     }
 
     @GetMapping("client")
     public Client GetClient(
             @RequestParam("id") String id
     ) {
-        Client result = clientService.findById(id);
-
-        return result;
+        return clientService.findById(id);
     }
 }
