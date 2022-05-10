@@ -9,13 +9,13 @@ interface PropsType {
 }
 
 const IdController: React.FC<PropsType> = ({ setId, text, value }) => {
-  console.log(value);
   return (
     <View>
       <TextInputController
         onChangeText={setId}
         value={value}
         placeholder={text}
+        keyboardType="visible-password"
       />
     </View>
   );

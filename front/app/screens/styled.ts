@@ -267,6 +267,8 @@ export const Btn = styled.TouchableOpacity<{ color: string }>`
   padding-right: 15%;
   padding-bottom: 2%;
   padding-left: 15%;
+  margin: 10px 0px;
+  width: 300px;
 `;
 export const BtnText = styled.Text<{ white: boolean }>`
   font-size: 20px;

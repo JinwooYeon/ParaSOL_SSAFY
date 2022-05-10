@@ -5,6 +5,7 @@ import {
   Button,
   TouchableOpacity,
   Alert,
+  View,
 } from "react-native";
 import styled from "styled-components/native";
 import axios from "axios";
@@ -16,7 +17,7 @@ import BtnBox from "../../components/BtnBox";
 
 const ContentContainer = styled.View`
   flex: 1;
-  justify-content: center;
+  margin-top: 20px;
   align-items: center;
 `;
 
@@ -55,6 +56,7 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
         }
       })
       .catch((err: any) => {
+        Alert.alert("에러가 발생했습니다. 잠시 후에 다시 시도해주세요.");
         console.log(err);
       });
     setId("");
@@ -71,41 +73,32 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
           text="비밀번호"
           value={password}
         />
-        <BtnBox
-          color="blue"
-          text="로그인"
-          setter={onSubmit}
-          setLogin={setLogin}
-        />
-        <TouchableOpacity
-          style={styles.textBtn}
-          onPress={() => navigate("Register")}
-        >
-          <Text>회원이 아니신가요?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.textBtn}
-          onPress={() => navigate("ForgetPassword")}
-        >
-          <Text>비밀번호를 잊으셨나요?</Text>
-        </TouchableOpacity>
+        <View style={{ marginTop: 50 }}>
+          <BtnBox
+            color="blue"
+            text="로그인"
+            setter={onSubmit}
+            setLogin={setLogin}
+          />
+          <TouchableOpacity onPress={() => navigate("Register")}>
+            <Text style={styles.textBtn}>회원이 아니신가요?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigate("ForgetPassword")}>
+            <Text style={styles.textBtn}>비밀번호를 잊으셨나요?</Text>
+          </TouchableOpacity>
+        </View>
       </ContentContainer>
     </LayoutContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    width: 300,
-    // backgroundColor: "#A23412",
-    fontSize: 30,
-    fontWeight: "200",
-    borderColor: "black",
-    borderStyle: "solid",
-    borderWidth: 1,
+  textBtn: {
+    fontSize: 18,
+    color: "grey",
+    marginVertical: 7,
+    textAlign: "center",
   },
-  textBtn: {},
 });
 
 export default Login;

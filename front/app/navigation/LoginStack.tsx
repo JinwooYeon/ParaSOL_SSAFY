@@ -13,6 +13,8 @@ const LoginStack: React.FC<PropsType> = ({ setLogin }) => {
   return (
     <Stack.Navigator
       screenOptions={{
+        contentStyle: { backgroundColor: "white" },
+        animation: "slide_from_right",
         headerShown: false,
       }}
     >
