@@ -11,7 +11,7 @@ plugins {
     id 'com.google.protobuf' version "${protobufPluginVersion}"
 }
 
-group 'org.example'
+group 'com.parasol'
 version '1.0-SNAPSHOT'
 
 repositories {
