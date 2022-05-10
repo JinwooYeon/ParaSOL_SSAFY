@@ -25,6 +25,16 @@ struct payload_b {
 	char account_number[14];
 };
 
+struct scus0001a_in {
+    char intnbk_user_id[10];
+    char intndk_pwd[24];
+};
+
+struct scus0001a_out {
+    char rst_yn[1];
+    char cusno[10];
+};
+
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
@@ -48,6 +58,27 @@ class CoreAPIClient {
             return response.balance();
         } else {
             return "RPC Failed";
+        }
+    }
+
+    struct scus0001a_out* login(const struct scus0001a_in raw_request) {
+        core_api::LoginRequest request;
+        request.set_id(raw_request.intnbk_user_id);
+        request.set_password(raw_request.intndk_pwd);
+
+        core_api::LoginResponse response;
+        ClientContext context;
+
+        Status status = stub_->login(&context, request, &response);
+
+        struct scus0001a_out* raw_response = (struct scus0001a_out*)malloc(sizeof(struct scus0001a_out));
+        memcpy(&raw_response->rst_yn, response.is_success().c_str(), 1);
+        memcpy(&raw_response->cusno, response.cusno().c_str(), 10);
+
+        if (status.ok()) {
+            return raw_response;
+        } else {
+            return NULL;
         }
     }
 
@@ -134,7 +165,14 @@ int main(int argc, char **argv) {
                     std::cout << "The balance: " << response << "\n";
 
                     write(clnt_sock, response.c_str(), response.size());
-                }
+                } else if (payload_len == sizeof(struct scus0001a_in)) {
+                     struct scus0001a_in req_buf;
+                     memcpy(&req_buf, &sock_buf, sizeof(payload_b));
+
+                     struct scus0001a_out *res_buf = client.login(req_buf);
+                     write(clnt_sock, &res_buf, sizeof(res_buf));
+                     free(res_buf);
+                 }
             }
             close(clnt_sock);
             exit(0);
