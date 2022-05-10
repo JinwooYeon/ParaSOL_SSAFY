@@ -4,16 +4,15 @@ import IdController from "../../components/Controller/IdController";
 import PasswordController from "../../components/Controller/PasswordController";
 import PasswordConfirmController from "../../components/Controller/PasswordConfirmController";
 import NameController from "../../components/Controller/NameController";
-import { LayoutContainer, HeaderText } from "../styled";
+import { LayoutContainer, HeaderText, FooterContainer } from "../styled";
 import axios from "axios";
 import BtnBox from "../../components/BtnBox";
 import { Alert, View } from "react-native";
 
 const ContentContainer = styled.View`
   flex: 1;
-  margin-top: 20px;
-  justify-content: center;
-  align-items: center;
+  margin: 20px auto;
+  width: 80%;
 `;
 
 interface PropsType {
@@ -58,18 +57,20 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
     <LayoutContainer>
       <HeaderText>회원가입</HeaderText>
       <ContentContainer>
-        <IdController setId={setId} text="아이디" value={id} />
-        <PasswordController
-          setPassword={setPassword}
-          text="비밀번호"
-          value={password}
-        />
-        <PasswordConfirmController
-          setPasswordConfirm={setPasswordConfirm}
-          value={passwordConfirm}
-        />
-        <NameController setName={setName} text="이름" value={name} />
-        <View style={{ marginTop: 50 }}>
+        <View style={{ marginBottom: 80 }}>
+          <IdController setId={setId} text="아이디" value={id} />
+          <PasswordController
+            setPassword={setPassword}
+            text="비밀번호"
+            value={password}
+          />
+          <PasswordConfirmController
+            setPasswordConfirm={setPasswordConfirm}
+            value={passwordConfirm}
+          />
+          <NameController setName={setName} text="이름" value={name} />
+        </View>
+        <FooterContainer>
           <BtnBox
             color="blue"
             text="회원가입"
@@ -77,7 +78,7 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
             navigation={navigation}
           ></BtnBox>
           <BtnBox color="white" text="뒤로" navigation={navigation}></BtnBox>
-        </View>
+        </FooterContainer>
       </ContentContainer>
     </LayoutContainer>
   );
