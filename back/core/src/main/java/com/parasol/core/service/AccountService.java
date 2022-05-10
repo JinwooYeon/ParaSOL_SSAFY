@@ -1,7 +1,9 @@
 package com.parasol.core.service;
 
 import com.parasol.core.VO.Balance;
+import com.parasol.core.api_model.AccountOpenRequest;
 import com.parasol.core.api_model.AccountRequest;
+import com.parasol.core.api_model.ClientInfo;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.Client;
 import com.parasol.core.repository.AccountRepository;
@@ -22,17 +24,31 @@ public class AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private ValidationService validationService;
+    @Autowired
+    private ClientService clientService;
 
-    public String Create(@Valid Account account) {
+
+    public String Create(@Valid AccountOpenRequest accountOpenRequest) {
+        Client client = clientService.findById(accountOpenRequest.getId());
+        Account account = new Account();
+
+        if(client == null)
+            return null;
+
+        account.setClient(client);
+        account.setPassword(accountOpenRequest.getAccountPassword());
         account.setId(AccountManager.GenerateAccountNumber());
-        accountRepository.save(account);
-        return account.getId();
+
+        return accountRepository.save(account).getId();
     }
 
-    public List<Account> getAllAccount(@Valid Client client) {
-        List<Account> accounts = accountRepository.findByClient(client);
-        return accounts;
+
+    public List<Account> getAllAccount(@Valid ClientInfo clientInfo) {
+        Client client = clientService.findById(clientInfo.getId());
+
+        return accountRepository.findByClient(client);
     }
+
 
     public Long getBalance(String accountNo) {
         Optional<Account> account = accountRepository.findById(accountNo);

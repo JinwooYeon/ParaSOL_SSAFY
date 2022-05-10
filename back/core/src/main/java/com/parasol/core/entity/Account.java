@@ -9,6 +9,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -19,8 +21,10 @@ import java.util.List;
 public class Account {
     @Id
     private String id;
-
-    private Integer password;
+    
+    @NotBlank
+    @Size(min = 4, max = 4)
+    private String password;
 
     private Long balance = Long.valueOf(0);
 
