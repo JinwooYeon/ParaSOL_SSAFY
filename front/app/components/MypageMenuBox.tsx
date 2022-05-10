@@ -4,6 +4,7 @@ import {
   MypageMenuTextContainer,
 } from "../screens/styled";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface PropsType {
   menu: string;
@@ -43,6 +44,7 @@ const MypageMenuBox: React.FC<PropsType> = ({
         console.log("Delete user");
         break;
       case "로그아웃":
+        AsyncStorage.clear();
         setLogin(false);
         console.log("log OUT");
         break;
