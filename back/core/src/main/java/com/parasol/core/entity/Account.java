@@ -24,7 +24,7 @@ public class Account {
 
     @NotBlank
     @Size(min = 4, max = 4)
-    private Integer password;
+    private String password;
 
     private Long balance = Long.valueOf(0);
 

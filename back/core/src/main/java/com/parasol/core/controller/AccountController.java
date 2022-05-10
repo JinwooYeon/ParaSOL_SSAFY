@@ -30,15 +30,7 @@ public class AccountController {
     public String createAccount(
             @RequestBody @Valid AccountOpenRequest accountOpenRequest
     ) {
-        Client client = clientService.findByNameAndResidentNumber(accountOpenRequest.getName(), accountOpenRequest.getResidentNumber());
-
-        Account account = new Account();
-        account.setClient(client);
-        account.setPassword(accountOpenRequest.getAccountPassword());
-
-        String result = accountService.Create(account);
-
-        return result;
+        return accountService.Create(accountOpenRequest);
     }
 
     // 계좌 폐쇄
@@ -56,28 +48,25 @@ public class AccountController {
     public List<Account> getAllAccount(
             @RequestBody @Valid ClientInfo clientInfo
     ) {
-        Client client = clientService.findByNameAndResidentNumber(clientInfo.getName(), clientInfo.getResidentNumber());
-        List<Account> result = accountService.getAllAccount(client);
-
-        return result;
+        return accountService.getAllAccount(clientInfo);
     }
 
     // 계좌 잔액 조회
     @GetMapping("account/balance")
     @ResponseBody
     public Long getBalance(
-            @RequestParam("accountNo") String accountNo
+            @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return accountService.getBalance(accountNo);
+        return accountService.getBalance(accountQueryRequest.getAccountNo());
     }
 
     // 계좌 거래 내역 조회
     @GetMapping("account/history")
     @ResponseBody
     public List<AccountHistory> getAccountHistory(
-            @RequestParam("accountNo") String accountNo
+            @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return transactionHistoryService.getAccountHistory(accountNo);
+        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNo());
     }
 
     // 계좌 입금. to 계좌에 입금
