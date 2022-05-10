@@ -9,6 +9,7 @@ import com.parasol.BaaS.auth.jwt.UserDetail;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,9 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @Value("${sbj-api-server.base-url}") String baseUrl;
+
     @Autowired
     private UserService userService;
 
@@ -40,7 +44,7 @@ public class UserController {
 
     @GetMapping("/login/google")
     public void loginGoogle(HttpServletResponse response) throws IOException {
-        String redirectUri = "http://localhost:8080/oauth2/authorization/google";
+        String redirectUri = baseUrl + "/oauth2/authorization/google";
         response.sendRedirect(redirectUri);
     }
 

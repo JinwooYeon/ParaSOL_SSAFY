@@ -5,6 +5,7 @@ import com.parasol.BaaS.db.repository.TokenRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -20,6 +21,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    @Value("${sbj-api-server.base-url}") String baseUrl;
+
     private final UserRequestMapper userRequestMapper;
 
     @Autowired
@@ -49,7 +52,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             userRepository.save(user);
         }
 
-        String redirectUri = UriComponentsBuilder.fromUriString("http://localhost:8080/user/login/oauth")
+        String redirectUri = UriComponentsBuilder.fromUriString(baseUrl + "/user/login/oauth")
                 .queryParam("id", id)
                 .toUriString();
         getRedirectStrategy().sendRedirect(request, response, redirectUri);
