@@ -39,4 +39,7 @@ public class AccountHistory {
     @ApiModelProperty(name = "transactionAccount")
     @NotBlank
     private String transactionAccount;
+    @ApiModelProperty(name = "transactionAccount")
+    @NotBlank
+    private String transactionOpponent;
 }

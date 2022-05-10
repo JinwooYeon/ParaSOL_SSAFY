@@ -44,7 +44,6 @@ public class AccountService {
         // to 계좌에 입금
         // 일단 같은 은행 계좌라고 생각하고 할게욥
         Optional<Account> accountTo = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
-
         Long toBalance = accountTo.get().getBalance() + request.getAmount();
         // to 계좌에서 입금 금액만큼 추가
         accountTo.get().setBalance(toBalance);
