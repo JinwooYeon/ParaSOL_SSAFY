@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import IdController from "../../components/Controller/IdController";
 import PasswordController from "../../components/Controller/PasswordController";
 import { LayoutContainer, HeaderText } from "../styled";
+import BtnBox from "../../components/BtnBox";
 
 const ContentContainer = styled.View`
   flex: 1;
@@ -23,12 +24,11 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
   const [password, setPassword] = useState("");
   const url = "http://k6S101.p.ssafy.io:8080/user/login";
 
-  const onSubmit = async (id: string, password: string) => {
+  const onSubmit = async () => {
     const data = {
       id: id,
       password: password,
     };
-    console.log(data);
     await axios
       .post(url, data, {
         headers: {
@@ -37,9 +37,12 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
       })
       .then((res: any) => {
         console.log(res);
-        const token = res.data.token;
-        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-        AsyncStorage.setItem("token", token);
+        const accessToken = res.data.accessToken;
+        const refreshToken = res.data.refreshToken;
+        axios.defaults.headers.common["Authorization"] =
+          "Bearer " + accessToken;
+        AsyncStorage.setItem("accessToken", accessToken);
+        AsyncStorage.setItem("refreshToken", refreshToken);
       })
       .catch((err: any) => {
         console.log(err);
@@ -48,18 +51,18 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
     setPassword("");
   };
 
-  const onLoginTemp = () => {
-    setLogin(true);
-  };
-
   return (
     <LayoutContainer>
       <HeaderText>로그인</HeaderText>
       <ContentContainer>
         <IdController setId={setId} text="아이디" />
         <PasswordController setPassword={setPassword} text="비밀번호" />
-        <Button title="Submit" onPress={() => onSubmit(id, password)}></Button>
-        <Button title="LOGIN" onPress={onLoginTemp}></Button>
+        <BtnBox
+          color="blue"
+          text="로그인"
+          setter={onSubmit}
+          setLogin={setLogin}
+        />
 
         <TouchableOpacity
           style={styles.textBtn}

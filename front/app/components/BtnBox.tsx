@@ -4,6 +4,7 @@ interface PropsType {
   color: string;
   text: string;
   setPrice?: (a: string) => void;
+  setLogin?: (a: boolean) => void;
   setter?: any;
   navigation?: any;
   setMethod?: (a: boolean) => void;
@@ -13,6 +14,7 @@ const BtnBox: React.FC<PropsType> = ({
   color,
   text,
   setPrice,
+  setLogin,
   setter,
   navigation,
   setMethod,
@@ -64,10 +66,13 @@ const BtnBox: React.FC<PropsType> = ({
         break;
       case "로그인":
         console.log("login");
+        setter?.();
+        setLogin?.(true);
         break;
       case "회원가입":
         console.log("register");
         setter?.();
+        navigation?.navigate("login");
         break;
       case "비밀번호 재발급":
         console.log("new Password");

@@ -61,7 +61,12 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
         <PasswordController setPassword={setPassword} text="비밀번호" />
         <PasswordConfirmController setPasswordConfirm={setPasswordConfirm} />
         <NameController setName={setName} text="이름" />
-        <BtnBox color="white" text="회원가입" setter={onSubmit}></BtnBox>
+        <BtnBox
+          color="white"
+          text="회원가입"
+          setter={onSubmit}
+          navigation={navigation}
+        ></BtnBox>
         <BtnBox color="white" text="뒤로" navigation={navigation}></BtnBox>
       </ContentContainer>
     </LayoutContainer>
