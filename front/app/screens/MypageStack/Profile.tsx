@@ -7,13 +7,13 @@ import {
   HeaderText,
   LayoutContainer,
 } from "../styled";
-import { Text, TextInput } from "react-native";
+import { Text } from "react-native";
 import axios from "axios";
 
 const Profile = ({ navigation }: any) => {
   const [myInfo, setMyInfo] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
-  const url = "http://k65101.p.ssafy.io:8080/user";
+  const url = "http://k6S101.p.ssafy.io:8080/user";
 
   const getMyInfo = async () => {
     await axios
@@ -38,16 +38,9 @@ const Profile = ({ navigation }: any) => {
       ) : (
         <HeaderText>회원정보 수정</HeaderText>
       )}
-
       <ContentFooterContainer>
         <ContentContainer>
-          {!isUpdate ? (
-            myInfo.map((info) => {
-              return <Text>{info}</Text>;
-            })
-          ) : (
-            <Text>정보 수정</Text>
-          )}
+          {!isUpdate ? <Text>정보</Text> : <Text>정보 수정</Text>}
         </ContentContainer>
         <FooterContainer>
           {!isUpdate ? (
