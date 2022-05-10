@@ -40,8 +40,8 @@ const ForgetPassword: React.FC<PropsType> = ({ navigation }) => {
   return (
     <ContentContainer>
       <Text>ForgetPassword</Text>
-      <IdController setId={setId} text="아이디" />
-      <NameController setName={setName} text="이름" />
+      <IdController setId={setId} text="아이디" value={id} />
+      <NameController setName={setName} text="이름" value={name}/>
       <BtnBox color="blue" text="비밀번호 재발급" setter={getNewPassword} />
       <BtnBox color="white" text="뒤로" navigation={navigation} />
     </ContentContainer>
