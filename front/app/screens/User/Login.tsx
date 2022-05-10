@@ -10,9 +10,8 @@ import BtnBox from "../../components/BtnBox";
 
 const ContentContainer = styled.View`
   flex: 1;
-  margin-top: 20px;
-  justify-contents: center;
-  align-items: center;
+  margin: 20px auto;
+  width: 80%;
 `;
 
 interface PropsType {
@@ -61,24 +60,28 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
     <LayoutContainer>
       <HeaderText>로그인</HeaderText>
       <ContentContainer>
-        <IdController setId={setId} text="아이디" value={id} />
-        <PasswordController
-          setPassword={setPassword}
-          text="비밀번호"
-          value={password}
-        />
-        <BtnBox
-          color="blue"
-          text="로그인"
-          setter={onSubmit}
-          setLogin={setLogin}
-        />
-        <TouchableOpacity onPress={() => navigate("Register")}>
-          <Text style={styles.textBtn}>회원이 아니신가요?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate("ForgetPassword")}>
-          <Text style={styles.textBtn}>비밀번호를 잊으셨나요?</Text>
-        </TouchableOpacity>
+        <View style={{ marginBottom: 80 }}>
+          <IdController setId={setId} text="아이디" value={id} />
+          <PasswordController
+            setPassword={setPassword}
+            text="비밀번호"
+            value={password}
+          />
+        </View>
+        <FooterContainer>
+          <BtnBox
+            color="blue"
+            text="로그인"
+            setter={onSubmit}
+            setLogin={setLogin}
+          />
+          <TouchableOpacity onPress={() => navigate("Register")}>
+            <Text style={styles.textBtn}>회원이 아니신가요?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigate("ForgetPassword")}>
+            <Text style={styles.textBtn}>비밀번호를 잊으셨나요?</Text>
+          </TouchableOpacity>
+        </FooterContainer>
       </ContentContainer>
     </LayoutContainer>
   );
