@@ -9,13 +9,14 @@ RUN gradle -b ./build.gradle build
 
 FROM gradle:7.4.1-jdk11 as builder
 WORKDIR /app
-RUN mkdir -p /app/libs
-COPY --from=interface_builder /app/build/libs/*.jar /app/libs
+RUN mkdir -p libs
+COPY --from=interface_builder /app/build/libs/*.jar libs
 COPY ./core/gradlew .
 COPY ./core/gradle .
 COPY ./core/build.gradle .
 COPY ./core/settings.gradle .
-COPY ./core/src .
+RUN mkdir -p src
+COPY ./core/src src
 RUN gradle -b ./build.gradle bootJar
 
 FROM openjdk:11-jre-slim
