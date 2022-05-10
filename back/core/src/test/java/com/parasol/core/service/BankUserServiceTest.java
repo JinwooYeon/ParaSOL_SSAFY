@@ -23,7 +23,7 @@ class BankUserServiceTest {
                 .password("parasol!@#")
                 .build();
 
-        String result = bankUserService.create(request);
+        String result = bankUserService.createBankUser(request);
         Assertions.assertThat(result).isNotEmpty();
     }
 }
