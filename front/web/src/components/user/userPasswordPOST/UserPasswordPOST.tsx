@@ -1,4 +1,5 @@
 import { Components } from "components/Components";
+import { PasswordResetRequest } from "model/Model";
 
 export const UserPasswordPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -8,7 +9,7 @@ export const UserPasswordPOST = () => {
     detail: "비밀번호 재설정",
     completed: false,
   };
-  const requestBody = {};
+  const requestBody = { PasswordResetRequest };
   ///////////////////////////////////
 
   return (
