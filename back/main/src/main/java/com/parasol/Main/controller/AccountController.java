@@ -1,9 +1,13 @@
 package com.parasol.Main.controller;
 
 import com.parasol.Main.api_model.AccountHistory;
+import com.parasol.Main.api_model.ClientInfo;
+import com.parasol.Main.api_model.Transaction;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
 import com.parasol.Main.api_response.AccountListQueryResultResponse;
+import com.parasol.Main.api_response.TransactionExecuteResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -84,7 +88,7 @@ public class AccountController {
     ) {
         DepositRequest request = new DepositRequest();
         request.setAccountFrom(depositRequest.getAccountFrom());
-        request.setNameTo(depositRequest.getNameTo());
+        request.setAccountTo(depositRequest.getAccountTo());
         request.setAmount(depositRequest.getAmount());
         request.setMethod(depositRequest.getMethod());
 
@@ -102,7 +106,7 @@ public class AccountController {
         WithdrawRequest request = new WithdrawRequest();
 
         request.setAccountFrom(withdrawRequest.getAccountFrom());
-        request.setNameTo(withdrawRequest.getNameTo());
+        request.setAccountTo(withdrawRequest.getAccountTo());
         request.setAmount(withdrawRequest.getAmount());
         request.setMethod(withdrawRequest.getMethod());
 
