@@ -1,23 +1,17 @@
 import React, { useState } from "react";
-import {
-  Text,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-  Alert,
-  View,
-} from "react-native";
+import { Text, StyleSheet, TouchableOpacity, Alert, View } from "react-native";
 import styled from "styled-components/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import IdController from "../../components/Controller/IdController";
 import PasswordController from "../../components/Controller/PasswordController";
-import { LayoutContainer, HeaderText } from "../styled";
+import { LayoutContainer, HeaderText, FooterContainer } from "../styled";
 import BtnBox from "../../components/BtnBox";
 
 const ContentContainer = styled.View`
   flex: 1;
   margin-top: 20px;
+  justify-contents: center;
   align-items: center;
 `;
 
@@ -73,20 +67,18 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
           text="비밀번호"
           value={password}
         />
-        <View style={{ marginTop: 50 }}>
-          <BtnBox
-            color="blue"
-            text="로그인"
-            setter={onSubmit}
-            setLogin={setLogin}
-          />
-          <TouchableOpacity onPress={() => navigate("Register")}>
-            <Text style={styles.textBtn}>회원이 아니신가요?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate("ForgetPassword")}>
-            <Text style={styles.textBtn}>비밀번호를 잊으셨나요?</Text>
-          </TouchableOpacity>
-        </View>
+        <BtnBox
+          color="blue"
+          text="로그인"
+          setter={onSubmit}
+          setLogin={setLogin}
+        />
+        <TouchableOpacity onPress={() => navigate("Register")}>
+          <Text style={styles.textBtn}>회원이 아니신가요?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigate("ForgetPassword")}>
+          <Text style={styles.textBtn}>비밀번호를 잊으셨나요?</Text>
+        </TouchableOpacity>
       </ContentContainer>
     </LayoutContainer>
   );

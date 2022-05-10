@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { Text, Button } from "react-native";
 import styled from "styled-components/native";
 import IdController from "../../components/Controller/IdController";
 import PasswordController from "../../components/Controller/PasswordController";
 import PasswordConfirmController from "../../components/Controller/PasswordConfirmController";
 import NameController from "../../components/Controller/NameController";
-import BirthController from "../../components/Controller/BirthController";
 import { LayoutContainer, HeaderText } from "../styled";
 import axios from "axios";
 import BtnBox from "../../components/BtnBox";
+import { Alert, View } from "react-native";
 
 const ContentContainer = styled.View`
   flex: 1;
-  justify-content: center;
+  margin-top: 20px;
+  justify-contents: center;
   align-items: center;
 `;
 
@@ -34,40 +34,50 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
       passwordConfirm: passwordConfirm,
       name: name,
     };
-    console.log(data);
-
     await axios
       .post(url, data)
       .then((res) => {
-        console.log(res);
-        navigation.navigate("Login");
+        // navigation.navigate("Login");
+        if (res.data) {
+          console.log(res);
+          setId("");
+          setPassword("");
+          setPasswordConfirm("");
+          setName("");
+        } else {
+          Alert.alert("입력 정보를 확인해주세요.");
+        }
       })
       .catch((err) => {
         console.log(err);
+        Alert.alert("에러가 발생했습니다. 잠시 후에 다시 시도해주세요.");
       });
-
-    setId("");
-    setPassword("");
-    setPasswordConfirm("");
-    setName("");
   };
 
   return (
     <LayoutContainer>
       <HeaderText>회원가입</HeaderText>
       <ContentContainer>
-        <Text>Register</Text>
-        <IdController setId={setId} text="아이디" />
-        <PasswordController setPassword={setPassword} text="비밀번호" />
-        <PasswordConfirmController setPasswordConfirm={setPasswordConfirm} />
-        <NameController setName={setName} text="이름" />
-        <BtnBox
-          color="white"
-          text="회원가입"
-          setter={onSubmit}
-          navigation={navigation}
-        ></BtnBox>
-        <BtnBox color="white" text="뒤로" navigation={navigation}></BtnBox>
+        <IdController setId={setId} text="아이디" value={id} />
+        <PasswordController
+          setPassword={setPassword}
+          text="비밀번호"
+          value={password}
+        />
+        <PasswordConfirmController
+          setPasswordConfirm={setPasswordConfirm}
+          value={passwordConfirm}
+        />
+        <NameController setName={setName} text="이름" value={name} />
+        <View style={{ marginTop: 50 }}>
+          <BtnBox
+            color="blue"
+            text="회원가입"
+            setter={onSubmit}
+            navigation={navigation}
+          ></BtnBox>
+          <BtnBox color="white" text="뒤로" navigation={navigation}></BtnBox>
+        </View>
       </ContentContainer>
     </LayoutContainer>
   );

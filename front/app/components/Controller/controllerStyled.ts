@@ -1,7 +1,6 @@
 import styled from "styled-components/native";
 
 export const TextInputController = styled.TextInput`
-  width: 300px;
   height: 60px;
   font-size: 30px;
   color: #010101;
