@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -33,6 +36,12 @@ public class UserController {
                 .accessToken(token.getAccessToken().getAccessToken())
                 .refreshToken(token.getRefreshToken().getRefreshToken())
                 .build();
+    }
+
+    @GetMapping("/login/google")
+    public void loginGoogle(HttpServletResponse response) throws IOException {
+        String redirectUri = "http://localhost:8080/oauth2/authorization/google";
+        response.sendRedirect(redirectUri);
     }
 
     @GetMapping("/login/oauth")
