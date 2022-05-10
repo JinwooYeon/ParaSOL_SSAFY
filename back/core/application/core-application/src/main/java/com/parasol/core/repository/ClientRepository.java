@@ -11,5 +11,4 @@ import java.util.Optional;
 @Transactional
 public interface ClientRepository extends JpaRepository<Client, String> {
     Optional<Client> findByNameAndResidentNumber(String name, String residentNumber);
-    Optional<Client> findByBankUser_Id(String id);
 }
