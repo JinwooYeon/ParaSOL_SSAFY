@@ -31,8 +31,8 @@ export const LayoutContainer = styled.View`
 `;
 export const HeaderContainer = styled.View`
   /* background-color: red; */
-  height: 20%;
-  margin-bottom: 3%;
+  height: 23%;
+  margin-bottom: 2%;
 `;
 export const ContentFooterContainer = styled.View`
   /* background-color: black; */
@@ -72,12 +72,30 @@ export const Balance = styled.Text`
   margin-left: 2%;
 `;
 
-// Content _ Pay
-export const WaitingContainer = styled.View`
+// Content _ Pay _ Confirm
+export const ConfirmContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
   margin: 20%;
+`;
+
+// Content _ Home _ Transaction
+export const TransactionContainer = styled.View`
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background-color: ${balanceGrey};
+  padding-top: 5%;
+  padding-right: 3%;
+  padding-bottom: 5%;
+  padding-left: 3%;
+`;
+export const TransactionTextInput = styled.TextInput`
+  /* background-color: green; */
+  width: 100%;
+  height: auto;
+  font-size: 25px;
 `;
 
 // Content _ Home
@@ -152,6 +170,7 @@ export const PriceInputContainer = styled.View`
   align-items: center;
   border-bottom-color: black;
   border-bottom-width: 2px;
+  margin-top: 10%;
   margin-bottom: 2%;
 `;
 export const PriceInputText = styled.Text`

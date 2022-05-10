@@ -1,47 +1,61 @@
 import BalanceBox from "../../components/BalanceBox";
 import BtnBox from "../../components/BtnBox";
+import PriceBox from "../../components/PriceBox";
 import {
   ContentContainer,
   ContentFooterContainer,
   FooterContainer,
   HeaderContainer,
   LayoutContainer,
+  TransactionContainer,
+  TransactionTextInput,
 } from "../styled";
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
-import { BarCodeScanner } from "expo-barcode-scanner";
+// import React, { useState, useEffect } from "react";
+// import { Text, View, StyleSheet, Button } from "react-native";
+// import { BarCodeScanner } from "expo-barcode-scanner";
 // import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 // import { Camera } from "expo-camera";
 
 interface PropsType {
   balance: string;
   navigation: any;
+  info: string;
+  setInfo: (a: string) => void;
+  price: string;
+  setPrice: (a: string) => void;
 }
 
-const Transaction: React.FC<PropsType> = ({ balance, navigation }) => {
-  const [hasPermission, setHasPermission] = useState<any>(null);
-  const [scanned, setScanned] = useState(true);
+const Transaction: React.FC<PropsType> = ({
+  balance,
+  navigation,
+  info,
+  setInfo,
+  price,
+  setPrice,
+}) => {
+  // const [hasPermission, setHasPermission] = useState<any>(null);
+  // const [scanned, setScanned] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await BarCodeScanner.requestPermissionsAsync();
+  //     setHasPermission(status === "granted");
+  //   })();
+  // }, []);
 
-  const handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
-    setScanned(true);
-    console.log(
-      `Bar code with type ${type} and data ${data} has been scanned!`
-    );
-  };
+  // const handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
+  //   setScanned(true);
+  //   console.log(
+  //     `Bar code with type ${type} and data ${data} has been scanned!`
+  //   );
+  // };
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <Text>Requesting for camera permission</Text>;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No access to camera</Text>;
+  // }
   //   const [hasPermission, setHasPermission] = useState(null);
   //   const [type, setType] = useState(Camera.Constants.Type.back);
 
@@ -59,6 +73,10 @@ const Transaction: React.FC<PropsType> = ({ balance, navigation }) => {
   //   if (hasPermission === false) {
   //     return <Text>No access to camera</Text>;
   //   }
+  const onChangeText = (s: string) => {
+    setInfo(s);
+  };
+
   return (
     <LayoutContainer>
       <HeaderContainer>
@@ -66,7 +84,7 @@ const Transaction: React.FC<PropsType> = ({ balance, navigation }) => {
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer>
-          <View style={styles.container}>
+          {/* <View style={styles.container}>
             <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
               style={StyleSheet.absoluteFillObject}
@@ -77,7 +95,7 @@ const Transaction: React.FC<PropsType> = ({ balance, navigation }) => {
                 onPress={() => setScanned(false)}
               />
             )}
-          </View>
+          </View> */}
           {/* <View style={styles.container}>
             <Camera style={styles.camera} type={type}>
               <View style={styles.buttonContainer}>
@@ -96,24 +114,37 @@ const Transaction: React.FC<PropsType> = ({ balance, navigation }) => {
               </View>
             </Camera>
           </View> */}
+          <TransactionContainer>
+            <TransactionTextInput
+              placeholder="송금할 주소를 입력해주세요."
+              value={info}
+              onChangeText={onChangeText}
+            />
+          </TransactionContainer>
+          <PriceBox price={price} setPrice={setPrice} />
         </ContentContainer>
         <FooterContainer>
-          <BtnBox color="blue" text="QR 스캔" navigation={navigation} />
+          <BtnBox color="blue" text="다음" navigation={navigation} />
           <BtnBox color="white" text="뒤로" navigation={navigation} />
-          {/* <BtnBox color="red" text="초기화" navigation={navigation} /> */}
+          <BtnBox
+            color="red"
+            text="초기화"
+            navigation={navigation}
+            setPrice={setPrice}
+          />
         </FooterContainer>
       </ContentFooterContainer>
     </LayoutContainer>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     flexDirection: "column",
+//     justifyContent: "center",
+//   },
+// });
 
 // const styles = StyleSheet.create({
 //   container: {
