@@ -18,10 +18,11 @@ public class ClientService {
     @Autowired
     private ValidationService validationService;
 
-    public String create(String name) {
+    public String create(String name, String residentNumber) {
         Client client = Client.builder()
                 .id(UUID.randomUUID().toString())
                 .name(name)
+                .residentNumber(residentNumber)
                 .build();
 
         return clientRepository.save(client).getId();
