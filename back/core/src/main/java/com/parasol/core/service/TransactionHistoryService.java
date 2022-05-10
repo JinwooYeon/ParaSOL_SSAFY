@@ -25,7 +25,7 @@ public class TransactionHistoryService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public TransactionHistory createDepositHistory(String accountFrom, String accountTo, Long amount) {
+    public TransactionHistory createDepositHistory(String accountFrom, String accountTo, String nameFrom, Long amount) {
         Long time = System.currentTimeMillis();
         Optional<Account> account = accountRepository.findById(accountTo);
 
@@ -36,12 +36,13 @@ public class TransactionHistoryService {
                 .type(TransactionType.DEPOSIT)
                 .amount(amount)
                 .transactionAccount(accountFrom)
+                .transactionOpponent(nameFrom)
                 .build();
 
         return transactionHistoryRepository.save(transactionHistory);
     }
 
-    public TransactionHistory createWithdrawHistory(String accountFrom, String accountTo, Long amount) {
+    public TransactionHistory createWithdrawHistory(String accountFrom, String accountTo, String nameTo, Long amount) {
         Long time = System.currentTimeMillis();
         Optional<Account> account = accountRepository.findById(accountTo);
 
@@ -52,6 +53,7 @@ public class TransactionHistoryService {
                 .type(TransactionType.WITHDRAW)
                 .amount(amount)
                 .transactionAccount(accountTo)
+                .transactionOpponent(nameTo)
                 .build();
 
         return transactionHistoryRepository.save(transactionHistory);
@@ -89,6 +91,8 @@ public class TransactionHistoryService {
             ele.setAmount(e.getAmount());
             ele.setAccountTo(accountInfo);
             ele.setTransactionAccount(e.getTransactionAccount());
+            ele.setTransactionOpponent(e.getTransactionOpponent());
+
 
             result.add(ele);
         }

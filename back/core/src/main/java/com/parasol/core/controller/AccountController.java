@@ -92,10 +92,11 @@ public class AccountController {
         * */
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
         String accountTo = request.getAccountTo().getBankAccountNumber();
+        String nameFrom = request.getNameOpponent();
         Long amount = request.getAmount();
 
         boolean deposit = accountService.deposit(request);
-        TransactionHistory transaction = transactionHistoryService.createDepositHistory(accountFrom, accountTo, amount);
+        TransactionHistory transaction = transactionHistoryService.createDepositHistory(accountFrom, accountTo, nameFrom, amount);
         if(deposit && !transaction.equals(null)) return true;
 
         return false;
@@ -109,10 +110,11 @@ public class AccountController {
     ) {
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
         String accountTo = request.getAccountTo().getBankAccountNumber();
+        String nameTo = request.getNameOpponent();
         Long amount = request.getAmount();
 
         boolean withdraw = accountService.withdraw(request);
-        TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountTo, amount);
+        TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountTo, nameTo, amount);
         if(withdraw && !transaction.equals(null)) return true;
 
         return false;

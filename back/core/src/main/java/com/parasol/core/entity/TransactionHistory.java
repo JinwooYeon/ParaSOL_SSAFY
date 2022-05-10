@@ -23,6 +23,7 @@ public class TransactionHistory {
     private TransactionType type;
     private Long amount;
     private String transactionAccount;
+    private String transactionOpponent;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @ManyToOne
