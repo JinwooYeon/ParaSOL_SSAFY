@@ -33,13 +33,15 @@ public class AccountService {
     private WithdrawRequestFactory withdrawRequestFactory;
 
     public Mono<String> create(AccountOpenRequest request) {
+        String id = request.getId();
         String resident = request.getResidentNumber();
-        int password = request.getAccountPassword();
+        String password = request.getAccountPassword();
         String name = request.getName();
         return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
     public Mono<AccountListQueryResultResponse> getAllAccount(AccountListQueryRequest request) {
+        String id = request.getId();
         String name = request.getName();
         String residentNumber = request.getResidentNumber();
 

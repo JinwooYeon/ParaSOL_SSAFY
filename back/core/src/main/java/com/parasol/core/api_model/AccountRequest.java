@@ -29,7 +29,7 @@ public class AccountRequest {
     @Nullable
     private AccountInfo accountTo;
     @ApiModelProperty(name = "name_opponent", example = "")
-    @NotBlank
+    @Nullable
     private String nameOpponent;
 //    @ApiModelProperty(name = "name_to", example = "")
 //    @NotBlank

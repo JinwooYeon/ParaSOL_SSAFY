@@ -28,6 +28,7 @@ public class AccountController {
             @RequestBody @Valid AccountOpenRequest accountOpenRequest
     ) {
         AccountOpenRequest request = new AccountOpenRequest();
+        request.setId(accountOpenRequest.getId());
         request.setName(accountOpenRequest.getName());
         request.setResidentNumber(accountOpenRequest.getResidentNumber());
         request.setAccountPassword(accountOpenRequest.getAccountPassword());
@@ -37,12 +38,13 @@ public class AccountController {
     }
 
     // 계좌 목록 조회
-    @GetMapping("account")
+    @PostMapping("account")
     @ResponseBody
     public Mono<AccountListQueryResultResponse> getList(
             @RequestBody @Valid AccountListQueryRequest accountListQueryRequest
     ) {
         AccountListQueryRequest request = new AccountListQueryRequest();
+        request.setId(accountListQueryRequest.getId());
         request.setName(accountListQueryRequest.getName());
         request.setResidentNumber(accountListQueryRequest.getResidentNumber());
 
@@ -51,7 +53,7 @@ public class AccountController {
     }
 
     // 계좌 잔액 조회
-    @GetMapping("account/balance")
+    @PostMapping("account/balance")
     @ResponseBody
     public Mono<AccountBalanceQueryResultResponse> getBalance(
             @RequestParam("bankName") String bankName,
@@ -66,7 +68,7 @@ public class AccountController {
     }
 
     // 계좌 거래내역 조회
-    @GetMapping("account/history")
+    @PostMapping("account/history")
     @ResponseBody
     public Mono<List<AccountHistory>> getHistory(
             @RequestParam("bankName") String bankName,
@@ -91,6 +93,7 @@ public class AccountController {
         request.setAccountTo(depositRequest.getAccountTo());
         request.setAmount(depositRequest.getAmount());
         request.setMethod(depositRequest.getMethod());
+        request.setNameOpponent(depositRequest.getNameOpponent());
 
         Mono<Boolean> result = accountService.deposit(request);
 
@@ -109,6 +112,7 @@ public class AccountController {
         request.setAccountTo(withdrawRequest.getAccountTo());
         request.setAmount(withdrawRequest.getAmount());
         request.setMethod(withdrawRequest.getMethod());
+        request.setNameOpponent(withdrawRequest.getNameOpponent());
 
         Mono<Boolean> result = accountService.withdraw(request);
 
