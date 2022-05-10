@@ -4,10 +4,7 @@ interface PropsType {
   color: string;
   text: string;
   setPrice?: (a: string) => void;
-  setIsUpdate?: (a: boolean) => void;
-  setLogin?: (a: boolean) => void;
-  onSubmit?: any;
-  deleteUser?: any;
+  setter?: any;
   navigation?: any;
   setMethod?: (a: boolean) => void;
 }
@@ -16,10 +13,7 @@ const BtnBox: React.FC<PropsType> = ({
   color,
   text,
   setPrice,
-  setIsUpdate,
-  setLogin,
-  onSubmit,
-  deleteUser,
+  setter,
   navigation,
   setMethod,
 }) => {
@@ -46,18 +40,18 @@ const BtnBox: React.FC<PropsType> = ({
       case "정보 수정":
         console.log("update info");
         // navigation?.navigate("UpdateProfile");
-        setIsUpdate?.(true);
+        setter?.(true);
         break;
       case "수정 완료":
         console.log("complete update");
-        setIsUpdate?.(false);
+        setter?.(false);
         break;
       case "비밀번호 수정":
         console.log("update password");
         break;
       case "회원 탈퇴":
         console.log("delete info");
-        deleteUser?.();
+        setter?.();
         // setLogin?.(false);
         break;
       case "초기화":
@@ -73,7 +67,12 @@ const BtnBox: React.FC<PropsType> = ({
         break;
       case "회원가입":
         console.log("register");
-        onSubmit?.();
+        setter?.();
+        break;
+      case "비밀번호 재발급":
+        console.log("new Password");
+        setter?.();
+        break;
       default:
         console.log("set text props");
     }

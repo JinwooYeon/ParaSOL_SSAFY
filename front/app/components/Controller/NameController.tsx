@@ -3,12 +3,13 @@ import { View, TextInput } from "react-native";
 
 interface PropsType {
   setName: (a: any) => void;
+  text: string;
 }
 
-const NameController: React.FC<PropsType> = ({ setName }) => {
+const NameController: React.FC<PropsType> = ({ setName, text }) => {
   return (
     <View>
-      <TextInput onChangeText={setName} placeholder="이름" />
+      <TextInput onChangeText={setName} placeholder={text} />
     </View>
   );
 };
