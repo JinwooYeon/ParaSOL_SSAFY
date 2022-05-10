@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, Button, TouchableOpacity } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import styled from "styled-components/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -36,13 +42,17 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
         },
       })
       .then((res: any) => {
-        console.log(res);
-        const accessToken = res.data.accessToken;
-        const refreshToken = res.data.refreshToken;
-        axios.defaults.headers.common["Authorization"] =
-          "Bearer " + accessToken;
-        AsyncStorage.setItem("accessToken", accessToken);
-        AsyncStorage.setItem("refreshToken", refreshToken);
+        if (res.data) {
+          const accessToken = res.data.accessToken;
+          const refreshToken = res.data.refreshToken;
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + accessToken;
+          AsyncStorage.setItem("accessToken", accessToken);
+          AsyncStorage.setItem("refreshToken", refreshToken);
+          setLogin(true);
+        } else {
+          Alert.alert("아이디와 비밀번호를 확인해주세요.");
+        }
       })
       .catch((err: any) => {
         console.log(err);
@@ -55,15 +65,18 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
     <LayoutContainer>
       <HeaderText>로그인</HeaderText>
       <ContentContainer>
-        <IdController setId={setId} text="아이디" />
-        <PasswordController setPassword={setPassword} text="비밀번호" />
+        <IdController setId={setId} text="아이디" value={id} />
+        <PasswordController
+          setPassword={setPassword}
+          text="비밀번호"
+          value={password}
+        />
         <BtnBox
           color="blue"
           text="로그인"
           setter={onSubmit}
           setLogin={setLogin}
         />
-
         <TouchableOpacity
           style={styles.textBtn}
           onPress={() => navigate("Register")}

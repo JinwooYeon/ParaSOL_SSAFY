@@ -67,7 +67,7 @@ const BtnBox: React.FC<PropsType> = ({
       case "로그인":
         console.log("login");
         setter?.();
-        setLogin?.(true);
+        // setLogin?.(true);
         break;
       case "회원가입":
         console.log("register");

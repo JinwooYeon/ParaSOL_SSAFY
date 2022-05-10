@@ -1,17 +1,24 @@
 import React from "react";
-import { View, TextInput } from "react-native";
+import { View } from "react-native";
+import { TextInputController } from "./controllerStyled";
 
 interface PropsType {
   setPassword: (a: any) => void;
   text: string;
+  value: string;
 }
 
-const PasswordController: React.FC<PropsType> = ({ setPassword, text }) => {
+const PasswordController: React.FC<PropsType> = ({
+  setPassword,
+  text,
+  value,
+}) => {
   return (
     <View>
-      <TextInput
+      <TextInputController
         onChangeText={setPassword}
         secureTextEntry={true}
+        value={value}
         placeholder={text}
       />
     </View>
