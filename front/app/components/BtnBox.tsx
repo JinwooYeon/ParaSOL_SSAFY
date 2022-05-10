@@ -28,19 +28,20 @@ const BtnBox: React.FC<PropsType> = ({
       case "충전하기":
         console.log("charge");
         setMethod?.(true);
-        navigation?.navigate("Waiting");
+        navigation?.navigate("PayConfirm");
         break;
       case "출금하기":
         console.log("withdraw");
         setMethod?.(false);
-        navigation?.navigate("Waiting");
+        navigation?.navigate("PayConfirm");
         break;
       case "송금하기":
         console.log("transaction");
         navigation?.navigate("Transaction");
         break;
-      case "QR 스캔":
-        console.log("QR scan");
+      case "다음":
+        console.log("Next");
+        navigation?.navigate("TransactionConfirm");
         break;
       case "정보 수정":
         console.log("update info");

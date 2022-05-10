@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BalanceBox from "../components/BalanceBox";
 import BtnBox from "../components/BtnBox";
 import ConnectedAccountBox from "../components/ConnectedAccountBox";

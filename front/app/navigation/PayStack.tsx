@@ -1,9 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import ConnectedAccountBox from "../components/ConnectedAccountBox";
 import Pay from "../screens/Pay";
-import { WaitingContainer } from "../screens/styled";
+import { ConfirmContainer } from "../screens/styled";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,21 +11,21 @@ interface PropsType {
   bankInfo: any;
   navigation: any;
 }
-interface WaitingPropsType {
+interface PayConfirmPropsType {
   method: boolean;
   bankInfo: any;
   price: string;
   navigation: any;
 }
 
-const Waiting: React.FC<WaitingPropsType> = ({
-  navigation: { navigate },
+const PayConfirm: React.FC<PayConfirmPropsType> = ({
+  navigation: { navigate, goBack },
   method,
   price,
   bankInfo,
 }) => {
   return (
-    <WaitingContainer>
+    <ConfirmContainer>
       <Text>
         {bankInfo.bankName} / {bankInfo.bankNum} 으로
       </Text>
@@ -38,7 +37,10 @@ const Waiting: React.FC<WaitingPropsType> = ({
       <TouchableOpacity onPress={() => navigate?.("PayMain")}>
         <Text>확인</Text>
       </TouchableOpacity>
-    </WaitingContainer>
+      <TouchableOpacity onPress={() => goBack()}>
+        <Text>취소</Text>
+      </TouchableOpacity>
+    </ConfirmContainer>
   );
 };
 
@@ -67,9 +69,9 @@ const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
           />
         )}
       </Stack.Screen>
-      <Stack.Screen name="Waiting">
+      <Stack.Screen name="PayConfirm">
         {(props) => (
-          <Waiting
+          <PayConfirm
             {...props}
             method={method}
             bankInfo={bankInfo}
