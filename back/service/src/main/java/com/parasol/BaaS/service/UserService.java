@@ -69,6 +69,32 @@ public class UserService {
         return null;
     }
 
+    public AuthToken loginOauth(String id) {
+        User user = getUserByUserId(id);
+
+        if(user == null) {
+            return null;
+        }
+
+        AuthToken authToken = JwtTokenUtil.getToken(id);
+        String refreshToken = authToken.getRefreshToken().getRefreshToken();
+
+        Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
+
+        if(checkToken.isPresent()) {
+            Token newToken = checkToken.get();
+            newToken.setRefreshToken(refreshToken);
+            tokenRepository.save(newToken);
+        } else {
+            Token token = Token.builder()
+                    .user(user)
+                    .refreshToken(refreshToken)
+                    .build();
+            tokenRepository.save(token);
+        }
+        return authToken;
+    }
+
     // AuthToken 재발급
     public AuthToken reissueAuthToken(String id, String refreshToken) {
         Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
