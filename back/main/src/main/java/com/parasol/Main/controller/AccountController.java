@@ -1,13 +1,9 @@
 package com.parasol.Main.controller;
 
 import com.parasol.Main.api_model.AccountHistory;
-import com.parasol.Main.api_model.ClientInfo;
-import com.parasol.Main.api_model.Transaction;
+import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
-import com.parasol.Main.api_response.AccountListQueryResultResponse;
-import com.parasol.Main.api_response.TransactionExecuteResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +26,6 @@ public class AccountController {
         AccountOpenRequest request = new AccountOpenRequest();
         request.setId(accountOpenRequest.getId());
         request.setName(accountOpenRequest.getName());
-        request.setResidentNumber(accountOpenRequest.getResidentNumber());
         request.setAccountPassword(accountOpenRequest.getAccountPassword());
 
         Mono<String> result = accountService.create(request);
@@ -38,48 +33,33 @@ public class AccountController {
     }
 
     // 계좌 목록 조회
-    @PostMapping("account")
+    @PostMapping("account/list")
     @ResponseBody
-    public Mono<AccountListQueryResultResponse> getList(
+    public Mono<List<AccountInfo>> getList(
             @RequestBody @Valid AccountListQueryRequest accountListQueryRequest
     ) {
         AccountListQueryRequest request = new AccountListQueryRequest();
         request.setId(accountListQueryRequest.getId());
-        request.setName(accountListQueryRequest.getName());
-        request.setResidentNumber(accountListQueryRequest.getResidentNumber());
 
-        Mono<AccountListQueryResultResponse> result = accountService.getAllAccount(request);
-        return result;
+        return accountService.getAllAccount(request);
     }
 
     // 계좌 잔액 조회
     @PostMapping("account/balance")
     @ResponseBody
     public Mono<AccountBalanceQueryResultResponse> getBalance(
-            @RequestParam("bankName") String bankName,
-            @RequestParam("bankAccountNumber") String bankAccountNumber
+            @RequestBody @Valid AccountBalanceQueryRequest request
     ) {
-        AccountBalanceQueryRequest request = new AccountBalanceQueryRequest();
-        request.setBankName(bankName);
-        request.setBankAccountNumber(bankAccountNumber);
-
-        Mono<AccountBalanceQueryResultResponse> result = accountService.getBalance(request);
-        return result;
+        return accountService.getBalance(request);
     }
 
     // 계좌 거래내역 조회
     @PostMapping("account/history")
     @ResponseBody
     public Mono<List<AccountHistory>> getHistory(
-            @RequestParam("bankName") String bankName,
-            @RequestParam("bankAccountNumber") String bankAccountNumber
+            @RequestBody @Valid AccountHistoryQueryRequest request
     ) {
-        AccountHistoryQueryRequest request = new AccountHistoryQueryRequest();
-        request.setBankName(bankName);
-        request.setBankAccountNumber(bankAccountNumber);
-
-        Mono<List<AccountHistory>> result = accountService.getHistory(request);
-        return result;
+        return accountService.getHistory(request);
     }
 
     // 계좌 입금. to 계좌에 입금
