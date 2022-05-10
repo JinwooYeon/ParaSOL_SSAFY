@@ -72,7 +72,6 @@ const BtnBox: React.FC<PropsType> = ({
       case "회원가입":
         console.log("register");
         setter?.();
-        navigation?.navigate("login");
         break;
       case "비밀번호 재발급":
         console.log("new Password");

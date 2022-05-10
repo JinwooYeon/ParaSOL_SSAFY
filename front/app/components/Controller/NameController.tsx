@@ -1,15 +1,22 @@
 import React from "react";
 import { View, TextInput } from "react-native";
+import { TextInputController } from "./controllerStyled";
 
 interface PropsType {
   setName: (a: any) => void;
   text: string;
+  value: string;
 }
 
-const NameController: React.FC<PropsType> = ({ setName, text }) => {
+const NameController: React.FC<PropsType> = ({ setName, text, value }) => {
   return (
     <View>
-      <TextInput onChangeText={setName} placeholder={text} />
+      <TextInputController
+        onChangeText={setName}
+        value={value}
+        placeholder={text}
+        keyboardType="visible-password"
+      />
     </View>
   );
 };
