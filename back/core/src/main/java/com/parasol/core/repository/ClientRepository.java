@@ -1,5 +1,6 @@
 package com.parasol.core.repository;
 
+import com.parasol.core.entity.BankUser;
 import com.parasol.core.entity.Client;
 import com.parasol.core.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ import java.util.Optional;
 @Transactional
 public interface ClientRepository extends JpaRepository<Client, String> {
     Optional<Client> findByNameAndResidentNumber(String name, String residentNumber);
+    Optional<Client> findByBankUser_Id(String id);
 }
