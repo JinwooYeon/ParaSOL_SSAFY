@@ -12,7 +12,7 @@ import { Alert, View } from "react-native";
 const ContentContainer = styled.View`
   flex: 1;
   margin-top: 20px;
-  justify-contents: center;
+  justify-content: center;
   align-items: center;
 `;
 
