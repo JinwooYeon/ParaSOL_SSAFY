@@ -46,14 +46,14 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
           setLogin(true);
         } else {
           Alert.alert("아이디와 비밀번호를 확인해주세요.");
+          setId("");
+          setPassword("");
         }
       })
       .catch((err: any) => {
         Alert.alert("에러가 발생했습니다. 잠시 후에 다시 시도해주세요.");
         console.log(err);
       });
-    setId("");
-    setPassword("");
   };
 
   return (
