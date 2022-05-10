@@ -45,10 +45,10 @@ public class AccountController {
 
     // 계좌 목록 조회
     @PostMapping("account/list")
-    public List<Account> getAllAccount(
-            @RequestBody @Valid ClientInfo clientInfo
+    public List<AccountInfo> getAllAccount(
+            @RequestBody @Valid AccountListQueryRequest request
     ) {
-        return accountService.getAllAccount(clientInfo);
+        return accountService.getAllAccount(request);
     }
 
     // 계좌 잔액 조회
