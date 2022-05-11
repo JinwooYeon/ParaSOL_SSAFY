@@ -30,7 +30,7 @@ public class AccountController {
     ) {
         QueryAccountBalanceRequest request = new QueryAccountBalanceRequest();
         request.setBankName(bankName);
-        request.setBankAccountNumber(bankAccountNumber);
+        request.setAccountNumber(bankAccountNumber);
 
         AccountBalanceQueryResultResponse result = accountService.getBalance(request);
         return result;
@@ -60,7 +60,7 @@ public class AccountController {
     ) {
         QueryAccountHistoryRequest request = new QueryAccountHistoryRequest();
         request.setBankName(bankName);
-        request.setBankAccountNumber(bankAccountNumber);
+        request.setAccountNumber(bankAccountNumber);
 
         AccountHistoryQueryResultResponse result = accountService.getAccountHistory(request);
         return result;

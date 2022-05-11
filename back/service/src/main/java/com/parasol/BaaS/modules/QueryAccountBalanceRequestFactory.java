@@ -2,16 +2,13 @@ package com.parasol.BaaS.modules;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.parasol.BaaS.api_request.DepositRequest;
 import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
 import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -33,7 +30,7 @@ public class QueryAccountBalanceRequestFactory {
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
                 .queryParam("bankName", request.getBankName())
-                .queryParam("bankAccountNumber", request.getBankAccountNumber())
+                .queryParam("bankAccountNumber", request.getAccountNumber())
                 .build()
         );
 
@@ -41,7 +38,7 @@ public class QueryAccountBalanceRequestFactory {
 
         AccountBalanceQueryResultResponse formattedResponse = objectMapper.readValue(response.block(), AccountBalanceQueryResultResponse.class);
         formattedResponse.setBankName(request.getBankName());
-        formattedResponse.setBankAccountName(request.getBankAccountNumber());
+        formattedResponse.setBankAccountName(request.getAccountNumber());
 
         return formattedResponse;
     }
