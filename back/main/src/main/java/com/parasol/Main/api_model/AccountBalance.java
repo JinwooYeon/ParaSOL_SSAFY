@@ -2,18 +2,21 @@ package com.parasol.Main.api_model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-@ToString
-@ApiModel("AccountBalance")
+@SuperBuilder
+@NoArgsConstructor
 public class AccountBalance {
-    @ApiModelProperty(name = "balance", example = "5000")
+    @ApiModelProperty(name = "totalBalance", example = "5000")
     @NotBlank
-    private long balance;
+    private long totalBalance;
+
+    @ApiModelProperty(name = "availableBalance", example = "5000")
+    @NotBlank
+    private long availableBalance;
 }
