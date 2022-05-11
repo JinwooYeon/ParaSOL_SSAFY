@@ -45,7 +45,7 @@ public class AccountService {
 
     public AccountBalanceQueryResultResponse getBalance(QueryAccountBalanceRequest request) {
         String bankName = request.getBankName();
-        String accountNo = request.getBankAccountNumber();
+        String accountNo = request.getAccountNumber();
 
         try {
             if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
@@ -94,7 +94,7 @@ public class AccountService {
 
     public AccountHistoryQueryResultResponse getAccountHistory(QueryAccountHistoryRequest request) {
         String bankName = request.getBankName();
-        String bankAccountNumber = request.getBankAccountNumber();
+        String bankAccountNumber = request.getAccountNumber();
 
         try {
             if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
