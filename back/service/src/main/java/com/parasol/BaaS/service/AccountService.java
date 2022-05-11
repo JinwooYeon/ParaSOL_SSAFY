@@ -67,21 +67,6 @@ public class AccountService {
                 ));
     }
 
-    public List<AccountInfo> toAccountInfoList(List<String> accounts) {
-        return accounts
-                .stream()
-                .map(accountNumber -> AccountInfo.builder()
-                        .accountNumber(accountNumber)
-                        .build())
-                .collect(Collectors.toList());
-    }
-
-    public BankConnection getBankConnection(User user, String bankName) throws IllegalStateException {
-        return bankConnectionRepository
-                .findByUser_UserSeqAndBankName(user.getUserSeq(), bankName)
-                .orElseThrow(IllegalStateException::new);
-    }
-
     public Mono<AccountListQueryResultResponse> getAccountList(User user, String bankName) {
         BankConnection bankConnection = getBankConnection(user, bankName);
 
@@ -151,4 +136,18 @@ public class AccountService {
         }
     }
 
+    public List<AccountInfo> toAccountInfoList(List<String> accounts) {
+        return accounts
+                .stream()
+                .map(accountNumber -> AccountInfo.builder()
+                        .accountNumber(accountNumber)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public BankConnection getBankConnection(User user, String bankName) throws IllegalStateException {
+        return bankConnectionRepository
+                .findByUser_UserSeqAndBankName(user.getUserSeq(), bankName)
+                .orElseThrow(IllegalStateException::new);
+    }
 }
