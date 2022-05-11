@@ -29,13 +29,24 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
   const handleShow = () => {
     setShow(!show);
   };
+
+  const isRefresh = (detail: string) => {
+    if (detail === "새로운 인증 토큰 요청") {
+      console.log("refreshToken", refreshToken);
+      return refreshToken;
+    } else {
+      console.log("accessToken", accessToken);
+      return accessToken;
+    }
+  };
+
   const onSubmit = async (data: any) => {
     switch (props.API.method) {
       case "GET":
         await axios({
           method: "get",
           url: props.API.uri,
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: { Authorization: `Bearer ${isRefresh(props.API.detail)}` },
           params: data,
         })
           .then((response) => {
