@@ -91,17 +91,13 @@ const BtnBox: React.FC<PropsType> = ({
           ]);
         }
         break;
-      case "정보 수정":
-        console.log("update info");
-        // navigation?.navigate("UpdateProfile");
-        setter?.(true);
-        break;
       case "수정 완료":
         console.log("complete update");
-        setter?.(false);
+        setter?.();
         break;
       case "비밀번호 수정":
         console.log("update password");
+        setter?.(true);
         break;
       case "회원 탈퇴":
         console.log("delete info");
@@ -115,6 +111,10 @@ const BtnBox: React.FC<PropsType> = ({
       case "뒤로":
         navigation?.goBack();
         console.log("back");
+        break;
+      case "취소":
+        console.log("cancel");
+        setter?.(false);
         break;
       case "로그인":
         console.log("login");

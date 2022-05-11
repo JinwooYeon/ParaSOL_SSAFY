@@ -272,7 +272,7 @@ export const MypageMenuTextContainer = styled.View`
 `;
 export const MypageMenuBtn = styled.TouchableOpacity``;
 export const MypageMenuText = styled.Text`
-  font-size: 30px;
+  font-size: 23px;
   font-weight: bold;
 `;
 

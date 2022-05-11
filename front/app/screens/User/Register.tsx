@@ -27,10 +27,13 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
   const url = "http://k6S101.p.ssafy.io:8080/user/register";
 
   const onSubmit = async () => {
+    if (password !== passwordConfirm) {
+      Alert.alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
     const data = {
       id: id,
       password: password,
-      passwordConfirm: passwordConfirm,
       name: name,
     };
     await axios
@@ -64,8 +67,9 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
             text="비밀번호"
             value={password}
           />
-          <PasswordConfirmController
-            setPasswordConfirm={setPasswordConfirm}
+          <PasswordController
+            setPassword={setPasswordConfirm}
+            text="비밀번호 확인"
             value={passwordConfirm}
           />
           <NameController setName={setName} text="이름" value={name} />
