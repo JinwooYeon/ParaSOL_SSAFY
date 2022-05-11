@@ -53,8 +53,17 @@ public class AccountService {
                 });
     }
 
-    public Mono<Long> getBalance(AccountBalanceQueryRequest request) {
-        return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
+    public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
+        return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request)
+                .filter(Objects::nonNull)
+                .flatMap(balance ->
+                    Mono.just(
+                            AccountBalanceQueryResultResponse.builder()
+                                .totalBalance(balance)
+                                .availableBalance(balance)
+                                .build()
+                    )
+                );
     }
 
     public Mono<List<AccountHistory>> getHistory(AccountHistoryQueryRequest request) {
