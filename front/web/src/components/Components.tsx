@@ -32,10 +32,8 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
 
   const isRefresh = (detail: string) => {
     if (detail === "새로운 인증 토큰 요청") {
-      console.log("refreshToken", refreshToken);
       return refreshToken;
     } else {
-      console.log("accessToken", accessToken);
       return accessToken;
     }
   };
@@ -50,7 +48,6 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           params: data,
         })
           .then((response) => {
-            console.log(response);
             setResponseData({
               status: response.status.toString(),
               output: JSON.stringify(response.data),
