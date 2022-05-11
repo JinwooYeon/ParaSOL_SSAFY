@@ -56,7 +56,7 @@ public class AccountController {
     public Long getBalance(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return accountService.getBalance(accountQueryRequest.getAccountNo());
+        return accountService.getBalanceWithPassword(accountQueryRequest);
     }
 
     // 계좌 거래 내역 조회
@@ -65,7 +65,7 @@ public class AccountController {
     public List<AccountHistory> getAccountHistory(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNo());
+        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNo(), accountQueryRequest.getAccountPassword());
     }
 
     // 계좌 입금. to 계좌에 입금
@@ -89,7 +89,7 @@ public class AccountController {
     @PostMapping("account/withdraw")
     @ResponseBody
     public boolean withdraw(
-            @RequestBody @Valid AccountRequest request
+            @RequestBody @Valid AccountWithdrawRequest request
     ) {
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
         String accountTo = request.getAccountTo().getBankAccountNumber();

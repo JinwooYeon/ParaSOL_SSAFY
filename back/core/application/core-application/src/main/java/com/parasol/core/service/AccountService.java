@@ -7,8 +7,11 @@ import com.parasol.core.entity.Client;
 import com.parasol.core.repository.AccountRepository;
 import com.parasol.core.utils.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -56,9 +59,21 @@ public class AccountService {
         return result;
     }
 
+    public Long getBalanceWithPassword(AccountQueryRequest accountQueryRequest){
+        Optional<Account> account = accountRepository.findById(accountQueryRequest.getAccountNo());
+
+        if(account.isEmpty())
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
+        validationService.equalPassword(accountQueryRequest.getAccountPassword(), account.get().getPassword());
+
+        return account.get().getBalance();
+    }
+
 
     public Long getBalance(String accountNo) {
         Optional<Account> account = accountRepository.findById(accountNo);
+
         return account.get().getBalance();
     }
 
@@ -75,9 +90,15 @@ public class AccountService {
     }
 
     @Transactional
-    public boolean withdraw(@Valid AccountRequest request) {
+    public boolean withdraw(@Valid AccountWithdrawRequest request) {
         // from 계좌에서 출금
         Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
+
+        if(accountFrom.isEmpty())
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
+        validationService.equalPassword(request.getAccountPassword(), accountFrom.get().getPassword());
+
         Long fromBalance = validationService.calculateBalance(new Balance(accountFrom.get().getBalance() - request.getAmount()));
         // from 계좌에서 입금 금액만큼 빼기
         accountFrom.get().setBalance(fromBalance);
