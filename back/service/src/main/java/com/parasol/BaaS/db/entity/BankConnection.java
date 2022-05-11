@@ -5,10 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -24,4 +21,8 @@ public class BankConnection {
     private String bankName;
     private String bankId;
     private String bankPassword;
+
+    @ManyToOne
+    @JoinColumn(name="user_seq")
+    private User user;
 }
