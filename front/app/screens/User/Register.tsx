@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import IdController from "../../components/Controller/IdController";
 import PasswordController from "../../components/Controller/PasswordController";
-import PasswordConfirmController from "../../components/Controller/PasswordConfirmController";
 import NameController from "../../components/Controller/NameController";
-import { LayoutContainer, HeaderText, FooterContainer } from "../styled";
+import {
+  LayoutContainer,
+  HeaderText,
+  FooterContainer,
+  BtnText,
+} from "../styled";
 import axios from "axios";
 import BtnBox from "../../components/BtnBox";
 import { Alert, View } from "react-native";
@@ -21,15 +25,21 @@ interface PropsType {
 
 const Register: React.FC<PropsType> = ({ navigation }) => {
   const [id, setId] = useState("");
+  const [confirmId, setConfirmId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [name, setName] = useState("");
-  const url = "http://k6S101.p.ssafy.io:8080/user/register";
+  const [idCheck, setIdcheck] = useState(false);
+  const registUrl = "http://k6S101.p.ssafy.io:8080/user/register";
+  const idcheckUrl = "http://k6S101.p.ssafy.io:8080/user/idcheck";
 
   const onSubmit = async () => {
     if (password !== passwordConfirm) {
       Alert.alert("비밀번호가 일치하지 않습니다.");
       return;
+    }
+    if (!idCheck) {
+      Alert.alert("중복된 아이디가 있는지 확인해주세요.");
     }
     const data = {
       id: id,
@@ -37,10 +47,10 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
       name: name,
     };
     await axios
-      .post(url, data)
+      .post(registUrl, data)
       .then((res) => {
         // navigation.navigate("Login");
-        if (res.data) {
+        if (idCheck && res.data) {
           console.log(res);
           setId("");
           setPassword("");
@@ -56,12 +66,68 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
       });
   };
 
+  const checkId = async () => {
+    if (!id) {
+      Alert.alert("아이디를 입력해주세요.");
+      console.log("아이디를 입력해주세요.");
+      return;
+    }
+    await axios
+      .post(idcheckUrl, { id: id })
+      .then((res) => {
+        console.log(res);
+        if (res.data) {
+          Alert.alert("사용가능한 아이디입니다.");
+          setIdcheck(true);
+          setConfirmId(id);
+        } else {
+          Alert.alert("이미 존재하는 아이디입니다.");
+          setIdcheck(false);
+          setConfirmId("");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleIdCheck = () => {
+    console.log(id);
+    if (confirmId !== id) {
+      setIdcheck(false);
+    }
+  };
+
+  useEffect(() => {
+    handleIdCheck();
+  }, [id]);
+
   return (
     <LayoutContainer>
       <HeaderText>회원가입</HeaderText>
       <ContentContainer>
         <View style={{ marginBottom: 80 }}>
           <IdController setId={setId} text="아이디" value={id} />
+          {!idCheck ? (
+            <BtnBox
+              color="blue"
+              text="아이디 중복 체크"
+              setter={checkId}
+            ></BtnBox>
+          ) : (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                paddingHorizontal: "15%",
+                paddingVertical: "2%",
+                backgroundColor: "grey",
+                marginVertical: "2%",
+              }}
+            >
+              <BtnText white={false}>중복 확인됨</BtnText>
+            </View>
+          )}
           <PasswordController
             setPassword={setPassword}
             text="비밀번호"

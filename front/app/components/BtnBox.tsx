@@ -121,6 +121,10 @@ const BtnBox: React.FC<PropsType> = ({
         setter?.();
         // setLogin?.(true);
         break;
+      case "아이디 중복 체크":
+        console.log("id check");
+        setter?.();
+        break;
       case "회원가입":
         console.log("register");
         setter?.();
