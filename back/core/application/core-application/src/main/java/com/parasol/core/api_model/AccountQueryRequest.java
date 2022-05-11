@@ -18,4 +18,9 @@ public class AccountQueryRequest {
     @NotBlank
     @Size(max = 14, min = 14)
     private String accountNo;
+
+    @ApiModelProperty(name="account_password", example = "1234")
+    @NotBlank
+    @Size(max = 4, min = 4)
+    private String accountPassword;
 }
