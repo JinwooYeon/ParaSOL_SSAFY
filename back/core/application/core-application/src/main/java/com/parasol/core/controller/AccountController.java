@@ -74,17 +74,12 @@ public class AccountController {
     public boolean deposit(
             @RequestBody @Valid AccountRequest request
     ) {
-
-        /*
-        * TODO : 유효 계좌인지 확인
-        * */
-        String accountFrom = request.getAccountFrom().getBankAccountNumber();
         String accountTo = request.getAccountTo().getBankAccountNumber();
         String nameFrom = request.getNameOpponent();
         Long amount = request.getAmount();
 
         boolean deposit = accountService.deposit(request);
-        TransactionHistory transaction = transactionHistoryService.createDepositHistory(accountFrom, accountTo, nameFrom, amount);
+        TransactionHistory transaction = transactionHistoryService.createDepositHistory(accountTo, accountTo, nameFrom, amount);
         if(deposit && !transaction.equals(null)) return true;
 
         return false;
