@@ -55,7 +55,7 @@ public class AccountController {
     public Long getBalance(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return accountService.getBalance(accountQueryRequest.getAccountNumber());
+        return accountService.getBalanceWithPassword(accountQueryRequest);
     }
 
     // 계좌 거래 내역 조회
@@ -64,7 +64,7 @@ public class AccountController {
     public List<AccountHistory> getAccountHistory(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
+        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber(), accountQueryRequest.getAccountPassword());
     }
 
     // 계좌 입금. to 계좌에 입금
@@ -73,17 +73,12 @@ public class AccountController {
     public boolean deposit(
             @RequestBody @Valid AccountRequest request
     ) {
-
-        /*
-        * TODO : 유효 계좌인지 확인
-        * */
-        String accountFrom = request.getAccountFrom().getBankAccountNumber();
         String accountTo = request.getAccountTo().getBankAccountNumber();
         String nameFrom = request.getNameOpponent();
         Long amount = request.getAmount();
 
         boolean deposit = accountService.deposit(request);
-        TransactionHistory transaction = transactionHistoryService.createDepositHistory(accountFrom, accountTo, nameFrom, amount);
+        TransactionHistory transaction = transactionHistoryService.createDepositHistory(accountTo, accountTo, nameFrom, amount);
         if(deposit && !transaction.equals(null)) return true;
 
         return false;
@@ -93,15 +88,14 @@ public class AccountController {
     @PostMapping("account/withdraw")
     @ResponseBody
     public boolean withdraw(
-            @RequestBody @Valid AccountRequest request
+            @RequestBody @Valid AccountWithdrawRequest request
     ) {
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
-        String accountTo = request.getAccountTo().getBankAccountNumber();
         String nameTo = request.getNameOpponent();
         Long amount = request.getAmount();
 
         boolean withdraw = accountService.withdraw(request);
-        TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountTo, nameTo, amount);
+        TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountFrom, nameTo, amount);
         if(withdraw && !transaction.equals(null)) return true;
 
         return false;

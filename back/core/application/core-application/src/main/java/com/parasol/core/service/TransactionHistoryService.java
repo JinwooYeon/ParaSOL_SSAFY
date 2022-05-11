@@ -8,7 +8,9 @@ import com.parasol.core.entity.TransactionHistory;
 import com.parasol.core.repository.AccountRepository;
 import com.parasol.core.repository.TransactionHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,6 +26,9 @@ public class TransactionHistoryService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private ValidationService validationService;
 
     public TransactionHistory createDepositHistory(String accountFrom, String accountTo, String nameFrom, Long amount) {
         Long time = System.currentTimeMillis();
@@ -75,8 +80,14 @@ public class TransactionHistoryService {
         return transactionHistoryRepository.save(transactionHistory);
     }
 
-    public List<AccountHistory> getAccountHistory(String accountNo) {
+    public List<AccountHistory> getAccountHistory(String accountNo, String accountPassword) {
         List<AccountHistory> result = new ArrayList<>();
+        Optional<Account> account = accountRepository.findById(accountNo);
+
+        if(account.isEmpty())
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
+        validationService.equalPassword(accountPassword, account.get().getPassword());
 
         for(TransactionHistory e : transactionHistoryRepository.findByAccount_Id(accountNo)
                 .stream().sorted(Comparator.comparing(TransactionHistory::getDate).reversed()).collect(Collectors.toList())){
