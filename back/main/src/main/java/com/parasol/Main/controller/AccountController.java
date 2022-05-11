@@ -25,7 +25,6 @@ public class AccountController {
     ) {
         AccountOpenRequest request = new AccountOpenRequest();
         request.setId(accountOpenRequest.getId());
-        request.setName(accountOpenRequest.getName());
         request.setAccountPassword(accountOpenRequest.getAccountPassword());
 
         Mono<String> result = accountService.create(request);
@@ -35,7 +34,7 @@ public class AccountController {
     // 계좌 목록 조회
     @PostMapping("account/list")
     @ResponseBody
-    public Mono<List<AccountInfo>> getList(
+    public Mono<List<String>> getList(
             @RequestBody @Valid AccountListQueryRequest accountListQueryRequest
     ) {
         AccountListQueryRequest request = new AccountListQueryRequest();

@@ -1,7 +1,6 @@
 package com.parasol.core.controller;
 
 import com.parasol.core.api_model.*;
-import com.parasol.core.entity.Account;
 import com.parasol.core.entity.TransactionHistory;
 import com.parasol.core.service.AccountService;
 import com.parasol.core.service.ClientService;
@@ -44,7 +43,7 @@ public class AccountController {
 
     // 계좌 목록 조회
     @PostMapping("account/list")
-    public List<AccountInfo> getAllAccount(
+    public List<String> getAllAccount(
             @RequestBody @Valid AccountListQueryRequest request
     ) {
         return accountService.getAllAccount(request);

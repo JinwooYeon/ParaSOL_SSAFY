@@ -45,15 +45,15 @@ public class AccountService {
     }
 
 
-    public List<AccountInfo> getAllAccount(@Valid AccountListQueryRequest request) {
+    public List<String> getAllAccount(@Valid AccountListQueryRequest request) {
         Client client = clientService.findById(request.getId());
-        List<AccountInfo> result = new ArrayList<>();
+        List<String> result = new ArrayList<>();
 
         for(Account element : accountRepository.findByClient(client)){
             AccountInfo accountInfo = new AccountInfo();
 
             accountInfo.setBankAccountNumber(element.getId());
-            result.add(accountInfo);
+            result.add(accountInfo.getBankAccountNumber());
         }
 
         return result;
