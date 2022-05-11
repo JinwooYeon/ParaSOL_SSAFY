@@ -1,6 +1,7 @@
 package com.parasol.BaaS.controller;
 
 import com.parasol.BaaS.api_model.AuthToken;
+import com.parasol.BaaS.api_model.Password;
 import com.parasol.BaaS.api_model.UserInfo;
 import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.AuthTokenResponse;
@@ -70,6 +71,17 @@ public class UserController {
             return true;
         }
         return false;
+    }
+
+    @PostMapping("/password")
+    public Password resetPassword(@RequestBody PasswordResetRequest request) {
+        Password newPassword = userService.resetPassword(request);
+
+        if(newPassword == null) {
+            return null;
+        }
+
+        return newPassword;
     }
 
     @GetMapping("/token")
