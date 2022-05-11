@@ -1,18 +1,28 @@
 import { useState, useEffect } from "react";
 import BtnBox from "../../components/BtnBox";
+import styled from "styled-components/native";
 import {
-  ContentContainer,
   ContentFooterContainer,
   FooterContainer,
   HeaderText,
   LayoutContainer,
 } from "../styled";
-import { Text } from "react-native";
+import { Alert, Text, TextInput } from "react-native";
 import axios from "axios";
+import PasswordController from "../../components/Controller/PasswordController";
+
+const ContentContainer = styled.View`
+  flex: 1;
+  margin: 30px auto;
+  width: 80%;
+`;
 
 const Profile = ({ navigation }: any) => {
   const [myInfo, setMyInfo] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   const url = "http://k6S101.p.ssafy.io:8080/user";
 
   const getMyInfo = async () => {
@@ -20,7 +30,32 @@ const Profile = ({ navigation }: any) => {
       .get(url)
       .then((res) => {
         console.log(res);
-        setMyInfo(res.data);
+        if (res.data) {
+          setMyInfo(res.data);
+        } else {
+          Alert.alert("정보 조회 오류");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const updatePassword = async () => {
+    if (newPassword !== newPasswordConfirm) {
+      Alert.alert("새 비밀번호가 일치하는지 확인해주세요.");
+      return;
+    }
+
+    const data = {
+      password: password,
+      newPassword: newPassword,
+    };
+    await axios
+      .patch(url, data)
+      .then((res) => {
+        console.log(res);
+        setIsUpdate(false);
       })
       .catch((err) => {
         console.log(err);
@@ -36,36 +71,60 @@ const Profile = ({ navigation }: any) => {
       {!isUpdate ? (
         <HeaderText>회원정보</HeaderText>
       ) : (
-        <HeaderText>회원정보 수정</HeaderText>
+        <HeaderText>비밀번호 수정</HeaderText>
       )}
       <ContentFooterContainer>
         <ContentContainer>
-          {!isUpdate ? <Text>정보</Text> : <Text>정보 수정</Text>}
+          {!isUpdate ? (
+            // myInfo && myInfo.map((info) => return( <Text>{info}</Text>))
+            <Text>정보</Text>
+          ) : (
+            <>
+              <PasswordController
+                setPassword={setPassword}
+                text="비밀번호"
+                value={password}
+              />
+              <PasswordController
+                setPassword={setNewPassword}
+                text="새 비밀번호"
+                value={newPassword}
+              />
+              <PasswordController
+                setPassword={setNewPasswordConfirm}
+                text="새 비밀번호 확인"
+                value={newPasswordConfirm}
+              />
+            </>
+          )}
         </ContentContainer>
         <FooterContainer>
           {!isUpdate ? (
             <>
               <BtnBox
                 color="blue"
-                text="정보 수정"
+                text="비밀번호 수정"
                 navigation={navigation}
                 setter={setIsUpdate}
               />
-              <BtnBox
-                color="blue"
-                text="비밀번호 수정"
-                navigation={navigation}
-              />
+              <BtnBox color="white" text="뒤로" navigation={navigation} />
             </>
           ) : (
-            <BtnBox
-              color="blue"
-              text="수정 완료"
-              navigation={navigation}
-              setter={setIsUpdate}
-            />
+            <>
+              <BtnBox
+                color="blue"
+                text="수정 완료"
+                navigation={navigation}
+                setter={updatePassword}
+              />
+              <BtnBox
+                color="white"
+                text="취소"
+                navigation={navigation}
+                setter={setIsUpdate}
+              />
+            </>
           )}
-          <BtnBox color="white" text="뒤로" navigation={navigation} />
         </FooterContainer>
       </ContentFooterContainer>
     </LayoutContainer>
