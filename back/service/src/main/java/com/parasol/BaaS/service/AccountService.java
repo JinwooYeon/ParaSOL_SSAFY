@@ -61,10 +61,23 @@ public class AccountService {
         }
     }
 
-    public Mono<AccountListQueryResultResponse> getAccountList(User user, String bankName) {
-        BankConnection bankConnection = bankConnectionRepository
+    public List<AccountInfo> toAccountInfoList(List<String> accounts) {
+        return accounts
+                .stream()
+                .map(accountNumber -> AccountInfo.builder()
+                        .accountNumber(accountNumber)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public BankConnection getBankConnection(User user, String bankName) throws IllegalStateException {
+        return bankConnectionRepository
                 .findByUser_UserSeqAndBankName(user.getUserSeq(), bankName)
                 .orElseThrow(IllegalStateException::new);
+    }
+
+    public Mono<AccountListQueryResultResponse> getAccountList(User user, String bankName) {
+        BankConnection bankConnection = getBankConnection(user, bankName);
 
         QueryAccountListRequest queryRequest = QueryAccountListRequest.builder()
                 .bankName(bankName)
@@ -76,17 +89,12 @@ public class AccountService {
         return queryAccountListRequestFactory.create(queryRequest)
                 .filter(Objects::nonNull)
                 .flatMap(rawBankAccounts -> {
-                    List<AccountInfo> wrappedBankAccounts = rawBankAccounts
-                            .stream()
-                            .map(accountNumber -> AccountInfo.builder()
-                                    .accountNumber(accountNumber)
-                                    .build())
-                            .collect(Collectors.toList());
+                    List<AccountInfo> bankAccounts = toAccountInfoList(rawBankAccounts);
 
                     return Mono.just(
                             AccountListQueryResultResponse.builder()
                                 .bankName(bankName)
-                                .bankAccounts(wrappedBankAccounts)
+                                .bankAccounts(bankAccounts)
                                 .build()
                     );
                 });
