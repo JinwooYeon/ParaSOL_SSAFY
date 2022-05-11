@@ -9,11 +9,12 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("AccountListQueryRequest")
 public class AccountListQueryRequest{
-    @ApiModelProperty(name = "id")
+    @ApiModelProperty(name = "cusNo")
     @NotBlank
     private String id;
 }
