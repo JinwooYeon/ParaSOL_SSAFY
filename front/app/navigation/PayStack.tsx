@@ -1,8 +1,16 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import Loading from "../screens/Loading";
 import Pay from "../screens/Pay";
-import { ConfirmContainer } from "../screens/styled";
+import {
+  ConfirmBtnContainer,
+  ConfirmBtnText,
+  ConfirmBtnTouchableOpacity,
+  ConfirmContainer,
+  ConfirmTargetContainer,
+  ConfirmTargetText,
+} from "../screens/styled";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,7 +20,7 @@ interface PropsType {
   navigation: any;
 }
 interface PayConfirmPropsType {
-  method: boolean;
+  charge: boolean;
   bankInfo: any;
   price: string;
   navigation: any;
@@ -20,32 +28,52 @@ interface PayConfirmPropsType {
 
 const PayConfirm: React.FC<PayConfirmPropsType> = ({
   navigation: { navigate, goBack },
-  method,
+  charge,
   price,
   bankInfo,
 }) => {
-  return (
-    <ConfirmContainer>
-      <Text>
-        {bankInfo.bankName} / {bankInfo.bankNum} 으로
-      </Text>
-      {method ? (
-        <Text>{price}원을 충전하시겠습니까?</Text>
-      ) : (
-        <Text>{price}원을 출금하시겠습니까?</Text>
-      )}
-      <TouchableOpacity onPress={() => navigate?.("PayMain")}>
-        <Text>확인</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => goBack()}>
-        <Text>취소</Text>
-      </TouchableOpacity>
-    </ConfirmContainer>
-  );
+  // useState
+  const [loading, setLoading] = useState(false);
+
+  // method
+  const onPressConfirm = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      navigate?.("PayMain");
+    }, 2000);
+  };
+  const onPressCancel = () => {
+    goBack();
+  };
+
+  if (loading) {
+    return <Loading method={charge ? "충전" : "출금"} />;
+  } else {
+    return (
+      <ConfirmContainer>
+        <ConfirmTargetContainer>
+          <ConfirmTargetText>{bankInfo.bankName}</ConfirmTargetText>
+          <ConfirmTargetText>{bankInfo.bankNum} 으로</ConfirmTargetText>
+          <ConfirmTargetText>
+            {price}원을 {charge ? "충전" : "출금"}하시겠습니까?
+          </ConfirmTargetText>
+        </ConfirmTargetContainer>
+        <ConfirmBtnContainer>
+          <ConfirmBtnTouchableOpacity onPress={onPressCancel} ok={false}>
+            <ConfirmBtnText>취소</ConfirmBtnText>
+          </ConfirmBtnTouchableOpacity>
+          <ConfirmBtnTouchableOpacity onPress={onPressConfirm} ok={true}>
+            <ConfirmBtnText>확인</ConfirmBtnText>
+          </ConfirmBtnTouchableOpacity>
+        </ConfirmBtnContainer>
+      </ConfirmContainer>
+    );
+  }
 };
 
 const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
-  const [method, setMethod] = useState(false);
+  const [charge, setCharge] = useState(false);
   const [price, setPrice] = useState("0");
 
   return (
@@ -65,7 +93,7 @@ const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
             price={price}
             setPrice={setPrice}
             navigation={navigation}
-            setMethod={setMethod}
+            setCharge={setCharge}
           />
         )}
       </Stack.Screen>
@@ -73,7 +101,7 @@ const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
         {(props) => (
           <PayConfirm
             {...props}
-            method={method}
+            charge={charge}
             bankInfo={bankInfo}
             price={price}
           />
