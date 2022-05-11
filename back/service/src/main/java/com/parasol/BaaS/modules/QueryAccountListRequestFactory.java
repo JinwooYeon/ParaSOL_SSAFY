@@ -1,5 +1,6 @@
 package com.parasol.BaaS.modules;
 
+import com.parasol.BaaS.api_model.AccountInfo;
 import com.parasol.BaaS.api_request.QueryAccountListRequest;
 import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class QueryAccountListRequestFactory {
     @Value("${baas.auth.key}")
     private String baasAuthKey;
 
-    public Mono<List<String>> create(QueryAccountListRequest request) {
+    public Mono<List<AccountInfo>> create(QueryAccountListRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
@@ -36,6 +37,6 @@ public class QueryAccountListRequestFactory {
                 .header("ClientId", baasAuthKey)
                 .body(BodyInserters.fromValue(request));
 
-        return bodySpec.retrieve().bodyToMono(new ParameterizedTypeReference<List<String>>() {});
+        return bodySpec.retrieve().bodyToMono(new ParameterizedTypeReference<List<AccountInfo>>() {});
     }
 }
