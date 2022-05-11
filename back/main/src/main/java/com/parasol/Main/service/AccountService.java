@@ -1,6 +1,7 @@
 package com.parasol.Main.service;
 
 import com.parasol.Main.api_model.AccountHistory;
+import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.*;
 import com.parasol.Main.modules.*;
@@ -10,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
@@ -33,23 +35,28 @@ public class AccountService {
         return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
-    public Mono<List<String>> getAllAccount(LoginRequest loginRequest) {
+    public Mono<List<AccountInfo>> getAllAccount(LoginRequest loginRequest) {
         Mono<LoginResultResponse> loginResponse = userLoginSocketRequestFactory.userLoginRequest(loginRequest);
 
         return loginResponse
                 .filter(Objects::nonNull)
+                .filter(LoginResultResponse::getIsSuccess)
                 .flatMap(response -> {
-                    if (response.getIsSuccess()) {
-                        AccountListQueryRequest queryRequest = AccountListQueryRequest.builder()
-                                //.id(임의의 UUID)를 통해 테스트 가능
-                                // 현재 로그인 로직 미비로 인해 오작동
-                                .id(response.getCusNo())
-                                .build();
+                    AccountListQueryRequest queryRequest = AccountListQueryRequest.builder()
+                            //.id(임의의 UUID)를 통해 테스트 가능
+                            // 현재 로그인 로직 미비로 인해 오작동
+                            .id(response.getCusNo())
+                            .build();
 
-                        return queryAccountListRequestFactory.createQueryAccountListRequest(queryRequest);
-                    }
-
-                    return null;
+                    return queryAccountListRequestFactory.createQueryAccountListRequest(queryRequest)
+                            .filter(Objects::nonNull)
+                            .flatMap(rawAccountNumbers ->
+                                    Mono.just(rawAccountNumbers
+                                            .stream()
+                                            .map(accountNumber -> AccountInfo.builder().accountNumber(accountNumber).build())
+                                            .collect(Collectors.toList())
+                                    )
+                            );
                 });
     }
 
