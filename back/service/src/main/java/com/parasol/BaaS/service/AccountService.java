@@ -61,7 +61,8 @@ public class AccountService {
                         AccountBalanceQueryResultResponse.builder()
                                 .bankName(bankName)
                                 .bankAccountNumber(bankAccountNumber)
-                                .balance(balance)
+                                .totalBalance(balance.getTotalBalance())
+                                .availableBalance(balance.getAvailableBalance())
                                 .build()
                 ));
     }
