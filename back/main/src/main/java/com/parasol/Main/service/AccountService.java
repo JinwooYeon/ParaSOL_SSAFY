@@ -1,22 +1,21 @@
 package com.parasol.Main.service;
 
 import com.parasol.Main.api_model.AccountHistory;
-import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
-import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
-import com.parasol.Main.api_response.AccountListQueryResultResponse;
-import com.parasol.Main.api_response.TransactionExecuteResultResponse;
-import com.parasol.Main.eenum.TransactionType;
+import com.parasol.Main.api_response.*;
 import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AccountService {
+    @Autowired
+    private UserLoginSocketRequestFactory userLoginSocketRequestFactory;
+
     @Autowired
     private OpenAccountRequestFactory openAccountRequestFactory;
     @Autowired
@@ -34,8 +33,24 @@ public class AccountService {
         return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
-    public Mono<List<String>> getAllAccount(AccountListQueryRequest request) {
-        return queryAccountListRequestFactory.createQueryAccountListRequest(request);
+    public Mono<List<String>> getAllAccount(LoginRequest loginRequest) {
+        Mono<LoginResultResponse> loginResponse = userLoginSocketRequestFactory.userLoginRequest(loginRequest);
+
+        return loginResponse
+                .filter(Objects::nonNull)
+                .flatMap(response -> {
+                    if (response.getIsSuccess()) {
+                        AccountListQueryRequest queryRequest = AccountListQueryRequest.builder()
+                                //.id(임의의 UUID)를 통해 테스트 가능
+                                // 현재 로그인 로직 미비로 인해 오작동
+                                .id(response.getCusNo())
+                                .build();
+
+                        return queryAccountListRequestFactory.createQueryAccountListRequest(queryRequest);
+                    }
+
+                    return null;
+                });
     }
 
     public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
