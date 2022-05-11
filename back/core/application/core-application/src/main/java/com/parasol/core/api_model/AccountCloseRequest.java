@@ -13,9 +13,9 @@ import javax.validation.constraints.*;
 @ToString
 @ApiModel("AccountCloseRequest")
 public class AccountCloseRequest {
-    @ApiModelProperty(name="account_no", example = "110-437-525252")
+    @ApiModelProperty(name="account_number", example = "110-437-525252")
     @NotBlank
-    private String accountNo;
+    private String accountNumber;
     @ApiModelProperty(name="account_password", example = "0809")
     @NotNull
     @Min(value = 0)
