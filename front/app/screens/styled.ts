@@ -72,12 +72,40 @@ export const Balance = styled.Text`
   margin-left: 2%;
 `;
 
-// Content _ Pay _ Confirm
+// Content _ Confirm
 export const ConfirmContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
   margin: 20%;
+`;
+export const ConfirmTargetContainer = styled.View`
+  width: 100%;
+  margin-bottom: 5%;
+  border-width: 2px;
+  border-radius: 5px;
+  padding: 1% 5%;
+`;
+export const ConfirmTargetText = styled.Text`
+  font-size: 18px;
+`;
+export const ConfirmBtnContainer = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+export const ConfirmBtnTouchableOpacity = styled.TouchableOpacity<{
+  ok: boolean;
+}>`
+  border-width: 2px;
+  border-color: ${(props) => (props.ok ? mainBlue : "red")};
+  border-radius: 5px;
+  padding: 1% 15%;
+`;
+export const ConfirmBtnText = styled.Text`
+  font-size: 25px;
+  font-weight: bold;
 `;
 
 // Content _ Home _ Transaction
@@ -90,12 +118,21 @@ export const TransactionContainer = styled.View`
   padding-right: 3%;
   padding-bottom: 5%;
   padding-left: 3%;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
 `;
 export const TransactionTextInput = styled.TextInput`
   /* background-color: green; */
-  width: 100%;
+  width: 90%;
   height: auto;
   font-size: 25px;
+`;
+export const TransactionTextDelTouchableOpacity = styled.TouchableOpacity``;
+export const TransactionTextDel = styled.Text`
+  font-size: 28px;
+  font-weight: bold;
+  color: grey;
 `;
 
 // Content _ Home
