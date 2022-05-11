@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import { Btn, BtnContainer, BtnText } from "../screens/styled";
 
 interface PropsType {
@@ -7,7 +8,9 @@ interface PropsType {
   setLogin?: (a: boolean) => void;
   setter?: any;
   navigation?: any;
-  setMethod?: (a: boolean) => void;
+  setCharge?: (a: boolean) => void;
+  transactionData?: { info: string; price: string };
+  payData?: { bankInfo: any; price: string };
 }
 
 const BtnBox: React.FC<PropsType> = ({
@@ -17,27 +20,76 @@ const BtnBox: React.FC<PropsType> = ({
   setLogin,
   setter,
   navigation,
-  setMethod,
+  setCharge,
+  transactionData,
+  payData,
 }) => {
+  let msg = "";
+
   const onPress = () => {
     switch (text) {
       case "충전하기":
-        console.log("charge");
-        setMethod?.(true);
-        navigation?.navigate("PayConfirm");
+        if (payData?.bankInfo.bankNum !== "" && payData?.price !== "0") {
+          console.log("charge");
+          setCharge?.(true);
+          navigation?.navigate("PayConfirm");
+        } else {
+          if (payData.bankInfo.bankNum === "") {
+            console.log("info empty");
+            msg = "계좌를 연결해주세요!";
+          } else if (payData.price === "0") {
+            console.log("price empty");
+            msg = "금액을 채워주세요!";
+          }
+          Alert.alert("알림", msg, [
+            {
+              text: "확인",
+            },
+          ]);
+        }
         break;
       case "출금하기":
-        console.log("withdraw");
-        setMethod?.(false);
-        navigation?.navigate("PayConfirm");
+        if (payData?.bankInfo.bankNum !== "" && payData?.price !== "0") {
+          console.log("withdraw");
+          setCharge?.(false);
+          navigation?.navigate("PayConfirm");
+        } else {
+          if (payData.bankInfo.bankNum === "") {
+            console.log("info empty");
+            msg = "계좌를 연결해주세요!";
+          } else if (payData.price === "0") {
+            console.log("price empty");
+            msg = "금액을 채워주세요!";
+          }
+          Alert.alert("알림", msg, [
+            {
+              text: "확인",
+            },
+          ]);
+        }
         break;
       case "송금하기":
         console.log("transaction");
         navigation?.navigate("Transaction");
         break;
       case "다음":
-        console.log("Next");
-        navigation?.navigate("TransactionConfirm");
+        if (transactionData?.info !== "" && transactionData?.price !== "0") {
+          console.log("Next");
+          navigation?.navigate("TransactionConfirm");
+        } else {
+          if (transactionData.info === "") {
+            console.log("info empty");
+            msg = "송금할 주소를 채워주세요!";
+          } else if (transactionData.price === "0") {
+            console.log("price empty");
+            msg = "금액을 채워주세요!";
+          }
+          Alert.alert("알림", msg, [
+            {
+              text: "확인",
+            },
+          ]);
+        }
         break;
       case "정보 수정":
         console.log("update info");
