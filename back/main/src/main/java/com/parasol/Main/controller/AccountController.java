@@ -35,11 +35,8 @@ public class AccountController {
     @PostMapping("account/list")
     @ResponseBody
     public Mono<List<String>> getList(
-            @RequestBody @Valid AccountListQueryRequest accountListQueryRequest
+            @RequestBody @Valid LoginRequest request
     ) {
-        AccountListQueryRequest request = new AccountListQueryRequest();
-        request.setId(accountListQueryRequest.getId());
-
         return accountService.getAllAccount(request);
     }
 
