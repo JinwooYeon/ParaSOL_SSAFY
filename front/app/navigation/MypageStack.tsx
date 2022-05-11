@@ -31,7 +31,9 @@ const MypageStack: React.FC<PropsType> = ({ setLogin }) => {
       <Stack.Screen name="Oauth" component={Oauth} />
       <Stack.Screen name="AuthBio" component={AuthBio} />
       <Stack.Screen name="Service" component={Service} />
-      <Stack.Screen name="Delete" component={Delete} />
+      <Stack.Screen name="Delete">
+        {(props) => <Delete {...props} setLogin={setLogin} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

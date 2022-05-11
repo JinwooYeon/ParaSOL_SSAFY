@@ -3,7 +3,7 @@ import { LayoutContainer, HeaderText, MypageMenuContainer } from "../styled";
 
 interface PropsType {
   navigation: any;
-  setLogin: (a: any) => void;
+  setLogin: (a: boolean) => void;
 }
 
 const Mypage: React.FC<PropsType> = ({ navigation, setLogin }) => {
