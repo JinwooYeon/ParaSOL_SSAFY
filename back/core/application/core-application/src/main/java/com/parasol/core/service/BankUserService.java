@@ -10,6 +10,7 @@ import com.parasol.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class BankUserService {
     @Autowired
     private BankUserRepository bankUserRepository;
 
+    @Transactional
     public String createBankUser(@Valid BankUserCreateRequest request) throws IllegalStateException{
         BankUser bankUser = BankUser.builder()
                 .id(UUID.randomUUID().toString())
@@ -31,7 +33,7 @@ public class BankUserService {
                 .build();
 
         Optional<Client> client = clientRepository.findByNameAndResidentNumber(request.getName(), request.getResidentNumber());
-        client.ifPresentOrElse(c -> c.setBankUser(bankUser), () -> { throw new IllegalStateException("해당 고객이 없습니다."); });
+        client.ifPresentOrElse(bankUser::setClient, () -> { throw new IllegalStateException("해당 고객이 없습니다."); });
 
         return bankUserRepository.save(bankUser).getId();
     }
@@ -46,11 +48,9 @@ public class BankUserService {
             if (!b.getPassword().equals(request.getPassword()))
                 throw new IllegalStateException("비밀번호가 틀립니다");
 
-            Optional<Client> client = clientRepository.findByBankUser_Id(b.getId());
-            client.ifPresentOrElse(c -> {
-                response.setSuccess(true);
-                response.setCusno(c.getId());
-            }, () -> { throw new IllegalStateException("연결된 고객 정보를 찾을 수 없습니다."); });
+            Client client = b.getClient();
+            response.setSuccess(true);
+            response.setCusno(client.getId());
         }, () -> { throw new IllegalStateException("해당 아이디를 찾을 수 없습니다."); });
 
         return response;

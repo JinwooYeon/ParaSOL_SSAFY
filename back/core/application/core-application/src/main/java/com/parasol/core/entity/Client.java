@@ -30,8 +30,4 @@ public class Client {
     @NotBlank
     @Size(max=14, min=14)
     private String residentNumber;
-
-    @OneToOne
-    @JoinColumn(name="bank_user_id")
-    private BankUser bankUser;
 };

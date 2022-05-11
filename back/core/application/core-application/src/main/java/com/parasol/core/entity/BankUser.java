@@ -4,8 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -22,6 +21,11 @@ public class BankUser {
 
     @NotBlank
     private String username;
+
     @NotBlank
     private String password;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name="client_id")
+    private Client client;
 };

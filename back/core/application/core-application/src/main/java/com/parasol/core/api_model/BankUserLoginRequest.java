@@ -18,10 +18,10 @@ import javax.validation.constraints.Size;
 public class BankUserLoginRequest {
     @ApiModelProperty(name="id", example = "parasol")
     @NotBlank
-    @Size(max = 5, min = 20)
+    //@Size(max = 5, min = 20)
     private String id;
     @ApiModelProperty(name="password", example = "parasol!@#$")
     @NotBlank
-    @Size(max = 8, min = 32)
+    //@Size(max = 8, min = 32)
     private String password;
 }
