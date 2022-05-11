@@ -5,10 +5,15 @@ import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountHistoryQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
 import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
+import com.parasol.BaaS.auth.jwt.UserDetail;
+import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("account")
@@ -33,14 +38,18 @@ public class AccountController {
 
     @GetMapping
     @ResponseBody
-    public AccountListQueryResultResponse getAccountList(
+    public Mono<AccountListQueryResultResponse> getAccountList(
+            Authentication authentication,
             @RequestParam("bankName") String bankName
     ) {
-        QueryAccountListRequest request = new QueryAccountListRequest();
-        request.setBankName(bankName);
+        if (authentication == null) {
+            throw new IllegalStateException("give me a token");
+        }
 
-        AccountListQueryResultResponse result = accountService.getAccountList(request);
-        return result;
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        User user = userDetail.getUser();
+
+        return accountService.getAccountList(user, bankName);
     }
 
     @GetMapping("history")
