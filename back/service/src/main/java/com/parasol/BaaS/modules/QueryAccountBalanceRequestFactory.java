@@ -1,5 +1,6 @@
 package com.parasol.BaaS.modules;
 
+import com.parasol.BaaS.api_model.AccountBalance;
 import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
 import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class QueryAccountBalanceRequestFactory {
     @Value("${baas.auth.key}")
     private String baasAuthKey;
 
-    public Mono<Long> create(QueryAccountBalanceRequest request) {
+    public Mono<AccountBalance> create(QueryAccountBalanceRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
@@ -33,6 +34,6 @@ public class QueryAccountBalanceRequestFactory {
                 .header("ClientId", baasAuthKey)
                 .body(BodyInserters.fromValue(request));
 
-        return bodySpec.retrieve().bodyToMono(Long.class);
+        return bodySpec.retrieve().bodyToMono(AccountBalance.class);
     }
 }
