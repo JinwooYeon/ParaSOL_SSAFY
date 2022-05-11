@@ -1,6 +1,7 @@
 package com.parasol.BaaS.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.parasol.BaaS.api_model.AccountHistory;
 import com.parasol.BaaS.api_model.AccountInfo;
 import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.*;
@@ -91,19 +92,29 @@ public class AccountService {
                 });
     }
 
-    public AccountHistoryQueryResultResponse getAccountHistory(QueryAccountHistoryRequest request) {
-        String bankName = request.getBankName();
-        String bankAccountNumber = request.getAccountNumber();
+    public Mono<AccountHistoryQueryResultResponse> getAccountHistory(User user, String bankName, String bankAccountNumber) {
+        BankConnection bankConnection = getBankConnection(user, bankName);
 
-        try {
-            if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
+        if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
 
-            AccountHistoryQueryResultResponse response = queryAccountHistoryRequestFactory.create(request);
-            return response;
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return null;
-        }
+        QueryAccountHistoryRequest queryRequest = QueryAccountHistoryRequest.builder()
+                .bankName(bankName)
+                .bankAccountNumber(bankAccountNumber)
+                .id(bankConnection.getBankId())
+                .password(bankConnection.getBankPassword())
+                .build();
+
+        return queryAccountHistoryRequestFactory.create(queryRequest)
+                .filter(Objects::nonNull)
+                .flatMap(bankAccountHistories -> {
+                    return Mono.just(
+                            AccountHistoryQueryResultResponse.builder()
+                                    .bankName(bankName)
+                                    .bankAccountNumber(bankAccountNumber)
+                                    .bankAccountHistories(bankAccountHistories)
+                                    .build()
+                    );
+                });
     }
 
     public TransactionExecuteResultResponse deposit(DepositRequest request) {
