@@ -92,12 +92,11 @@ public class AccountController {
             @RequestBody @Valid AccountWithdrawRequest request
     ) {
         String accountFrom = request.getAccountFrom().getBankAccountNumber();
-        String accountTo = request.getAccountTo().getBankAccountNumber();
         String nameTo = request.getNameOpponent();
         Long amount = request.getAmount();
 
         boolean withdraw = accountService.withdraw(request);
-        TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountTo, nameTo, amount);
+        TransactionHistory transaction = transactionHistoryService.createWithdrawHistory(accountFrom, accountFrom, nameTo, amount);
         if(withdraw && !transaction.equals(null)) return true;
 
         return false;
