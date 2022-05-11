@@ -34,7 +34,14 @@ export const Response: React.FC<PropsType> = (props: PropsType) => {
           </Stack>
         </Stack>
         <Box style={styles.outputStyle}>
-          <Box sx={{ wordWrap: "break-word" }}>{output}</Box>
+          <Box
+            sx={{
+              height: "100%",
+              wordWrap: "break-word",
+            }}
+          >
+            {output}
+          </Box>
         </Box>
       </Stack>
       <Button
