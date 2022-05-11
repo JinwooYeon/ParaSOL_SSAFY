@@ -17,5 +17,5 @@ public class AccountQueryRequest {
     @ApiModelProperty(name="account_no", example = "110-437-525252")
     @NotBlank
     @Size(max = 14, min = 14)
-    private String accountNo;
+    private String accountNumber;
 }
