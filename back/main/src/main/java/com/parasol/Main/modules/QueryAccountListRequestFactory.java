@@ -14,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class QueryAccountListRequestFactory {
@@ -29,10 +30,6 @@ public class QueryAccountListRequestFactory {
 
         WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
 
-        Mono<List<String>> response = headersSpec.retrieve().bodyToMono(new ParameterizedTypeReference<List<String>>() {});
-
-        return response
-                .filter(s -> true)
-                .flatMap(s -> Mono.just(s));
+        return headersSpec.retrieve().bodyToMono(new ParameterizedTypeReference<List<String>>() {});
     }
 }
