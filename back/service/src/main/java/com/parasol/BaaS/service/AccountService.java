@@ -80,9 +80,7 @@ public class AccountService {
         if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
         return queryAccountListRequestFactory.create(queryRequest)
                 .filter(Objects::nonNull)
-                .flatMap(rawBankAccounts -> {
-                    List<AccountInfo> bankAccounts = toAccountInfoList(rawBankAccounts);
-
+                .flatMap(bankAccounts -> {
                     return Mono.just(
                             AccountListQueryResultResponse.builder()
                                 .bankName(bankName)
