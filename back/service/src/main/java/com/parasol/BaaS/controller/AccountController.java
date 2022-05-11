@@ -57,16 +57,19 @@ public class AccountController {
 
     @GetMapping("history")
     @ResponseBody
-    public AccountHistoryQueryResultResponse getAccountHistory(
+    public Mono<AccountHistoryQueryResultResponse> getAccountHistory(
+            Authentication authentication,
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
-        QueryAccountHistoryRequest request = new QueryAccountHistoryRequest();
-        request.setBankName(bankName);
-        request.setAccountNumber(bankAccountNumber);
+        if (authentication == null) {
+            throw new IllegalStateException("give me a token");
+        }
 
-        AccountHistoryQueryResultResponse result = accountService.getAccountHistory(request);
-        return result;
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        User user = userDetail.getUser();
+
+        return accountService.getAccountHistory(user, bankName, bankAccountNumber);
     }
 
     @PostMapping("deposit")
