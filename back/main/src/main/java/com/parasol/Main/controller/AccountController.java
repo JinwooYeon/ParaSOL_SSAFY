@@ -68,16 +68,7 @@ public class AccountController {
     public Mono<Boolean> deposit(
             @RequestBody @Valid DepositRequest depositRequest
     ) {
-        DepositRequest request = new DepositRequest();
-        request.setAccountFrom(depositRequest.getAccountFrom());
-        request.setAccountTo(depositRequest.getAccountTo());
-        request.setAmount(depositRequest.getAmount());
-        request.setMethod(depositRequest.getMethod());
-        request.setNameOpponent(depositRequest.getNameOpponent());
-
-        Mono<Boolean> result = accountService.deposit(request);
-
-        return result;
+        return accountService.deposit(depositRequest);
     }
 
     // 계좌 출금. from 계좌에서 출금
@@ -86,17 +77,7 @@ public class AccountController {
     public Mono<Boolean> withdraw(
             @RequestBody @Valid WithdrawRequest withdrawRequest
     ) {
-        WithdrawRequest request = new WithdrawRequest();
-
-        request.setAccountFrom(withdrawRequest.getAccountFrom());
-        request.setAccountTo(withdrawRequest.getAccountTo());
-        request.setAmount(withdrawRequest.getAmount());
-        request.setMethod(withdrawRequest.getMethod());
-        request.setNameOpponent(withdrawRequest.getNameOpponent());
-
-        Mono<Boolean> result = accountService.withdraw(request);
-
-        return result;
+        return accountService.withdraw(withdrawRequest);
     }
 
 }
