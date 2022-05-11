@@ -43,22 +43,27 @@ public class AccountService {
     @Autowired
     WithdrawRequestFactory withdrawRequestFactory;
 
-    public AccountBalanceQueryResultResponse getBalance(QueryAccountBalanceRequest request) {
-        String bankName = request.getBankName();
-        String accountNo = request.getAccountNumber();
+    public Mono<AccountBalanceQueryResultResponse> getBalance(User user, String bankName, String bankAccountNumber) {
+        BankConnection bankConnection = getBankConnection(user, bankName);
 
-        try {
-            if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
+        if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
 
-            AccountBalanceQueryResultResponse response = queryAccountBalanceRequestFactory.create(request);
-            return response;
-        } catch (JsonProcessingException e) {
-            System.out.println(e.toString());
-            return null;
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return null;
-        }
+        QueryAccountBalanceRequest queryRequest = QueryAccountBalanceRequest.builder()
+                .bankName(bankName)
+                .bankAccountNumber(bankAccountNumber)
+                .id(bankConnection.getBankId())
+                .password(bankConnection.getBankPassword())
+                .build();
+
+        return queryAccountBalanceRequestFactory.create(queryRequest)
+                .filter(Objects::nonNull)
+                .flatMap(balance -> Mono.just(
+                        AccountBalanceQueryResultResponse.builder()
+                                .bankName(bankName)
+                                .bankAccountNumber(bankAccountNumber)
+                                .balance(balance)
+                                .build()
+                ));
     }
 
     public List<AccountInfo> toAccountInfoList(List<String> accounts) {
