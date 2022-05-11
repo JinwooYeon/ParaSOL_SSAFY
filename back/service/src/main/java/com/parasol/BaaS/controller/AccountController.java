@@ -24,16 +24,19 @@ public class AccountController {
 
     @GetMapping("balance")
     @ResponseBody
-    public AccountBalanceQueryResultResponse getBalance(
+    public Mono<AccountBalanceQueryResultResponse> getBalance(
+            Authentication authentication,
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
-        QueryAccountBalanceRequest request = new QueryAccountBalanceRequest();
-        request.setBankName(bankName);
-        request.setAccountNumber(bankAccountNumber);
+        if (authentication == null) {
+            throw new IllegalStateException("give me a token");
+        }
 
-        AccountBalanceQueryResultResponse result = accountService.getBalance(request);
-        return result;
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        User user = userDetail.getUser();
+
+        return accountService.getBalance(user, bankName, bankAccountNumber);
     }
 
     @GetMapping
