@@ -43,7 +43,7 @@ public class AccountController {
 
     // 계좌 목록 조회
     @PostMapping("account/list")
-    public List<AccountInfo> getAllAccount(
+    public List<String> getAllAccount(
             @RequestBody @Valid AccountListQueryRequest request
     ) {
         return accountService.getAllAccount(request);

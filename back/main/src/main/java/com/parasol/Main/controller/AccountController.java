@@ -34,7 +34,7 @@ public class AccountController {
     // 계좌 목록 조회
     @PostMapping("account/list")
     @ResponseBody
-    public Mono<List<AccountInfo>> getList(
+    public Mono<List<String>> getList(
             @RequestBody @Valid AccountListQueryRequest accountListQueryRequest
     ) {
         AccountListQueryRequest request = new AccountListQueryRequest();

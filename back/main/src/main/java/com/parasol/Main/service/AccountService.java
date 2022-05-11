@@ -34,7 +34,7 @@ public class AccountService {
         return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
-    public Mono<List<AccountInfo>> getAllAccount(AccountListQueryRequest request) {
+    public Mono<List<String>> getAllAccount(AccountListQueryRequest request) {
         return queryAccountListRequestFactory.createQueryAccountListRequest(request);
     }
 
