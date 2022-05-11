@@ -2,15 +2,16 @@ package com.parasol.Main.api_model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
+@SuperBuilder
 @ToString
+@NoArgsConstructor
 @ApiModel("LoginInfo")
 public class LoginInfo {
     @ApiModelProperty(name="id", example = "nini6630")
