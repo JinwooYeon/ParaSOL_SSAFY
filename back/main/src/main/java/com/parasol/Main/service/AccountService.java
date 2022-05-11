@@ -53,8 +53,7 @@ public class AccountService {
                 });
     }
 
-    public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
-
+    public Mono<Long> getBalance(AccountBalanceQueryRequest request) {
         return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
     }
 
