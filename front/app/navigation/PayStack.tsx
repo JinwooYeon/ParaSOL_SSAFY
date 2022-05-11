@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
 import Loading from "../screens/Loading";
 import Pay from "../screens/Pay";
 import {
@@ -11,6 +10,8 @@ import {
   ConfirmTargetContainer,
   ConfirmTargetText,
 } from "../screens/styled";
+import * as LocalAuthentication from "expo-local-authentication";
+import { Alert } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,15 +37,34 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
   const [loading, setLoading] = useState(false);
 
   // method
-  const onPressConfirm = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate?.("PayMain");
-    }, 2000);
-  };
   const onPressCancel = () => {
     goBack();
+  };
+
+  // LocalAuthentication
+  const biometricsAuth = async () => {
+    const compatible = await LocalAuthentication.hasHardwareAsync();
+    if (!compatible)
+      Alert.alert(
+        "This device is not compatible for biometric authentication (바이오인증 안됨)"
+      );
+    const enrolled = await LocalAuthentication.isEnrolledAsync();
+    if (!enrolled)
+      Alert.alert(
+        `'This device doesn't have biometric authentication enabled (바이오인증 없음)`
+      );
+    const result = await LocalAuthentication.authenticateAsync();
+    if (!result.success)
+      Alert.alert(`${result.error} - Authentication unsuccessful (인증실패)`);
+    if (result.success) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        navigate?.("PayMain");
+      }, 2000);
+      console.log("success");
+    }
+    return;
   };
 
   if (loading) {
@@ -63,7 +83,7 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
           <ConfirmBtnTouchableOpacity onPress={onPressCancel} ok={false}>
             <ConfirmBtnText>취소</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
-          <ConfirmBtnTouchableOpacity onPress={onPressConfirm} ok={true}>
+          <ConfirmBtnTouchableOpacity onPress={biometricsAuth} ok={true}>
             <ConfirmBtnText>확인</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
         </ConfirmBtnContainer>
