@@ -20,6 +20,8 @@ interface ItemPropsType {
 }
 
 const History: React.FC<PropsType> = ({ balance }) => {
+  // useState
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [total, setTotal] = useState("1,234,000");
   const [data, setData] = useState([
@@ -94,6 +96,14 @@ const History: React.FC<PropsType> = ({ balance }) => {
     return <Item item={item} />;
   };
 
+  // method
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
   return (
     <LayoutContainer>
       <HistoryHeaderContainer>
@@ -117,6 +127,8 @@ const History: React.FC<PropsType> = ({ balance }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           extraData={selectedId}
+          onRefresh={onRefresh}
+          refreshing={refreshing}
         />
       </SafeAreaView>
     </LayoutContainer>
