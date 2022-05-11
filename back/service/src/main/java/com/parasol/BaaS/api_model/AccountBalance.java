@@ -12,5 +12,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountBalance {
-    private Long balance;
+    private Long totalBalance;
+    private Long availableBalance;
 }
