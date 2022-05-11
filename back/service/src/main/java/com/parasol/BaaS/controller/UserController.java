@@ -148,7 +148,7 @@ public class UserController {
     @PatchMapping
     public UserInfo updateUser(
             Authentication authentication,
-            @RequestBody UserUpdateRequest request
+            @RequestBody PasswordUpdateRequest request
     ){
         if(authentication == null) {
             return null;
