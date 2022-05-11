@@ -1,5 +1,13 @@
-import { TouchableOpacity, Text } from "react-native";
-import { ConfirmContainer } from "../styled";
+import { useState } from "react";
+import Loading from "../Loading";
+import {
+  ConfirmBtnContainer,
+  ConfirmContainer,
+  ConfirmTargetContainer,
+  ConfirmBtnTouchableOpacity,
+  ConfirmBtnText,
+  ConfirmTargetText,
+} from "../styled";
 
 interface PropsType {
   navigation: any;
@@ -12,18 +20,39 @@ const TransactionConfirm: React.FC<PropsType> = ({
   info,
   price,
 }) => {
-  return (
-    <ConfirmContainer>
-      <Text>{info} 으로</Text>
-      <Text>{price}원을 송금하시겠습니까?</Text>
-      <TouchableOpacity onPress={() => navigate?.("HomeMain")}>
-        <Text>확인</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => goBack()}>
-        <Text>취소</Text>
-      </TouchableOpacity>
-    </ConfirmContainer>
-  );
+  const [loading, setLoading] = useState(false);
+
+  // method
+  const onPressConfirm = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      navigate?.("HomeMain");
+    }, 2000);
+  };
+  const onPressCancel = () => {
+    goBack();
+  };
+  if (loading) {
+    return <Loading method="송금" />;
+  } else {
+    return (
+      <ConfirmContainer>
+        <ConfirmTargetContainer>
+          <ConfirmTargetText>{info} 으로</ConfirmTargetText>
+          <ConfirmTargetText>{price}원을 송금하시겠습니까?</ConfirmTargetText>
+        </ConfirmTargetContainer>
+        <ConfirmBtnContainer>
+          <ConfirmBtnTouchableOpacity onPress={onPressCancel} ok={false}>
+            <ConfirmBtnText>취소</ConfirmBtnText>
+          </ConfirmBtnTouchableOpacity>
+          <ConfirmBtnTouchableOpacity onPress={onPressConfirm} ok={true}>
+            <ConfirmBtnText>확인</ConfirmBtnText>
+          </ConfirmBtnTouchableOpacity>
+        </ConfirmBtnContainer>
+      </ConfirmContainer>
+    );
+  }
 };
 
 export default TransactionConfirm;

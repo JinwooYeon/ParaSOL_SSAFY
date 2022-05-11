@@ -18,7 +18,7 @@ interface PropsType {
   price: string;
   setPrice: (a: string) => void;
   navigation: any;
-  setMethod: (a: boolean) => void;
+  setCharge: (a: boolean) => void;
 }
 
 const Pay: React.FC<PropsType> = ({
@@ -27,8 +27,13 @@ const Pay: React.FC<PropsType> = ({
   price,
   setPrice,
   navigation,
-  setMethod,
+  setCharge,
 }) => {
+  const payData = {
+    bankInfo,
+    price,
+  };
+
   return (
     <LayoutContainer>
       <HeaderContainer>
@@ -45,13 +50,15 @@ const Pay: React.FC<PropsType> = ({
               color="white"
               text="출금하기"
               navigation={navigation}
-              setMethod={setMethod}
+              setCharge={setCharge}
+              payData={payData}
             />
             <BtnBox
               color="blue"
               text="충전하기"
               navigation={navigation}
-              setMethod={setMethod}
+              setCharge={setCharge}
+              payData={payData}
             />
           </BtnContainerRow>
           <BtnBox color="red" text="초기화" setPrice={setPrice} />
