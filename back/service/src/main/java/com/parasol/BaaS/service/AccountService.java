@@ -3,17 +3,30 @@ package com.parasol.BaaS.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.parasol.BaaS.api_model.AccountInfo;
 import com.parasol.BaaS.api_request.*;
-import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.BaaS.api_response.AccountHistoryQueryResultResponse;
-import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
-import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
+import com.parasol.BaaS.api_response.*;
+import com.parasol.BaaS.db.entity.BankConnection;
+import com.parasol.BaaS.db.entity.User;
+import com.parasol.BaaS.db.repository.BankConnectionRepository;
 import com.parasol.BaaS.enums.TransactionType;
 import com.parasol.BaaS.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AccountService {
+
+    @Autowired
+    BankConnectionRepository bankConnectionRepository;
+
+    @Autowired
+    BankLoginRequestFactory bankLoginRequestFactory;
 
     @Autowired
     QueryAccountBalanceRequestFactory queryAccountBalanceRequestFactory;
@@ -48,22 +61,35 @@ public class AccountService {
         }
     }
 
-    public AccountListQueryResultResponse getAccountList(QueryAccountListRequest request) {
-        String bankName = request.getBankName();
+    public Mono<AccountListQueryResultResponse> getAccountList(User user, String bankName) {
+        BankConnection bankConnection = bankConnectionRepository
+                .findByUser_UserSeqAndBankName(user.getUserSeq(), bankName)
+                .orElseThrow(IllegalStateException::new);
 
-        // TODO: DB에서 사전에 등록된 현재 사용자의 인터넷 뱅킹 계정을 얻어와야 함
-        //String accountId = request.getId();
-        //String accountPassword = request.getPassword();
+        QueryAccountListRequest queryRequest = QueryAccountListRequest.builder()
+                .bankName(bankName)
+                .id(bankConnection.getBankId())
+                .password(bankConnection.getBankPassword())
+                .build();
 
-        try {
-            if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
+        if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
+        return queryAccountListRequestFactory.create(queryRequest)
+                .filter(Objects::nonNull)
+                .flatMap(rawBankAccounts -> {
+                    List<AccountInfo> wrappedBankAccounts = rawBankAccounts
+                            .stream()
+                            .map(accountNumber -> AccountInfo.builder()
+                                    .accountNumber(accountNumber)
+                                    .build())
+                            .collect(Collectors.toList());
 
-            AccountListQueryResultResponse response = queryAccountListRequestFactory.create(request);
-            return response;
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return null;
-        }
+                    return Mono.just(
+                            AccountListQueryResultResponse.builder()
+                                .bankName(bankName)
+                                .bankAccounts(wrappedBankAccounts)
+                                .build()
+                    );
+                });
     }
 
     public AccountHistoryQueryResultResponse getAccountHistory(QueryAccountHistoryRequest request) {
