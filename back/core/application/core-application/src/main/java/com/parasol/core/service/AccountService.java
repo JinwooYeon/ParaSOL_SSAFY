@@ -60,7 +60,7 @@ public class AccountService {
     }
 
     public Long getBalanceWithPassword(AccountQueryRequest accountQueryRequest){
-        Optional<Account> account = accountRepository.findById(accountQueryRequest.getAccountNo());
+        Optional<Account> account = accountRepository.findById(accountQueryRequest.getAccountNumber());
 
         if(account.isEmpty())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
