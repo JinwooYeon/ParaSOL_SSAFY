@@ -5,6 +5,7 @@ import com.parasol.Main.api_request.LoginRequest;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.Main.api_response.LoginResultResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+@Component
 public class UserLoginSocketRequestFactory {
     private Socket socket;
     private BufferedReader reader;
