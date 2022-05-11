@@ -1,20 +1,14 @@
 package com.parasol.BaaS.service;
 
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.parasol.BaaS.api_model.AuthToken;
 import com.parasol.BaaS.api_model.Password;
 import com.parasol.BaaS.api_request.*;
-import com.parasol.BaaS.auth.jwt.JwtAuthenticationFilter;
-import com.parasol.BaaS.auth.jwt.UserDetail;
 import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
 import com.parasol.BaaS.db.entity.Token;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.TokenRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -165,19 +159,26 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(String userId, UserUpdateRequest request) {
+    public User updateUser(String userId, PasswordUpdateRequest request) {
         User user = userRepository.findByUserId(userId).get();
+        String password = request.getPassword();
+        String newPassword = request.getNewPassword();
 
-        if(StringUtils.hasText(request.getName())) {
-            user.setUserName(request.getName());
+        if(!StringUtils.hasText(password)) {
+            return null;
         }
 
-        // TODO : 비밀번호 암호화
-        if(StringUtils.hasText(request.getPassword())) {
-            user.setUserPassword(passwordEncoder.encode(request.getPassword()));
+        if(StringUtils.hasText(newPassword)) {
+            if(passwordEncoder.matches(password, user.getUserPassword())) {
+                // 같은 비밀번호 사용 불가
+                if(passwordEncoder.matches(newPassword, user.getUserPassword())) {
+                    return null;
+                }
+                user.setUserPassword(passwordEncoder.encode(request.getNewPassword()));
+                return userRepository.save(user);
+            }
         }
-
-        return userRepository.save(user);
+        return null;
     }
 
     @Transactional
