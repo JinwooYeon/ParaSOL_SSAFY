@@ -167,10 +167,13 @@ int main(int argc, char **argv) {
                     write(clnt_sock, response.c_str(), response.size());
                 } else if (payload_len == sizeof(struct scus0001a_in)) {
                      struct scus0001a_in req_buf;
-                     memcpy(&req_buf, &sock_buf, sizeof(payload_b));
+                     memcpy(&req_buf, sock_buf, sizeof(struct scus0001a_in));
+                     memset(sock_buf, 0, sizeof(sock_buf));
 
                      struct scus0001a_out *res_buf = client.login(req_buf);
-                     write(clnt_sock, &res_buf, sizeof(res_buf));
+                     memcpy(sock_buf, res_buf, sizeof(struct scus0001a_out));
+
+                     write(clnt_sock, sock_buf, sizeof(struct scus0001a_out));
                      free(res_buf);
                  }
             }
