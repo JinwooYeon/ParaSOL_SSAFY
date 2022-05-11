@@ -19,6 +19,7 @@
     "expo": "~44.0.2",
     "expo-barcode-scanner": "~11.2.0",
     "expo-camera": "~12.1.2",
+    "expo-local-authentication": "~12.1.0",
     "expo-splash-screen": "~0.14.1",
     "expo-status-bar": "~1.2.0",
     "react": "17.0.1",
