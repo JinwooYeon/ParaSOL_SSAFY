@@ -25,7 +25,6 @@ public class AccountController {
     ) {
         AccountOpenRequest request = new AccountOpenRequest();
         request.setId(accountOpenRequest.getId());
-        request.setName(accountOpenRequest.getName());
         request.setAccountPassword(accountOpenRequest.getAccountPassword());
 
         Mono<String> result = accountService.create(request);
