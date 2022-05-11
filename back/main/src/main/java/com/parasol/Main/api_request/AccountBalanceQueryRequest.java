@@ -16,5 +16,5 @@ import javax.validation.constraints.NotBlank;
 public class AccountBalanceQueryRequest{
     @ApiModelProperty(name = "account_no", example = "110-437-525252")
     @NotBlank
-    private String accountNo;
+    private String accountNumber;
 }

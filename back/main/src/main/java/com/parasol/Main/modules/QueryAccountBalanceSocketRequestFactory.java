@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
 
 @Component
 public class QueryAccountBalanceSocketRequestFactory {
@@ -30,8 +29,8 @@ public class QueryAccountBalanceSocketRequestFactory {
             socket = new Socket(coreIp, Integer.parseInt(corePort));
 
             char[] payload = new char[14];
-            for (int i = 0; i < request.getAccountNo().length(); i++)
-                payload[i] = request.getAccountNo().charAt(i);
+            for (int i = 0; i < request.getAccountNumber().length(); i++)
+                payload[i] = request.getAccountNumber().charAt(i);
 
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream());

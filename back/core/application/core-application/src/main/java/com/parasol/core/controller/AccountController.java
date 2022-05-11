@@ -1,7 +1,6 @@
 package com.parasol.core.controller;
 
 import com.parasol.core.api_model.*;
-import com.parasol.core.entity.Account;
 import com.parasol.core.entity.TransactionHistory;
 import com.parasol.core.service.AccountService;
 import com.parasol.core.service.ClientService;
@@ -56,7 +55,7 @@ public class AccountController {
     public Long getBalance(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return accountService.getBalance(accountQueryRequest.getAccountNo());
+        return accountService.getBalance(accountQueryRequest.getAccountNumber());
     }
 
     // 계좌 거래 내역 조회
@@ -65,7 +64,7 @@ public class AccountController {
     public List<AccountHistory> getAccountHistory(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNo());
+        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
     }
 
     // 계좌 입금. to 계좌에 입금
