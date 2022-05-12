@@ -13,5 +13,6 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 public class DepositResult {
-    private List<AccountInfo> accounts;
+//    private List<AccountInfo> accounts;
+    private Boolean isSuccess;
 }

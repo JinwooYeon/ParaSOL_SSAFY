@@ -69,7 +69,6 @@ public class AccountController {
     @PostMapping("deposit")
     @ResponseBody
     public Mono<ResponseEntity<DepositResponse>> deposit(
-            Authentication authentication,
             @RequestBody DepositRequest request
     ) {
         return accountService.deposit(request)
@@ -79,8 +78,11 @@ public class AccountController {
     @PostMapping("withdraw")
     @ResponseBody
     public Mono<ResponseEntity<WithdrawResponse>> withdraw(
+            Authentication authentication,
             @RequestBody WithdrawRequest request
     ) {
+        request.setAuthentication(authentication);
+
         return accountService.withdraw(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }

@@ -23,7 +23,7 @@ public class QueryAccountHistoryRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    @Value("${sbj-api-server.balance}")
+    @Value("${sbj-api-server.history}")
     private String endPoint;
 
     @Value("${baas.auth.key}")
@@ -39,6 +39,7 @@ public class QueryAccountHistoryRequestFactory {
                 .header("ClientId", baasAuthKey)
                 .body(BodyInserters.fromValue(request));
 
+        String block = bodySpec.retrieve().bodyToMono(String.class).block();
         return bodySpec.retrieve().bodyToMono(QueryAccountHistoryResult.class);
     }
 }
