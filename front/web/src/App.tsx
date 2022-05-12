@@ -28,12 +28,15 @@ function App() {
               <Tab label="인증 및 페이" value="3" />
             </TabList>
           </Box>
+          {/* 유저 */}
           <TabPanel value="1">
             <User />
           </TabPanel>
+          {/* 계좌 */}
           <TabPanel value="2">
             <Account />
           </TabPanel>
+          {/* 인증 및 페이 */}
           <TabPanel value="3">
             <Pay />
           </TabPanel>
