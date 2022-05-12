@@ -48,18 +48,23 @@ public class AccountService {
     }
 
 
-    public List<String> getAllAccount(@Valid AccountListQueryRequest request) {
+    public AccountListQueryResultResponse getAllAccount(@Valid AccountListQueryRequest request) {
         Client client = clientService.findById(request.getId());
-        List<String> result = new ArrayList<>();
+        AccountListQueryResultResponse listresult = new AccountListQueryResultResponse();
+        List<AccountNumber> result = new ArrayList<>();
 
-        for (Account element : accountRepository.findByClient(client)) {
+        for (Account e : accountRepository.findByClient(client)) {
+            AccountNumber ele = new AccountNumber();
             AccountInfo accountInfo = new AccountInfo();
 
-            accountInfo.setBankAccountNumber(element.getId());
-            result.add(accountInfo.getBankAccountNumber());
+            accountInfo.setBankAccountNumber(e.getId());
+            ele.setAccountNumber(accountInfo.getBankAccountNumber());
+            result.add(ele);
         }
 
-        return result;
+        listresult.setAccounts(result);
+
+        return listresult;
     }
 
     public AccountBalanceQueryResultResponse getBalanceWithPassword(AccountQueryRequest accountQueryRequest) {
