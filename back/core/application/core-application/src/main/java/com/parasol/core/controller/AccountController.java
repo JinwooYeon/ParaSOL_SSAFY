@@ -64,7 +64,7 @@ public class AccountController {
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
-    public TransactionExecutionResultResponse deposit(
+    public DepositResponse deposit(
             @RequestBody @Valid AccountRequest request
     ) {
         return accountService.deposit(request);

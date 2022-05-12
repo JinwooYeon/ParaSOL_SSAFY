@@ -103,7 +103,7 @@ public class TransactionHistoryService {
             AccountHistory accountHistory = new AccountHistory();
             AccountInfo accountInfo = new AccountInfo();
 
-            accountInfo.setBankAccountNumber(e.getAccount().getId());
+            accountInfo.setAccountNumber(e.getAccount().getId());
 
             accountHistory.setTxId(e.getId());
             accountHistory.setTxDatetime(e.getDate());

@@ -9,6 +9,7 @@ import com.parasol.core.utils.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -55,8 +56,8 @@ public class AccountService {
             AccountNumber ele = new AccountNumber();
             AccountInfo accountInfo = new AccountInfo();
 
-            accountInfo.setBankAccountNumber(e.getId());
-            ele.setAccountNumber(accountInfo.getBankAccountNumber());
+            accountInfo.setAccountNumber(e.getId());
+            ele.setAccountNumber(accountInfo.getAccountNumber());
             result.add(ele);
         }
 
@@ -86,28 +87,43 @@ public class AccountService {
     }
 
     @Transactional
-    public TransactionExecutionResultResponse deposit(@Valid AccountRequest request) {
-        TransactionExecutionResultResponse resultResponse = new TransactionExecutionResultResponse();
-        // to 계좌에 입금
-        Optional<Account> accountTo = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
-        Long toBalance = accountTo.get().getBalance() + request.getAmount();
-        // to 계좌에서 입금 금액만큼 추가
-        accountTo.get().setBalance(toBalance);
+    public DepositResponse deposit(@Valid AccountRequest request) {
+        Long amount = request.getAmount();
+        AccountInfo accountTo = request.getAccountTo();
+        String nameFrom = request.getNameOpponent();
 
-        transactionHistoryService.createDepositHistory(request.getAccountTo().getBankAccountNumber(),
-                request.getAccountTo().getBankAccountNumber(),
-                request.getNameOpponent(),
-                request.getAmount());
+        if (accountTo == null) {
+            throw new NullPointerException("AccountService :: deposit :: accountTo is null");
+        }
 
-        resultResponse.setSuccess(true);
-        return resultResponse;
+        if (!StringUtils.hasText(nameFrom)) {
+            throw new NullPointerException("AccountService :: deposit :: nameFrom is null");
+        }
+
+        String accountNumberTo = accountTo.getAccountNumber();
+        Account depositAccount = accountRepository.findById(accountNumberTo).orElseThrow(IllegalStateException::new);
+
+        Long beforeBalance = depositAccount.getBalance();
+        Long afterBalance = beforeBalance + amount;
+
+        depositAccount.setBalance(afterBalance);
+        accountRepository.save(depositAccount);
+
+        transactionHistoryService.createDepositHistory(accountNumberTo,
+                accountNumberTo,
+                nameFrom,
+                amount);
+
+        return DepositResponse.builder()
+                .isSuccess(true)
+                .build();
     }
 
     @Transactional
     public TransactionExecutionResultResponse withdraw(@Valid AccountWithdrawRequest request) {
         TransactionExecutionResultResponse resultResponse = new TransactionExecutionResultResponse();
         // from 계좌에서 출금
-        Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
+        Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getAccountNumber());
 
         if (accountFrom.isEmpty())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -118,8 +134,8 @@ public class AccountService {
         // from 계좌에서 입금 금액만큼 빼기
         accountFrom.get().setBalance(fromBalance);
 
-        transactionHistoryService.createWithdrawHistory(request.getAccountFrom().getBankAccountNumber(),
-                request.getAccountFrom().getBankAccountNumber(),
+        transactionHistoryService.createWithdrawHistory(request.getAccountFrom().getAccountNumber(),
+                request.getAccountFrom().getAccountNumber(),
                 request.getNameOpponent(),
                 request.getAmount());
 
@@ -130,8 +146,8 @@ public class AccountService {
     public TransactionExecutionResultResponse remit(@Valid AccountRequest request) {
         TransactionExecutionResultResponse resultResponse = new TransactionExecutionResultResponse();
 
-        Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getBankAccountNumber());
-        Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
+        Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getAccountNumber());
+        Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getAccountNumber());
 
         Long toBalance = validationService.calculateBalance(new Balance(accountTo.get().getBalance() + request.getAmount()));
         Long fromBalance = validationService.calculateBalance(new Balance(accountFrom.get().getBalance() - request.getAmount()));
@@ -139,8 +155,8 @@ public class AccountService {
         accountTo.get().setBalance(toBalance);
         accountFrom.get().setBalance(fromBalance);
 
-        transactionHistoryService.createRemitHistory(request.getAccountFrom().getBankAccountNumber(),
-                request.getAccountTo().getBankAccountNumber(),
+        transactionHistoryService.createRemitHistory(request.getAccountFrom().getAccountNumber(),
+                request.getAccountTo().getAccountNumber(),
                 request.getNameOpponent(),
                 request.getAmount());
 
