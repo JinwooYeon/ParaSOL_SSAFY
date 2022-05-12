@@ -88,6 +88,13 @@ public class TransactionHistoryService {
     }
     
     public AccountHistoryResultResponse getAccountHistory(String accountNo, String accountPassword) {
+        Optional<Account> account = accountRepository.findById(accountNo);
+
+        if(account.isEmpty())
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
+        validationService.equalPassword(accountPassword, account.get().getPassword());
+
         List<TransactionHistory> transactionHistories = accountRepositorySupport.getTransactionHistory(accountNo);
         AccountHistoryResultResponse resultResponse = new AccountHistoryResultResponse();
         List<AccountHistory> accountHistories = new ArrayList<>();
