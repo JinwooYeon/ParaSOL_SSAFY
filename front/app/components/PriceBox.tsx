@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import {
   PriceBtn,
   PriceBtnContainer,
@@ -43,6 +43,9 @@ const PriceBox: React.FC<PropsType> = ({ price, setPrice }) => {
             onChangeText={onChangeText}
           />
           <PriceInputText>원</PriceInputText>
+          <TouchableOpacity onPress={() => setPrice("0")}>
+            <PriceInputText>×</PriceInputText>
+          </TouchableOpacity>
         </PriceInputTextContainer>
       </PriceInputContainer>
       <PriceBtnContainer>

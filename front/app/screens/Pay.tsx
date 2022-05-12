@@ -61,7 +61,6 @@ const Pay: React.FC<PropsType> = ({
               payData={payData}
             />
           </BtnContainerRow>
-          <BtnBox color="red" text="초기화" setPrice={setPrice} />
         </FooterContainer>
       </ContentFooterContainer>
     </LayoutContainer>

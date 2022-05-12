@@ -104,10 +104,6 @@ const BtnBox: React.FC<PropsType> = ({
         setter?.();
         // setLogin?.(false);
         break;
-      case "초기화":
-        console.log("reset");
-        setPrice?.("0");
-        break;
       case "뒤로":
         navigation?.goBack();
         console.log("back");
@@ -119,7 +115,6 @@ const BtnBox: React.FC<PropsType> = ({
       case "로그인":
         console.log("login");
         setter?.();
-        // setLogin?.(true);
         break;
       case "아이디 중복 체크":
         console.log("id check");

@@ -211,15 +211,16 @@ export const PriceInputContainer = styled.View`
   margin-bottom: 2%;
 `;
 export const PriceInputText = styled.Text`
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   padding-right: 1%;
   padding-left: 1%;
+  padding-bottom: 2%;
 `;
 export const PriceInput = styled.TextInput`
   width: 220px;
-  height: 30px;
-  font-size: 25px;
+  font-size: 20px;
+  padding-bottom: 2%;
 `;
 export const PriceInputTextContainer = styled.View`
   flex-direction: row;
@@ -285,6 +286,7 @@ export const BtnContainerRow = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-horizontal: 10px;
 `;
 export const Btn = styled.TouchableOpacity<{ color: string }>`
   background-color: ${({ color }) => {
