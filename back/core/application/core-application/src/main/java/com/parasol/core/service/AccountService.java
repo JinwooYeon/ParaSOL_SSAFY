@@ -120,7 +120,7 @@ public class AccountService {
         // from 계좌에서 입금 금액만큼 빼기
         accountFrom.get().setBalance(fromBalance);
 
-        transactionHistoryService.createDepositHistory(request.getAccountFrom().getBankAccountNumber(),
+        transactionHistoryService.createWithdrawHistory(request.getAccountFrom().getBankAccountNumber(),
                 request.getAccountFrom().getBankAccountNumber(),
                 request.getNameOpponent(),
                 request.getAmount());
@@ -141,7 +141,7 @@ public class AccountService {
         accountTo.get().setBalance(toBalance);
         accountFrom.get().setBalance(fromBalance);
 
-        transactionHistoryService.createDepositHistory(request.getAccountFrom().getBankAccountNumber(),
+        transactionHistoryService.createRemitHistory(request.getAccountFrom().getBankAccountNumber(),
                 request.getAccountTo().getBankAccountNumber(),
                 request.getNameOpponent(),
                 request.getAmount());
