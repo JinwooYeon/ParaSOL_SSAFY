@@ -1,8 +1,9 @@
 package com.parasol.Main.service;
 
-import com.parasol.Main.api_model.AccountHistory;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoryResultResponse;
+import com.parasol.Main.api_response.TransactionExecutionResultResponse;
 import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,11 +43,11 @@ public class AccountService {
         return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request);
     }
 
-    public Mono<AccountBalanceQueryResultResponse> deposit(DepositRequest request) {
+    public Mono<TransactionExecutionResultResponse> deposit(DepositRequest request) {
         return depositRequestFactory.run(request);
     }
 
-    public Mono<AccountBalanceQueryResultResponse> withdraw(WithdrawRequest request) {
+    public Mono<TransactionExecutionResultResponse> withdraw(WithdrawRequest request) {
         return withdrawRequestFactory.run(request);
     }
 }

@@ -1,8 +1,9 @@
 package com.parasol.Main.controller;
 
-import com.parasol.Main.api_model.AccountHistory;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoryResultResponse;
+import com.parasol.Main.api_response.TransactionExecutionResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +64,7 @@ public class AccountController {
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
-    public Mono<AccountBalanceQueryResultResponse> deposit(
+    public Mono<TransactionExecutionResultResponse> deposit(
             @RequestBody @Valid DepositRequest depositRequest
     ) {
         return accountService.deposit(depositRequest);
@@ -72,7 +73,7 @@ public class AccountController {
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public Mono<AccountBalanceQueryResultResponse> withdraw(
+    public Mono<TransactionExecutionResultResponse> withdraw(
             @RequestBody @Valid WithdrawRequest withdrawRequest
     ) {
         return accountService.withdraw(withdrawRequest);
