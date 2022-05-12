@@ -23,52 +23,52 @@ const History: React.FC<PropsType> = ({ balance }) => {
   // useState
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const [total, setTotal] = useState("1,234,000");
+  const [total, setTotal] = useState("-1,234,000");
   const [data, setData] = useState([
     {
       id: "05월 10일 12시 10분", // 날짜 데이터 (기본키, key로 사용할 예정)
       title: "연어를 덮밥 서초점",
-      price: "25,000",
+      price: "-25,000",
     },
     {
       id: "05월 9일 12시 30분",
       title: "버거퀸 교대점",
-      price: "5,900",
+      price: "+5,900",
     },
     {
       id: "05월 8일 18시 10분",
       title: "고도리 곱돌이탕 강남점",
-      price: "34,000",
+      price: "+34,000",
     },
     {
       id: "05월 7일 12시 10분",
       title: "연어를 덮밥 서초점",
-      price: "25,000",
+      price: "-25,000",
     },
     {
       id: "05월 6일 12시 10분",
       title: "버거퀸 교대점",
-      price: "5,900",
+      price: "-5,900",
     },
     {
       id: "05월 5일 12시 10분",
       title: "고도리 곱돌이탕 강남점",
-      price: "34,000",
+      price: "-34,000",
     },
     {
       id: "05월 4일 12시 10분", // 날짜 데이터
       title: "연어를 덮밥 서초점",
-      price: "25,000",
+      price: "+25,000",
     },
     {
       id: "05월 3일 12시 10분",
       title: "버거퀸 교대점",
-      price: "5,900",
+      price: "-5,900",
     },
     {
       id: "05월 2일 12시 10분",
       title: "고도리 곱돌이탕 강남점",
-      price: "34,000",
+      price: "+34,000",
     },
   ]);
 
@@ -83,7 +83,15 @@ const History: React.FC<PropsType> = ({ balance }) => {
       >
         <View>
           <Text style={styles.title}>{item.title}</Text>
-          <Text style={{ ...styles.title, fontSize: 18 }}>{item.price}원</Text>
+          {item.price[0] === "-" ? (
+            <Text style={{ ...styles.title, fontSize: 18, color: "blue" }}>
+              {item.price}원
+            </Text>
+          ) : (
+            <Text style={{ ...styles.title, fontSize: 18, color: "red" }}>
+              {item.price}원
+            </Text>
+          )}
         </View>
         <Text style={{ ...styles.title, fontSize: 13, color: "grey" }}>
           {item.id}
@@ -119,7 +127,12 @@ const History: React.FC<PropsType> = ({ balance }) => {
         }}
       >
         <Text style={{ fontSize: 25, fontWeight: "bold" }}>5월</Text>
-        <Text style={{ color: "red" }}>-{total}원</Text>
+
+        {total[0] === "-" ? (
+          <Text style={{ color: "blue" }}>{total}원</Text>
+        ) : (
+          <Text style={{ color: "red" }}>{total}원</Text>
+        )}
       </View>
       <SafeAreaView style={styles.container}>
         <FlatList
