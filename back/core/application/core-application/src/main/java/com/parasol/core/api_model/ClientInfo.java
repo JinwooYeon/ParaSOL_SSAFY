@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @ApiModel("ClientInfo")
 public class ClientInfo {
     @Nullable
-    private String id;
+    private long id;
 
     @NotBlank
     private String name;

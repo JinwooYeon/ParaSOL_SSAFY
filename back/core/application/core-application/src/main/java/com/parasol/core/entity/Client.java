@@ -20,7 +20,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class Client {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @NotBlank
     private String name;
