@@ -3,6 +3,7 @@ package com.parasol.Main.service;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.Main.api_response.AccountHistoryResultResponse;
+import com.parasol.Main.api_response.AccountListQueryResultResponse;
 import com.parasol.Main.api_response.TransactionExecutionResultResponse;
 import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class AccountService {
         return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
-    public Mono<List<String>> getAllAccount(AccountListQueryRequest request) {
+    public Mono<AccountListQueryResultResponse> getAllAccount(AccountListQueryRequest request) {
         return queryAccountListRequestFactory.createQueryAccountListRequest(request);
     }
 

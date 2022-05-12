@@ -3,6 +3,7 @@ package com.parasol.Main.controller;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.Main.api_response.AccountHistoryResultResponse;
+import com.parasol.Main.api_response.AccountListQueryResultResponse;
 import com.parasol.Main.api_response.TransactionExecutionResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,9 @@ public class AccountController {
     // 계좌 목록 조회
     @PostMapping("account/list")
     @ResponseBody
-    public Mono<List<String>> getList(
-            @RequestBody @Valid AccountListQueryRequest accountListQueryRequest
+    public Mono<AccountListQueryResultResponse> getList(
+            @RequestBody @Valid AccountListQueryRequest request
     ) {
-        AccountListQueryRequest request = new AccountListQueryRequest();
-        request.setId(accountListQueryRequest.getId());
-
         return accountService.getAllAccount(request);
     }
 
