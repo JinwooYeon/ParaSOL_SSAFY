@@ -1,8 +1,10 @@
 package com.parasol.Main.modules;
 
 import com.parasol.Main.api_request.AccountBalanceQueryRequest;
+import com.parasol.Main.api_request.LoginParam;
 import com.parasol.Main.api_request.LoginRequest;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_response.LoginResult;
 import com.parasol.Main.api_response.LoginResultResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,7 @@ public class UserLoginSocketRequestFactory {
     @Value("${core.interface.port}")
     private String corePort;
 
-    public Mono<LoginResultResponse> userLoginRequest(LoginRequest request) {
+    public Mono<LoginResult> userLoginRequest(LoginParam request) {
         try {
             socket = new Socket(coreIp, Integer.parseInt(corePort));
 
@@ -49,17 +51,17 @@ public class UserLoginSocketRequestFactory {
             return response
                     .flatMap(s -> {
                         boolean success;
-                        String cusno = "";
+                        Long cusno;
 
                         success = (sockBuf[0] == '1');
-                        cusno = String.copyValueOf(sockBuf, 1, 10);
+                        cusno = Long.parseLong(String.valueOf(sockBuf, 1, 10).trim());
 
-                        LoginResultResponse loginResultResponse = LoginResultResponse.builder()
+                        LoginResult loginResult = LoginResult.builder()
                                 .isSuccess(success)
                                 .cusNo(cusno)
                                 .build();
 
-                        return Mono.just(loginResultResponse);
+                        return Mono.just(loginResult);
                     });
         } catch (IOException e) {
             System.out.println(e.getMessage());

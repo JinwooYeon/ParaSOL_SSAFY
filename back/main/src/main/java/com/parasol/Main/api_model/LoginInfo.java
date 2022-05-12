@@ -3,8 +3,10 @@ package com.parasol.Main.api_model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
 
@@ -12,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @ToString
 @ApiModel("LoginInfo")
+@SuperBuilder
+@NoArgsConstructor
 public class LoginInfo {
     @ApiModelProperty(name="id", example = "nini6630")
     @NotBlank

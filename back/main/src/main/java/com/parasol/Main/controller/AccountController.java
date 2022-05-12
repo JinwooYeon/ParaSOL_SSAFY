@@ -1,9 +1,10 @@
 package com.parasol.Main.controller;
 
-import com.parasol.Main.api_model.AccountHistory;
-import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoryResultResponse;
+import com.parasol.Main.api_response.AccountListQueryResultResponse;
+import com.parasol.Main.api_response.TransactionExecutionResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +35,9 @@ public class AccountController {
     // 계좌 목록 조회
     @PostMapping("account/list")
     @ResponseBody
-    public Mono<List<String>> getList(
-            @RequestBody @Valid AccountListQueryRequest accountListQueryRequest
+    public Mono<AccountListQueryResultResponse> getList(
+            @RequestBody @Valid AccountListQueryRequest request
     ) {
-        AccountListQueryRequest request = new AccountListQueryRequest();
-        request.setId(accountListQueryRequest.getId());
-
         return accountService.getAllAccount(request);
     }
 
@@ -55,7 +53,7 @@ public class AccountController {
     // 계좌 거래내역 조회
     @PostMapping("account/history")
     @ResponseBody
-    public Mono<List<AccountHistory>> getHistory(
+    public Mono<AccountHistoryResultResponse> getHistory(
             @RequestBody @Valid AccountHistoryQueryRequest request
     ) {
         return accountService.getHistory(request);
@@ -64,7 +62,7 @@ public class AccountController {
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
-    public Mono<Boolean> deposit(
+    public Mono<TransactionExecutionResultResponse> deposit(
             @RequestBody @Valid DepositRequest depositRequest
     ) {
         return accountService.deposit(depositRequest);
@@ -73,7 +71,7 @@ public class AccountController {
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public Mono<Boolean> withdraw(
+    public Mono<TransactionExecutionResultResponse> withdraw(
             @RequestBody @Valid WithdrawRequest withdrawRequest
     ) {
         return accountService.withdraw(withdrawRequest);

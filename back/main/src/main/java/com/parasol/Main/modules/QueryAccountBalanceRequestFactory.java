@@ -25,14 +25,10 @@ public class QueryAccountBalanceRequestFactory {
         WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
 
         // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
-        Mono<String> response = headersSpec.retrieve().bodyToMono(String.class);
+        Mono<AccountBalanceQueryResultResponse> response = headersSpec.retrieve().bodyToMono(AccountBalanceQueryResultResponse.class);
 
         return response
-                .filter(s -> !s.isEmpty())
-                .flatMap(s -> {
-                    AccountBalanceQueryResultResponse accountBalanceQueryResultResponse = new AccountBalanceQueryResultResponse();
-                    accountBalanceQueryResultResponse.setBalance(Long.parseLong(s));
-                    return Mono.just(accountBalanceQueryResultResponse);
-                });
+                .filter(s -> true)
+                .flatMap(s -> Mono.just(s));
     }
 }

@@ -1,6 +1,7 @@
 package com.parasol.core.controller;
 
 import com.parasol.core.api_model.BankUserCreateRequest;
+import com.parasol.core.api_model.BankUserCreateResponse;
 import com.parasol.core.api_model.BankUserLoginRequest;
 import com.parasol.core.api_model.BankUserLoginResponse;
 import com.parasol.core.service.BankUserService;
@@ -17,10 +18,9 @@ public class BankUserController {
     private BankUserService bankUserService;
 
     @PostMapping("register")
-    public String createBankUser(@RequestBody @Valid BankUserCreateRequest request) {
+    public BankUserCreateResponse createBankUser(@RequestBody @Valid BankUserCreateRequest request) {
 
-        String result = bankUserService.createBankUser(request);
-        return result;
+        return bankUserService.createBankUser(request);
     }
 
     @PostMapping("login")

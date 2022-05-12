@@ -1,0 +1,9 @@
+diff a/back/core/application/core-application/src/main/java/com/parasol/core/service/TransactionHistoryService.java b/back/core/application/core-application/src/main/java/com/parasol/core/service/TransactionHistoryService.java	(rejected hunks)
+@@ -82,7 +82,6 @@
+  
+          return transactionHistoryRepository.save(transactionHistory);
+      }
+--
+ -    public List<AccountHistory> getAccountHistory(String accountNo, String accountPassword) {
+ +    
+ +    public AccountHistoryResultResponse getAccountHistory(String accountNo, String accountPassword) {

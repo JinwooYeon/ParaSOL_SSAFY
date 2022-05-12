@@ -3,6 +3,7 @@ package com.parasol.Main.service;
 import com.parasol.Main.api_model.Client;
 import com.parasol.Main.api_model.ClientInfo;
 import com.parasol.Main.api_request.ClientRegisterRequest;
+import com.parasol.Main.api_response.ClientCreateResponse;
 import com.parasol.Main.modules.CreateAddClientRequest;
 import com.parasol.Main.modules.FindClientRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class ClientService {
     @Autowired
     private FindClientRequest findClientRequest;
 
-    public Mono<String> create(ClientRegisterRequest request) {
+    public Mono<ClientCreateResponse> create(ClientRegisterRequest request) {
         return addClientRequest.createAddClientRequest(request);
     }
 
