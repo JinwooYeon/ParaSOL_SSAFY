@@ -1,19 +1,27 @@
 package com.parasol.BaaS.service;
 
+import com.parasol.BaaS.api_model.AccessToken;
 import com.parasol.BaaS.api_model.AuthToken;
 import com.parasol.BaaS.api_model.Password;
+import com.parasol.BaaS.api_model.RefreshToken;
 import com.parasol.BaaS.api_request.*;
+import com.parasol.BaaS.api_response.*;
+import com.parasol.BaaS.auth.jwt.UserDetail;
 import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
 import com.parasol.BaaS.db.entity.Token;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.TokenRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import reactor.core.publisher.Mono;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -28,172 +36,320 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public AuthToken login(LoginRequest request) {
+    public Mono<LoginResponse> login(
+            LoginRequest request
+    ) throws IllegalArgumentException, NoSuchElementException {
         String id = request.getId();
         String password = request.getPassword();
 
+        if (!StringUtils.hasText(id)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!StringUtils.hasText(password)) {
+            throw new IllegalArgumentException();
+        }
+
         User user = getUserByUserId(id);
 
-        if(user == null) {
-            return null;
+        if (!passwordEncoder.matches(password, user.getUserPassword())) {
+            throw new IllegalArgumentException();
         }
 
-        if(passwordEncoder.matches(password, user.getUserPassword())) {
-            AuthToken authToken = JwtTokenUtil.getToken(id);
-            String refreshToken = authToken.getRefreshToken().getRefreshToken();
+        AuthToken newToken = JwtTokenUtil.getToken(id);
+        String newAccessToken = newToken.getAccessToken().getAccessToken();
+        String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
 
-            Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
+        Token savedToken = tokenRepository.findByUser_UserId(id)
+                .orElse(
+                        Token.builder()
+                                .user(user)
+                                .refreshToken(newRefreshToken)
+                                .build()
+                );
+        savedToken.setRefreshToken(newRefreshToken);
+        tokenRepository.save(savedToken);
 
-            if(checkToken.isPresent()) {
-                Token newToken = checkToken.get();
-                newToken.setRefreshToken(refreshToken);
-                tokenRepository.save(newToken);
-            } else {
-                Token token = Token.builder()
-                        .user(user)
-                        .refreshToken(refreshToken)
-                        .build();
-                tokenRepository.save(token);
-            }
-            return authToken;
-        }
-        return null;
+        return Mono.just(
+                LoginResponse.builder()
+                    .accessToken(newAccessToken)
+                    .refreshToken(newRefreshToken)
+                    .build()
+        );
     }
 
-    public AuthToken loginOauth(String id) {
+    public Mono<LoginResponse> loginOauth(
+            LoginRequest request
+    ) throws IllegalArgumentException, NoSuchElementException {
+        String id = request.getId();
+
+        if (!StringUtils.hasText(id)) {
+            throw new IllegalArgumentException();
+        }
+
         User user = getUserByUserId(id);
 
-        if(user == null) {
-            return null;
-        }
+        AuthToken newToken = JwtTokenUtil.getToken(id);
+        String newAccessToken = newToken.getAccessToken().getAccessToken();
+        String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
 
-        AuthToken authToken = JwtTokenUtil.getToken(id);
-        String refreshToken = authToken.getRefreshToken().getRefreshToken();
+        Token savedToken = tokenRepository.findByUser_UserId(id)
+                .orElse(
+                        Token.builder()
+                                .user(user)
+                                .refreshToken(newRefreshToken)
+                                .build()
+                );
+        savedToken.setRefreshToken(newRefreshToken);
+        tokenRepository.save(savedToken);
 
-        Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
-
-        if(checkToken.isPresent()) {
-            Token newToken = checkToken.get();
-            newToken.setRefreshToken(refreshToken);
-            tokenRepository.save(newToken);
-        } else {
-            Token token = Token.builder()
-                    .user(user)
-                    .refreshToken(refreshToken)
-                    .build();
-            tokenRepository.save(token);
-        }
-        return authToken;
+        return Mono.just(
+                LoginResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .build()
+        );
     }
 
-    public Password resetPassword(PasswordResetRequest request) {
+    public Mono<IdCheckResponse> idCheck(
+            IdCheckRequest request
+    ) throws IllegalArgumentException {
+        String id = request.getId();
+
+        if (!StringUtils.hasText(id)) {
+            throw new IllegalArgumentException();
+        }
+
+        Optional<User> user = userRepository.findByUserId(id);
+        if (user.isPresent()) {
+            throw new IllegalArgumentException();
+        }
+
+        return Mono.just(
+                IdCheckResponse.builder()
+                        .build()
+        );
+    }
+
+    public Mono<PasswordResetResponse> resetPassword(
+            PasswordResetRequest request
+    ) throws IllegalArgumentException, NoSuchElementException {
         String id = request.getId();
         String name = request.getName();
 
-        if(!StringUtils.hasText(id) || !StringUtils.hasText(name)) {
-            return null;
+        if (!StringUtils.hasText(id)) {
+            throw new IllegalArgumentException();
         }
 
-        Optional<User> oUser = userRepository.findByUserId(id);
-
-        if(!oUser.isPresent()) {
-            return null;
+        if (!StringUtils.hasText(name)) {
+            throw new IllegalArgumentException();
         }
 
-        User user = oUser.get();
-        if(name.equals(user.getUserName())) {
-            String newPassword = createPassword();
+        User user = getUserByUserId(id);
 
-            user.setUserPassword(passwordEncoder.encode(newPassword));
-
-            userRepository.save(user);
-
-            return Password.builder()
-                    .password(newPassword)
-                    .build();
+        if (!name.equals(user.getUserName())) {
+            throw new IllegalArgumentException();
         }
-        return null;
+
+        String newPassword = createPassword();
+        user.setUserPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        return Mono.just(
+                PasswordResetResponse.builder()
+                        .password(newPassword)
+                        .build()
+        );
     }
 
     // AuthToken 재발급
-    public AuthToken reissueAuthToken(String id, String refreshToken) {
-        Optional<Token> checkToken = tokenRepository.findByUser_UserId(id);
+    public Mono<ReissueTokenResponse> reissueAuthToken(
+            ReissueTokenRequest request
+    ) throws IllegalStateException, IllegalArgumentException, AccessDeniedException {
+        Authentication authentication = request.getAuthentication();
 
-        if(!checkToken.isPresent()) {
-            return null;
+        if (authentication == null) {
+            throw new AccessDeniedException("give me a token");
         }
 
-        Token token = checkToken.get();
-        String originRefreshToken = token.getRefreshToken();
-        String message = JwtTokenUtil.handleError(originRefreshToken);
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
 
-        if("success".equals(message)) {
-            if(originRefreshToken.equals(refreshToken)) {
-                AuthToken authToken = JwtTokenUtil.getToken(id);
-                String newRefreshToken = authToken.getRefreshToken().getRefreshToken();
-                token.setRefreshToken(newRefreshToken);
+        String id = userDetail.getUsername();
+        String refreshToken = authentication.getPrincipal().toString();
 
-                tokenRepository.save(token);
-                return authToken;
-            }
+        Token savedToken = tokenRepository.findByUser_UserId(id)
+                .orElseThrow(NoSuchElementException::new);
+
+        String oldRefreshToken = savedToken.getRefreshToken();
+        String message = JwtTokenUtil.handleError(oldRefreshToken);
+
+        if(!StringUtils.hasText(message)) {
+            throw new IllegalStateException();
         }
-        return null;
+
+        if (!message.equals("success")) {
+            throw new IllegalStateException();
+        }
+
+        if (!oldRefreshToken.equals(refreshToken)) {
+            throw new IllegalStateException();
+        }
+
+        AuthToken newToken = JwtTokenUtil.getToken(id);
+        String newAccessToken = newToken.getAccessToken().getAccessToken();
+        String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
+
+        savedToken.setRefreshToken(newRefreshToken);
+        tokenRepository.save(savedToken);
+
+        return Mono.just(
+                ReissueTokenResponse.builder()
+                        .accessToken(newAccessToken)
+                        .refreshToken(newRefreshToken)
+                        .build()
+        );
     }
 
+    public Mono<QueryUserInfoResponse> getUserInfo(
+            QueryUserInfoRequest request
+    ) throws IllegalStateException, NoSuchElementException, AccessDeniedException {
+        Authentication authentication = request.getAuthentication();
 
-    public User getUserByUserId(String id) {
-        Optional<User> oUser = userRepository.findByUserId(id);
-        if(!oUser.isPresent()) return null;
-        User user = oUser.get();
+        if (authentication == null) {
+            throw new AccessDeniedException("give me a token");
+        }
 
-        return user;
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
+        if (!StringUtils.hasText(id)) {
+            throw new IllegalStateException();
+        }
+
+        User user = getUserByUserId(id);
+
+        return Mono.just(
+                QueryUserInfoResponse.builder()
+                        .id(user.getUserId())
+                        .name(user.getUserName())
+                        .build()
+        );
     }
 
-    public User createUser(UserRegisterRequest request) {
+    public Mono<RegisterResponse> createUser(
+            RegisterRequest request
+    ) throws IllegalArgumentException {
+        String id = request.getId();
+        String password = request.getPassword();
+        String name = request.getName();
+
+        if (!StringUtils.hasText(id)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!StringUtils.hasText(password)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!StringUtils.hasText(name)) {
+            throw new IllegalArgumentException();
+        }
+
         User user = User.builder()
-                .userId(request.getId())
-                .userPassword(passwordEncoder.encode(request.getPassword()))
-                .userName(request.getName())
+                .userId(id)
+                .userPassword(passwordEncoder.encode(password))
+                .userName(name)
                 .build();
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return Mono.just(
+                RegisterResponse.builder()
+                        .id(user.getUserId())
+                        .name(user.getUserName())
+                        .build()
+        );
     }
 
-    public User updateUser(String userId, PasswordUpdateRequest request) {
-        User user = userRepository.findByUserId(userId).get();
+    public Mono<UpdateResponse> updateUser(
+            PasswordUpdateRequest request
+    ) throws IllegalArgumentException, NoSuchElementException, AccessDeniedException {
+        Authentication authentication = request.getAuthentication();
+
+        if (authentication == null) {
+            throw new AccessDeniedException("give me a token");
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
         String password = request.getPassword();
         String newPassword = request.getNewPassword();
 
         if(!StringUtils.hasText(password)) {
-            return null;
+            throw new IllegalArgumentException();
         }
 
-        if(StringUtils.hasText(newPassword)) {
-            if(passwordEncoder.matches(password, user.getUserPassword())) {
-                // 같은 비밀번호 사용 불가
-                if(passwordEncoder.matches(newPassword, user.getUserPassword())) {
-                    return null;
-                }
-                user.setUserPassword(passwordEncoder.encode(request.getNewPassword()));
-                return userRepository.save(user);
-            }
+        if(!StringUtils.hasText(newPassword)) {
+            throw new IllegalArgumentException();
         }
-        return null;
+
+        User user = getUserByUserId(id);
+
+        if (!passwordEncoder.matches(password, user.getUserPassword())) {
+            throw new IllegalArgumentException();
+        }
+
+        if (passwordEncoder.matches(newPassword, user.getUserPassword())) {
+            throw new IllegalArgumentException();
+        }
+
+        user.setUserPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        return Mono.just(
+                UpdateResponse.builder()
+                        .id(user.getUserId())
+                        .name(user.getUserName())
+                        .build()
+        );
     }
 
     @Transactional
-    public boolean deleteUser(String userId) {
-        // refreshToken 먼저 삭제 -> user 삭제
-        Long tokenDelete = tokenRepository.deleteByUserUserId(userId);
+    public Mono<DeleteResponse> deleteUser(
+            DeleteRequest request
+    ) throws IllegalStateException, AccessDeniedException {
+        Authentication authentication = request.getAuthentication();
 
-        Long delete = userRepository.deleteByUserId(userId);
-        if(tokenDelete > 0 && delete > 0) return true;
-        return false;
+        if (authentication == null) {
+            throw new AccessDeniedException("give me a token");
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
+        Long tokenDeleteResult = tokenRepository.deleteByUserUserId(id);
+
+        if (tokenDeleteResult <= 0) {
+            throw new IllegalStateException();
+        }
+
+        Long userDeleteResult = userRepository.deleteByUserId(id);
+
+        if (userDeleteResult <= 0) {
+            throw new IllegalStateException();
+        }
+
+        return Mono.just(
+                DeleteResponse.builder()
+                        .build()
+        );
     }
 
     // 임시 비밀번호 8자리
-    public String createPassword() {
-        StringBuffer password = new StringBuffer();
+    public String createPassword(
+    ) {
+        StringBuilder password = new StringBuilder();
         Random rnd = new Random();
 
         for (int i = 0; i < 8; i++) { // 8자리
@@ -215,6 +371,13 @@ public class UserService {
             }
         }
         return password.toString();
+    }
+
+    public User getUserByUserId(
+            String id
+    ) throws NoSuchElementException {
+        return userRepository.findByUserId(id)
+                .orElseThrow(NoSuchElementException::new);
     }
 
 }
