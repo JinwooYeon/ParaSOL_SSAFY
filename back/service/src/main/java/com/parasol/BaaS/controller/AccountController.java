@@ -27,7 +27,7 @@ public class AccountController {
         QueryAccountBalanceRequest request = QueryAccountBalanceRequest.builder()
                 .authentication(authentication)
                 .bankName(bankName)
-                .accountNumber(bankAccountNumber)
+                .bankAccountNumber(bankAccountNumber)
                 .build();
 
         return accountService.getBalance(request)
@@ -59,7 +59,7 @@ public class AccountController {
         QueryAccountHistoryRequest request = QueryAccountHistoryRequest.builder()
                 .authentication(authentication)
                 .bankName(bankName)
-                .accountNumber(bankAccountNumber)
+                .bankAccountNumber(bankAccountNumber)
                 .build();
 
         return accountService.getAccountHistory(request)

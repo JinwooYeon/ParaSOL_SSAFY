@@ -13,7 +13,8 @@ import org.springframework.security.core.Authentication;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryAccountHistoryRequest extends AccountInfo {
+public class QueryAccountHistoryRequest {
     private Authentication authentication;
     private String bankName;
+    private String bankAccountNumber;
 }

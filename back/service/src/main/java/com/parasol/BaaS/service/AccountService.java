@@ -65,7 +65,7 @@ public class AccountService {
                 .orElseThrow(NoSuchElementException::new);
 
         String bankName = request.getBankName();
-        String bankAccountNumber = request.getAccountNumber();
+        String bankAccountNumber = request.getBankAccountNumber();
 
         BankConnection bankConnection = getBankConnection(user, bankName);
 
@@ -146,7 +146,7 @@ public class AccountService {
                 .orElseThrow(NoSuchElementException::new);
 
         String bankName = request.getBankName();
-        String bankAccountNumber = request.getAccountNumber();
+        String bankAccountNumber = request.getBankAccountNumber();
 
         BankConnection bankConnection = getBankConnection(user, bankName);
 
