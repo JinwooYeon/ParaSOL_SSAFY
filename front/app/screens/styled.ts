@@ -2,14 +2,14 @@ import styled from "styled-components/native";
 import { mainBlue, balanceGrey } from "../color";
 
 // Container
-export const LogoContainer = styled.View`
+export const LogoContainer = styled.SafeAreaView`
   /* background-color: black; */
   margin-top: 10%;
   margin-bottom: 4%;
   margin-left: 5%;
   flex-direction: row;
 `;
-export const BoxContainer = styled.View`
+export const BoxContainer = styled.SafeAreaView`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -23,7 +23,7 @@ export const BoxContainer = styled.View`
   padding-bottom: 5%;
   padding-left: 3%;
 `;
-export const LayoutContainer = styled.View`
+export const LayoutContainer = styled.SafeAreaView`
   /* background-color: teal; */
   flex: 1;
   margin-right: 5%;
@@ -66,7 +66,7 @@ export const BalanceTextContainer = styled.View`
   justify-content: space-between;
 `;
 export const Balance = styled.Text`
-  font-size: 23px;
+  font-size: 20px;
   font-weight: bold;
   margin-right: 2%;
   margin-left: 2%;
@@ -153,12 +153,12 @@ export const QRcodeInfoContainer = styled.View`
   margin-top: 5%;
 `;
 export const QRcodeInfoName = styled.Text`
-  font-size: 35px;
+  font-size: 30px;
   color: black;
 `;
 export const QRcodeInfoNum = styled.TouchableOpacity``;
 export const QRcodeInfoNumText = styled.Text`
-  font-size: 30px;
+  font-size: 20px;
   color: ${mainBlue};
 `;
 
@@ -283,7 +283,7 @@ export const BtnContainer = styled.View`
 `;
 export const BtnContainerRow = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 `;
 export const Btn = styled.TouchableOpacity<{ color: string }>`
@@ -297,7 +297,7 @@ export const Btn = styled.TouchableOpacity<{ color: string }>`
     }
   }};
   border-color: ${mainBlue};
-  border-width: ${({ color }) => (color === "white" ? "1px" : "0px")};
+  border-width: ${({ color }) => (color === "white" ? "1px" : "1px")};
   justify-content: center;
   align-items: center;
   padding-top: 2%;

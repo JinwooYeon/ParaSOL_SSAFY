@@ -79,16 +79,17 @@ const History: React.FC<PropsType> = ({ balance }) => {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
+          marginVertical: 5,
         }}
       >
         <View>
           <Text style={styles.title}>{item.title}</Text>
           {item.price[0] === "-" ? (
-            <Text style={{ ...styles.title, fontSize: 18, color: "blue" }}>
+            <Text style={{ ...styles.title, fontSize: 16, color: "blue" }}>
               {item.price}원
             </Text>
           ) : (
-            <Text style={{ ...styles.title, fontSize: 18, color: "red" }}>
+            <Text style={{ ...styles.title, fontSize: 16, color: "red" }}>
               {item.price}원
             </Text>
           )}
@@ -122,7 +123,7 @@ const History: React.FC<PropsType> = ({ balance }) => {
           // backgroundColor: "blue",
           flexDirection: "row",
           justifyContent: "space-between",
-          marginBottom: "5%",
+          marginVertical: "5%",
           alignItems: "center",
         }}
       >
@@ -157,12 +158,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   title: {
-    fontSize: 23,
+    fontSize: 16,
   },
 });
 
 const HistoryHeaderContainer = styled(HeaderContainer)`
-  height: 18%;
+  flex: 0.3;
 `;
 
 export default History;
