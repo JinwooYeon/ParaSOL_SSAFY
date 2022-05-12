@@ -39,7 +39,7 @@ public class AccountService {
         return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
     }
 
-    public Mono<List<AccountHistory>> getHistory(AccountHistoryQueryRequest request) {
+    public Mono<AccountHistoryResultResponse> getHistory(AccountHistoryQueryRequest request) {
         return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request);
     }
 

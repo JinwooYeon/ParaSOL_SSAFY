@@ -55,7 +55,7 @@ public class AccountController {
     // 계좌 거래내역 조회
     @PostMapping("account/history")
     @ResponseBody
-    public Mono<List<AccountHistory>> getHistory(
+    public Mono<AccountHistoryResultResponse> getHistory(
             @RequestBody @Valid AccountHistoryQueryRequest request
     ) {
         return accountService.getHistory(request);
