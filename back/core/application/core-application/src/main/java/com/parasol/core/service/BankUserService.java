@@ -1,6 +1,7 @@
 package com.parasol.core.service;
 
 import com.parasol.core.api_model.BankUserCreateRequest;
+import com.parasol.core.api_model.BankUserCreateResponse;
 import com.parasol.core.api_model.BankUserLoginRequest;
 import com.parasol.core.api_model.BankUserLoginResponse;
 import com.parasol.core.entity.BankUser;
@@ -25,7 +26,8 @@ public class BankUserService {
     private BankUserRepository bankUserRepository;
 
     @Transactional
-    public String createBankUser(@Valid BankUserCreateRequest request) throws IllegalStateException{
+    public BankUserCreateResponse createBankUser(@Valid BankUserCreateRequest request) throws IllegalStateException{
+        BankUserCreateResponse result = new BankUserCreateResponse();
         BankUser bankUser = BankUser.builder()
                 .id(UUID.randomUUID().toString())
                 .username(request.getId())
@@ -35,7 +37,10 @@ public class BankUserService {
         Optional<Client> client = clientRepository.findByNameAndResidentNumber(request.getName(), request.getResidentNumber());
         client.ifPresentOrElse(bankUser::setClient, () -> { throw new IllegalStateException("해당 고객이 없습니다."); });
 
-        return bankUserRepository.save(bankUser).getId();
+        String id = bankUserRepository.save(bankUser).getId();
+        result.setId(id);
+
+        return result;
     }
 
     public BankUserLoginResponse login(@Valid BankUserLoginRequest request) throws IllegalStateException {
