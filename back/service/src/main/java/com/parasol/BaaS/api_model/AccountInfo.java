@@ -10,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class AccountInfo {
-    private String bankAccountNumber;
+    private String accountNumber;
 }
