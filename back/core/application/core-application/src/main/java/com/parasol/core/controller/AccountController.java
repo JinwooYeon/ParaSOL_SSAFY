@@ -58,7 +58,7 @@ public class AccountController {
     public AccountHistoryResultResponse getAccountHistory(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber(), accountQueryRequest.getAccountPassword());
+        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
     }
 
     // 계좌 입금. to 계좌에 입금

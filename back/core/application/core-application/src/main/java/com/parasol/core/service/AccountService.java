@@ -72,7 +72,7 @@ public class AccountService {
         if (account.isEmpty())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
-        validationService.equalPassword(accountQueryRequest.getAccountPassword(), account.get().getPassword());
+//        validationService.equalPassword(accountQueryRequest.getAccountPassword(), account.get().getPassword());
 
         result.setBalance(account.get().getBalance());
         return result;
