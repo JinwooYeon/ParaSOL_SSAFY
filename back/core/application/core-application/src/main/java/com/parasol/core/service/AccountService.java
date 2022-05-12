@@ -4,14 +4,12 @@ import com.parasol.core.VO.Balance;
 import com.parasol.core.api_model.*;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.Client;
-import com.parasol.core.entity.TransactionHistory;
 import com.parasol.core.repository.AccountRepository;
 import com.parasol.core.utils.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -34,7 +32,7 @@ public class AccountService {
 
 
     public String Create(@Valid AccountOpenRequest accountOpenRequest) {
-        Client client = clientService.findById(accountOpenRequest.getId());
+        Client client = clientService.findById(accountOpenRequest.getCusNo());
         Account account = new Account();
 
         if (client == null)
@@ -49,7 +47,7 @@ public class AccountService {
 
 
     public AccountListQueryResultResponse getAllAccount(@Valid AccountListQueryRequest request) {
-        Client client = clientService.findById(request.getId());
+        Client client = clientService.findById(request.getCusNo());
         AccountListQueryResultResponse listresult = new AccountListQueryResultResponse();
         List<AccountNumber> result = new ArrayList<>();
 

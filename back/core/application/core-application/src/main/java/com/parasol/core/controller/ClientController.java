@@ -2,7 +2,6 @@ package com.parasol.core.controller;
 
 import com.parasol.core.api_model.ClientCreateRequest;
 import com.parasol.core.api_model.ClientCreateResponse;
-import com.parasol.core.api_model.ClientInfo;
 import com.parasol.core.entity.Client;
 import com.parasol.core.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,9 @@ public class ClientController {
 
     @GetMapping("client")
     public Client GetClient(
-            @RequestParam("id") String id
+            @RequestParam("id") Long cusNo
     ) {
-        Client result = clientService.findById(id);
+        Client result = clientService.findById(cusNo);
 
         return result;
     }

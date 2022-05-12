@@ -13,6 +13,5 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @ApiModel("AccountListQueryRequest")
 public class AccountListQueryRequest {
-    @NotBlank
-    private String id;
+    private Long cusNo;
 }
