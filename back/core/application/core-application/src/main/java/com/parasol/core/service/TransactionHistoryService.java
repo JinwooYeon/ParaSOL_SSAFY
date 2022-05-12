@@ -1,6 +1,7 @@
 package com.parasol.core.service;
 
 import com.parasol.core.api_model.AccountHistory;
+import com.parasol.core.api_model.AccountHistoryResultResponse;
 import com.parasol.core.api_model.AccountInfo;
 import com.parasol.core.eenum.TransactionType;
 import com.parasol.core.entity.Account;
@@ -82,7 +83,8 @@ public class TransactionHistoryService {
         return transactionHistoryRepository.save(transactionHistory);
     }
 
-    public List<AccountHistory> getAccountHistory(String accountNo, String accountPassword) {
+    public AccountHistoryResultResponse getAccountHistory(String accountNo, String accountPassword) {
+        AccountHistoryResultResponse listResult = new AccountHistoryResultResponse();
         List<AccountHistory> result = new ArrayList<>();
         Optional<Account> account = accountRepository.findById(accountNo);
 
@@ -110,6 +112,8 @@ public class TransactionHistoryService {
             result.add(ele);
         }
 
-        return result;
+        listResult.setAccountHistories(result);
+
+        return listResult;
     }
 }

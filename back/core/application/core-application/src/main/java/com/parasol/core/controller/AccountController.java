@@ -57,7 +57,7 @@ public class AccountController {
     // 계좌 거래 내역 조회
     @PostMapping("account/history")
     @ResponseBody
-    public List<AccountHistory> getAccountHistory(
+    public AccountHistoryResultResponse getAccountHistory(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
         return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber(), accountQueryRequest.getAccountPassword());
