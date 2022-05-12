@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 @Transactional
 public interface TransactionHistoryRepository extends JpaRepository<TransactionHistory, Long> {
-    List<TransactionHistory> findByAccount_Id(String accountId);
 }
