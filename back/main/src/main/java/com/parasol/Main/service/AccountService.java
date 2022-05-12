@@ -56,8 +56,8 @@ public class AccountService {
 
     public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
         LoginParam loginParam = LoginParam.builder()
-                .id(request.getBankId())
-                .password(request.getBankPassword())
+                .id(request.getId())
+                .password(request.getPassword())
                 .build();
 
         return userLoginSocketRequestFactory.userLoginRequest(loginParam)
