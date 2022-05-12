@@ -246,14 +246,14 @@ export const PriceBtnText = styled.Text`
 `;
 
 // Content _ Benefit
-export const BenefitContainer = styled.View`
+export const BenefitContainer = styled.SafeAreaView`
   /* background-color: grey; */
+  flex: 0.8;
   justify-content: center;
   align-items: center;
-  height: 100%;
 `;
 export const BenefitText = styled.Text`
-  font-size: 55px;
+  font-size: 25px;
 `;
 
 // Content _ MypageMenu

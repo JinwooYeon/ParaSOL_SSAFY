@@ -9,7 +9,7 @@ const Benefit = () => (
   <LayoutContainer>
     <HeaderText>혜택</HeaderText>
     <BenefitContainer>
-      <BenefitText>준비중...</BenefitText>
+      <BenefitText>진행중인 이벤트가 없습니다.</BenefitText>
     </BenefitContainer>
   </LayoutContainer>
 );
