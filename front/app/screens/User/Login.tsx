@@ -29,7 +29,6 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
       id: id,
       password: password,
     };
-    console.log(data);
     await axios
       .post(url, data, {
         headers: {
@@ -37,7 +36,6 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
         },
       })
       .then((res: any) => {
-        console.log(res);
         if (res.data) {
           const accessToken = res.data.accessToken;
           const refreshToken = res.data.refreshToken;
@@ -53,7 +51,6 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
         }
       })
       .catch((err: any) => {
-        console.log(err);
         Alert.alert("에러가 발생했습니다. 잠시 후에 다시 시도해주세요.");
       });
   };
