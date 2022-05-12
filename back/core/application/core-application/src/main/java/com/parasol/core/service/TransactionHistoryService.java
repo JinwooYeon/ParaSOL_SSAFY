@@ -7,6 +7,7 @@ import com.parasol.core.eenum.TransactionType;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.TransactionHistory;
 import com.parasol.core.repository.AccountRepository;
+import com.parasol.core.repository.AccountRepositorySupport;
 import com.parasol.core.repository.TransactionHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,9 @@ public class TransactionHistoryService {
 
     @Autowired
     private ValidationService validationService;
+
+    @Autowired
+    private AccountRepositorySupport accountRepositorySupport;
 
     public TransactionHistory createDepositHistory(String accountFrom, String accountTo, String nameFrom, Long amount) {
         Optional<Account> account = accountRepository.findById(accountTo);
@@ -84,36 +88,28 @@ public class TransactionHistoryService {
     }
     
     public AccountHistoryResultResponse getAccountHistory(String accountNo, String accountPassword) {
-        AccountHistoryResultResponse listResult = new AccountHistoryResultResponse();
-        List<AccountHistory> result = new ArrayList<>();
-        Optional<Account> account = accountRepository.findById(accountNo);
+        List<TransactionHistory> transactionHistories = accountRepositorySupport.getTransactionHistory(accountNo);
+        AccountHistoryResultResponse resultResponse = new AccountHistoryResultResponse();
+        List<AccountHistory> accountHistories = new ArrayList<>();
 
-        if(account.isEmpty())
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-
-        validationService.equalPassword(accountPassword, account.get().getPassword());
-
-        for(TransactionHistory e : transactionHistoryRepository.findByAccount_Id(accountNo)
-                .stream().sorted(Comparator.comparing(TransactionHistory::getDate).reversed()).collect(Collectors.toList())){
-            AccountHistory ele = new AccountHistory();
+        for(TransactionHistory e : transactionHistories){
+            AccountHistory accountHistory = new AccountHistory();
             AccountInfo accountInfo = new AccountInfo();
 
             accountInfo.setBankAccountNumber(e.getAccount().getId());
 
-            ele.setTxId(e.getId());
-            ele.setTxDatetime(e.getDate());
-            ele.setTxMethod(e.getType());
-            ele.setAmount(e.getAmount());
-            ele.setAccountTo(accountInfo);
-            ele.setTransactionAccount(e.getTransactionAccount());
-            ele.setTransactionOpponent(e.getTransactionOpponent());
+            accountHistory.setTxId(e.getId());
+            accountHistory.setTxDatetime(e.getDate());
+            accountHistory.setTxMethod(e.getType());
+            accountHistory.setAmount(e.getAmount());
+            accountHistory.setAccountTo(accountInfo);
+            accountHistory.setTransactionAccount(e.getTransactionAccount());
+            accountHistory.setTransactionOpponent(e.getTransactionOpponent());
 
-
-            result.add(ele);
+            accountHistories.add(accountHistory);
         }
 
-        listResult.setAccountHistories(result);
-
-        return listResult;
+        resultResponse.setAccountHistories(accountHistories);
+        return resultResponse;
     }
 }
