@@ -49,7 +49,7 @@ public class TransactionHistoryService {
     }
 
     public TransactionHistory createWithdrawHistory(String accountFrom, String accountTo, String nameTo, Long amount) {
-        Optional<Account> account = accountRepository.findById(accountTo);
+        Optional<Account> account = accountRepository.findById(accountFrom);
         Long time = System.currentTimeMillis();
 
 
@@ -66,7 +66,7 @@ public class TransactionHistoryService {
         return transactionHistoryRepository.save(transactionHistory);
     }
 
-    public TransactionHistory createRemitHistory(String accountFrom, String accountTo, Long amount) {
+    public TransactionHistory createRemitHistory(String accountFrom, String accountTo, String nameTo, Long amount) {
         Optional<Account> account = accountRepository.findById(accountTo);
         Long time = System.currentTimeMillis();
 
