@@ -1,7 +1,6 @@
 package com.parasol.Main.controller;
 
 import com.parasol.Main.api_model.AccountHistory;
-import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.Main.service.AccountService;

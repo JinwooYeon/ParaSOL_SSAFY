@@ -4,6 +4,7 @@ import com.parasol.core.VO.Balance;
 import com.parasol.core.api_model.*;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.Client;
+import com.parasol.core.entity.TransactionHistory;
 import com.parasol.core.repository.AccountRepository;
 import com.parasol.core.utils.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,15 @@ public class AccountService {
     private ValidationService validationService;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private TransactionHistoryService transactionHistoryService;
 
 
     public String Create(@Valid AccountOpenRequest accountOpenRequest) {
         Client client = clientService.findById(accountOpenRequest.getId());
         Account account = new Account();
 
-        if(client == null)
+        if (client == null)
             return null;
 
         account.setClient(client);
@@ -49,7 +52,7 @@ public class AccountService {
         Client client = clientService.findById(request.getId());
         List<String> result = new ArrayList<>();
 
-        for(Account element : accountRepository.findByClient(client)){
+        for (Account element : accountRepository.findByClient(client)) {
             AccountInfo accountInfo = new AccountInfo();
 
             accountInfo.setBankAccountNumber(element.getId());
@@ -59,10 +62,10 @@ public class AccountService {
         return result;
     }
 
-    public Long getBalanceWithPassword(AccountQueryRequest accountQueryRequest){
+    public Long getBalanceWithPassword(AccountQueryRequest accountQueryRequest) {
         Optional<Account> account = accountRepository.findById(accountQueryRequest.getAccountNumber());
 
-        if(account.isEmpty())
+        if (account.isEmpty())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         validationService.equalPassword(accountQueryRequest.getAccountPassword(), account.get().getPassword());
@@ -78,23 +81,30 @@ public class AccountService {
     }
 
     @Transactional
-    public boolean deposit(@Valid AccountRequest request) {
+    public TransactionExecutionResultResponse deposit(@Valid AccountRequest request) {
+        TransactionExecutionResultResponse resultResponse = new TransactionExecutionResultResponse();
         // to 계좌에 입금
-        // 일단 같은 은행 계좌라고 생각하고 할게욥
         Optional<Account> accountTo = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
         Long toBalance = accountTo.get().getBalance() + request.getAmount();
         // to 계좌에서 입금 금액만큼 추가
         accountTo.get().setBalance(toBalance);
 
-        return true;
+        transactionHistoryService.createDepositHistory(request.getAccountTo().getBankAccountNumber(),
+                request.getAccountTo().getBankAccountNumber(),
+                request.getNameOpponent(),
+                request.getAmount());
+
+        resultResponse.setSuccess(true);
+        return resultResponse;
     }
 
     @Transactional
-    public boolean withdraw(@Valid AccountWithdrawRequest request) {
+    public TransactionExecutionResultResponse withdraw(@Valid AccountWithdrawRequest request) {
+        TransactionExecutionResultResponse resultResponse = new TransactionExecutionResultResponse();
         // from 계좌에서 출금
         Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
 
-        if(accountFrom.isEmpty())
+        if (accountFrom.isEmpty())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         validationService.equalPassword(request.getAccountPassword(), accountFrom.get().getPassword());
@@ -103,20 +113,33 @@ public class AccountService {
         // from 계좌에서 입금 금액만큼 빼기
         accountFrom.get().setBalance(fromBalance);
 
-        return true;
+        transactionHistoryService.createDepositHistory(request.getAccountFrom().getBankAccountNumber(),
+                request.getAccountFrom().getBankAccountNumber(),
+                request.getNameOpponent(),
+                request.getAmount());
+
+        resultResponse.setSuccess(true);
+        return resultResponse;
     }
 
-    public boolean remit(@Valid AccountRequest request) {
+    public TransactionExecutionResultResponse remit(@Valid AccountRequest request) {
+        TransactionExecutionResultResponse resultResponse = new TransactionExecutionResultResponse();
 
-        /*Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getBankAccountNumber());
+        Optional<Account> accountTo = accountRepository.findById(request.getAccountTo().getBankAccountNumber());
         Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getBankAccountNumber());
 
         Long toBalance = validationService.calculateBalance(new Balance(accountTo.get().getBalance() + request.getAmount()));
         Long fromBalance = validationService.calculateBalance(new Balance(accountFrom.get().getBalance() - request.getAmount()));
 
         accountTo.get().setBalance(toBalance);
-        accountFrom.get().setBalance(fromBalance);*/
+        accountFrom.get().setBalance(fromBalance);
 
-        return true;
+        transactionHistoryService.createDepositHistory(request.getAccountFrom().getBankAccountNumber(),
+                request.getAccountTo().getBankAccountNumber(),
+                request.getNameOpponent(),
+                request.getAmount());
+
+        resultResponse.setSuccess(true);
+        return resultResponse;
     }
 }
