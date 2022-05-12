@@ -1,6 +1,5 @@
 package com.parasol.Main.api_response;
 
-import com.parasol.Main.api_model.AccountBalance;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 @NoArgsConstructor
-@ApiModel("AccountBalanceQueryResultResponse")
-public class AccountBalanceQueryResultResponse extends AccountBalance {
+@ApiModel("DepositResult")
+public class DepositResult {
+    private boolean success = false;
 }

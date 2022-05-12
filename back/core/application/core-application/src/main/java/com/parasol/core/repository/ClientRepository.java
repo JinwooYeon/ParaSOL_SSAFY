@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface ClientRepository extends JpaRepository<Client, String> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findByNameAndResidentNumber(String name, String residentNumber);
 }

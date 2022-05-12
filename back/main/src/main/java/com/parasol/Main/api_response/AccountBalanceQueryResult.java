@@ -13,6 +13,6 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 @NoArgsConstructor
-@ApiModel("AccountBalanceQueryResultResponse")
-public class AccountBalanceQueryResultResponse extends AccountBalance {
+@ApiModel("AccountBalanceQueryResult")
+public class AccountBalanceQueryResult extends AccountBalance {
 }

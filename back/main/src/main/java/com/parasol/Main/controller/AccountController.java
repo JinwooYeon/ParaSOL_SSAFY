@@ -1,17 +1,13 @@
 package com.parasol.Main.controller;
 
 import com.parasol.Main.api_request.*;
-import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.Main.api_response.AccountHistoryResultResponse;
-import com.parasol.Main.api_response.AccountListQueryResultResponse;
-import com.parasol.Main.api_response.TransactionExecutionResultResponse;
+import com.parasol.Main.api_response.*;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 public class AccountController {
@@ -62,10 +58,10 @@ public class AccountController {
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
-    public Mono<TransactionExecutionResultResponse> deposit(
-            @RequestBody @Valid DepositRequest depositRequest
+    public Mono<DepositResponse> deposit(
+            @RequestBody @Valid DepositRequest request
     ) {
-        return accountService.deposit(depositRequest);
+        return accountService.deposit(request);
     }
 
     // 계좌 출금. from 계좌에서 출금

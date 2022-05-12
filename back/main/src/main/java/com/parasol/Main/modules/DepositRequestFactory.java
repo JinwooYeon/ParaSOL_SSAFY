@@ -1,7 +1,7 @@
 package com.parasol.Main.modules;
 
-import com.parasol.Main.api_request.DepositRequest;
-import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_request.DepositParam;
+import com.parasol.Main.api_response.DepositResult;
 import com.parasol.Main.api_response.TransactionExecutionResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,19 +20,15 @@ public class DepositRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    public Mono<TransactionExecutionResultResponse> run(DepositRequest saveInfo) {
+    public Mono<DepositResult> run(DepositParam saveInfo) {
         /* Http 통신 */
         UriSpec<RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
-        RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
+        RequestHeadersSpec headersSpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account/deposit")
-                .build());
-        RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(saveInfo));
+                .build()
+        )
+                .body(BodyInserters.fromValue(saveInfo));
 
-        // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
-        Mono<TransactionExecutionResultResponse> response = headersSpec.retrieve().bodyToMono(TransactionExecutionResultResponse.class);
-
-        return response
-                .filter(s -> true)
-                .flatMap(s -> Mono.just(s));
+        return headersSpec.retrieve().bodyToMono(DepositResult.class);
     }
 }
