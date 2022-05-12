@@ -2,6 +2,7 @@ package com.parasol.Main.service;
 
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.*;
+import com.parasol.Main.eenum.TransactionType;
 import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,8 +84,8 @@ public class AccountService {
 
     public Mono<AccountHistoryResultResponse> getHistory(AccountHistoryQueryRequest request) {
         LoginParam loginParam = LoginParam.builder()
-                .id(request.getBankId())
-                .password(request.getBankPassword())
+                .id(request.getId())
+                .password(request.getPassword())
                 .build();
 
         return userLoginSocketRequestFactory.userLoginRequest(loginParam)
@@ -108,8 +109,21 @@ public class AccountService {
                 );
     }
 
-    public Mono<TransactionExecutionResultResponse> deposit(DepositRequest request) {
-        return depositRequestFactory.run(request);
+    public Mono<DepositResponse> deposit(DepositRequest request) {
+        DepositParam param = DepositParam.builder()
+                .method(TransactionType.DEPOSIT)
+                .amount(request.getAmount())
+                .accountTo(request.getAccountTo())
+                .nameOpponent(request.getNameFrom())
+                .build();
+
+        return depositRequestFactory.run(param)
+                .map(queryResult ->
+                        DepositResponse.builder()
+                                .isSuccess(queryResult.isSuccess())
+                                .build()
+                );
+
     }
 
     public Mono<TransactionExecutionResultResponse> withdraw(WithdrawRequest request) {

@@ -25,8 +25,8 @@ public class AccountHistoryQueryRequest{
 
     @ApiModelProperty(name="id", example = "nini6630")
     @NotBlank
-    private String bankId;
+    private String id;
     @NotBlank
     @ApiModelProperty(name="password", example = "1q2w3e4r")
-    private String bankPassword;
+    private String password;
 }

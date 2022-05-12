@@ -14,10 +14,10 @@ import javax.validation.constraints.NotBlank;
 @ToString
 @ApiModel("AccountInfo")
 public class AccountInfo {
-    @ApiModelProperty(name = "bank_name", example = "피피쿠스은행")
-    @Nullable
-    private String bankName;
+//    @ApiModelProperty(name = "bank_name", example = "피피쿠스은행")
+//    @Nullable
+//    private String bankName;
     @ApiModelProperty(name = "bank_account_number", example = "110-437-525252")
     @NotBlank
-    private String bankAccountNumber;
+    private String accountNumber;
 }
