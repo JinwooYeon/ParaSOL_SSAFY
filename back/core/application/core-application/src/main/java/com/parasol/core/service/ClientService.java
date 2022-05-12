@@ -1,5 +1,6 @@
 package com.parasol.core.service;
 
+import com.parasol.core.api_model.ClientCreateResponse;
 import com.parasol.core.entity.Client;
 import com.parasol.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,17 @@ public class ClientService {
     @Autowired
     private ValidationService validationService;
 
-    public String create(String name, String residentNumber) {
+    public ClientCreateResponse create(String name, String residentNumber) {
+        ClientCreateResponse result = new ClientCreateResponse();
         Client client = Client.builder()
                 .id(UUID.randomUUID().toString())
                 .name(name)
                 .residentNumber(residentNumber)
                 .build();
+        String id = clientRepository.save(client).getId();
 
-        return clientRepository.save(client).getId();
+        result.setId(id);
+        return result;
     }
 
     public Client findById(String id) {
