@@ -125,6 +125,9 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
               status: response.status.toString(),
               output: JSON.stringify(response.data),
             });
+            if (props.API.detail === "회원 탈퇴") {
+              localStorage.clear();
+            }
           })
           .catch((err) => {
             setResponseData({
