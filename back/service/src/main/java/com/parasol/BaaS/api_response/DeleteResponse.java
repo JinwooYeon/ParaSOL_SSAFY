@@ -1,6 +1,5 @@
-package com.parasol.BaaS.api_model;
+package com.parasol.BaaS.api_response;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +9,5 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class Password {
-    private String password;
+public class DeleteResponse {
 }

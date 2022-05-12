@@ -1,7 +1,9 @@
 package com.parasol.BaaS.api_request;
 
-import lombok.AllArgsConstructor;
+import com.parasol.BaaS.api_model.UserInfo;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.Authentication;
@@ -9,9 +11,7 @@ import org.springframework.security.core.Authentication;
 @Getter
 @Setter
 @SuperBuilder
-@AllArgsConstructor
-public class PasswordUpdateRequest {
+@NoArgsConstructor
+public class QueryUserInfoRequest {
     private Authentication authentication;
-    private String password;
-    private String newPassword;
 }

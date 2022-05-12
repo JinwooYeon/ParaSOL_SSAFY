@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 @Setter
 @SuperBuilder
 @AllArgsConstructor
-public class PasswordUpdateRequest {
+public class UpdateRequest {
     private Authentication authentication;
     private String password;
     private String newPassword;

@@ -1,15 +1,15 @@
-package com.parasol.BaaS.api_model;
+package com.parasol.BaaS.api_request;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.Authentication;
 
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class Password {
-    private String password;
+public class DeleteRequest {
+    private Authentication authentication;
 }

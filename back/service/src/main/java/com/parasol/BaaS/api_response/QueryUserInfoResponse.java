@@ -1,6 +1,7 @@
-package com.parasol.BaaS.api_model;
+package com.parasol.BaaS.api_response;
 
-import lombok.Builder;
+import com.parasol.BaaS.api_model.UserInfo;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,5 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class Password {
-    private String password;
+public class QueryUserInfoResponse extends UserInfo {
 }
