@@ -10,5 +10,5 @@ import lombok.ToString;
 @ToString
 @ApiModel("ClientCreateResponse")
 public class ClientCreateResponse {
-    private String id;
+    private long id;
 }

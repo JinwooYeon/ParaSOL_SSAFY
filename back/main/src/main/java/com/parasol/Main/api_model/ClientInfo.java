@@ -19,5 +19,5 @@ public class ClientInfo {
     private String name;
     @ApiModelProperty(name="id", example="5124dd4684")
     @Nullable
-    private String id;
+    private long id;
 }

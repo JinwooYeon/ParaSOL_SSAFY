@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ClientService {
@@ -20,13 +19,12 @@ public class ClientService {
     public ClientCreateResponse create(String name, String residentNumber) {
         ClientCreateResponse result = new ClientCreateResponse();
         Client client = Client.builder()
-                .id(UUID.randomUUID().toString())
                 .name(name)
                 .residentNumber(residentNumber)
                 .build();
-        String id = clientRepository.save(client).getId();
+        clientRepository.save(client);
 
-        result.setId(id);
+        result.setId(clientRepository.findByNameAndResidentNumber(name, residentNumber).get().getId());
         return result;
     }
 
