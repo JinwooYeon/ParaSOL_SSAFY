@@ -63,7 +63,7 @@ public class AccountController {
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
-    public Mono<Boolean> deposit(
+    public Mono<AccountBalanceQueryResultResponse> deposit(
             @RequestBody @Valid DepositRequest depositRequest
     ) {
         return accountService.deposit(depositRequest);
@@ -72,7 +72,7 @@ public class AccountController {
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public Mono<Boolean> withdraw(
+    public Mono<AccountBalanceQueryResultResponse> withdraw(
             @RequestBody @Valid WithdrawRequest withdrawRequest
     ) {
         return accountService.withdraw(withdrawRequest);

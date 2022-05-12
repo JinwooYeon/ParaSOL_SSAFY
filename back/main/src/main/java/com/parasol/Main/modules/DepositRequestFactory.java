@@ -19,7 +19,7 @@ public class DepositRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    public Mono<Boolean> run(DepositRequest saveInfo) {
+    public Mono<AccountBalanceQueryResultResponse> run(DepositRequest saveInfo) {
         /* Http 통신 */
         UriSpec<RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
@@ -28,7 +28,7 @@ public class DepositRequestFactory {
         RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(saveInfo));
 
         // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
-        Mono<Boolean> response = headersSpec.retrieve().bodyToMono(Boolean.class);
+        Mono<AccountBalanceQueryResultResponse> response = headersSpec.retrieve().bodyToMono(AccountBalanceQueryResultResponse.class);
 
         return response
                 .filter(s -> true)

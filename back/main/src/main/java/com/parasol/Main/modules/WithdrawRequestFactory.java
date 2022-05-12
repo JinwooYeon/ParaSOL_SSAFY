@@ -1,7 +1,7 @@
 package com.parasol.Main.modules;
 
 import com.parasol.Main.api_request.WithdrawRequest;
-import com.parasol.Main.api_response.TransactionExecuteResultResponse;
+import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
@@ -16,7 +16,7 @@ public class WithdrawRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    public Mono<Boolean> run(WithdrawRequest saveInfo){
+    public Mono<AccountBalanceQueryResultResponse> run(WithdrawRequest saveInfo){
         /* Http 통신 */
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
@@ -25,7 +25,7 @@ public class WithdrawRequestFactory {
         WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(saveInfo));
 
         // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
-        Mono<Boolean> response = headersSpec.retrieve().bodyToMono(Boolean.class);
+        Mono<AccountBalanceQueryResultResponse> response = headersSpec.retrieve().bodyToMono(AccountBalanceQueryResultResponse.class);
 
         return response
                 .filter(s -> true)
