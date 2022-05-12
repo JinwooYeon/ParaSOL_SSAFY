@@ -1,9 +1,7 @@
 package com.parasol.core.controller;
 
 import com.parasol.core.api_model.*;
-import com.parasol.core.entity.TransactionHistory;
 import com.parasol.core.service.AccountService;
-import com.parasol.core.service.ClientService;
 import com.parasol.core.service.TransactionHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

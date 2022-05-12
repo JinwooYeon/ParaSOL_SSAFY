@@ -82,7 +82,7 @@ public class TransactionHistoryService {
 
         return transactionHistoryRepository.save(transactionHistory);
     }
-
+    
     public AccountHistoryResultResponse getAccountHistory(String accountNo, String accountPassword) {
         AccountHistoryResultResponse listResult = new AccountHistoryResultResponse();
         List<AccountHistory> result = new ArrayList<>();
