@@ -53,18 +53,18 @@ public class AccountController {
     @PostMapping("account/balance")
     @ResponseBody
     public Long getBalance(
-            @RequestBody @Valid AccountQueryRequest accountQueryRequest
+            @RequestBody @Valid AccountQueryRequest request
     ) {
-        return accountService.getBalanceWithPassword(accountQueryRequest);
+        return accountService.getBalance(request);
     }
 
     // 계좌 거래 내역 조회
     @PostMapping("account/history")
     @ResponseBody
     public List<AccountHistory> getAccountHistory(
-            @RequestBody @Valid AccountQueryRequest accountQueryRequest
+            @RequestBody @Valid AccountQueryRequest request
     ) {
-        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber(), accountQueryRequest.getAccountPassword());
+        return transactionHistoryService.getAccountHistory(request);
     }
 
     // 계좌 입금. to 계좌에 입금

@@ -48,7 +48,7 @@ class CoreAPIClient {
 
     std::string getBalance(const std::string& account_number) {
         AccountBalanceQueryRequest request;
-        request.set_accountnumber(account_number);
+        request.set_account_number(account_number);
 
         AccountBalanceQueryResponse response;
         ClientContext context;
@@ -72,8 +72,10 @@ class CoreAPIClient {
         Status status = stub_->login(&context, request, &response);
 
         struct scus0001a_out* raw_response = (struct scus0001a_out*)malloc(sizeof(struct scus0001a_out));
-        memcpy(&raw_response->rst_yn, response.is_success().c_str(), 1);
-        memcpy(&raw_response->cusno, response.cusno().c_str(), 10);
+	memset(raw_response, 0, sizeof(struct scus0001a_out));
+
+        memcpy(&raw_response->rst_yn, response.is_success().c_str(), response.is_success().size());
+        memcpy(&raw_response->cusno, response.cus_no().c_str(), response.cus_no().size());
 
         if (status.ok()) {
             return raw_response;
@@ -87,7 +89,7 @@ class CoreAPIClient {
 };
 
 int main(int argc, char **argv) {
-    std::string baseURL = "localhost:9090";
+    std::string baseURL = "172.24.176.1:9090";
 
     int serv_sock;
     int clnt_sock;

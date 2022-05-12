@@ -12,7 +12,8 @@ service CoreAPI {
 }
 
 message AccountBalanceQueryRequest {
-  string accountNumber = 1;
+  string cus_no = 1;
+  string account_number = 2;
 }
 
 message AccountBalanceQueryResponse {
@@ -26,5 +27,5 @@ message LoginRequest {
 
 message LoginResponse {
   string is_success = 1;
-  string cusno = 2;
+  string cus_no = 2;
 }

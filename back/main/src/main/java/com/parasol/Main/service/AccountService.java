@@ -35,53 +35,98 @@ public class AccountService {
         return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
-    public Mono<List<AccountInfo>> getAllAccount(LoginRequest loginRequest) {
-        Mono<LoginResultResponse> loginResponse = userLoginSocketRequestFactory.userLoginRequest(loginRequest);
+    public Mono<AccountListQueryResultResponse> getAllAccount(AccountListQueryRequest request) {
+        Mono<LoginResultResponse> loginResponse = userLoginSocketRequestFactory.userLoginRequest(request);
 
         return loginResponse
                 .filter(Objects::nonNull)
                 .filter(LoginResultResponse::getIsSuccess)
                 .flatMap(response -> {
-                    AccountListQueryRequest queryRequest = AccountListQueryRequest.builder()
-                            //.id(임의의 UUID)를 통해 테스트 가능
-                            // 현재 로그인 로직 미비로 인해 오작동
-                            .id(response.getCusNo())
-                            .build();
+                    request.setCusNo(response.getCusNo());
 
-                    return queryAccountListRequestFactory.createQueryAccountListRequest(queryRequest)
+                    return queryAccountListRequestFactory.createQueryAccountListRequest(request)
                             .filter(Objects::nonNull)
                             .flatMap(rawAccountNumbers ->
-                                    Mono.just(rawAccountNumbers
-                                            .stream()
-                                            .map(accountNumber -> AccountInfo.builder().accountNumber(accountNumber).build())
-                                            .collect(Collectors.toList())
+                                    Mono.just(
+                                            AccountListQueryResultResponse.builder()
+                                                    .accounts(
+                                                            rawAccountNumbers
+                                                                    .stream()
+                                                                    .map(accountNumber -> AccountInfo.builder().accountNumber(accountNumber).build())
+                                                                    .collect(Collectors.toList())
+                                                    )
+                                                    .build()
                                     )
                             );
                 });
     }
 
     public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
-        return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request)
+        Mono<LoginResultResponse> loginResponse = userLoginSocketRequestFactory.userLoginRequest(request);
+
+        return loginResponse
                 .filter(Objects::nonNull)
-                .flatMap(balance ->
-                    Mono.just(
-                            AccountBalanceQueryResultResponse.builder()
-                                .totalBalance(balance)
-                                .availableBalance(balance)
-                                .build()
-                    )
-                );
+                .filter(LoginResultResponse::getIsSuccess)
+                .flatMap(response -> {
+                    request.setCusNo(response.getCusNo());
+
+                    return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request)
+                            .filter(Objects::nonNull)
+                            .flatMap(rawAccountBalance ->
+                                    Mono.just(
+                                            AccountBalanceQueryResultResponse.builder()
+                                                    .totalBalance(rawAccountBalance)
+                                                    .availableBalance(rawAccountBalance)
+                                                    .build()
+                                    )
+                            );
+                });
     }
 
-    public Mono<List<AccountHistory>> getHistory(AccountHistoryQueryRequest request) {
-        return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request);
+    public Mono<AccountHistoriesQueryResultResponse> getHistory(AccountHistoryQueryRequest request) {
+        Mono<LoginResultResponse> loginResponse = userLoginSocketRequestFactory.userLoginRequest(request);
+
+        return loginResponse
+                .filter(Objects::nonNull)
+                .filter(LoginResultResponse::getIsSuccess)
+                .flatMap(response -> {
+                    request.setCusNo(response.getCusNo());
+
+                    return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request)
+                            .filter(Objects::nonNull)
+                            .flatMap(rawAccountHistories ->
+                                    Mono.just(
+                                            AccountHistoriesQueryResultResponse.builder()
+                                                    .accountHistories(rawAccountHistories)
+                                                    .build()
+                                    )
+                            );
+                });
     }
 
     public Mono<Boolean> deposit(DepositRequest request) {
-        return depositRequestFactory.run(request);
+        Mono<LoginResultResponse> loginResponse = userLoginSocketRequestFactory.userLoginRequest(request);
+
+        return loginResponse
+                .filter(Objects::nonNull)
+                .filter(LoginResultResponse::getIsSuccess)
+                .flatMap(response -> {
+                    request.setCusNo(response.getCusNo());
+
+                    return depositRequestFactory.run(request);
+                });
     }
 
     public Mono<Boolean> withdraw(WithdrawRequest request) {
-        return withdrawRequestFactory.run(request);
+        Mono<LoginResultResponse> loginResponse = userLoginSocketRequestFactory.userLoginRequest(request);
+
+        return loginResponse
+                .filter(Objects::nonNull)
+                .filter(LoginResultResponse::getIsSuccess)
+                .flatMap(response -> {
+                    request.setCusNo(response.getCusNo());
+
+                    return withdrawRequestFactory.run(request);
+                });
     }
 }

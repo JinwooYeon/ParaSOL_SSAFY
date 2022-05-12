@@ -14,5 +14,5 @@ public class LoginResultResponse {
     Boolean isSuccess;
 
     @ApiModelProperty(name="cusNo",example = "")
-    String cusNo;
+    Long cusNo;
 }

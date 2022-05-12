@@ -3,7 +3,7 @@ syntax = "proto3";
 package core_api;
 
 option java_multiple_files = true;
-option java_package = "com.parasol.core.lib";
+option java_package = "com.parasol.core_interface";
 option java_outer_classname = "CoreAPIProto";
 
 service CoreAPI {
@@ -12,7 +12,8 @@ service CoreAPI {
 }
 
 message AccountBalanceQueryRequest {
-  string accountNumber = 1;
+  string cus_no = 1;
+  string account_number = 2;
 }
 
 message AccountBalanceQueryResponse {
@@ -26,5 +27,5 @@ message LoginRequest {
 
 message LoginResponse {
   string is_success = 1;
-  string cusno = 2;
+  string cus_no = 2;
 }

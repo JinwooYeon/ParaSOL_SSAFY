@@ -46,7 +46,7 @@ public class AccountService {
 
 
     public List<String> getAllAccount(@Valid AccountListQueryRequest request) {
-        Client client = clientService.findById(request.getId());
+        Client client = clientService.findById(request.getCusNo());
         List<String> result = new ArrayList<>();
 
         for(Account element : accountRepository.findByClient(client)){
@@ -59,7 +59,7 @@ public class AccountService {
         return result;
     }
 
-    public Long getBalanceWithPassword(AccountQueryRequest accountQueryRequest){
+/*    public Long getBalanceWithPassword(AccountQueryRequest accountQueryRequest){
         Optional<Account> account = accountRepository.findById(accountQueryRequest.getAccountNumber());
 
         if(account.isEmpty())
@@ -68,11 +68,11 @@ public class AccountService {
         validationService.equalPassword(accountQueryRequest.getAccountPassword(), account.get().getPassword());
 
         return account.get().getBalance();
-    }
+    }*/
 
 
-    public Long getBalance(String accountNo) {
-        Optional<Account> account = accountRepository.findById(accountNo);
+    public Long getBalance(@Valid AccountQueryRequest request) {
+        Optional<Account> account = accountRepository.findById(request.getAccountNumber());
 
         return account.get().getBalance();
     }

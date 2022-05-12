@@ -15,8 +15,7 @@ import javax.validation.constraints.Size;
 @ToString
 @ApiModel("AccountOpenRequest")
 public class AccountOpenRequest{
-    @NotBlank
-    private String id;
+    private Long id;
 
     @ApiModelProperty(name="account_password", example = "0809")
     @NotNull

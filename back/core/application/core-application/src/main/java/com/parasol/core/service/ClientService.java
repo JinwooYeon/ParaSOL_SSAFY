@@ -16,9 +16,8 @@ public class ClientService {
     @Autowired
     private ValidationService validationService;
 
-    public String create(String name, String residentNumber) {
+    public Long create(String name, String residentNumber) {
         Client client = Client.builder()
-                .id(UUID.randomUUID().toString())
                 .name(name)
                 .residentNumber(residentNumber)
                 .build();
@@ -26,7 +25,7 @@ public class ClientService {
         return clientRepository.save(client).getId();
     }
 
-    public Client findById(String id) {
+    public Client findById(Long id) {
         Optional<Client> result = clientRepository.findById(id);
         return result.orElse(null);
     }

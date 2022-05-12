@@ -50,7 +50,7 @@ public class BankUserService {
 
             Client client = b.getClient();
             response.setSuccess(true);
-            response.setCusno(client.getId());
+            response.setCusNo(client.getId());
         }, () -> { throw new IllegalStateException("해당 아이디를 찾을 수 없습니다."); });
 
         return response;

@@ -2,6 +2,7 @@ package com.parasol.core.service;
 
 import com.parasol.core.api_model.AccountHistory;
 import com.parasol.core.api_model.AccountInfo;
+import com.parasol.core.api_model.AccountQueryRequest;
 import com.parasol.core.eenum.TransactionType;
 import com.parasol.core.entity.Account;
 import com.parasol.core.entity.TransactionHistory;
@@ -80,16 +81,16 @@ public class TransactionHistoryService {
         return transactionHistoryRepository.save(transactionHistory);
     }
 
-    public List<AccountHistory> getAccountHistory(String accountNo, String accountPassword) {
+    public List<AccountHistory> getAccountHistory(AccountQueryRequest request) {
         List<AccountHistory> result = new ArrayList<>();
-        Optional<Account> account = accountRepository.findById(accountNo);
+        Optional<Account> account = accountRepository.findById(request.getAccountNumber());
 
         if(account.isEmpty())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
-        validationService.equalPassword(accountPassword, account.get().getPassword());
+        //validationService.equalPassword(accountPassword, account.get().getPassword());
 
-        for(TransactionHistory e : transactionHistoryRepository.findByAccount_Id(accountNo)
+        for(TransactionHistory e : transactionHistoryRepository.findByAccount_Id(request.getAccountNumber())
                 .stream().sorted(Comparator.comparing(TransactionHistory::getDate).reversed()).collect(Collectors.toList())){
             AccountHistory ele = new AccountHistory();
             AccountInfo accountInfo = new AccountInfo();

@@ -14,5 +14,5 @@ import lombok.ToString;
 @ApiModel("BankUserLoginResponse")
 public class BankUserLoginResponse {
     private boolean isSuccess;
-    private String cusno;
+    private Long cusNo;
 }

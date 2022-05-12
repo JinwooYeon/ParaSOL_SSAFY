@@ -16,17 +16,17 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping("client")
-    public String CreateClient(
+    public Long CreateClient(
             @RequestBody @Valid ClientCreateRequest client
     ) {
-        String result = clientService.create(client.getName(), client.getResidentNumber());
+        Long result = clientService.create(client.getName(), client.getResidentNumber());
 
         return result;
     }
 
     @GetMapping("client")
     public Client GetClient(
-            @RequestParam("id") String id
+            @RequestParam("id") Long id
     ) {
         Client result = clientService.findById(id);
 

@@ -1,12 +1,15 @@
 package com.parasol.BaaS.modules;
 
 import com.parasol.BaaS.api_model.AccountBalance;
+import com.parasol.BaaS.api_model.AccountBalanceQueryParam;
+import com.parasol.BaaS.api_model.AccountBalanceQueryResult;
 import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
 import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,14 +28,22 @@ public class QueryAccountBalanceRequestFactory {
     @Value("${baas.auth.key}")
     private String baasAuthKey;
 
-    public Mono<AccountBalance> create(QueryAccountBalanceRequest request) {
+    public Mono<AccountBalanceQueryResult> create(QueryAccountBalanceRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
                 .build()
         )
                 .header("ClientId", baasAuthKey)
-                .body(BodyInserters.fromValue(request));
+                .body(
+                        BodyInserters.fromValue(
+                            AccountBalanceQueryParam.builder()
+                                    .accountNumber(request.getBankAccountNumber())
+                                    .id(request.getId())
+                                    .password(request.getPassword())
+                                    .build()
+                        )
+                );
 
         return bodySpec.retrieve().bodyToMono(AccountBalance.class);
     }

@@ -4,6 +4,8 @@ import com.parasol.Main.api_model.AccountHistory;
 import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
+import com.parasol.Main.api_response.AccountListQueryResultResponse;
 import com.parasol.Main.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +36,8 @@ public class AccountController {
     // 계좌 목록 조회
     @PostMapping("account/list")
     @ResponseBody
-    public Mono<List<AccountInfo>> getList(
-            @RequestBody @Valid LoginRequest request
+    public Mono<AccountListQueryResultResponse> getList(
+            @RequestBody @Valid AccountListQueryRequest request
     ) {
         return accountService.getAllAccount(request);
     }
@@ -52,7 +54,7 @@ public class AccountController {
     // 계좌 거래내역 조회
     @PostMapping("account/history")
     @ResponseBody
-    public Mono<List<AccountHistory>> getHistory(
+    public Mono<AccountHistoriesQueryResultResponse> getHistory(
             @RequestBody @Valid AccountHistoryQueryRequest request
     ) {
         return accountService.getHistory(request);

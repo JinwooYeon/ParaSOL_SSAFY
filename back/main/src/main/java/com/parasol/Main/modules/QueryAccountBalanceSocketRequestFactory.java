@@ -53,11 +53,14 @@ public class QueryAccountBalanceSocketRequestFactory {
             Mono<Long> response = Mono.just(balance);
 
             return response
-                    .flatMap(s -> {
-                        AccountBalanceQueryResultResponse accountBalanceQueryResultResponse = new AccountBalanceQueryResultResponse();
-                        accountBalanceQueryResultResponse.setBalance(s);
-                        return Mono.just(accountBalanceQueryResultResponse);
-                    });
+                    .flatMap(rawBalance ->
+                        Mono.just(
+                                AccountBalanceQueryResultResponse.builder()
+                                        .totalBalance(rawBalance)
+                                        .availableBalance(rawBalance)
+                                        .build()
+                        )
+                    );
         } catch (IOException e) {
             System.out.println(e.getMessage());
 

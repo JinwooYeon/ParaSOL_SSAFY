@@ -1,13 +1,18 @@
 package com.parasol.core.grpc;
 
+import com.parasol.core.api_model.AccountQueryRequest;
 import com.parasol.core.api_model.BankUserLoginRequest;
 import com.parasol.core.api_model.BankUserLoginResponse;
 import com.parasol.core_interface.*;
 import com.parasol.core.service.AccountService;
 import com.parasol.core.service.BankUserService;
 import io.grpc.stub.StreamObserver;
+import io.swagger.annotations.ApiModelProperty;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @GrpcService
 public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
@@ -32,7 +37,7 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
 
         LoginResponse response = LoginResponse.newBuilder()
                 .setIsSuccess(bankUserLoginResponse.isSuccess() ? "1" : "0")
-                .setCusno(bankUserLoginResponse.getCusno())
+                .setCusNo(bankUserLoginResponse.getCusNo().toString())
                 .build();
 
         responseObserver.onNext(response);
@@ -41,9 +46,12 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
 
     @Override
     public void getBalance(AccountBalanceQueryRequest request, StreamObserver<AccountBalanceQueryResponse> responseObserver) {
-        String accountNumber = request.getAccountNumber();
+        AccountQueryRequest balanceQueryRequest = AccountQueryRequest.builder()
+                .cusNo(Long.parseLong(request.getCusNo()))
+                .accountNumber(request.getAccountNumber())
+                .build();
 
-        Long balance = accountService.getBalance(accountNumber);
+        Long balance = accountService.getBalance(balanceQueryRequest);
 
         AccountBalanceQueryResponse response = AccountBalanceQueryResponse.newBuilder()
                 .setBalance(balance.toString())

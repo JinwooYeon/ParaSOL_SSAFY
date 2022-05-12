@@ -49,14 +49,14 @@ public class UserLoginSocketRequestFactory {
             return response
                     .flatMap(s -> {
                         boolean success;
-                        String cusno = "";
+                        long cusNo;
 
                         success = (sockBuf[0] == '1');
-                        cusno = String.copyValueOf(sockBuf, 1, 10);
+                        cusNo = Long.parseLong(String.valueOf(sockBuf, 1, 10).trim());
 
                         LoginResultResponse loginResultResponse = LoginResultResponse.builder()
                                 .isSuccess(success)
-                                .cusNo(cusno)
+                                .cusNo(cusNo)
                                 .build();
 
                         return Mono.just(loginResultResponse);

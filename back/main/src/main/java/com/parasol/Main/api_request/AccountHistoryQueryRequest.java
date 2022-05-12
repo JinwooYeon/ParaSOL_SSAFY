@@ -13,13 +13,11 @@ import javax.validation.constraints.Size;
 @Setter
 @ToString
 @ApiModel("AccountHistoryQueryRequest")
-public class AccountHistoryQueryRequest{
+public class AccountHistoryQueryRequest extends LoginRequest{
+    @ApiModelProperty(name = "cusNo")
+    private Long cusNo;
+
     @ApiModelProperty(name = "account_number", example = "110-437-525252")
     @NotBlank
     private String accountNumber;
-
-    @ApiModelProperty(name="account_password", example = "1234")
-    @NotBlank
-    @Size(max = 4, min = 4)
-    private String accountPassword;
 }
