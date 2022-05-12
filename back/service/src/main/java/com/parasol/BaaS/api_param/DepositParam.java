@@ -1,9 +1,7 @@
-package com.parasol.BaaS.api_request;
+package com.parasol.BaaS.api_param;
 
 import com.parasol.BaaS.api_model.AccountInfo;
-import com.parasol.BaaS.api_model.Transaction;
-import com.parasol.BaaS.enums.TransactionType;
-import lombok.AllArgsConstructor;
+import com.parasol.BaaS.api_model.LoginInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +12,7 @@ import org.springframework.security.core.Authentication;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class DepositRequest {
-    private String bankName;
+public class DepositParam extends LoginInfo {
     private Long amount;
     private String nameFrom;
     private AccountInfo accountTo;

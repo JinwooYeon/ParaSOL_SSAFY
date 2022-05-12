@@ -1,5 +1,6 @@
-package com.parasol.BaaS.api_model;
+package com.parasol.BaaS.api_response;
 
+import com.parasol.BaaS.api_model.AccountBalance;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,5 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class AccountInfo {
-    private String bankAccountNumber;
+public class QueryAccountBalanceResponse extends AccountBalance {
 }

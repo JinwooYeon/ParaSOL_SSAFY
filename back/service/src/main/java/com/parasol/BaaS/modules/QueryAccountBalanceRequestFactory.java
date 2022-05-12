@@ -2,10 +2,10 @@ package com.parasol.BaaS.modules;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.parasol.BaaS.api_request.DepositRequest;
+import com.parasol.BaaS.api_param.QueryAccountBalanceParam;
 import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
-import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
+import com.parasol.BaaS.api_response.QueryAccountBalanceResponse;
+import com.parasol.BaaS.api_result.QueryAccountBalanceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,27 +22,22 @@ public class QueryAccountBalanceRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Value("${sbj-api-server.balance}")
     private String endPoint;
 
-    public AccountBalanceQueryResultResponse create(QueryAccountBalanceRequest request) throws JsonProcessingException {
-        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.GET);
-        WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
+    @Value("${baas.auth.key}")
+    private String baasAuthKey;
+
+
+    public Mono<QueryAccountBalanceResult> create(QueryAccountBalanceParam request) {
+        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
+        WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
-                .queryParam("bankName", request.getBankName())
-                .queryParam("bankAccountNumber", request.getBankAccountNumber())
                 .build()
-        );
+        )
+                .header("ClientId", baasAuthKey)
+                .body(BodyInserters.fromValue(request));
 
-        Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
-
-        AccountBalanceQueryResultResponse formattedResponse = objectMapper.readValue(response.block(), AccountBalanceQueryResultResponse.class);
-        formattedResponse.setBankName(request.getBankName());
-        formattedResponse.setBankAccountName(request.getBankAccountNumber());
-
-        return formattedResponse;
+        return bodySpec.retrieve().bodyToMono(QueryAccountBalanceResult.class);
     }
 }
