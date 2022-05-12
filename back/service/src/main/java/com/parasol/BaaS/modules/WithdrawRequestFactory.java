@@ -2,8 +2,11 @@ package com.parasol.BaaS.modules;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.parasol.BaaS.api_param.WithdrawParam;
 import com.parasol.BaaS.api_request.WithdrawRequest;
 import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
+import com.parasol.BaaS.api_result.DepositResult;
+import com.parasol.BaaS.api_result.WithdrawResult;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,29 +25,22 @@ public class WithdrawRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Value("${sbj-api-server.withdraw}")
     private String endPoint;
 
-    public TransactionExecuteResultResponse create(WithdrawRequest request) throws JsonProcessingException {
+    @Value("${baas.auth.key}")
+    private String baasAuthKey;
+
+
+    public Mono<WithdrawResult> create(WithdrawParam request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
                 .build()
-        ).contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters
-                .fromFormData("method", request.getMethod().toString())
-                .with("amount", request.getAmount().toString())
-                .with("accountFrom", request.getAccountFrom().toString())
-                .with("accountTo", request.getAccountTo().toString())
-        );
-        // ClientResponse에 응답 데이터 로드
-        Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
+        )
+                .header("ClientId", baasAuthKey)
+                .body(BodyInserters.fromValue(request));
 
-        TransactionExecuteResultResponse formattedResponse = objectMapper.readValue(response.block(), TransactionExecuteResultResponse.class);
-
-        return formattedResponse;
+        return bodySpec.retrieve().bodyToMono(WithdrawResult.class);
     }
 }

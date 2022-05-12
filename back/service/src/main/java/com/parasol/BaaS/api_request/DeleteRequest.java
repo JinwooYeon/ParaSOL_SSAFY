@@ -1,7 +1,5 @@
 package com.parasol.BaaS.api_request;
 
-import com.parasol.BaaS.api_model.BankInfo;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +10,6 @@ import org.springframework.security.core.Authentication;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class QueryAccountListRequest {
+public class DeleteRequest {
     private Authentication authentication;
-    private String bankName;
 }

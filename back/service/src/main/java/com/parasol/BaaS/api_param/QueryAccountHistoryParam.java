@@ -1,4 +1,4 @@
-package com.parasol.BaaS.api_request;
+package com.parasol.BaaS.api_param;
 
 import com.parasol.BaaS.api_model.LoginInfo;
 import lombok.Getter;
@@ -10,5 +10,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class LoginRequest extends LoginInfo {
+public class QueryAccountHistoryParam extends LoginInfo {
+    private String accountNumber;
 }

@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
-public class UserInfo extends LoginInfo{
+public class UserInfo extends LoginInfo {
     private String name;
 }

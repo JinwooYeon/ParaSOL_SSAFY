@@ -1,9 +1,7 @@
 package com.parasol.BaaS.api_request;
 
-import com.parasol.BaaS.api_model.BankInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.Authentication;
@@ -11,9 +9,9 @@ import org.springframework.security.core.Authentication;
 @Getter
 @Setter
 @SuperBuilder
-@NoArgsConstructor
 @AllArgsConstructor
-public class QueryAccountListRequest {
+public class UpdateRequest {
     private Authentication authentication;
-    private String bankName;
+    private String password;
+    private String newPassword;
 }

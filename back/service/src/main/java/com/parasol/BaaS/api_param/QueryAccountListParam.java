@@ -1,6 +1,6 @@
-package com.parasol.BaaS.api_model;
+package com.parasol.BaaS.api_param;
 
-import lombok.Builder;
+import com.parasol.BaaS.api_model.LoginInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +10,5 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class Password {
-    private String password;
+public class QueryAccountListParam extends LoginInfo {
 }

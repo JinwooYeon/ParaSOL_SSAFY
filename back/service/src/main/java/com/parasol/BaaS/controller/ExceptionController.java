@@ -4,9 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @Slf4j
@@ -42,6 +45,22 @@ public class ExceptionController {
     public ResponseEntity<Object> ForbiddenException(final IllegalAccessException ex) {
         log.error("Forbidden", ex);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @ExceptionHandler({
+            NoSuchElementException.class
+    })
+    public ResponseEntity<Object> NotFoundException(final NoSuchElementException ex) {
+        log.error("Not Found", ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @ExceptionHandler({
+            HttpRequestMethodNotSupportedException.class
+    })
+    public ResponseEntity<Object> MethodNotSupportedException(final HttpRequestMethodNotSupportedException ex) {
+        log.error("Method Not Supported", ex);
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
     @ExceptionHandler({
