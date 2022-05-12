@@ -1,6 +1,8 @@
 package com.parasol.Main.modules;
 
+import com.parasol.Main.api_request.AccountBalanceQueryParam;
 import com.parasol.Main.api_request.AccountBalanceQueryRequest;
+import com.parasol.Main.api_response.AccountBalanceQueryResult;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,19 +18,14 @@ public class QueryAccountBalanceRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient webClient;
 
-    public Mono<AccountBalanceQueryResultResponse> createQueryAccountBalanceRequest(AccountBalanceQueryRequest request) {
+    public Mono<AccountBalanceQueryResult> createQueryAccountBalanceRequest(AccountBalanceQueryParam request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.POST);
-        WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
+        WebClient.RequestHeadersSpec<?> headersSpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account/balance")
-                .build());
+                .build()
+        )
+                .body(BodyInserters.fromValue(request));
 
-        WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
-
-        // TODO: 로직 정비 필요 (당장 배포를 위해 임의로 수정)
-        Mono<AccountBalanceQueryResultResponse> response = headersSpec.retrieve().bodyToMono(AccountBalanceQueryResultResponse.class);
-
-        return response
-                .filter(s -> true)
-                .flatMap(s -> Mono.just(s));
+        return headersSpec.retrieve().bodyToMono(AccountBalanceQueryResult.class);
     }
 }

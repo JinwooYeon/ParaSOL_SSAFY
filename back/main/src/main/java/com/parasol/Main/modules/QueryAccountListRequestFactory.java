@@ -2,7 +2,9 @@ package com.parasol.Main.modules;
 
 import com.parasol.Main.api_model.AccountHistory;
 import com.parasol.Main.api_model.AccountInfo;
+import com.parasol.Main.api_request.AccountListQueryParam;
 import com.parasol.Main.api_request.AccountListQueryRequest;
+import com.parasol.Main.api_response.AccountListQueryResult;
 import com.parasol.Main.api_response.AccountListQueryResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,19 +23,14 @@ public class QueryAccountListRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient webClient;
 
-    public Mono<AccountListQueryResultResponse> createQueryAccountListRequest(AccountListQueryRequest request) {
+    public Mono<AccountListQueryResult> createQueryAccountListRequest(AccountListQueryParam request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.POST);
-        WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
+        WebClient.RequestHeadersSpec<?> headersSpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account/list")
-                .build());
+                .build()
+        )
+                .body(BodyInserters.fromValue(request));
+        return headersSpec.retrieve().bodyToMono(AccountListQueryResult.class);
 
-        WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
-
-//        Mono<AccountListQueryResultResponse> response = headersSpec.retrieve().bodyToMono(new ParameterizedTypeReference<List<String>>() {});
-        Mono<AccountListQueryResultResponse> response = headersSpec.retrieve().bodyToMono(AccountListQueryResultResponse.class);
-
-        return response
-                .filter(s -> true)
-                .flatMap(s -> Mono.just(s));
     }
 }
