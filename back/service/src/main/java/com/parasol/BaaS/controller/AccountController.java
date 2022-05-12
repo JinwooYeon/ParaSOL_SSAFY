@@ -21,9 +21,14 @@ public class AccountController {
     @ResponseBody
     public Mono<ResponseEntity<QueryAccountBalanceResponse>> getBalance(
             Authentication authentication,
-            @RequestParam QueryAccountBalanceRequest request
+            @RequestParam("bankName") String bankName,
+            @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
-        request.setAuthentication(authentication);
+        QueryAccountBalanceRequest request = QueryAccountBalanceRequest.builder()
+                .authentication(authentication)
+                .bankName(bankName)
+                .bankAccountNumber(bankAccountNumber)
+                .build();
 
         return accountService.getBalance(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
@@ -33,9 +38,12 @@ public class AccountController {
     @ResponseBody
     public Mono<ResponseEntity<QueryAccountListResponse>> getAccountList(
             Authentication authentication,
-            @RequestParam QueryAccountListRequest request
+            @RequestParam("bankName") String bankName
     ) {
-        request.setAuthentication(authentication);
+        QueryAccountListRequest request = QueryAccountListRequest.builder()
+                .authentication(authentication)
+                .bankName(bankName)
+                .build();
 
         return accountService.getAccountList(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
@@ -45,9 +53,14 @@ public class AccountController {
     @ResponseBody
     public Mono<ResponseEntity<QueryAccountHistoryResponse>> getAccountHistory(
             Authentication authentication,
-            @RequestParam QueryAccountHistoryRequest request
+            @RequestParam("bankName") String bankName,
+            @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
-        request.setAuthentication(authentication);
+        QueryAccountHistoryRequest request = QueryAccountHistoryRequest.builder()
+                .authentication(authentication)
+                .bankName(bankName)
+                .bankAccountNumber(bankAccountNumber)
+                .build();
 
         return accountService.getAccountHistory(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
