@@ -72,8 +72,10 @@ class CoreAPIClient {
         Status status = stub_->login(&context, request, &response);
 
         struct scus0001a_out* raw_response = (struct scus0001a_out*)malloc(sizeof(struct scus0001a_out));
-        memcpy(&raw_response->rst_yn, response.is_success().c_str(), 1);
-        memcpy(&raw_response->cusno, response.cusno().c_str(), 10);
+        memset(raw_response, 0, sizeof(struct scus0001a_out));
+
+        memcpy(&raw_response->rst_yn, response.is_success().c_str(), response.is_success().size());
+        memcpy(&raw_response->cusno, response.cusno().c_str(), response.cusno().size());
 
         if (status.ok()) {
             return raw_response;
