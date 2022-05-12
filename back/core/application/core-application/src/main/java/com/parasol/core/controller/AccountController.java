@@ -48,7 +48,7 @@ public class AccountController {
     // 계좌 잔액 조회
     @PostMapping("account/balance")
     @ResponseBody
-    public Long getBalance(
+    public AccountBalanceQueryResultResponse getBalance(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
         return accountService.getBalanceWithPassword(accountQueryRequest);

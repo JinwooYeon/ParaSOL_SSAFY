@@ -62,15 +62,17 @@ public class AccountService {
         return result;
     }
 
-    public Long getBalanceWithPassword(AccountQueryRequest accountQueryRequest) {
+    public AccountBalanceQueryResultResponse getBalanceWithPassword(AccountQueryRequest accountQueryRequest) {
         Optional<Account> account = accountRepository.findById(accountQueryRequest.getAccountNumber());
+        AccountBalanceQueryResultResponse result = new AccountBalanceQueryResultResponse();
 
         if (account.isEmpty())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
         validationService.equalPassword(accountQueryRequest.getAccountPassword(), account.get().getPassword());
 
-        return account.get().getBalance();
+        result.setBalance(account.get().getBalance());
+        return result;
     }
 
 
