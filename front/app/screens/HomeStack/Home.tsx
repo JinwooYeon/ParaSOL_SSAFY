@@ -33,7 +33,7 @@ const Home: React.FC<PropsType> = ({ balance, navigation }) => {
       <ContentFooterContainer>
         <ContentContainer>
           <QRcodeContainer>
-            <QRCode value={qrCodeInfo.num} size={225} />
+            <QRCode value={qrCodeInfo.num} size={190} />
             <QRcodeInfoContainer>
               <QRcodeInfoName>{qrCodeInfo.name}</QRcodeInfoName>
               <QRcodeInfoNum>
