@@ -1,7 +1,6 @@
 package com.parasol.Main.modules;
 
-import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.Main.api_response.ClientResponse;
+import com.parasol.Main.api_response.ClientCreateResponse;
 import com.parasol.Main.api_request.ClientRegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +16,7 @@ public class CreateAddClientRequest {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    public Mono<String> createAddClientRequest(ClientRegisterRequest request) {
+    public Mono<ClientCreateResponse> createAddClientRequest(ClientRegisterRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/client")
@@ -26,7 +25,7 @@ public class CreateAddClientRequest {
         WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
 
         // ClientResponse에 응답 데이터 로드
-        Mono<String> response = headersSpec.retrieve().bodyToMono(String.class);
+        Mono<ClientCreateResponse> response = headersSpec.retrieve().bodyToMono(ClientCreateResponse.class);
 
         return response
                 .filter(s -> true)

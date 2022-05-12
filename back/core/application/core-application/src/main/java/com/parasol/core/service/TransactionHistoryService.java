@@ -1,6 +1,7 @@
 package com.parasol.core.service;
 
 import com.parasol.core.api_model.AccountHistory;
+import com.parasol.core.api_model.AccountHistoryResultResponse;
 import com.parasol.core.api_model.AccountInfo;
 import com.parasol.core.eenum.TransactionType;
 import com.parasol.core.entity.Account;
@@ -31,8 +32,8 @@ public class TransactionHistoryService {
     private ValidationService validationService;
 
     public TransactionHistory createDepositHistory(String accountFrom, String accountTo, String nameFrom, Long amount) {
-        Long time = System.currentTimeMillis();
         Optional<Account> account = accountRepository.findById(accountTo);
+        Long time = System.currentTimeMillis();
 
         // 입금 요청일 때 toAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
         TransactionHistory transactionHistory = TransactionHistory.builder()
@@ -48,8 +49,9 @@ public class TransactionHistoryService {
     }
 
     public TransactionHistory createWithdrawHistory(String accountFrom, String accountTo, String nameTo, Long amount) {
-        Long time = System.currentTimeMillis();
         Optional<Account> account = accountRepository.findById(accountTo);
+        Long time = System.currentTimeMillis();
+
 
         // 출금 요청일 때 fromAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
         TransactionHistory transactionHistory = TransactionHistory.builder()
@@ -65,8 +67,9 @@ public class TransactionHistoryService {
     }
 
     public TransactionHistory createRemitHistory(String accountFrom, String accountTo, Long amount) {
-        Long time = System.currentTimeMillis();
         Optional<Account> account = accountRepository.findById(accountTo);
+        Long time = System.currentTimeMillis();
+
 
         // 송금 요청일 때 toAccount에 입금 거래내역 추가. 받은 사람은 입금. 보낸 사람은 출금
         TransactionHistory transactionHistory = TransactionHistory.builder()
@@ -79,8 +82,9 @@ public class TransactionHistoryService {
 
         return transactionHistoryRepository.save(transactionHistory);
     }
-
-    public List<AccountHistory> getAccountHistory(String accountNo, String accountPassword) {
+    
+    public AccountHistoryResultResponse getAccountHistory(String accountNo, String accountPassword) {
+        AccountHistoryResultResponse listResult = new AccountHistoryResultResponse();
         List<AccountHistory> result = new ArrayList<>();
         Optional<Account> account = accountRepository.findById(accountNo);
 
@@ -108,6 +112,8 @@ public class TransactionHistoryService {
             result.add(ele);
         }
 
-        return result;
+        listResult.setAccountHistories(result);
+
+        return listResult;
     }
 }

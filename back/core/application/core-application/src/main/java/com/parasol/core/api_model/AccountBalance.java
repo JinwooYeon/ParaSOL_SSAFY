@@ -1,4 +1,4 @@
-package com.parasol.Main.api_model;
+package com.parasol.core.api_model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -15,5 +14,6 @@ import javax.validation.constraints.NotNull;
 @ApiModel("AccountBalance")
 public class AccountBalance {
     @ApiModelProperty(name = "balance", example = "5000")
+    @NotBlank
     private long balance;
 }

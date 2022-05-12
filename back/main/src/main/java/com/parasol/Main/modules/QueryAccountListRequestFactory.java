@@ -21,7 +21,7 @@ public class QueryAccountListRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient webClient;
 
-    public Mono<List<String>> createQueryAccountListRequest(AccountListQueryRequest request) {
+    public Mono<AccountListQueryResultResponse> createQueryAccountListRequest(AccountListQueryRequest request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = webClient.method(HttpMethod.POST);
         WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account/list")
@@ -29,7 +29,8 @@ public class QueryAccountListRequestFactory {
 
         WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(request));
 
-        Mono<List<String>> response = headersSpec.retrieve().bodyToMono(new ParameterizedTypeReference<List<String>>() {});
+//        Mono<AccountListQueryResultResponse> response = headersSpec.retrieve().bodyToMono(new ParameterizedTypeReference<List<String>>() {});
+        Mono<AccountListQueryResultResponse> response = headersSpec.retrieve().bodyToMono(AccountListQueryResultResponse.class);
 
         return response
                 .filter(s -> true)

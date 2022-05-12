@@ -1,6 +1,7 @@
 package com.parasol.core.controller;
 
 import com.parasol.core.api_model.ClientCreateRequest;
+import com.parasol.core.api_model.ClientCreateResponse;
 import com.parasol.core.api_model.ClientInfo;
 import com.parasol.core.entity.Client;
 import com.parasol.core.service.ClientService;
@@ -16,12 +17,10 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping("client")
-    public String CreateClient(
+    public ClientCreateResponse CreateClient(
             @RequestBody @Valid ClientCreateRequest client
     ) {
-        String result = clientService.create(client.getName(), client.getResidentNumber());
-
-        return result;
+        return clientService.create(client.getName(), client.getResidentNumber());
     }
 
     @GetMapping("client")

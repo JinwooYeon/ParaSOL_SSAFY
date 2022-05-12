@@ -1,6 +1,6 @@
 package com.parasol.Main.api_response;
 
-import com.parasol.Main.api_model.AccountNumber;
+import com.parasol.Main.api_model.AccountHistory;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@ApiModel("AccountListQueryResultResponse")
-public class AccountListQueryResultResponse {
-    private List<AccountNumber> accounts;
+@ApiModel("AccountHistoryResultResponse")
+public class AccountHistoryResultResponse {
+    private List<AccountHistory> accountHistories;
 }

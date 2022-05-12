@@ -1,13 +1,10 @@
 package com.parasol.Main.service;
 
-import com.parasol.Main.api_model.AccountHistory;
-import com.parasol.Main.api_model.AccountInfo;
 import com.parasol.Main.api_request.*;
 import com.parasol.Main.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.Main.api_response.AccountHistoriesQueryResultResponse;
+import com.parasol.Main.api_response.AccountHistoryResultResponse;
 import com.parasol.Main.api_response.AccountListQueryResultResponse;
-import com.parasol.Main.api_response.TransactionExecuteResultResponse;
-import com.parasol.Main.eenum.TransactionType;
+import com.parasol.Main.api_response.TransactionExecutionResultResponse;
 import com.parasol.Main.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +31,7 @@ public class AccountService {
         return openAccountRequestFactory.createOpenAccountRequest(request);
     }
 
-    public Mono<List<String>> getAllAccount(AccountListQueryRequest request) {
+    public Mono<AccountListQueryResultResponse> getAllAccount(AccountListQueryRequest request) {
         return queryAccountListRequestFactory.createQueryAccountListRequest(request);
     }
 
@@ -43,15 +40,15 @@ public class AccountService {
         return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(request);
     }
 
-    public Mono<List<AccountHistory>> getHistory(AccountHistoryQueryRequest request) {
+    public Mono<AccountHistoryResultResponse> getHistory(AccountHistoryQueryRequest request) {
         return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(request);
     }
 
-    public Mono<Boolean> deposit(DepositRequest request) {
+    public Mono<TransactionExecutionResultResponse> deposit(DepositRequest request) {
         return depositRequestFactory.run(request);
     }
 
-    public Mono<Boolean> withdraw(WithdrawRequest request) {
+    public Mono<TransactionExecutionResultResponse> withdraw(WithdrawRequest request) {
         return withdrawRequestFactory.run(request);
     }
 }

@@ -1,6 +1,5 @@
-package com.parasol.Main.api_response;
+package com.parasol.core.api_model;
 
-import com.parasol.Main.api_model.AccountNumber;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
