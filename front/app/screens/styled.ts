@@ -285,9 +285,8 @@ export const BtnContainer = styled.View`
 `;
 export const BtnContainerRow = styled.View`
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-horizontal: 10px;
 `;
 export const Btn = styled.TouchableOpacity<{ color: string }>`
   background-color: ${({ color }) => {
