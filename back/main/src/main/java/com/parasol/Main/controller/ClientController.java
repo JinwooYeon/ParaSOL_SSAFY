@@ -22,11 +22,4 @@ public class ClientController {
         return clientService.create(request);
     }
 
-    @GetMapping("client")
-    public Mono<Client> getClient(
-            @RequestParam("id") String id
-    ) {
-       return clientService.findById(id);
-    }
-
 }
