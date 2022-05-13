@@ -1,5 +1,6 @@
 package com.parasol.Main.api_request;
 
+import com.parasol.Main.api_model.LoginInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -17,16 +18,9 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 @NoArgsConstructor
 @ApiModel("AccountHistoryQueryRequest")
-public class AccountHistoryQueryRequest{
+public class AccountHistoryQueryRequest extends LoginInfo {
     @ApiModelProperty(name = "account_number", example = "110-437-525252")
     @NotBlank
     @Size(max = 14, min = 14)
     private String accountNumber;
-
-    @ApiModelProperty(name="id", example = "nini6630")
-    @NotBlank
-    private String id;
-    @NotBlank
-    @ApiModelProperty(name="password", example = "1q2w3e4r")
-    private String password;
 }
