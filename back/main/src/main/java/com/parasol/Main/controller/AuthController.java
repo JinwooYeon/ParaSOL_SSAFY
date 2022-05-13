@@ -15,9 +15,4 @@ public class AuthController {
     public String register(@RequestBody(required = true) RegisterRequest registerRequest) {
         return apiKeyAuthenticateService.register(registerRequest);
     }
-
-    @DeleteMapping
-    public boolean revoke(@RequestBody(required = true) String apiKey) {
-        return true;
-    }
 }
