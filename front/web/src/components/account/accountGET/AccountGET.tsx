@@ -7,7 +7,7 @@ export const AccountGET = () => {
     uri: "/account",
     method: "GET",
     detail: "계좌 목록 조회",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
     QueryAccountListRequest,

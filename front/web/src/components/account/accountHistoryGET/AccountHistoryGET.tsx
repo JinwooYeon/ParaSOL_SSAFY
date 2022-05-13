@@ -7,7 +7,7 @@ export const AccountHistoryGET = () => {
     uri: "/account/history",
     method: "GET",
     detail: "계좌 거래내역 조회",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
     QueryAccountHistoryRequest,

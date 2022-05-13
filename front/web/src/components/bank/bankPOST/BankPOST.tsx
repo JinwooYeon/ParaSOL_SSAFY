@@ -7,7 +7,7 @@ export const BankPOST = () => {
     uri: "/bank",
     method: "POST",
     detail: "은행 연결",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
     BankConnectionRequest,

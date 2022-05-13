@@ -42,6 +42,7 @@ export const Response: React.FC<PropsType> = ({
             sx={{
               height: "100%",
               wordWrap: "break-word",
+              overflow: "auto",
             }}
           >
             {output}
