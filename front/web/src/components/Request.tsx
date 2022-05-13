@@ -85,14 +85,6 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
                           handleChange(re.value, e.target.value);
                         }}
                         value={
-                          // re.value === "accessToken" ||
-                          // re.value === "refreshToken"
-                          //   ? `${re.value}` === undefined
-                          //     ? "로그인을 해야합니다!"
-                          //     : `${re.value}` === "accessToken"
-                          //     ? accessToken || ""
-                          //     : refreshToken || ""
-                          //   : formData[re.value] || ""
                           re.value === "accessToken" ||
                           re.value === "refreshToken"
                             ? accessToken || refreshToken
@@ -113,81 +105,6 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
                           ),
                         }}
                       />
-                      {/* {re.value === "accessToken" && (
-                        <TextField
-                          label={re.value}
-                          disabled
-                          size="small"
-                          type="text"
-                          sx={{ width: "100%" }}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            handleChange(re.value, e.target.value);
-                          }}
-                          value={accessToken || "로그인을 해야합니다!"}
-                          InputProps={{
-                            endAdornment: (
-                              <IconButton
-                                size="small"
-                                onClick={() => clearValue(re.value)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            ),
-                          }}
-                        />
-                      )}
-                      {re.value === "refreshToken" && (
-                        <TextField
-                          label={re.value}
-                          disabled
-                          size="small"
-                          type="text"
-                          sx={{ width: "100%" }}
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            handleChange(re.value, e.target.value);
-                          }}
-                          value={refreshToken || "로그인을 해야합니다!"}
-                          InputProps={{
-                            endAdornment: (
-                              <IconButton
-                                size="small"
-                                onClick={() => clearValue(re.value)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            ),
-                          }}
-                        />
-                      )}
-                      {re.value !== "accessToken" &&
-                        re.value !== "refreshToken" && (
-                          <TextField
-                            label={re.value}
-                            size="small"
-                            type="text"
-                            sx={{ width: "100%" }}
-                            onChange={(
-                              e: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                              handleChange(re.value, e.target.value);
-                            }}
-                            value={formData[re.value] || ""}
-                            InputProps={{
-                              endAdornment: (
-                                <IconButton
-                                  size="small"
-                                  onClick={() => clearValue(re.value)}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              ),
-                            }}
-                          />
-                        )} */}
                     </Grid>
                   </Grid>
                 );
