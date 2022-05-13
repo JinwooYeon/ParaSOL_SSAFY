@@ -7,7 +7,7 @@ export const UserPasswordPOST = () => {
     uri: "/user/password",
     method: "POST",
     detail: "비밀번호 재설정",
-    completed: false,
+    completed: true,
   };
   const requestBody = { PasswordResetRequest };
   ///////////////////////////////////
