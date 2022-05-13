@@ -1,6 +1,5 @@
 package com.parasol.BaaS.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.parasol.BaaS.api_model.AccountInfo;
 import com.parasol.BaaS.api_param.*;
 import com.parasol.BaaS.api_request.*;
@@ -10,7 +9,6 @@ import com.parasol.BaaS.db.entity.BankConnection;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.BankConnectionRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
-import com.parasol.BaaS.enums.TransactionType;
 import com.parasol.BaaS.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -181,8 +179,8 @@ public class AccountService {
 
         DepositParam param = DepositParam.builder()
                 .amount(amount)
-                .nameFrom(nameFrom)
                 .accountTo(accountTo)
+                .nameOpponent(nameFrom)
                 .build();
 
         return depositRequestFactory.create(param)
@@ -216,8 +214,8 @@ public class AccountService {
         String bankName = request.getBankName();
         String accountPassword = request.getBankAccountPassword();
         Long amount = request.getAmount();
-        String nameFrom = request.getNameFrom();
-        AccountInfo accountTo = request.getAccountTo();
+        String nameTo = request.getNameTo();
+        AccountInfo accountFrom = request.getAccountFrom();
 
         BankConnection bankConnection = getBankConnection(user, bankName);
 
@@ -227,8 +225,8 @@ public class AccountService {
         WithdrawParam param = WithdrawParam.builder()
                 .accountPassword(accountPassword)
                 .amount(amount)
-                .nameTo(nameFrom)
-                .accountFrom(accountTo)
+                .accountFrom(accountFrom)
+                .nameOpponent(nameTo)
                 .id(bankConnection.getBankId())
                 .password(bankConnection.getBankPassword())
                 .build();
@@ -236,8 +234,8 @@ public class AccountService {
         return withdrawRequestFactory.create(param)
                 .map(result -> WithdrawResponse.builder()
                         .amount(amount)
-                        .nameTo(nameFrom)
-                        .accountFrom(accountTo)
+                        .nameTo(nameTo)
+                        .accountFrom(accountFrom)
                         .build()
                 );
     }

@@ -1,7 +1,6 @@
 package com.parasol.BaaS.api_request;
 
 import com.parasol.BaaS.api_model.AccountInfo;
-import com.parasol.BaaS.api_model.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +18,6 @@ public class WithdrawRequest {
     private String bankName;
     private String bankAccountPassword;
     private Long amount;
-    private AccountInfo accountTo;
-    private String nameFrom;
+    private AccountInfo accountFrom;
+    private String nameTo;
 }

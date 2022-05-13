@@ -15,5 +15,5 @@ public class WithdrawParam extends LoginInfo {
     private String accountPassword;
     private Long amount;
     private AccountInfo accountFrom;
-    private String nameTo;
+    private String nameOpponent;
 }
