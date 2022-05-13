@@ -6,10 +6,14 @@ interface PropsType {
   setResponseData: (a: any) => void;
 }
 
-export const Response: React.FC<PropsType> = (props: PropsType) => {
-  const responseStatus = props.responseData.status;
-  const output = props.responseData.output;
-  const setResponseData = props.setResponseData;
+export const Response: React.FC<PropsType> = ({
+  responseData,
+  setResponseData,
+}) => {
+  // const
+  const responseStatus = responseData.status;
+  const output = responseData.output;
+
   return (
     <>
       <Stack justifyContent="center" alignItems="center">
@@ -51,7 +55,7 @@ export const Response: React.FC<PropsType> = (props: PropsType) => {
         onClick={() =>
           setResponseData({
             status: "",
-            ouput: "",
+            output: "",
           })
         }
       >

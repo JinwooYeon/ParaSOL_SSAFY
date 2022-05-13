@@ -12,8 +12,8 @@ import org.springframework.security.core.Authentication;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public class DepositParam extends LoginInfo {
+public class DepositParam {
     private Long amount;
-    private String nameFrom;
+    private String nameOpponent;
     private AccountInfo accountTo;
 }

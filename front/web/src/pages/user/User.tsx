@@ -25,33 +25,43 @@ export const User = () => {
     <>
       <Box sx={{ width: "100%" }}>
         <Stack spacing={2}>
+          {/* 로그인 */}
           <Item>
             <UserLoginPOST />
           </Item>
+          {/* 아이디 중복 체크 */}
           <Item>
             <UserIdcheckPOST />
           </Item>
+          {/* 회원 등록 */}
           <Item>
             <UserRegisterPOST />
           </Item>
+          {/* 비밀번호 수정 */}
           <Item>
             <UserPATCH />
           </Item>
+          {/* 회원 탈퇴 */}
           <Item>
             <UserDelete />
           </Item>
+          {/* 내 정보 조회 */}
           <Item>
             <UserGET />
           </Item>
+          {/* 새로운 인증 토큰 요청 */}
           <Item>
             <UserTokenPOST />
           </Item>
+          {/* OAUTH 회원 등록 */}
           <Item>
             <OauthPOST />
           </Item>
+          {/* OAUTH 회원 탈퇴 */}
           <Item>
             <OauthDelete />
           </Item>
+          {/* 비밀번호 재설정 */}
           <Item>
             <UserPasswordPOST />
           </Item>

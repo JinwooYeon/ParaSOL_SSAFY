@@ -186,7 +186,7 @@ export const ReissueTokenRequest = [
 export const PasswordUpdateRequest = [
   ...Password,
   {
-    value: "NewPassword",
+    value: "newPassword",
     type: "string",
     required: true,
   },

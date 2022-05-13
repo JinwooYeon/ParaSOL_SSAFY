@@ -18,6 +18,7 @@ export const Pay = () => {
     <>
       <Box sx={{ width: "100%" }}>
         <Stack spacing={2}>
+          {/* 은행 연결 */}
           <Item>
             <BankPOST />
           </Item>

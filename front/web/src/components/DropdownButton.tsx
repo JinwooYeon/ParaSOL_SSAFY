@@ -8,10 +8,7 @@ interface PropsType {
   handleShow: () => void;
 }
 
-export const DropdownButton: React.FC<PropsType> = (props: PropsType) => {
-  const API = props.API;
-  const handleShow = props.handleShow;
-
+export const DropdownButton: React.FC<PropsType> = ({ API, handleShow }) => {
   return (
     <>
       <Button sx={styles.apiHeader} onClick={handleShow}>

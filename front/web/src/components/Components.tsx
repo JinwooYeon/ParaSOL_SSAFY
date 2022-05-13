@@ -12,13 +12,15 @@ interface PropsType {
 }
 
 export const Components: React.FC<PropsType> = (props: PropsType) => {
-  // const BASE_URL = "http://k6S101.p.ssafy.io:8080/";
+  // localStorage
   const accessToken = localStorage.getItem("accessToken")
     ? localStorage.getItem("accessToken")
     : "";
   const refreshToken = localStorage.getItem("refreshToken")
     ? localStorage.getItem("refreshToken")
     : "";
+
+  // useState
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({});
   const [responseData, setResponseData] = useState({
@@ -26,10 +28,10 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
     output: "",
   });
 
+  // method
   const handleShow = () => {
     setShow(!show);
   };
-
   const isRefresh = (detail: string) => {
     if (detail === "새로운 인증 토큰 요청") {
       return refreshToken;
@@ -37,9 +39,9 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
       return accessToken;
     }
   };
-
   const onSubmit = async (data: any) => {
     switch (props.API.method) {
+      // GET 요청
       case "GET":
         await axios({
           method: "get",
@@ -64,6 +66,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
             });
           });
         break;
+      // POST 요청
       case "POST":
         if (props.API.detail === "입금" || props.API.detail === "결제") {
           data["accountTo"] = { accountNumber: data.accountNumber };
@@ -92,6 +95,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
             });
           });
         break;
+      // PATCH 요청
       case "PATCH":
         await axios({
           method: "patch",
@@ -112,6 +116,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
             });
           });
         break;
+      // DELETE 요청
       case "DELETE":
         await axios({
           method: "delete",
@@ -124,6 +129,9 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
               status: response.status.toString(),
               output: JSON.stringify(response.data),
             });
+            if (props.API.detail === "회원 탈퇴") {
+              localStorage.clear();
+            }
           })
           .catch((err) => {
             setResponseData({
@@ -139,6 +147,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
 
   return (
     <>
+      {/* 요청할 api */}
       <DropdownButton API={props.API} handleShow={handleShow} />
       {show ? (
         <Stack>
@@ -147,6 +156,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
             <Stack direction="column">
               <Box>
                 <Stack direction="column" spacing={3}>
+                  {/* 요청 */}
                   <Request
                     requestBody={props.requestBody}
                     formData={formData}
@@ -156,6 +166,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
                 </Stack>
               </Box>
             </Stack>
+            {/* 응답 */}
             <Response
               responseData={responseData}
               setResponseData={setResponseData}

@@ -20,18 +20,23 @@ export const Account = () => {
     <>
       <Box sx={{ width: "100%" }}>
         <Stack spacing={2}>
+          {/* 계좌 목록 조회 */}
           <Item>
             <AccountGET />
           </Item>
+          {/* 계좌 잔액 조회 */}
           <Item>
             <AccountBalanceGET />
           </Item>
+          {/* 계좌 거래내역 조회 */}
           <Item>
             <AccountHistoryGET />
           </Item>
+          {/* 입금 */}
           <Item>
             <AccountDepositPOST />
           </Item>
+          {/* 출금 */}
           <Item>
             <AccountWithdrawPOST />
           </Item>

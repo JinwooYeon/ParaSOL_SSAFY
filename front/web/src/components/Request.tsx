@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Stack, TextField, IconButton, Grid, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styles from "./styles";
@@ -10,23 +9,25 @@ interface IMyprops {
   onSubmit: (a: any) => void;
 }
 
-export const Request: React.FC<IMyprops> = (props: IMyprops) => {
-  const myRequest = props.requestBody;
-  const formData = props.formData;
-  const setter = props.setFormData;
-  const onSubmit = props.onSubmit;
+export const Request: React.FC<IMyprops> = ({
+  requestBody,
+  formData,
+  setFormData,
+  onSubmit,
+}) => {
+  // localStorage
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
 
+  // method
   const handleChange = (key: string, v: string) => {
-    setter({
+    setFormData({
       ...formData,
       [key]: v,
     });
   };
-
   const clearValue = (key: string) => {
-    setter({
+    setFormData({
       ...formData,
       [key]: "",
     });
@@ -34,11 +35,11 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
 
   return (
     <>
-      {props.requestBody ? (
+      {requestBody ? (
         <>
           <Box>
-            {Object.keys(myRequest).map((key: string) =>
-              myRequest[key].map((re: any, index: string) => {
+            {Object.keys(requestBody).map((key: string) =>
+              requestBody[key].map((re: any, index: string) => {
                 return (
                   <Grid
                     container
@@ -51,9 +52,11 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
                     <Grid item xs={5}>
                       <Stack direction="row" spacing={1} sx={{ width: "40%" }}>
                         <div style={{ width: "100%", whiteSpace: "normal" }}>
+                          {/* 속성명 */}
                           {re.value && (
                             <div style={styles.apiTitle}>{re.value}</div>
                           )}
+                          {/* 속성타입 */}
                           {re.type && (
                             <div style={styles.apiType}>{re.type}</div>
                           )}
@@ -61,6 +64,7 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
                       </Stack>
                     </Grid>
                     <Grid item xs={1.5}>
+                      {/* 필수 여부 */}
                       {re.required ? (
                         <div style={styles.apiRequired.required}>required</div>
                       ) : (
@@ -70,6 +74,7 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
                       )}
                     </Grid>
                     <Grid item xs={5.5}>
+                      {/* 데이터 입력 */}
                       <TextField
                         label={re.value}
                         disabled={
@@ -111,7 +116,11 @@ export const Request: React.FC<IMyprops> = (props: IMyprops) => {
               })
             )}
           </Box>{" "}
-          <Button variant="outlined" color="error" onClick={() => setter({})}>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => setFormData({})}
+          >
             입력값 초기화
           </Button>
           <Button
