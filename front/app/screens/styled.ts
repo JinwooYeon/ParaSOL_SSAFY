@@ -298,7 +298,7 @@ export const Btn = styled.TouchableOpacity<{ color: string }>`
       return "white";
     }
   }};
-  border-color: ${mainBlue};
+  border-color: ${({ color }) => (color === "red" ? "red" : mainBlue)};
   border-width: ${({ color }) => (color === "white" ? "1px" : "1px")};
   justify-content: center;
   align-items: center;
