@@ -29,12 +29,3 @@ cc_binary(
         ":core_api_cc_grpc"
     ]
 )
-
-cc_binary(
-    name = "core_api_client_cc",
-    srcs = ["client.cpp"],
-    deps = [
-        "@com_github_grpc_grpc//:grpc++",
-        ":core_api_cc_grpc"
-    ]
-)
