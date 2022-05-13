@@ -65,6 +65,10 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           });
         break;
       case "POST":
+        if (props.API.detail === "입금" || props.API.detail === "결제") {
+          data["accountTo"] = { accountNumber: data.accountNumber };
+          delete data.accountNumber;
+        }
         await axios({
           method: "post",
           url: props.API.uri,

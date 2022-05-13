@@ -7,7 +7,7 @@ export const AccountDepositPOST = () => {
     uri: "/account/deposit",
     method: "POST",
     detail: "입금",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
     DepositRequest,

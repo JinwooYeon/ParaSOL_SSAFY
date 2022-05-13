@@ -19,9 +19,14 @@ export const UserInfo = [
   },
 ];
 export const Transaction = [
+  // {
+  //   value: "method",
+  //   type: "{TransactionType}",
+  //   required: true,
+  // },
   {
-    value: "method",
-    type: "{TransactionType}",
+    value: "bankName",
+    type: "string",
     required: true,
   },
   {
@@ -30,23 +35,13 @@ export const Transaction = [
     required: true,
   },
   {
-    value: "bankName",
-    type: "[AccountInfo.accountFrom]",
+    value: "nameFrom",
+    type: "string",
     required: true,
   },
   {
-    value: "bankAccountNumber",
-    type: "[AccountInfo.accountFrom]",
-    required: true,
-  },
-  {
-    value: "bankName",
-    type: "[AccountInfo.accountTo]",
-    required: true,
-  },
-  {
-    value: "bankAccountNumber",
-    type: "[AccountInfo.accountTo]",
+    value: "accountNumber",
+    type: "[accountTo]",
     required: true,
   },
 ];
@@ -167,7 +162,14 @@ export const BankConnectionRequest = [...BankInfo];
 export const UserRegisterRequest = [...UserInfo];
 export const UserUpdateRequest = [...UserInfo];
 export const DepositRequest = [...Transaction];
-export const WithdrawRequest = [...Transaction];
+export const WithdrawRequest = [
+  ...Transaction,
+  {
+    value: "bankAccountPassword",
+    type: "string",
+    required: true,
+  },
+];
 const [a, , b] = UserInfo;
 export const PasswordResetRequest = [a, b];
 export const QueryAccountListRequest = [...BankInfo];

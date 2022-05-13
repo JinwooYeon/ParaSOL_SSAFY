@@ -7,7 +7,7 @@ export const AccountWithdrawPOST = () => {
     uri: "/account/withdraw",
     method: "POST",
     detail: "결제",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
     WithdrawRequest,
