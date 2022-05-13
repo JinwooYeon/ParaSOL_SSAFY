@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import IdController from "../../components/Controller/IdController";
 import PasswordController from "../../components/Controller/PasswordController";
@@ -13,26 +13,29 @@ import axios from "axios";
 import BtnBox from "../../components/BtnBox";
 import { Alert, View } from "react-native";
 
-const ContentContainer = styled.View`
-  flex: 1;
-  margin: 20px auto;
-  width: 80%;
-`;
-
 interface PropsType {
+  // stack navigation
   navigation: any;
 }
 
+// Component _ Register
 const Register: React.FC<PropsType> = ({ navigation }) => {
+  // const
+  // Axios 회원가입 url
+  const registUrl = "http://k6S101.p.ssafy.io:8080/user/register";
+  // Axios 아이디 중복 체크 url
+  const idcheckUrl = "http://k6S101.p.ssafy.io:8080/user/idcheck";
+
+  // useState
   const [id, setId] = useState("");
   const [confirmId, setConfirmId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [name, setName] = useState("");
   const [idCheck, setIdcheck] = useState(false);
-  const registUrl = "http://k6S101.p.ssafy.io:8080/user/register";
-  const idcheckUrl = "http://k6S101.p.ssafy.io:8080/user/idcheck";
 
+  // Axios
+  // 회원가입
   const onSubmit = async () => {
     if (password !== passwordConfirm) {
       Alert.alert("비밀번호가 일치하지 않습니다.");
@@ -49,9 +52,7 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
     await axios
       .post(registUrl, data)
       .then((res) => {
-        // navigation.navigate("Login");
         if (idCheck && res.data) {
-          console.log(res);
           setId("");
           setPassword("");
           setPasswordConfirm("");
@@ -65,17 +66,15 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
         Alert.alert("에러가 발생했습니다. 잠시 후에 다시 시도해주세요.");
       });
   };
-
+  // 아이디 중복 체크
   const checkId = async () => {
     if (!id) {
       Alert.alert("아이디를 입력해주세요.");
-      console.log("아이디를 입력해주세요.");
       return;
     }
     await axios
       .post(idcheckUrl, { id: id })
       .then((res) => {
-        console.log(res);
         if (res.data) {
           Alert.alert("사용가능한 아이디입니다.");
           setIdcheck(true);
@@ -91,6 +90,7 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
       });
   };
 
+  // method
   const handleIdCheck = () => {
     console.log(id);
     if (confirmId !== id) {
@@ -98,6 +98,7 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
     }
   };
 
+  // useEffect
   useEffect(() => {
     handleIdCheck();
   }, [id]);
@@ -153,5 +154,11 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
     </LayoutContainer>
   );
 };
+
+const ContentContainer = styled.View`
+  flex: 1;
+  margin: 20px auto;
+  width: 80%;
+`;
 
 export default Register;

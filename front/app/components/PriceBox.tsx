@@ -10,11 +10,16 @@ import {
 } from "../screens/styled";
 
 interface PropsType {
+  // 금액
   price: string;
+  // 금액 set
   setPrice: (a: any) => void;
 }
 
+// Component _ PriceBox
 const PriceBox: React.FC<PropsType> = ({ price, setPrice }) => {
+  // method
+  // 세자리 수마다 콤마 찍기
   const onChangeText = (s: string) => {
     s = s.replace(/[^0-9]/g, "");
     if (s === "") s = "0";
@@ -25,7 +30,7 @@ const PriceBox: React.FC<PropsType> = ({ price, setPrice }) => {
     let rep = s.replace(/,/g, "");
     setPrice(rep.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
   };
-
+  // 콤마 제거
   const onPress = (n: number) => {
     let rep = parseInt(price.replace(/,/g, "")) + n;
     setPrice(rep.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));

@@ -5,6 +5,7 @@ import {
   LayoutContainer,
 } from "./styled";
 
+// Component _ Benefit
 const Benefit = () => (
   <LayoutContainer>
     <HeaderText>혜택</HeaderText>

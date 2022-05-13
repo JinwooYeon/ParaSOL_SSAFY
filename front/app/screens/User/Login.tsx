@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Text, StyleSheet, TouchableOpacity, Alert, View } from "react-native";
 import styled from "styled-components/native";
 import axios from "axios";
@@ -8,22 +8,24 @@ import PasswordController from "../../components/Controller/PasswordController";
 import { LayoutContainer, HeaderText, FooterContainer } from "../styled";
 import BtnBox from "../../components/BtnBox";
 
-const ContentContainer = styled.View`
-  flex: 1;
-  margin: 30px auto;
-  width: 80%;
-`;
-
 interface PropsType {
+  // 로그인 여부 set
   setLogin: (a: boolean) => void;
+  // stack navigation
   navigation: any;
 }
 
+// Component _ Login
 const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+  // const
+  // Axios url
   const url = "http://k6S101.p.ssafy.io:8080/user/login";
 
+  // useState
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Axios
   const onSubmit = async () => {
     const data = {
       id: id,
@@ -68,12 +70,7 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
           />
         </View>
         <FooterContainer>
-          <BtnBox
-            color="blue"
-            text="로그인"
-            setter={onSubmit}
-            setLogin={setLogin}
-          />
+          <BtnBox color="blue" text="로그인" setter={onSubmit} />
           <TouchableOpacity onPress={() => navigate("Register")}>
             <Text style={styles.textBtn}>회원이 아니신가요?</Text>
           </TouchableOpacity>
@@ -85,6 +82,12 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
     </LayoutContainer>
   );
 };
+
+const ContentContainer = styled.View`
+  flex: 1;
+  margin: 30px auto;
+  width: 80%;
+`;
 
 const styles = StyleSheet.create({
   textBtn: {

@@ -2,43 +2,47 @@ import { Alert } from "react-native";
 import { Btn, BtnContainer, BtnText } from "../screens/styled";
 
 interface PropsType {
+  // 버튼 색상
   color: string;
+  // 버튼 텍스트
   text: string;
-  setPrice?: (a: string) => void;
-  setLogin?: (a: boolean) => void;
-  setter?: any;
-  navigation?: any;
-  setCharge?: (a: boolean) => void;
+  // 송금 데이터
   transactionData?: { info: string; price: string };
+  // 충전 or 출금 데이터
   payData?: { bankInfo: any; price: string };
+  // set 함수
+  setter?: any;
+  // 충전 or 출금 set
+  setCharge?: (a: boolean) => void;
+  // stack navigation
+  navigation?: any;
 }
 
+// Component _ BtnBox
 const BtnBox: React.FC<PropsType> = ({
   color,
   text,
-  setPrice,
-  setLogin,
   setter,
   navigation,
   setCharge,
   transactionData,
   payData,
 }) => {
+  // let
+  // 알림 메시지
   let msg = "";
 
   const onPress = () => {
     switch (text) {
+      // 충전하기
       case "충전하기":
         if (payData?.bankInfo.bankNum !== "" && payData?.price !== "0") {
-          console.log("charge");
           setCharge?.(true);
           navigation?.navigate("PayConfirm");
         } else {
           if (payData.bankInfo.bankNum === "") {
-            console.log("info empty");
             msg = "계좌를 연결해주세요!";
           } else if (payData.price === "0") {
-            console.log("price empty");
             msg = "금액을 채워주세요!";
           }
           Alert.alert("알림", msg, [
@@ -48,17 +52,15 @@ const BtnBox: React.FC<PropsType> = ({
           ]);
         }
         break;
+      // 출금하기
       case "출금하기":
         if (payData?.bankInfo.bankNum !== "" && payData?.price !== "0") {
-          console.log("withdraw");
           setCharge?.(false);
           navigation?.navigate("PayConfirm");
         } else {
           if (payData.bankInfo.bankNum === "") {
-            console.log("info empty");
             msg = "계좌를 연결해주세요!";
           } else if (payData.price === "0") {
-            console.log("price empty");
             msg = "금액을 채워주세요!";
           }
           Alert.alert("알림", msg, [
@@ -68,20 +70,18 @@ const BtnBox: React.FC<PropsType> = ({
           ]);
         }
         break;
+      // 송금하기
       case "송금하기":
-        console.log("transaction");
         navigation?.navigate("Transaction");
         break;
+      // 다음
       case "다음":
         if (transactionData?.info !== "" && transactionData?.price !== "0") {
-          console.log("Next");
           navigation?.navigate("TransactionConfirm");
         } else {
           if (transactionData.info === "") {
-            console.log("info empty");
             msg = "송금할 주소를 채워주세요!";
           } else if (transactionData.price === "0") {
-            console.log("price empty");
             msg = "금액을 채워주세요!";
           }
           Alert.alert("알림", msg, [
@@ -91,45 +91,45 @@ const BtnBox: React.FC<PropsType> = ({
           ]);
         }
         break;
+      // 수정 완료
       case "수정 완료":
-        console.log("complete update");
         setter?.();
         break;
+      // 비밀번호 수정
       case "비밀번호 수정":
-        console.log("update password");
         setter?.(true);
         break;
+      // 회원 탈퇴
       case "회원 탈퇴":
-        console.log("delete info");
         setter?.();
-        // setLogin?.(false);
         break;
+      // 뒤로
       case "뒤로":
         navigation?.goBack();
-        console.log("back");
         break;
+      // 취소
       case "취소":
-        console.log("cancel");
         setter?.(false);
         break;
+      // 로그인
       case "로그인":
-        console.log("login");
         setter?.();
         break;
+      // 아이디 중복 체크
       case "아이디 중복 체크":
-        console.log("id check");
         setter?.();
         break;
+      // 회원가입
       case "회원가입":
-        console.log("register");
         setter?.();
         break;
+      // 비밀번호 재설정
       case "비밀번호 재설정":
-        console.log("new Password");
         setter?.();
         break;
       default:
-        console.log("set text props");
+        Alert.alert("set text props");
+        break;
     }
   };
 

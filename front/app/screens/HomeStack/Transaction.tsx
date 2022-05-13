@@ -1,4 +1,3 @@
-import { TouchableOpacity } from "react-native";
 import BalanceBox from "../../components/BalanceBox";
 import BtnBox from "../../components/BtnBox";
 import PriceBox from "../../components/PriceBox";
@@ -15,14 +14,21 @@ import {
 } from "../styled";
 
 interface PropsType {
+  // 잔액
   balance: string;
-  navigation: any;
+  // 송금할 주소
   info: string;
+  // 송금할 주소 set
   setInfo: (a: string) => void;
+  // 송금할 금액
   price: string;
+  // 송금할 금액 set
   setPrice: (a: string) => void;
+  // stack naviagation
+  navigation: any;
 }
 
+// Component _ Transaction
 const Transaction: React.FC<PropsType> = ({
   balance,
   navigation,
@@ -31,6 +37,8 @@ const Transaction: React.FC<PropsType> = ({
   price,
   setPrice,
 }) => {
+  // const
+  // 송금 데이터
   const transactionData = { info, price };
 
   // method
@@ -68,12 +76,6 @@ const Transaction: React.FC<PropsType> = ({
             transactionData={transactionData}
           />
           <BtnBox color="white" text="뒤로" navigation={navigation} />
-          <BtnBox
-            color="red"
-            text="초기화"
-            navigation={navigation}
-            setPrice={setPrice}
-          />
         </FooterContainer>
       </ContentFooterContainer>
     </LayoutContainer>

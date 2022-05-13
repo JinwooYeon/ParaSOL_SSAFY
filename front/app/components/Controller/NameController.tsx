@@ -1,14 +1,18 @@
 import React from "react";
-import { View, TextInput } from "react-native";
+import { View } from "react-native";
 import { TextInputController } from "./controllerStyled";
 
 interface PropsType {
-  setName: (a: any) => void;
+  // 이름 placeholder
   text: string;
+  // 이름 입력 데이터
   value: string;
+  // 이름 입력 데이터 set
+  setName: (a: any) => void;
 }
 
-const NameController: React.FC<PropsType> = ({ setName, text, value }) => {
+// Component _ NameController
+const NameController: React.FC<PropsType> = ({ text, value, setName }) => {
   return (
     <View>
       <TextInputController

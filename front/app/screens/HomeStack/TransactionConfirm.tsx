@@ -12,17 +12,23 @@ import * as LocalAuthentication from "expo-local-authentication";
 import { Alert } from "react-native";
 
 interface PropsType {
-  navigation: any;
+  // 송금할 주소
   info: string;
+  // 송금할 금액
   price: string;
+  // stack navigation
+  navigation: any;
 }
 
+// Component _ TransactionConfirm
 const TransactionConfirm: React.FC<PropsType> = ({
   navigation: { navigate, goBack },
   info,
   price,
 }) => {
-  const [loading, setLoading] = useState(false);
+  // useState
+  // 로딩
+  const [loading, setLoading] = useState<boolean>(false);
 
   // method
   const onPressCancel = () => {
@@ -55,6 +61,7 @@ const TransactionConfirm: React.FC<PropsType> = ({
     return;
   };
 
+  // 송금중~
   if (loading) {
     return <Loading method="송금" />;
   } else {

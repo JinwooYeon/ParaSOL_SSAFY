@@ -7,6 +7,7 @@ import {
   LayoutContainer,
 } from "../styled";
 
+// Component _ AuthBio
 const AuthBio = ({ navigation }: any) => (
   <LayoutContainer>
     <HeaderText>생체인증 발급/재발급</HeaderText>

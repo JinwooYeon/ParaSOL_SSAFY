@@ -3,7 +3,6 @@ import { HeaderContainer, LayoutContainer } from "./styled";
 import {
   FlatList,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,21 +12,59 @@ import { useState } from "react";
 import styled from "styled-components/native";
 
 interface PropsType {
+  // 잔액
   balance: string;
 }
 interface ItemPropsType {
+  // 거래내역 정보
   item: any;
 }
 
+// Component _ Item
+const Item: React.FC<ItemPropsType> = ({ item }) => (
+  <TouchableOpacity style={styles.item}>
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginVertical: 5,
+      }}
+    >
+      <View>
+        <Text style={styles.title}>{item.title}</Text>
+        {item.price[0] === "-" ? (
+          <Text style={{ ...styles.title, fontSize: 16, color: "blue" }}>
+            {item.price}원
+          </Text>
+        ) : (
+          <Text style={{ ...styles.title, fontSize: 16, color: "red" }}>
+            {item.price}원
+          </Text>
+        )}
+      </View>
+      <Text style={{ ...styles.title, fontSize: 13, color: "grey" }}>
+        {item.id}
+      </Text>
+    </View>
+  </TouchableOpacity>
+);
+
+// Component _ History
 const History: React.FC<PropsType> = ({ balance }) => {
   // useState
-  const [refreshing, setRefreshing] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
-  const [total, setTotal] = useState("-1,234,000");
+  // 리프레쉬
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  // 총 거래 금액
+  const [total, setTotal] = useState<string>("-1,234,000");
+  // 거래내역 데이터
   const [data, setData] = useState([
     {
-      id: "05월 10일 12시 10분", // 날짜 데이터 (기본키, key로 사용할 예정)
+      // 날짜 데이터 (기본키)
+      id: "05월 10일 12시 10분",
+      // 사용처
       title: "연어를 덮밥 서초점",
+      // 금액
       price: "-25,000",
     },
     {
@@ -56,7 +93,7 @@ const History: React.FC<PropsType> = ({ balance }) => {
       price: "-34,000",
     },
     {
-      id: "05월 4일 12시 10분", // 날짜 데이터
+      id: "05월 4일 12시 10분",
       title: "연어를 덮밥 서초점",
       price: "+25,000",
     },
@@ -72,40 +109,10 @@ const History: React.FC<PropsType> = ({ balance }) => {
     },
   ]);
 
-  const Item: React.FC<ItemPropsType> = ({ item }) => (
-    <TouchableOpacity style={styles.item}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginVertical: 5,
-        }}
-      >
-        <View>
-          <Text style={styles.title}>{item.title}</Text>
-          {item.price[0] === "-" ? (
-            <Text style={{ ...styles.title, fontSize: 16, color: "blue" }}>
-              {item.price}원
-            </Text>
-          ) : (
-            <Text style={{ ...styles.title, fontSize: 16, color: "red" }}>
-              {item.price}원
-            </Text>
-          )}
-        </View>
-        <Text style={{ ...styles.title, fontSize: 13, color: "grey" }}>
-          {item.id}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-
+  // method
   const renderItem = ({ item }: any) => {
     return <Item item={item} />;
   };
-
-  // method
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -120,7 +127,6 @@ const History: React.FC<PropsType> = ({ balance }) => {
       </HistoryHeaderContainer>
       <View
         style={{
-          // backgroundColor: "blue",
           flexDirection: "row",
           justifyContent: "space-between",
           marginVertical: "5%",
@@ -128,7 +134,6 @@ const History: React.FC<PropsType> = ({ balance }) => {
         }}
       >
         <Text style={{ fontSize: 25, fontWeight: "bold" }}>5월</Text>
-
         {total[0] === "-" ? (
           <Text style={{ color: "blue" }}>{total}원</Text>
         ) : (
@@ -140,7 +145,6 @@ const History: React.FC<PropsType> = ({ balance }) => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          extraData={selectedId}
           onRefresh={onRefresh}
           refreshing={refreshing}
         />
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
 });
 
 const HistoryHeaderContainer = styled(HeaderContainer)`
-  flex: 0.3;
+  flex: 0.2;
 `;
 
 export default History;

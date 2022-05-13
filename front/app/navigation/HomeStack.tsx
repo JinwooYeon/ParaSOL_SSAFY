@@ -4,16 +4,22 @@ import Home from "../screens/HomeStack/Home";
 import Transaction from "../screens/HomeStack/Transaction";
 import TransactionConfirm from "../screens/HomeStack/TransactionConfirm";
 
+const Stack = createNativeStackNavigator();
+
 interface PropsType {
+  // 잔액
   balance: string;
+  // stack navigation
   navigation: any;
 }
 
-const Stack = createNativeStackNavigator();
-
+// Component _ HomeStack
 const HomeStack: React.FC<PropsType> = ({ balance }) => {
-  const [info, setInfo] = useState("");
-  const [price, setPrice] = useState("0");
+  // useState
+  // 송금할 주소
+  const [info, setInfo] = useState<string>("");
+  // 송금할 금액
+  const [price, setPrice] = useState<string>("0");
 
   return (
     <Stack.Navigator
@@ -24,9 +30,11 @@ const HomeStack: React.FC<PropsType> = ({ balance }) => {
         headerShown: false,
       }}
     >
+      {/* 홈 첫 스크린 */}
       <Stack.Screen name="HomeMain">
         {(props) => <Home {...props} balance={balance} />}
       </Stack.Screen>
+      {/* 송금 */}
       <Stack.Screen name="Transaction">
         {(props) => (
           <Transaction
@@ -39,6 +47,7 @@ const HomeStack: React.FC<PropsType> = ({ balance }) => {
           />
         )}
       </Stack.Screen>
+      {/* 송금 확인 */}
       <Stack.Screen name="TransactionConfirm">
         {(props) => <TransactionConfirm {...props} info={info} price={price} />}
       </Stack.Screen>

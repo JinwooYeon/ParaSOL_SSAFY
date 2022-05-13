@@ -3,12 +3,16 @@ import { View } from "react-native";
 import { TextInputController } from "./controllerStyled";
 
 interface PropsType {
-  setId: (a: any) => void;
+  // 아이디 placeholder
   text: string;
+  // 아이디 입력 데이터
   value: string;
+  // 아이디 데이터 set
+  setId: (a: any) => void;
 }
 
-const IdController: React.FC<PropsType> = ({ setId, text, value }) => {
+// Component _ IdController
+const IdController: React.FC<PropsType> = ({ text, value, setId }) => {
   return (
     <View>
       <TextInputController

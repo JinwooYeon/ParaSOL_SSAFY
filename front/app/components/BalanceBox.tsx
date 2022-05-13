@@ -8,17 +8,24 @@ import {
 } from "../screens/styled";
 
 interface PropsType {
+  // 거래내역 or 페이 or 홈
   category: string;
+  // 잔액
   num: string;
 }
 
+// Component _ BalanceBox
 const BalanceBox: React.FC<PropsType> = ({ category, num }) => {
+  // useState
+  // 리프레쉬
   const [refreshing, setRefreshing] = useState(false);
 
+  // method
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 2000);
   };
+
   return (
     <ScrollView
       refreshControl={

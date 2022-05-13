@@ -1,27 +1,27 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { View } from "react-native";
+import { useState } from "react";
+import { Alert, View } from "react-native";
 import styled from "styled-components/native";
 import BtnBox from "../../components/BtnBox";
 import IdController from "../../components/Controller/IdController";
 import NameController from "../../components/Controller/NameController";
 import { FooterContainer, HeaderText, LayoutContainer } from "../styled";
 
-const ContentContainer = styled.View`
-  flex: 1;
-  margin: 30px auto;
-  width: 80%;
-`;
-
 interface PropsType {
   navigation: any;
 }
 
+// Component _ ForgetPassword
 const ForgetPassword: React.FC<PropsType> = ({ navigation }) => {
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
+  // const
+  // Axios url
   const url = "http://k6S101.p.ssafy.io:8080/client/password";
 
+  // useState
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+
+  // Axios
   const getNewPassword = async () => {
     const data = {
       id: id,
@@ -30,9 +30,15 @@ const ForgetPassword: React.FC<PropsType> = ({ navigation }) => {
     await axios
       .post(url, data)
       .then((res) => {
-        console.log(res);
+        Alert.alert(
+          "비밀번호 재설정 성공! 변경된 비밀번호로 다시 로그인해주세요."
+        );
+        navigation.navigate("Login");
       })
       .catch((err) => {
+        Alert.alert(
+          "비밀번호 재설정에 실패했습니다. 입력값을 다시 한번 확인해주세요."
+        );
         console.log(err);
       });
   };
@@ -53,5 +59,11 @@ const ForgetPassword: React.FC<PropsType> = ({ navigation }) => {
     </LayoutContainer>
   );
 };
+
+const ContentContainer = styled.View`
+  flex: 1;
+  margin: 30px auto;
+  width: 80%;
+`;
 
 export default ForgetPassword;

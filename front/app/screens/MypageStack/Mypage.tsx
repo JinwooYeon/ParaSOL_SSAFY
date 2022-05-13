@@ -2,11 +2,16 @@ import MypageMenuBox from "../../components/MypageMenuBox";
 import { LayoutContainer, HeaderText, MypageMenuContainer } from "../styled";
 
 interface PropsType {
-  navigation: any;
+  // 로그인 여부 set
   setLogin: (a: boolean) => void;
+  // stack naviagation
+  navigation: any;
 }
 
+// Component _ Mypage
 const Mypage: React.FC<PropsType> = ({ navigation, setLogin }) => {
+  // const
+  // 내 정보 메뉴 데이터
   const menus = [
     "회원정보",
     "계좌 관리하기",

@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ConnectedAccountContainer,
   ConnectedAccountContentContainer,
@@ -14,21 +13,29 @@ import {
 } from "../screens/styled";
 
 interface PropsType {
+  // 계좌 연결 정보
   bankInfo?: any;
+  // stack navigation
   navigation: any;
 }
 
+// Component _ ConnectedAccountBox
 const ConnectedAccountBox: React.FC<PropsType> = ({
   bankInfo,
   navigation: { navigate },
 }) => {
+  // const
+  // 계좌 연결 정보 비구조화
   const { bankImg, bankName, bankNum } = bankInfo;
-  const [empty, setEmpty] = useState(true);
+  // 계좌 연결 정보 존재 여부
+  const [empty, setEmpty] = useState<boolean>(true);
 
+  // method
   const onPress = () => {
     navigate("Mypage");
   };
 
+  // useEffect
   useEffect(() => {
     if (bankImg + bankName + bankNum !== "") setEmpty(false);
   }, []);

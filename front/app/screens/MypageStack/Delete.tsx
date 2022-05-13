@@ -8,29 +8,26 @@ import {
   LayoutContainer,
 } from "../styled";
 import axios from "axios";
-
-const ContentContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 90px;
-  text-align: center;
-`;
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface PropsType {
   navigation: any;
   setLogin: (a: boolean) => void;
 }
 
+// Component _ Delete
 const Delete: React.FC<PropsType> = ({ navigation, setLogin }) => {
+  // const
+  // Axios url
   const url = "http://k6s101.p.ssafy.io:8080/user";
 
+  // Axios
   const deleteUser = async () => {
     await axios
       .delete(url)
       .then((res) => {
-        console.log(res);
         setLogin(false);
+        AsyncStorage.clear();
       })
       .catch((err) => {
         console.log(err);
@@ -59,4 +56,13 @@ const Delete: React.FC<PropsType> = ({ navigation, setLogin }) => {
     </LayoutContainer>
   );
 };
+
+const ContentContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 90px;
+  text-align: center;
+`;
+
 export default Delete;

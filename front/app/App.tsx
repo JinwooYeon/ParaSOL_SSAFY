@@ -7,8 +7,11 @@ import LoginStack from "./navigation/LoginStack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
-  const [login, setLogin] = useState(false);
+  // useState
+  // 로그인 여부
+  const [login, setLogin] = useState<boolean>(false);
 
+  // method
   const getToken = async () => {
     const accessToken = await AsyncStorage.getItem("accessToken");
     if (accessToken != null) {
@@ -16,11 +19,13 @@ export default function App() {
     }
   };
 
+  // useEffect
   useEffect(() => {
     getToken();
   }, []);
 
   if (login) {
+    // 로그인
     return (
       <SafeAreaProvider>
         <NavigationContainer>
@@ -30,6 +35,7 @@ export default function App() {
       </SafeAreaProvider>
     );
   } else {
+    // 로그아웃
     return (
       <SafeAreaProvider>
         <NavigationContainer>

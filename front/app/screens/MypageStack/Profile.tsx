@@ -7,24 +7,24 @@ import {
   HeaderText,
   LayoutContainer,
 } from "../styled";
-import { Alert, Text, TextInput } from "react-native";
+import { Alert, Text } from "react-native";
 import axios from "axios";
 import PasswordController from "../../components/Controller/PasswordController";
 
-const ContentContainer = styled.View`
-  flex: 1;
-  margin: 30px auto;
-  width: 80%;
-`;
-
+// Compoennt _ Profile
 const Profile = ({ navigation }: any) => {
+  // const
+  // Axios url
+  const url = "http://k6S101.p.ssafy.io:8080/user";
+
+  // useState
   const [myInfo, setMyInfo] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
-  const url = "http://k6S101.p.ssafy.io:8080/user";
 
+  // Axios
   const getMyInfo = async () => {
     await axios
       .get(url)
@@ -41,12 +41,12 @@ const Profile = ({ navigation }: any) => {
       });
   };
 
+  // method
   const updatePassword = async () => {
     if (newPassword !== newPasswordConfirm) {
       Alert.alert("새 비밀번호가 일치하는지 확인해주세요.");
       return;
     }
-
     const data = {
       password: password,
       newPassword: newPassword,
@@ -54,7 +54,6 @@ const Profile = ({ navigation }: any) => {
     await axios
       .patch(url, data)
       .then((res) => {
-        console.log(res);
         setIsUpdate(false);
       })
       .catch((err) => {
@@ -62,6 +61,7 @@ const Profile = ({ navigation }: any) => {
       });
   };
 
+  // useEffect
   useEffect(() => {
     getMyInfo();
   }, []);
@@ -76,7 +76,6 @@ const Profile = ({ navigation }: any) => {
       <ContentFooterContainer>
         <ContentContainer>
           {!isUpdate ? (
-            // myInfo && myInfo.map((info) => return( <Text>{info}</Text>))
             <Text>정보</Text>
           ) : (
             <>
@@ -130,5 +129,11 @@ const Profile = ({ navigation }: any) => {
     </LayoutContainer>
   );
 };
+
+const ContentContainer = styled.View`
+  flex: 1;
+  margin: 30px auto;
+  width: 80%;
+`;
 
 export default Profile;

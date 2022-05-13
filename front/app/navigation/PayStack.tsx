@@ -16,17 +16,25 @@ import { Alert } from "react-native";
 const Stack = createNativeStackNavigator();
 
 interface PropsType {
+  // 잔액
   balance: string;
+  // 계좌 연결 정보
   bankInfo: any;
+  // stack navigation
   navigation: any;
 }
 interface PayConfirmPropsType {
+  // 충전 or 출금
   charge: boolean;
+  // 계좌 연결 정보
   bankInfo: any;
+  // 금액
   price: string;
+  // stack navigation
   navigation: any;
 }
 
+// Component _ PayConfirm
 const PayConfirm: React.FC<PayConfirmPropsType> = ({
   navigation: { navigate, goBack },
   charge,
@@ -68,6 +76,7 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
   };
 
   if (loading) {
+    // 충전중~ or 출금중~
     return <Loading method={charge ? "충전" : "출금"} />;
   } else {
     return (
@@ -92,9 +101,13 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
   }
 };
 
+// Component _ PayStack
 const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
-  const [charge, setCharge] = useState(false);
-  const [price, setPrice] = useState("0");
+  // useState
+  // 충전 or 출금
+  const [charge, setCharge] = useState<boolean>(false);
+  // 금액
+  const [price, setPrice] = useState<string>("0");
 
   return (
     <Stack.Navigator
@@ -104,6 +117,7 @@ const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
         animation: "slide_from_bottom",
       }}
     >
+      {/* 페이 첫 스크린 */}
       <Stack.Screen name="PayMain">
         {(props) => (
           <Pay
@@ -117,6 +131,7 @@ const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
           />
         )}
       </Stack.Screen>
+      {/* 충전 or 출금 확인 */}
       <Stack.Screen name="PayConfirm">
         {(props) => (
           <PayConfirm

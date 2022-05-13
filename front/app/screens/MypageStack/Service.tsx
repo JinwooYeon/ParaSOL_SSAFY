@@ -8,12 +8,7 @@ import {
 import { Linking, Text } from "react-native";
 import styled from "styled-components/native";
 
-const ContentContainer = styled.View`
-  flex: 1;
-  margin: auto;
-  justify-content: center;
-`;
-
+// Component _ Service
 const Service = ({ navigation }: any) => (
   <LayoutContainer>
     <HeaderText>고객 문의</HeaderText>
@@ -33,5 +28,11 @@ const Service = ({ navigation }: any) => (
     </ContentFooterContainer>
   </LayoutContainer>
 );
+
+const ContentContainer = styled.View`
+  flex: 1;
+  margin: auto;
+  justify-content: center;
+`;
 
 export default Service;

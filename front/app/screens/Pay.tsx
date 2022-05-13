@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import BalanceBox from "../components/BalanceBox";
 import BtnBox from "../components/BtnBox";
 import ConnectedAccountBox from "../components/ConnectedAccountBox";
@@ -13,22 +12,31 @@ import {
 } from "./styled";
 
 interface PropsType {
+  // 잔액
   balance: string;
+  // 계좌 연결 정보
   bankInfo: any;
+  // 금액
   price: string;
+  // 금액 set
   setPrice: (a: string) => void;
-  navigation: any;
+  // 충전 or 출금 set
   setCharge: (a: boolean) => void;
+  // stack navigation
+  navigation: any;
 }
 
+// Component _ Pay
 const Pay: React.FC<PropsType> = ({
   balance,
   bankInfo,
   price,
   setPrice,
-  navigation,
   setCharge,
+  navigation,
 }) => {
+  // const
+  // 충전 or 출금 데이터
   const payData = {
     bankInfo,
     price,

@@ -5,51 +5,57 @@ import {
 } from "../screens/styled";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 interface PropsType {
+  // 메뉴명
   menu: string;
-  navigation: any;
+  // 로그인 여부 set
   setLogin: (a: any) => void;
+  // stack navigation
+  navigation: any;
 }
 
+// Component _ MypageMenuBox
 const MypageMenuBox: React.FC<PropsType> = ({
   menu,
   navigation: { navigate },
   setLogin,
 }) => {
+  // method
   const onPress = () => {
     switch (menu) {
+      // 회원정보
       case "회원정보":
         navigate("Profile");
-        console.log("Profile");
         break;
+      // 계좌 관리하기
       case "계좌 관리하기":
         navigate("ConnectAccount");
-        console.log("ConnectAccount");
         break;
+      // 공동인증 발급/재발급
       case "공동인증 발급/재발급":
         navigate("Oauth");
-        console.log("Oauth");
         break;
+      // 생체인증 발급/재발급
       case "생체인증 발급/재발급":
         navigate("AuthBio");
-        console.log("AuthBio");
         break;
+      // 고객 문의
       case "고객 문의":
         navigate("Service");
-        console.log("Service");
         break;
+      // 회원 탈퇴
       case "회원 탈퇴":
         navigate("Delete");
-        console.log("Delete user");
         break;
+      // 로그아웃
       case "로그아웃":
         AsyncStorage.clear();
         setLogin(false);
-        console.log("log OUT");
         break;
       default:
-        console.log("wrong menu");
+        Alert.alert("wrong menu");
         break;
     }
   };
