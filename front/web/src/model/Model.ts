@@ -58,16 +58,6 @@ export const BankInfo = [
     type: "string",
     required: true,
   },
-  {
-    value: "id",
-    type: "string",
-    required: true,
-  },
-  {
-    value: "password",
-    type: "string",
-    required: true,
-  },
 ];
 export const AccountInfo = [
   {
