@@ -21,12 +21,14 @@ export const Pay = () => {
           <Item>
             <BankPOST />
           </Item>
-          <Item>
+          {/* 생체인증(지문) 등록 및 요청 */}
+          {/* <Item>
             <AuthBioPOST />
-          </Item>
-          <Item>
+          </Item> */}
+          {/* 생체인증(지문) 삭제 */}
+          {/* <Item>
             <AuthBioDELETE />
-          </Item>
+          </Item> */}
         </Stack>
       </Box>
     </>
