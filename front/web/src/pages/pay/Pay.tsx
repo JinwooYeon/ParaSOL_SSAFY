@@ -18,12 +18,15 @@ export const Pay = () => {
     <>
       <Box sx={{ width: "100%" }}>
         <Stack spacing={2}>
+          {/* 은행 연결 */}
           <Item>
             <BankPOST />
           </Item>
+          {/* 생체인증(지문) 등록 및 요청 */}
           <Item>
             <AuthBioPOST />
           </Item>
+          {/* 생체인증(지문) 삭제 */}
           <Item>
             <AuthBioDELETE />
           </Item>
