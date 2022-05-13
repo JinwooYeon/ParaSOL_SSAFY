@@ -1,8 +1,7 @@
 package com.parasol.Main.controller;
 
 import com.parasol.Main.api_request.LoginRequest;
-import com.parasol.Main.api_response.LoginResultResponse;
-import com.parasol.Main.service.ApiKeyAuthenticateService;
+import com.parasol.Main.api_response.LoginResponse;
 import com.parasol.Main.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +19,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("login")
-    public Mono<LoginResultResponse> login(@RequestBody @Valid LoginRequest request) {
+    public Mono<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
         return userService.login(request);
     }
 

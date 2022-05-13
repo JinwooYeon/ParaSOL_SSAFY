@@ -7,9 +7,9 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@ApiModel("LoginResultResponse")
+@ApiModel("LoginResponse")
 @Builder
-public class LoginResultResponse {
+public class LoginResponse {
     @ApiModelProperty(name="isSuccess",example = "")
     Boolean isSuccess;
 }
