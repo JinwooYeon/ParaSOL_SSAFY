@@ -48,7 +48,6 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
           params: data,
         })
           .then((response) => {
-            console.log(response);
             if (props.API.detail === "새로운 인증 토큰 요청") {
               localStorage.setItem("accessToken", response.data.accessToken);
               localStorage.setItem("refreshToken", response.data.refreshToken);
