@@ -39,7 +39,7 @@ const MypageMenuBox: React.FC<PropsType> = ({
         break;
       // 생체인증 발급/재발급
       case "생체인증 발급/재발급":
-        navigate("AuthBio");
+        // navigate("AuthBio");
         break;
       // 고객 문의
       case "고객 문의":
@@ -62,8 +62,14 @@ const MypageMenuBox: React.FC<PropsType> = ({
   return (
     <MypageMenuBtn onPress={onPress}>
       <MypageMenuTextContainer>
-        <MypageMenuText>{menu}</MypageMenuText>
-        <MaterialCommunityIcons name="chevron-right" size={35} color="black" />
+        <MypageMenuText able={menu === "생체인증 발급/재발급" ? false : true}>
+          {menu}
+        </MypageMenuText>
+        <MaterialCommunityIcons
+          name="chevron-right"
+          size={35}
+          color={menu === "생체인증 발급/재발급" ? "grey" : "black"}
+        />
       </MypageMenuTextContainer>
     </MypageMenuBtn>
   );

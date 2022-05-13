@@ -273,9 +273,10 @@ export const MypageMenuTextContainer = styled.View`
   margin-bottom: 5%;
 `;
 export const MypageMenuBtn = styled.TouchableOpacity``;
-export const MypageMenuText = styled.Text`
+export const MypageMenuText = styled.Text<{ able?: boolean }>`
   font-size: 23px;
   font-weight: bold;
+  color: ${(props) => (props.able ? "black" : "grey")};
 `;
 
 // Footer _ Button
