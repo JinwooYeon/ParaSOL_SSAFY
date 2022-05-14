@@ -32,7 +32,7 @@ public class AccountService {
                     if (ex.getStatusCode().is4xxClientError())
                         throw new ResponseStatusException(ex.getStatusCode());
                     else if (ex.getStatusCode().is5xxServerError())
-                        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+                        throw new ResponseStatusException(ex.getStatusCode());
                 })
                 .map(queryResult ->
                         DepositResponse.builder()
