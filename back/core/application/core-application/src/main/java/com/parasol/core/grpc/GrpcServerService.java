@@ -1,5 +1,6 @@
 package com.parasol.core.grpc;
 
+import com.parasol.core.api_model.BalanceResponse;
 import com.parasol.core.api_model.BankUserLoginRequest;
 import com.parasol.core.api_model.BankUserLoginResponse;
 import com.parasol.core_interface.*;
@@ -43,10 +44,10 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
     public void getBalance(AccountBalanceQueryRequest request, StreamObserver<AccountBalanceQueryResponse> responseObserver) {
         String accountNumber = request.getAccountNumber();
 
-        Long balance = accountService.getBalance(accountNumber);
+        BalanceResponse balance = accountService.getBalance(accountNumber);
 
         AccountBalanceQueryResponse response = AccountBalanceQueryResponse.newBuilder()
-                .setBalance(balance.toString())
+                .setBalance(balance.getBalance().toString())
                 .build();
 
         responseObserver.onNext(response);

@@ -80,10 +80,12 @@ public class AccountService {
     }
 
 
-    public Long getBalance(String accountNo) {
+    public BalanceResponse getBalance(String accountNo) {
         Optional<Account> account = accountRepository.findById(accountNo);
 
-        return account.get().getBalance();
+        return BalanceResponse.builder()
+                .balance(account.get().getBalance())
+                .build();
     }
 
     @Transactional
