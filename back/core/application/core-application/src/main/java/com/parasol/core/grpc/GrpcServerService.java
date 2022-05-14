@@ -19,7 +19,7 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
     AccountService accountService;
 
     @Override
-    public void login(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
+    public void login(LoginGrpcRequest request, StreamObserver<LoginGrpcResponse> responseObserver) {
         try {
             String id = request.getId();
             String password = request.getPassword();
@@ -31,14 +31,19 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
 
             BankUserLoginResponse bankUserLoginResponse = bankUserService.login(bankUserLoginRequest);
 
-            LoginResponse response = LoginResponse.newBuilder()
-                    .setIsSuccess(bankUserLoginResponse.isSuccess() ? "1" : "0")
-                    .setCusno(bankUserLoginResponse.getCusno())
+            LoginGrpcResponse response = LoginGrpcResponse.newBuilder()
+                    .setIsSuccess("1")
+                    .setCusno(bankUserLoginResponse.getCusno().toString())
                     .build();
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (ResponseStatusException ex) {
+            LoginGrpcResponse response = LoginGrpcResponse.newBuilder()
+                    .setIsSuccess("0")
+                    .build();
+
+            responseObserver.onNext(response);
             responseObserver.onError(ex);
         }
     }
