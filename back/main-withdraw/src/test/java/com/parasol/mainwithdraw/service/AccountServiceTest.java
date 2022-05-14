@@ -2,13 +2,11 @@ package com.parasol.mainwithdraw.service;
 
 import com.parasol.mainwithdraw.api_model.AccountInfo;
 import com.parasol.mainwithdraw.api_request.WithdrawRequest;
-import com.parasol.mainwithdraw.api_response.TransactionExecutionResultResponse;
+import com.parasol.mainwithdraw.api_response.WithdrawResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AccountServiceTest {
@@ -28,7 +26,7 @@ class AccountServiceTest {
         // request.setNameOpponent();
 
         for (int i = 0;i < 10;i++) {
-            Mono<TransactionExecutionResultResponse> withdraw = accountService.withdraw(request);
+            Mono<WithdrawResponse> withdraw = accountService.withdraw(request);
 
             withdraw.subscribe(s->{
                 System.out.println(s);

@@ -1,7 +1,7 @@
 package com.parasol.mainwithdraw.controller;
 
 import com.parasol.mainwithdraw.api_request.WithdrawRequest;
-import com.parasol.mainwithdraw.api_response.TransactionExecutionResultResponse;
+import com.parasol.mainwithdraw.api_response.WithdrawResponse;
 import com.parasol.mainwithdraw.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class AccountController {
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public Mono<TransactionExecutionResultResponse> withdraw(
+    public Mono<WithdrawResponse> withdraw(
             @RequestBody @Valid WithdrawRequest withdrawRequest
     ) {
         return accountService.withdraw(withdrawRequest);
