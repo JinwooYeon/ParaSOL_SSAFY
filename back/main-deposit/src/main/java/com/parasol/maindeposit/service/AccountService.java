@@ -30,7 +30,7 @@ public class AccountService {
                     WebClientResponseException ex = (WebClientResponseException)throwable;
 
                     if (ex.getStatusCode().is4xxClientError())
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                        throw new ResponseStatusException(ex.getStatusCode());
                     else if (ex.getStatusCode().is5xxServerError())
                         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
                 })
