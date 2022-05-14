@@ -38,7 +38,7 @@ public class AccountService {
                                     .accountNumber(request.getAccountNumber())
                                     .build();
 
-                            return queryAccountBalanceSocketRequestFactory.createQueryAccountBalanceRequest(param)
+                            return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(param)
                                     .map(queryResult ->
                                             AccountBalanceQueryResponse.builder()
                                                     .balance(queryResult.getBalance())
