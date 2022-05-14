@@ -67,113 +67,117 @@ public class AccountService {
     }
 
     public AccountBalanceQueryResponse getBalance(AccountQueryBalanceRequest request) {
-        try {
-            String accountNumber = request.getAccountNumber();
+        String accountNumber = request.getAccountNumber();
 
-            Account queryAccount = accountRepository.findById(accountNumber)
-                    .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: getBalance :: queryAccount is null"); });
+        Account queryAccount = accountRepository.findById(accountNumber)
+                .orElseThrow(() -> {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "AccountService :: getBalance :: queryAccount is null"
+                    );
+                });
 
-            Long balance = queryAccount.getBalance();
+        Long balance = queryAccount.getBalance();
 
-            return AccountBalanceQueryResponse.builder()
-                    .balance(balance)
-                    .build();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-            return AccountBalanceQueryResponse.builder()
-                    .build();
-        }
+        return AccountBalanceQueryResponse.builder()
+                .balance(balance)
+                .build();
     }
 
     @Transactional
-    public DepositResponse deposit(@Valid DepositRequest request) {
-        try {
-            Long amount = request.getAmount();
-            AccountInfo accountTo = request.getAccountTo();
-            String nameFrom = request.getNameOpponent();
+    public DepositResponse deposit(@Valid DepositRequest request) throws ResponseStatusException {
+        Long amount = request.getAmount();
+        AccountInfo accountTo = request.getAccountTo();
+        String nameFrom = request.getNameOpponent();
 
-            if (accountTo == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: deposit :: accountTo is null");
-            }
-
-            if (!StringUtils.hasText(nameFrom)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: deposit :: nameFrom is null");
-            }
-
-            String accountNumberTo = accountTo.getAccountNumber();
-            Account depositAccount = accountRepository.findById(accountNumberTo)
-                    .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: deposit :: depositAccount is null"); });
-
-            Balance beforeBalance = new Balance(depositAccount.getBalance());
-            Balance afterBalance = new Balance(depositAccount.getBalance() + amount);
-
-            Long validAfterBalance = validationService.calculateBalance(afterBalance);
-
-            depositAccount.setBalance(validAfterBalance);
-            accountRepository.save(depositAccount);
-
-            transactionHistoryService.createDepositHistory(accountNumberTo,
-                    accountNumberTo,
-                    nameFrom,
-                    amount);
-
-            return DepositResponse.builder()
-                    .isSuccess(true)
-                    .build();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-            return DepositResponse.builder()
-                    .isSuccess(false)
-                    .build();
+        if (accountTo == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "AccountService :: deposit :: accountTo is null"
+            );
         }
+
+        if (!StringUtils.hasText(nameFrom)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "AccountService :: deposit :: nameFrom is null"
+            );
+        }
+
+        String accountNumberTo = accountTo.getAccountNumber();
+        Account depositAccount = accountRepository.findById(accountNumberTo)
+                .orElseThrow(() -> {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "AccountService :: deposit :: depositAccount is null"
+                    );
+                });
+
+        Balance beforeBalance = new Balance(depositAccount.getBalance());
+        Balance afterBalance = new Balance(depositAccount.getBalance() + amount);
+
+        Long validAfterBalance = validationService.calculateBalance(afterBalance);
+
+        depositAccount.setBalance(validAfterBalance);
+        accountRepository.save(depositAccount);
+
+        transactionHistoryService.createDepositHistory(accountNumberTo,
+                accountNumberTo,
+                nameFrom,
+                amount);
+
+        return DepositResponse.builder()
+                .isSuccess(true)
+                .build();
     }
 
     @Transactional
-    public WithdrawResponse withdraw(@Valid WithdrawRequest request) {
-        try {
-            Long amount = request.getAmount();
-            AccountInfo accountFrom = request.getAccountFrom();
-            String nameTo = request.getNameOpponent();
+    public WithdrawResponse withdraw(@Valid WithdrawRequest request) throws ResponseStatusException {
+        Long amount = request.getAmount();
+        AccountInfo accountFrom = request.getAccountFrom();
+        String nameTo = request.getNameOpponent();
 
-            if (accountFrom == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: withdraw :: accountFrom is null");
-            }
-
-            if (!StringUtils.hasText(nameTo)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: withdraw :: nameTo is null");
-            }
-
-            String accountNumberFrom = accountFrom.getAccountNumber();
-            Account withdrawAccount = accountRepository.findById(accountNumberFrom)
-                    .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: withdraw :: withdrawAccount is null"); });
-
-            validationService.equalPassword(request.getAccountPassword(), withdrawAccount.getPassword());
-
-            Balance beforeBalance = new Balance(withdrawAccount.getBalance());
-            Balance afterBalance = new Balance(withdrawAccount.getBalance() - amount);
-
-            Long validAfterBalance = validationService.calculateBalance(afterBalance);
-
-            withdrawAccount.setBalance(validAfterBalance);
-            accountRepository.save(withdrawAccount);
-
-            transactionHistoryService.createWithdrawHistory(accountNumberFrom,
-                    accountNumberFrom,
-                    nameTo,
-                    amount);
-
-            return WithdrawResponse.builder()
-                    .isSuccess(true)
-                    .build();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-            return WithdrawResponse.builder()
-                    .isSuccess(false)
-                    .build();
+        if (accountFrom == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "AccountService :: withdraw :: accountFrom is null"
+            );
         }
+
+        if (!StringUtils.hasText(nameTo)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "AccountService :: withdraw :: nameTo is null"
+            );
+        }
+
+        String accountNumberFrom = accountFrom.getAccountNumber();
+        Account withdrawAccount = accountRepository.findById(accountNumberFrom)
+                .orElseThrow(() -> {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "AccountService :: withdraw :: withdrawAccount is null"
+                    );
+                });
+
+        validationService.equalPassword(request.getAccountPassword(), withdrawAccount.getPassword());
+
+        Balance beforeBalance = new Balance(withdrawAccount.getBalance());
+        Balance afterBalance = new Balance(withdrawAccount.getBalance() - amount);
+
+        Long validAfterBalance = validationService.calculateBalance(afterBalance);
+
+        withdrawAccount.setBalance(validAfterBalance);
+        accountRepository.save(withdrawAccount);
+
+        transactionHistoryService.createWithdrawHistory(accountNumberFrom,
+                accountNumberFrom,
+                nameTo,
+                amount);
+
+        return WithdrawResponse.builder()
+                .isSuccess(true)
+                .build();
     }
 
     public TransactionExecutionResultResponse remit(@Valid AccountRequest request) {
