@@ -1,23 +1,19 @@
 package com.parasol.pay.modules;
 
-        import com.parasol.pay.api_model.DepInpt;
-        import com.parasol.pay.api_request.AccountBalanceQueryParam;
-        import com.parasol.pay.api_response.AccountBalanceQueryResult;
-        import com.parasol.pay.api_response.LoginResult;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.beans.factory.annotation.Qualifier;
-        import org.springframework.beans.factory.annotation.Value;
-        import org.springframework.http.HttpMethod;
-        import org.springframework.stereotype.Component;
-        import org.springframework.web.reactive.function.BodyInserters;
-        import org.springframework.web.reactive.function.client.WebClient;
-        import reactor.core.publisher.Mono;
+import com.parasol.pay.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.pay.socket_model.DepAcMas;
+import com.parasol.pay.socket_model.DepInpt;
+import com.parasol.pay.api_request.AccountBalanceQueryParam;
+import com.parasol.pay.api_response.AccountBalanceQueryResult;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
-        import java.io.BufferedReader;
-        import java.io.IOException;
-        import java.io.InputStreamReader;
-        import java.io.PrintWriter;
-        import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 @Component
 public class QueryAccountBalanceSocketRequestFactory {
@@ -31,7 +27,7 @@ public class QueryAccountBalanceSocketRequestFactory {
     @Value("${core.interface.port}")
     private String corePort;
 
-    public Mono<AccountBalanceQueryResult> createQueryAccountBalanceRequest(AccountBalanceQueryParam request) {
+    public Mono<AccountBalanceQueryResultResponse> createQueryAccountBalanceRequest(AccountBalanceQueryParam request) {
         try {
             socket = new Socket(coreIp, Integer.parseInt(corePort));
 
@@ -55,25 +51,28 @@ public class QueryAccountBalanceSocketRequestFactory {
             writer.print(payload);
             writer.flush();
 
-            char[] sockBuf = new char[11];
+            // 엑셀 sdep0240a_out
+            char[] sockBuf = new char[1341]; // 1341?
             int responseLen = reader.read(sockBuf);
             if (responseLen == -1) throw new IllegalStateException("으앙");
 
+            char[] balanceBuf = new char[22];
+            System.arraycopy(sockBuf, 121, balanceBuf, 0, 22);
 
             long balance = 0L;
-            for (char sockChar : sockBuf)
-                if (sockChar != 0) {
+            for (char balanceChar : balanceBuf)
+                if (balanceChar != 0) {
                     balance *= 10;
-                    balance += sockChar - '0';
+                    balance += balanceChar - '0';
                 } else {
                     break;
                 }
             Mono<Long> response = Mono.just(balance);
 
             return response
-                    .flatMap(s -> {
+                    .flatMap(queryResult -> {
                         AccountBalanceQueryResultResponse accountBalanceQueryResultResponse = new AccountBalanceQueryResultResponse();
-                        accountBalanceQueryResultResponse.setBalance(s);
+                        accountBalanceQueryResultResponse.setBalance(queryResult);
                         return Mono.just(accountBalanceQueryResultResponse);
                     });
         } catch (IOException e) {
@@ -82,19 +81,12 @@ public class QueryAccountBalanceSocketRequestFactory {
             return null;
         } finally {
             try {
-                if (socket != null) {
-                    socket.close();
-                }
-                if (reader != null) {
-                    reader.close();
-                }
-                if (writer != null) {
-                    writer.close();
-                }
+                if (socket != null) { socket.close(); }
+                if (reader != null) { reader.close(); }
+                if (writer != null) { writer.close(); }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
-}
 }
