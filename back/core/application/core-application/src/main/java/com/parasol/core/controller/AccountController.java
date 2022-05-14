@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
@@ -39,7 +38,7 @@ public class AccountController {
 
     // 계좌 목록 조회
     @PostMapping("account/list")
-    public AccountListQueryResultResponse getAllAccount(
+    public AccountListQueryResponse getAllAccount(
             @RequestBody @Valid AccountListQueryRequest request
     ) {
         return accountService.getAllAccount(request);
@@ -58,10 +57,10 @@ public class AccountController {
     // 계좌 거래 내역 조회
     @PostMapping("account/history")
     @ResponseBody
-    public ResponseEntity<AccountHistoryResultResponse> getAccountHistory(
+    public ResponseEntity<AccountHistoryQueryResponse> getAccountHistory(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        AccountHistoryResultResponse response = transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
+        AccountHistoryQueryResponse response = transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

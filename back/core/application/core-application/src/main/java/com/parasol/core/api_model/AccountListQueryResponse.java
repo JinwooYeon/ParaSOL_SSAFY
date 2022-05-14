@@ -1,16 +1,17 @@
 package com.parasol.core.api_model;
 
 import io.swagger.annotations.ApiModel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel("AccountListQueryResultResponse")
-public class AccountListQueryResultResponse {
+public class AccountListQueryResponse {
     private List<AccountNumber> accounts;
 }

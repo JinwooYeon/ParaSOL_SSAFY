@@ -11,6 +11,6 @@ import java.util.List;
 @Setter
 @ToString
 @ApiModel("AccountHistoryResultResponse")
-public class AccountHistoryResultResponse {
+public class AccountHistoryQueryResponse {
     private List<AccountHistory> accountHistories;
 }

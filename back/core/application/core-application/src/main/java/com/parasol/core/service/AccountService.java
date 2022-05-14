@@ -15,9 +15,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Validated
 @Service
@@ -47,23 +47,26 @@ public class AccountService {
     }
 
 
-    public AccountListQueryResultResponse getAllAccount(@Valid AccountListQueryRequest request) {
-        Client client = clientService.findById(request.getCusNo());
-        AccountListQueryResultResponse listresult = new AccountListQueryResultResponse();
-        List<AccountNumber> result = new ArrayList<>();
+    public AccountListQueryResponse getAllAccount(@Valid AccountListQueryRequest request) {
+        Long cusNo = request.getCusNo();
 
-        for (Account e : accountRepository.findByClient(client)) {
-            AccountNumber ele = new AccountNumber();
-            AccountInfo accountInfo = new AccountInfo();
+        Client queryClient = clientService.findById(cusNo);
 
-            accountInfo.setAccountNumber(e.getId());
-            ele.setAccountNumber(accountInfo.getAccountNumber());
-            result.add(ele);
-        }
+        List<Account> accounts = accountRepository.findByClient(queryClient);
 
-        listresult.setAccounts(result);
+        List<AccountNumber> accountNumbers = accounts.stream()
+                .map(account -> {
+                    String accountNumber = account.getId();
 
-        return listresult;
+                    return AccountNumber.builder()
+                            .accountNumber(accountNumber)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return AccountListQueryResponse.builder()
+                .accounts(accountNumbers)
+                .build();
     }
 
     public AccountBalanceQueryResponse getBalance(AccountQueryBalanceRequest request) {

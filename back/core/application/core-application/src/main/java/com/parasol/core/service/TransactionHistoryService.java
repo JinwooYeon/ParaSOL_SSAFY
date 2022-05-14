@@ -1,7 +1,7 @@
 package com.parasol.core.service;
 
 import com.parasol.core.api_model.AccountHistory;
-import com.parasol.core.api_model.AccountHistoryResultResponse;
+import com.parasol.core.api_model.AccountHistoryQueryResponse;
 import com.parasol.core.api_model.AccountInfo;
 import com.parasol.core.eenum.TransactionType;
 import com.parasol.core.entity.Account;
@@ -15,10 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TransactionHistoryService {
@@ -87,7 +85,7 @@ public class TransactionHistoryService {
         return transactionHistoryRepository.save(transactionHistory);
     }
     
-    public AccountHistoryResultResponse getAccountHistory(String accountNo) {
+    public AccountHistoryQueryResponse getAccountHistory(String accountNo) {
         Optional<Account> account = accountRepository.findById(accountNo);
 
         if(account.isEmpty())
@@ -96,7 +94,7 @@ public class TransactionHistoryService {
 //        validationService.equalPassword(accountPassword, account.get().getPassword());
 
         List<TransactionHistory> transactionHistories = accountRepositorySupport.getTransactionHistory(accountNo);
-        AccountHistoryResultResponse resultResponse = new AccountHistoryResultResponse();
+        AccountHistoryQueryResponse resultResponse = new AccountHistoryQueryResponse();
         List<AccountHistory> accountHistories = new ArrayList<>();
 
         for(TransactionHistory e : transactionHistories){
