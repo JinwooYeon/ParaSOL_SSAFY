@@ -40,11 +40,6 @@ public class ApiKeyAuthenticateService extends AuthenticateService {
         }
     }
 
-    public boolean revoke(String apiKey) {
-        // Todo : 아직 구현 안함
-        return true;
-    }
-
     private String createRandom() throws NoSuchAlgorithmException {
         return this.encrypt(Long.toString(apiKeyRepository.count()));
     }
