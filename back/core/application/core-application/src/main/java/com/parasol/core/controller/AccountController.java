@@ -4,7 +4,10 @@ import com.parasol.core.api_model.*;
 import com.parasol.core.service.AccountService;
 import com.parasol.core.service.TransactionHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
@@ -45,37 +48,41 @@ public class AccountController {
     // 계좌 잔액 조회
     @PostMapping("account/balance")
     @ResponseBody
-    public AccountBalanceQueryResponse getBalance(
+    public ResponseEntity<AccountBalanceQueryResponse> getBalance(
             @RequestBody @Valid AccountQueryBalanceRequest request
     ) {
-        return accountService.getBalance(request);
+        AccountBalanceQueryResponse response = accountService.getBalance(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 거래 내역 조회
     @PostMapping("account/history")
     @ResponseBody
-    public AccountHistoryResultResponse getAccountHistory(
+    public ResponseEntity<AccountHistoryResultResponse> getAccountHistory(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
+        AccountHistoryResultResponse response = transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
-    public DepositResponse deposit(
+    public ResponseEntity<DepositResponse> deposit(
             @RequestBody @Valid DepositRequest request
     ) {
-        return accountService.deposit(request);
+        DepositResponse response = accountService.deposit(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public WithdrawResponse withdraw(
+    public ResponseEntity<WithdrawResponse> withdraw(
             @RequestBody @Valid WithdrawRequest request
     ) {
-        return accountService.withdraw(request);
+        WithdrawResponse response = accountService.withdraw(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 송금, from 계좌에서 출금, to 계좌에 입금
