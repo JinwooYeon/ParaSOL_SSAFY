@@ -138,7 +138,15 @@ public class TransactionHistoryService {
     }
     
     public AccountHistoryQueryResponse getAccountHistory(AccountHistoryQueryRequest request) {
+        Long cusNo = request.getCusNo();
         String accountNumber = request.getAccountNumber();
+
+        if (cusNo == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "AccountService :: withdraw :: this request does not authorized"
+            );
+        }
 
         if (!StringUtils.hasText(accountNumber)) {
             throw new ResponseStatusException(
@@ -154,6 +162,13 @@ public class TransactionHistoryService {
                             "TransactionHistoryService :: getAccountHistory :: account does not exist"
                     );
                 });
+
+        if (account.getClient().getId() == cusNo) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "AccountService :: getAccountHistory :: this account is not yours"
+            );
+        }
 
         List<TransactionHistory> transactionHistories = accountRepositorySupport.getTransactionHistory(accountNumber);
         List<AccountHistory> accountHistories = transactionHistories.stream()
