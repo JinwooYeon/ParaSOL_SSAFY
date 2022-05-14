@@ -20,23 +20,22 @@ public class AccountHistory {
     @ApiModelProperty(name= "id", example ="2" )
     @JsonProperty("id")
     @NotNull
-    private Long txId;
+    private Long id;
     @ApiModelProperty(name= "txDatetime", example ="2022-04-28 18:43:22:03" )
     @JsonProperty("date")
     @NotNull
-    private Long txDatetime;
+    private Long datetime;
     @ApiModelProperty(name= "txMethod", example ="1" )
     @JsonProperty("type")
     @NotNull
-    private TransactionType txMethod;
+    private TransactionType method;
     @ApiModelProperty(name = "amount", example = "4500000000")
     @PositiveOrZero
     private Long amount;
-    @ApiModelProperty(name = "account_to", example = "110-437-525252")
+    @ApiModelProperty(name = "account", example = "110-437-525252")
     @NotNull
-    private AccountInfo accountTo;
-
-    @ApiModelProperty(name = "transactionAccount")
+    private String account;
+    @ApiModelProperty(name = "nameOpponent")
     @NotBlank
-    private String transactionAccount;
+    private String nameOpponent;
 }
