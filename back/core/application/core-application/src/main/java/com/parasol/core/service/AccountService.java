@@ -67,16 +67,23 @@ public class AccountService {
     }
 
     public AccountBalanceQueryResponse getBalance(AccountQueryBalanceRequest request) {
-        String accountNumber = request.getAccountNumber();
+        try {
+            String accountNumber = request.getAccountNumber();
 
-        Account queryAccount = accountRepository.findById(accountNumber)
-                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: getBalance :: queryAccount is null"); });
+            Account queryAccount = accountRepository.findById(accountNumber)
+                    .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: getBalance :: queryAccount is null"); });
 
-        Long balance = queryAccount.getBalance();
+            Long balance = queryAccount.getBalance();
 
-        return AccountBalanceQueryResponse.builder()
-                .balance(balance)
-                .build();
+            return AccountBalanceQueryResponse.builder()
+                    .balance(balance)
+                    .build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+            return AccountBalanceQueryResponse.builder()
+                    .build();
+        }
     }
 
     @Transactional
