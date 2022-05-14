@@ -114,7 +114,7 @@ public class AccountService {
                     );
                 });
 
-        if (queryAccount.getClient().getId() == cusNo) {
+        if (queryAccount.getClient().getId() != cusNo) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
                     "AccountService :: getBalance :: this account is not yours"
@@ -188,7 +188,7 @@ public class AccountService {
                     "AccountService :: withdraw :: this request does not authorized"
             );
         }
-        
+
         if (accountFrom == null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
@@ -212,7 +212,7 @@ public class AccountService {
                     );
                 });
 
-        if (withdrawAccount.getClient().getId() == cusNo) {
+        if (withdrawAccount.getClient().getId() != cusNo) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
                     "AccountService :: withdraw :: this account is not yours"

@@ -144,7 +144,7 @@ public class TransactionHistoryService {
         if (cusNo == null) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
-                    "AccountService :: withdraw :: this request does not authorized"
+                    "TransactionHistoryService :: withdraw :: this request does not authorized"
             );
         }
 
@@ -163,10 +163,10 @@ public class TransactionHistoryService {
                     );
                 });
 
-        if (account.getClient().getId() == cusNo) {
+        if (account.getClient().getId() != cusNo) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
-                    "AccountService :: getAccountHistory :: this account is not yours"
+                    "TransactionHistoryService :: getAccountHistory :: this account is not yours"
             );
         }
 
