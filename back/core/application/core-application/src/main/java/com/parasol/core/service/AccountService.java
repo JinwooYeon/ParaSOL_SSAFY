@@ -87,60 +87,92 @@ public class AccountService {
     }
 
     @Transactional
-    public DepositResponse deposit(@Valid AccountRequest request) {
-        Long amount = request.getAmount();
-        AccountInfo accountTo = request.getAccountTo();
-        String nameFrom = request.getNameOpponent();
+    public DepositResponse deposit(@Valid DepositRequest request) {
+        try {
+            Long amount = request.getAmount();
+            AccountInfo accountTo = request.getAccountTo();
+            String nameFrom = request.getNameOpponent();
 
-        if (accountTo == null) {
-            throw new NullPointerException("AccountService :: deposit :: accountTo is null");
+            if (accountTo == null) {
+                throw new NullPointerException("AccountService :: deposit :: accountTo is null");
+            }
+
+            if (!StringUtils.hasText(nameFrom)) {
+                throw new NullPointerException("AccountService :: deposit :: nameFrom is null");
+            }
+
+            String accountNumberTo = accountTo.getAccountNumber();
+            Account depositAccount = accountRepository.findById(accountNumberTo).orElseThrow(IllegalStateException::new);
+
+            Balance beforeBalance = new Balance(depositAccount.getBalance());
+            Balance afterBalance = new Balance(depositAccount.getBalance() + amount);
+
+            Long validAfterBalance = validationService.calculateBalance(afterBalance);
+
+            depositAccount.setBalance(validAfterBalance);
+            accountRepository.save(depositAccount);
+
+            transactionHistoryService.createDepositHistory(accountNumberTo,
+                    accountNumberTo,
+                    nameFrom,
+                    amount);
+
+            return DepositResponse.builder()
+                    .isSuccess(true)
+                    .build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+            return DepositResponse.builder()
+                    .isSuccess(false)
+                    .build();
         }
-
-        if (!StringUtils.hasText(nameFrom)) {
-            throw new NullPointerException("AccountService :: deposit :: nameFrom is null");
-        }
-
-        String accountNumberTo = accountTo.getAccountNumber();
-        Account depositAccount = accountRepository.findById(accountNumberTo).orElseThrow(IllegalStateException::new);
-
-        Long beforeBalance = depositAccount.getBalance();
-        Long afterBalance = beforeBalance + amount;
-
-        depositAccount.setBalance(afterBalance);
-        accountRepository.save(depositAccount);
-
-        transactionHistoryService.createDepositHistory(accountNumberTo,
-                accountNumberTo,
-                nameFrom,
-                amount);
-
-        return DepositResponse.builder()
-                .isSuccess(true)
-                .build();
     }
 
     @Transactional
-    public TransactionExecutionResultResponse withdraw(@Valid AccountWithdrawRequest request) {
-        TransactionExecutionResultResponse resultResponse = new TransactionExecutionResultResponse();
-        // from 계좌에서 출금
-        Optional<Account> accountFrom = accountRepository.findById(request.getAccountFrom().getAccountNumber());
+    public WithdrawResponse withdraw(@Valid WithdrawRequest request) {
+        try {
+            Long amount = request.getAmount();
+            AccountInfo accountFrom = request.getAccountFrom();
+            String nameTo = request.getNameOpponent();
 
-        if (accountFrom.isEmpty())
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            if (accountFrom == null) {
+                throw new NullPointerException("AccountService :: withdraw :: accountFrom is null");
+            }
 
-        validationService.equalPassword(request.getAccountPassword(), accountFrom.get().getPassword());
+            if (!StringUtils.hasText(nameTo)) {
+                throw new NullPointerException("AccountService :: deposit :: nameTo is null");
+            }
 
-        Long fromBalance = validationService.calculateBalance(new Balance(accountFrom.get().getBalance() - request.getAmount()));
-        // from 계좌에서 입금 금액만큼 빼기
-        accountFrom.get().setBalance(fromBalance);
+            String accountNumberFrom = accountFrom.getAccountNumber();
+            Account withdrawAccount = accountRepository.findById(accountNumberFrom)
+                    .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.FORBIDDEN); });
 
-        transactionHistoryService.createWithdrawHistory(request.getAccountFrom().getAccountNumber(),
-                request.getAccountFrom().getAccountNumber(),
-                request.getNameOpponent(),
-                request.getAmount());
+            validationService.equalPassword(request.getAccountPassword(), withdrawAccount.getPassword());
 
-        resultResponse.setSuccess(true);
-        return resultResponse;
+            Balance beforeBalance = new Balance(withdrawAccount.getBalance());
+            Balance afterBalance = new Balance(withdrawAccount.getBalance() - amount);
+
+            Long validAfterBalance = validationService.calculateBalance(afterBalance);
+
+            withdrawAccount.setBalance(validAfterBalance);
+            accountRepository.save(withdrawAccount);
+
+            transactionHistoryService.createWithdrawHistory(accountNumberFrom,
+                    accountNumberFrom,
+                    nameTo,
+                    amount);
+
+            return WithdrawResponse.builder()
+                    .isSuccess(true)
+                    .build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+            return WithdrawResponse.builder()
+                    .isSuccess(false)
+                    .build();
+        }
     }
 
     public TransactionExecutionResultResponse remit(@Valid AccountRequest request) {

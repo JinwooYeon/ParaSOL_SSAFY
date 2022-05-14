@@ -65,7 +65,7 @@ public class AccountController {
     @PostMapping("account/deposit")
     @ResponseBody
     public DepositResponse deposit(
-            @RequestBody @Valid AccountRequest request
+            @RequestBody @Valid DepositRequest request
     ) {
         return accountService.deposit(request);
     }
@@ -73,8 +73,8 @@ public class AccountController {
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public TransactionExecutionResultResponse withdraw(
-            @RequestBody @Valid AccountWithdrawRequest request
+    public WithdrawResponse withdraw(
+            @RequestBody @Valid WithdrawRequest request
     ) {
         return accountService.withdraw(request);
     }
