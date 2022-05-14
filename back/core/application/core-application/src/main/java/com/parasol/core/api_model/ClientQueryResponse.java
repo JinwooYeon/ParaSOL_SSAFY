@@ -14,6 +14,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @SuperBuilder
 @NoArgsConstructor
-public class QueryClientResponse extends Client {
+public class ClientQueryResponse extends Client {
 
 }

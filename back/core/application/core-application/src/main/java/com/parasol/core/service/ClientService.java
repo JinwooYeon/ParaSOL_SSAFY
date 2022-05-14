@@ -2,7 +2,7 @@ package com.parasol.core.service;
 
 import com.parasol.core.api_model.ClientCreateRequest;
 import com.parasol.core.api_model.ClientCreateResponse;
-import com.parasol.core.api_model.QueryClientResponse;
+import com.parasol.core.api_model.ClientQueryResponse;
 import com.parasol.core.api_model.QueryClientRequest;
 import com.parasol.core.entity.Client;
 import com.parasol.core.repository.ClientRepository;
@@ -38,7 +38,7 @@ public class ClientService {
                 .build();
     }
 
-    public QueryClientResponse getClient(QueryClientRequest request) {
+    public ClientQueryResponse getClient(QueryClientRequest request) {
         Long id = request.getId();
 
         Client client = this.findById(id);
@@ -49,7 +49,7 @@ public class ClientService {
         String maskedName = maskName(name);
         String maskedResidentNumber = maskResidentNumber(residentNumber);
 
-        return QueryClientResponse.builder()
+        return ClientQueryResponse.builder()
                 .id(id)
                 .name(maskedName)
                 .residentNumber(maskedResidentNumber)

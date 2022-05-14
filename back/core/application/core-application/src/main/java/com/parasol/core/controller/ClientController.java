@@ -2,7 +2,7 @@ package com.parasol.core.controller;
 
 import com.parasol.core.api_model.ClientCreateRequest;
 import com.parasol.core.api_model.ClientCreateResponse;
-import com.parasol.core.api_model.QueryClientResponse;
+import com.parasol.core.api_model.ClientQueryResponse;
 import com.parasol.core.api_model.QueryClientRequest;
 import com.parasol.core.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +28,14 @@ public class ClientController {
     }
 
     @GetMapping("client")
-    public ResponseEntity<QueryClientResponse> GetClient(
+    public ResponseEntity<ClientQueryResponse> GetClient(
             @RequestParam("cusNo") Long cusNo
     ) {
         QueryClientRequest request = QueryClientRequest.builder()
                 .id(cusNo)
                 .build();
 
-        QueryClientResponse response = clientService.getClient(request);
+        ClientQueryResponse response = clientService.getClient(request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
