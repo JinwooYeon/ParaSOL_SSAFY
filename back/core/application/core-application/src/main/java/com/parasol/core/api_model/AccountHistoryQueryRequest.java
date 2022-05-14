@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @ApiModel("AccountHistoryQueryRequest")
 public class AccountHistoryQueryRequest {
+    private Long cusNo;
     @ApiModelProperty(name="account_number", example = "110-437-525252")
     @NotBlank
     @Size(max = 14, min = 14)

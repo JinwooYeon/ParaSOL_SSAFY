@@ -16,6 +16,7 @@ import javax.validation.constraints.PositiveOrZero;
 @ToString
 @ApiModel("WithdrawRequest")
 public class WithdrawRequest {
+    private Long cusNo;
     @ApiModelProperty(name = "method", example = "0")
     @Nullable
     private TransactionType type;

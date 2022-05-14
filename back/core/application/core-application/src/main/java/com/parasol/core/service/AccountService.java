@@ -88,6 +88,8 @@ public class AccountService {
     }
 
     public AccountBalanceQueryResponse getBalance(AccountBalanceQueryRequest request) {
+        Long cusNo = request.getCusNo();
+
         String accountNumber = request.getAccountNumber();
 
         Account queryAccount = accountRepository.findById(accountNumber)
@@ -97,6 +99,12 @@ public class AccountService {
                             "AccountService :: getBalance :: queryAccount does not exist"
                     );
                 });
+
+        if (queryAccount.getClient().getId() == cusNo)
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "AccountService :: getBalance :: this account is not yours"
+            );
 
         Long balance = queryAccount.getBalance();
 
@@ -154,6 +162,7 @@ public class AccountService {
 
     @Transactional
     public WithdrawResponse withdraw(@Valid WithdrawRequest request) throws ResponseStatusException {
+        Long cusNo = request.getCusNo();
         Long amount = request.getAmount();
         AccountInfo accountFrom = request.getAccountFrom();
         String nameTo = request.getNameOpponent();
@@ -180,6 +189,12 @@ public class AccountService {
                             "AccountService :: withdraw :: withdrawAccount is null"
                     );
                 });
+
+        if (withdrawAccount.getClient().getId() == cusNo)
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "AccountService :: withdraw :: this account is not yours"
+            );
 
         validationService.equalPassword(request.getAccountPassword(), withdrawAccount.getPassword());
 
