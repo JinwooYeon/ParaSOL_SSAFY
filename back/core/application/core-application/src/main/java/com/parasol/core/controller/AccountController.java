@@ -49,7 +49,7 @@ public class AccountController {
     public AccountBalanceQueryResultResponse getBalance(
             @RequestBody @Valid AccountQueryRequest accountQueryRequest
     ) {
-        return accountService.getBalanceWithPassword(accountQueryRequest);
+        return accountService.getBalance(accountQueryRequest);
     }
 
     // 계좌 거래 내역 조회
