@@ -3,7 +3,10 @@ package com.parasol.accountList.modules;
 import com.parasol.accountList.api_request.LoginParam;
 import com.parasol.accountList.api_response.LoginResult;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.io.BufferedReader;
@@ -24,7 +27,7 @@ public class UserLoginSocketRequestFactory {
     @Value("${core.interface.port}")
     private String corePort;
 
-    public Mono<LoginResult> userLoginRequest(LoginParam request) {
+    public Mono<LoginResult> userLoginRequest(LoginParam request) throws ResponseStatusException {
         try {
             socket = new Socket(coreIp, Integer.parseInt(corePort));
 
@@ -46,11 +49,17 @@ public class UserLoginSocketRequestFactory {
 
             return response
                     .flatMap(s -> {
+                        String successBuf = String.valueOf(sockBuf, 0, 1).trim();
+                        String cusnoBuf = String.valueOf(sockBuf, 1, 10).trim();
+
                         boolean success;
                         Long cusno;
 
-                        success = (sockBuf[0] == '1');
-                        cusno = Long.parseLong(String.valueOf(sockBuf, 1, 10).trim());
+                        if (!StringUtils.hasText(successBuf))
+                            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY);
+
+                        success = successBuf.equals("1");
+                        cusno = StringUtils.hasText(cusnoBuf) ? Long.parseLong(cusnoBuf) : null;
 
                         LoginResult loginResult = LoginResult.builder()
                                 .isSuccess(success)
@@ -61,8 +70,7 @@ public class UserLoginSocketRequestFactory {
                     });
         } catch (IOException e) {
             System.out.println(e.getMessage());
-
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY);
         } finally {
             try {
                 if (socket != null) { socket.close(); }
