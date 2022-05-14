@@ -1,13 +1,11 @@
 package com.parasol.pay.service;
 
 import com.parasol.pay.api_request.AccountBalanceQueryRequest;
-import com.parasol.pay.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.pay.api_response.AccountBalanceQueryResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AccountServiceTest {
@@ -23,7 +21,7 @@ class AccountServiceTest {
         request.setId("khj123");
 
         for(int i = 0;i < 100;i++) {
-            Mono<AccountBalanceQueryResultResponse> balance = accountService.getBalance(request);
+            Mono<AccountBalanceQueryResponse> balance = accountService.getBalance(request);
 
             balance.subscribe(s->{
                 System.out.println(s.getBalance());
