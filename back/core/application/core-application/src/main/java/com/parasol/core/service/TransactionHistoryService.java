@@ -72,7 +72,6 @@ public class TransactionHistoryService {
                 .date(time)
                 .type(TransactionType.DEPOSIT)
                 .amount(amount)
-                .accountNumberOpponent(accountNumberFrom)
                 .nameOpponent(nameFrom)
                 .build();
 
@@ -116,7 +115,6 @@ public class TransactionHistoryService {
                 .date(time)
                 .type(TransactionType.WITHDRAW)
                 .amount(amount)
-                .accountNumberOpponent(accountNumberTo)
                 .nameOpponent(nameTo)
                 .build();
 
@@ -134,7 +132,6 @@ public class TransactionHistoryService {
                 .date(time)
                 .type(TransactionType.DEPOSIT)
                 .amount(amount)
-                .accountNumberOpponent(accountFrom)
                 .build();
 
         return transactionHistoryRepository.save(transactionHistory);
@@ -166,7 +163,6 @@ public class TransactionHistoryService {
                     TransactionType txMethod = transactionHistory.getType();
                     Long txAmount = transactionHistory.getAmount();
                     String txAccount = transactionHistory.getAccount().getId();
-                    String txAccountNumberOpponent = transactionHistory.getAccountNumberOpponent();
                     String txNameOpponent = transactionHistory.getNameOpponent();
 
                     return AccountHistory.builder()
@@ -175,7 +171,6 @@ public class TransactionHistoryService {
                             .method(txMethod)
                             .amount(txAmount)
                             .account(txAccount)
-                            .accountOpponent(txAccountNumberOpponent)
                             .nameOpponent(txNameOpponent)
                             .build();
                 })

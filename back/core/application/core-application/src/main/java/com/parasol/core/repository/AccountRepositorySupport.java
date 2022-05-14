@@ -19,8 +19,7 @@ public class AccountRepositorySupport{
     public List<TransactionHistory> getTransactionHistory(String accountNumber){
         return jpaQueryFactory.select(qTransactionHistory)
                 .from(qTransactionHistory)
-                .where(qTransactionHistory.accountNumberOpponent.eq(accountNumber)
-                        .or(qTransactionHistory.account.id.eq(accountNumber)))
+                .where(qTransactionHistory.account.id.eq(accountNumber))
                 .join(qTransactionHistory.account, QAccount.account)
                 .fetchJoin().fetch();
     }

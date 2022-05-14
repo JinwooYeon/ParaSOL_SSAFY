@@ -36,9 +36,6 @@ public class AccountHistory {
     @ApiModelProperty(name = "account", example = "110-437-525252")
     @NotNull
     private String account;
-    @ApiModelProperty(name = "accountOpponent")
-    @NotBlank
-    private String accountOpponent;
     @ApiModelProperty(name = "nameOpponent")
     @NotBlank
     private String nameOpponent;
