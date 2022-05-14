@@ -4,7 +4,10 @@ package com.parasol.pay.modules;
 import com.parasol.pay.api_request.LoginParam;
 import com.parasol.pay.api_response.LoginResult;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.io.BufferedReader;
@@ -47,11 +50,17 @@ public class UserLoginSocketRequestFactory {
 
             return response
                     .flatMap(s -> {
-                        boolean success;
-                        long cusno;
+                        String successBuf = String.valueOf(sockBuf, 0, 1).trim();
+                        String cusnoBuf = String.valueOf(sockBuf, 1, 10).trim();
 
-                        success = (sockBuf[0] == '1');
-                        cusno = Long.parseLong(String.valueOf(sockBuf, 1, 10).trim());
+                        boolean success;
+                        Long cusno;
+
+                        if (!StringUtils.hasText(successBuf))
+                            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY);
+
+                        success = successBuf.equals("1");
+                        cusno = StringUtils.hasText(cusnoBuf) ? Long.parseLong(cusnoBuf) : null;
 
                         LoginResult loginResult = LoginResult.builder()
                                 .isSuccess(success)
@@ -62,8 +71,7 @@ public class UserLoginSocketRequestFactory {
                     });
         } catch (IOException e) {
             System.out.println(e.getMessage());
-
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY);
         } finally {
             try {
                 if (socket != null) {
