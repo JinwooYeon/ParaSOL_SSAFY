@@ -39,18 +39,20 @@ using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
 using core_api::CoreAPI;
-using core_api::AccountBalanceQueryRequest;
-using core_api::AccountBalanceQueryResponse;
+using core_api::AccountBalanceQueryGrpcRequest;
+using core_api::AccountBalanceQueryGrpcResponse;
+using core_api::LoginGrpcRequest;
+using core_api::LoginGrpcResponse;
 
 class CoreAPIClient {
     public:
     CoreAPIClient(std::shared_ptr<Channel> channel) : stub_(CoreAPI::NewStub(channel)) {}
 
     std::string getBalance(const std::string& account_number) {
-        AccountBalanceQueryRequest request;
+        AccountBalanceQueryGrpcRequest request;
         request.set_accountnumber(account_number);
 
-        AccountBalanceQueryResponse response;
+        AccountBalanceQueryGrpcResponse response;
         ClientContext context;
 
         Status status = stub_->getBalance(&context, request, &response);
@@ -62,11 +64,11 @@ class CoreAPIClient {
     }
 
     struct scus0001a_out* login(const struct scus0001a_in raw_request) {
-        core_api::LoginRequest request;
+        LoginGrpcRequest request;
         request.set_id(raw_request.intnbk_user_id);
         request.set_password(raw_request.intndk_pwd);
 
-        core_api::LoginResponse response;
+        LoginGrpcResponse response;
         ClientContext context;
 
         Status status = stub_->login(&context, request, &response);
@@ -89,7 +91,7 @@ class CoreAPIClient {
 };
 
 int main(int argc, char **argv) {
-    std::string baseURL = "localhost:9090";
+    std::string baseURL = "172.24.176.1:9090";
 
     int serv_sock;
     int clnt_sock;

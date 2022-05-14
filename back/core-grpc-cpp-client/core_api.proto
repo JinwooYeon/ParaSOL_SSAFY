@@ -3,28 +3,28 @@ syntax = "proto3";
 package core_api;
 
 option java_multiple_files = true;
-option java_package = "com.parasol.core.lib";
+option java_package = "com.parasol.core_interface";
 option java_outer_classname = "CoreAPIProto";
 
 service CoreAPI {
-  rpc getBalance(AccountBalanceQueryRequest) returns (AccountBalanceQueryResponse) {}
-  rpc login(LoginRequest) returns (LoginResponse) {}
+  rpc getBalance(AccountBalanceQueryGrpcRequest) returns (AccountBalanceQueryGrpcResponse) {}
+  rpc login(LoginGrpcRequest) returns (LoginGrpcResponse) {}
 }
 
-message AccountBalanceQueryRequest {
+message AccountBalanceQueryGrpcRequest {
   string accountNumber = 1;
 }
 
-message AccountBalanceQueryResponse {
+message AccountBalanceQueryGrpcResponse {
   string balance = 1;
 }
 
-message LoginRequest {
+message LoginGrpcRequest {
   string id = 1;
   string password = 2;
 }
 
-message LoginResponse {
+message LoginGrpcResponse {
   string is_success = 1;
   string cusno = 2;
 }
