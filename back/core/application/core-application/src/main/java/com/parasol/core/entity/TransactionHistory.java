@@ -22,8 +22,8 @@ public class TransactionHistory {
     private Long date;
     private TransactionType type;
     private Long amount;
-    private String transactionAccount;
-    private String transactionOpponent;
+    private String accountNumberOpponent;
+    private String nameOpponent;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
     @ManyToOne

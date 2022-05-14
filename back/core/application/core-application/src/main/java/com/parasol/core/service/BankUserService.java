@@ -59,7 +59,7 @@ public class BankUserService {
                 .orElseThrow(() -> {
                     throw new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
-                            "BankUserService :: login :: bankUser is null"
+                            "BankUserService :: login :: bankUser does not exist"
                     );
                 });
 
@@ -75,7 +75,7 @@ public class BankUserService {
         if (client == null) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "BankUserService :: login :: client is null"
+                    "BankUserService :: login :: client does not exist"
             );
         }
 

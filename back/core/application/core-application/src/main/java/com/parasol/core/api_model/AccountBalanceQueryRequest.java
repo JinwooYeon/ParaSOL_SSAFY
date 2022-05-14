@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountQueryBalanceRequest {
+public class AccountBalanceQueryRequest {
     @ApiModelProperty(name="account_number", example = "110-437-525252")
     @NotBlank
     @Size(max = 14, min = 14)

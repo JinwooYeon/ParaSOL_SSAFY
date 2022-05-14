@@ -61,7 +61,7 @@ public class ClientService {
                 .orElseThrow(() -> {
                     throw new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
-                            "ClientService :: findById :: queryClient is null"
+                            "ClientService :: findById :: [client] does not exist"
                     );
                 });
     }

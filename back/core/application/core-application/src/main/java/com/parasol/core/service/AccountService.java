@@ -87,14 +87,14 @@ public class AccountService {
                 .build();
     }
 
-    public AccountBalanceQueryResponse getBalance(AccountQueryBalanceRequest request) {
+    public AccountBalanceQueryResponse getBalance(AccountBalanceQueryRequest request) {
         String accountNumber = request.getAccountNumber();
 
         Account queryAccount = accountRepository.findById(accountNumber)
                 .orElseThrow(() -> {
                     throw new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
-                            "AccountService :: getBalance :: queryAccount is null"
+                            "AccountService :: getBalance :: queryAccount does not exist"
                     );
                 });
 
@@ -130,7 +130,7 @@ public class AccountService {
                 .orElseThrow(() -> {
                     throw new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
-                            "AccountService :: deposit :: depositAccount is null"
+                            "AccountService :: deposit :: depositAccount does not exist"
                     );
                 });
 

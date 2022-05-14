@@ -50,7 +50,7 @@ public class AccountController {
     @PostMapping("account/balance")
     @ResponseBody
     public ResponseEntity<AccountBalanceQueryResponse> getBalance(
-            @RequestBody @Valid AccountQueryBalanceRequest request
+            @RequestBody @Valid AccountBalanceQueryRequest request
     ) {
         AccountBalanceQueryResponse response = accountService.getBalance(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -60,9 +60,9 @@ public class AccountController {
     @PostMapping("account/history")
     @ResponseBody
     public ResponseEntity<AccountHistoryQueryResponse> getAccountHistory(
-            @RequestBody @Valid AccountQueryRequest accountQueryRequest
+            @RequestBody @Valid AccountHistoryQueryRequest request
     ) {
-        AccountHistoryQueryResponse response = transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
+        AccountHistoryQueryResponse response = transactionHistoryService.getAccountHistory(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

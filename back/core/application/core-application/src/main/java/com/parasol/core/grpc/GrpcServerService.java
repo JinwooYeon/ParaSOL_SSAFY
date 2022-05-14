@@ -53,7 +53,7 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
         try {
             String accountNumber = request.getAccountNumber();
 
-            AccountQueryBalanceRequest queryRequest = AccountQueryBalanceRequest.builder()
+            AccountBalanceQueryRequest queryRequest = AccountBalanceQueryRequest.builder()
                     .accountNumber(accountNumber)
                     .build();
 
