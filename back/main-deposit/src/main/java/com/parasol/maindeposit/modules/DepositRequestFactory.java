@@ -22,7 +22,7 @@ public class DepositRequestFactory {
     public Mono<DepositResult> run(DepositParam saveInfo) {
         /* Http 통신 */
         UriSpec<RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
-        RequestHeadersSpec headersSpec = uriSpec.uri(uriBuilder -> uriBuilder
+        RequestHeadersSpec<?> headersSpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path("/account/deposit")
                 .build()
         )
