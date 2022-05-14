@@ -19,5 +19,5 @@ import javax.validation.constraints.NotBlank;
 public class AccountBalance {
     @ApiModelProperty(name = "balance", example = "5000")
     @NotBlank
-    private long balance;
+    private Long balance;
 }
