@@ -48,7 +48,7 @@ public class UserLoginSocketRequestFactory {
             return response
                     .flatMap(s -> {
                         boolean success;
-                        Long cusno;
+                        long cusno;
 
                         success = (sockBuf[0] == '1');
                         cusno = Long.parseLong(String.valueOf(sockBuf, 1, 10).trim());
