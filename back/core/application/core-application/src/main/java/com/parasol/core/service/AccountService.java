@@ -66,25 +66,16 @@ public class AccountService {
         return listresult;
     }
 
-    public AccountBalanceQueryResultResponse getBalanceWithPassword(AccountQueryRequest accountQueryRequest) {
-        Optional<Account> account = accountRepository.findById(accountQueryRequest.getAccountNumber());
-        AccountBalanceQueryResultResponse result = new AccountBalanceQueryResultResponse();
+    public AccountBalanceQueryResultResponse getBalance(AccountQueryRequest request) {
+        String accountNumber = request.getAccountNumber();
 
-        if (account.isEmpty())
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        Account account = accountRepository.findById(accountNumber)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
 
-//        validationService.equalPassword(accountQueryRequest.getAccountPassword(), account.get().getPassword());
+        Long balance = account.getBalance();
 
-        result.setBalance(account.get().getBalance());
-        return result;
-    }
-
-
-    public BalanceResponse getBalance(String accountNo) {
-        Optional<Account> account = accountRepository.findById(accountNo);
-
-        return BalanceResponse.builder()
-                .balance(account.get().getBalance())
+        return AccountBalanceQueryResultResponse.builder()
+                .balance(balance)
                 .build();
     }
 
