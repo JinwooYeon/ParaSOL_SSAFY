@@ -1,15 +1,18 @@
 package com.parasol.Main.service;
 
 import com.parasol.Main.api_request.RegisterRequest;
+import com.parasol.Main.api_response.RegisterResponse;
 import com.parasol.Main.entity.ApiKey;
 import com.parasol.Main.repository.ApiKeyRepository;
 import org.apache.tomcat.util.net.openssl.ciphers.Encryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.NoSuchElementException;
 
 
 @Service
@@ -19,12 +22,21 @@ public class ApiKeyAuthenticateService extends AuthenticateService {
     @Autowired
     private ApiKeyRepository apiKeyRepository;
 
-    public String register(RegisterRequest registerRequest) {
+    public Mono<RegisterResponse> register(RegisterRequest registerRequest) {
         try {
-            return apiKeyRepository.save(new ApiKey(this.createRandom(), request.getRemoteAddr(), registerRequest.getCompanyName())).getClientId();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            ApiKey apiKey = ApiKey.builder()
+                    .clientId(this.createRandom())
+                    .ipAddr(request.getRemoteAddr())
+                    .companyName(registerRequest.getCompanyName())
+                    .build();
+
+            return Mono.just(
+                    RegisterResponse.builder()
+                            .clientId(apiKeyRepository.save(apiKey).getClientId())
+                            .build()
+            );
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException(ex);
         }
     }
 
