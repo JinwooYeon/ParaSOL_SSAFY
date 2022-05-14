@@ -20,10 +20,11 @@ public class AccountController {
     // 계좌 개설
     @PostMapping("account")
     @ResponseBody
-    public String createAccount(
+    public ResponseEntity<AccountOpenResponse> createAccount(
             @RequestBody @Valid AccountOpenRequest accountOpenRequest
     ) {
-        return accountService.Create(accountOpenRequest);
+        AccountOpenResponse response = accountService.createAccount(accountOpenRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 폐쇄

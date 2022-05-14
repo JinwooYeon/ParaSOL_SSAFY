@@ -32,18 +32,36 @@ public class AccountService {
     private TransactionHistoryService transactionHistoryService;
 
 
-    public String Create(@Valid AccountOpenRequest accountOpenRequest) {
-        Client client = clientService.findById(accountOpenRequest.getCusNo());
-        Account account = new Account();
+    public AccountOpenResponse createAccount(@Valid AccountOpenRequest request) {
+        String accountNumber = AccountManager.generateAccountNumber();
+        String accountPassword = request.getAccountPassword();
+        Client client = clientService.findById(request.getCusNo());
 
-        if (client == null)
-            return null;
+        if (!StringUtils.hasText(accountNumber)) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "AccountService :: createAccount :: accountNumber is null"
+            );
+        }
 
-        account.setClient(client);
-        account.setPassword(accountOpenRequest.getAccountPassword());
-        account.setId(AccountManager.GenerateAccountNumber());
+        if (!StringUtils.hasText(accountPassword)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "AccountService :: createAccount :: accountPassword is null"
+            );
+        }
 
-        return accountRepository.save(account).getId();
+        Account account = Account.builder()
+                .id(accountNumber)
+                .password(accountPassword)
+                .client(client)
+                .build();
+
+        accountRepository.save(account);
+
+        return AccountOpenResponse.builder()
+                .accountNumber(accountNumber)
+                .build();
     }
 
 
