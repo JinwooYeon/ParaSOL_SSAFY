@@ -39,17 +39,17 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
     }
 
     @Override
-    public void getBalance(AccountBalanceQueryRequest request, StreamObserver<AccountBalanceQueryResponse> responseObserver) {
+    public void getBalance(AccountBalanceQueryGrpcRequest request, StreamObserver<AccountBalanceQueryGrpcResponse> responseObserver) {
         String accountNumber = request.getAccountNumber();
 
-        AccountQueryRequest queryRequest = AccountQueryRequest.builder()
+        AccountQueryBalanceRequest queryRequest = AccountQueryBalanceRequest.builder()
                 .accountNumber(accountNumber)
                 .build();
 
-        AccountBalanceQueryResultResponse balance = accountService.getBalance(queryRequest);
+        AccountBalanceQueryResponse queryResponse = accountService.getBalance(queryRequest);
 
-        AccountBalanceQueryResponse response = AccountBalanceQueryResponse.newBuilder()
-                .setBalance(balance.getBalance().toString())
+        AccountBalanceQueryGrpcResponse response = AccountBalanceQueryGrpcResponse.newBuilder()
+                .setBalance(queryResponse.getBalance().toString())
                 .build();
 
         responseObserver.onNext(response);

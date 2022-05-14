@@ -66,7 +66,7 @@ public class AccountService {
         return listresult;
     }
 
-    public AccountBalanceQueryResultResponse getBalance(AccountQueryRequest request) {
+    public AccountBalanceQueryResponse getBalance(AccountQueryBalanceRequest request) {
         String accountNumber = request.getAccountNumber();
 
         Account account = accountRepository.findById(accountNumber)
@@ -74,7 +74,7 @@ public class AccountService {
 
         Long balance = account.getBalance();
 
-        return AccountBalanceQueryResultResponse.builder()
+        return AccountBalanceQueryResponse.builder()
                 .balance(balance)
                 .build();
     }

@@ -7,15 +7,15 @@ option java_package = "com.parasol.core_interface";
 option java_outer_classname = "CoreAPIProto";
 
 service CoreAPI {
-  rpc getBalance(AccountBalanceQueryRequest) returns (AccountBalanceQueryResponse) {}
+  rpc getBalance(AccountBalanceQueryGrpcRequest) returns (AccountBalanceQueryGrpcResponse) {}
   rpc login(LoginRequest) returns (LoginResponse) {}
 }
 
-message AccountBalanceQueryRequest {
+message AccountBalanceQueryGrpcRequest {
   string accountNumber = 1;
 }
 
-message AccountBalanceQueryResponse {
+message AccountBalanceQueryGrpcResponse {
   string balance = 1;
 }
 

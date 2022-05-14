@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 public class AccountController {
@@ -46,10 +45,10 @@ public class AccountController {
     // 계좌 잔액 조회
     @PostMapping("account/balance")
     @ResponseBody
-    public AccountBalanceQueryResultResponse getBalance(
-            @RequestBody @Valid AccountQueryRequest accountQueryRequest
+    public AccountBalanceQueryResponse getBalance(
+            @RequestBody @Valid AccountQueryBalanceRequest request
     ) {
-        return accountService.getBalance(accountQueryRequest);
+        return accountService.getBalance(request);
     }
 
     // 계좌 거래 내역 조회
