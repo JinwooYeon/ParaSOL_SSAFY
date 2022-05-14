@@ -3,9 +3,10 @@ package com.parasol.pay.service;
 import com.parasol.pay.api_request.AccountBalanceQueryParam;
 import com.parasol.pay.api_request.AccountBalanceQueryRequest;
 import com.parasol.pay.api_request.LoginParam;
-import com.parasol.pay.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.pay.api_response.AccountBalanceQueryResponse;
 import com.parasol.pay.api_response.LoginResult;
 import com.parasol.pay.modules.QueryAccountBalanceRequestFactory;
+import com.parasol.pay.modules.QueryAccountBalanceSocketRequestFactory;
 import com.parasol.pay.modules.UserLoginSocketRequestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,10 @@ public class AccountService {
     private QueryAccountBalanceRequestFactory queryAccountBalanceRequestFactory;
     @Autowired
     private UserLoginSocketRequestFactory userLoginSocketRequestFactory;
+    @Autowired
+    private QueryAccountBalanceSocketRequestFactory queryAccountBalanceSocketRequestFactory;
 
-    public Mono<AccountBalanceQueryResultResponse> getBalance(AccountBalanceQueryRequest request) {
+    public Mono<AccountBalanceQueryResponse> getBalance(AccountBalanceQueryRequest request) {
         LoginParam loginParam = LoginParam.builder()
                 .id(request.getId())
                 .password(request.getPassword())
@@ -35,9 +38,9 @@ public class AccountService {
                                     .accountNumber(request.getAccountNumber())
                                     .build();
 
-                            return queryAccountBalanceRequestFactory.createQueryAccountBalanceRequest(param)
+                            return queryAccountBalanceSocketRequestFactory.createQueryAccountBalanceRequest(param)
                                     .map(queryResult ->
-                                            AccountBalanceQueryResultResponse.builder()
+                                            AccountBalanceQueryResponse.builder()
                                                     .balance(queryResult.getBalance())
                                                     .build()
                                     );
