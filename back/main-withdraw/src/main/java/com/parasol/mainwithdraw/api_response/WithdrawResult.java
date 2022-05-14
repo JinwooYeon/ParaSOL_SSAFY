@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 @NoArgsConstructor
-@ApiModel("DepositResult")
+@ApiModel("WithdrawResult")
 public class WithdrawResult {
     private boolean success = false;
 }
