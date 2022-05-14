@@ -38,10 +38,11 @@ public class AccountController {
 
     // 계좌 목록 조회
     @PostMapping("account/list")
-    public AccountListQueryResponse getAllAccount(
+    public ResponseEntity<AccountListQueryResponse> getAllAccount(
             @RequestBody @Valid AccountListQueryRequest request
     ) {
-        return accountService.getAllAccount(request);
+        AccountListQueryResponse response = accountService.getAllAccount(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 잔액 조회
