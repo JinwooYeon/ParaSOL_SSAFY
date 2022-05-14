@@ -69,10 +69,10 @@ public class AccountService {
     public AccountBalanceQueryResponse getBalance(AccountQueryBalanceRequest request) {
         String accountNumber = request.getAccountNumber();
 
-        Account account = accountRepository.findById(accountNumber)
-                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
+        Account queryAccount = accountRepository.findById(accountNumber)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: getBalance :: queryAccount is null"); });
 
-        Long balance = account.getBalance();
+        Long balance = queryAccount.getBalance();
 
         return AccountBalanceQueryResponse.builder()
                 .balance(balance)
@@ -87,16 +87,16 @@ public class AccountService {
             String nameFrom = request.getNameOpponent();
 
             if (accountTo == null) {
-                throw new NullPointerException("AccountService :: deposit :: accountTo is null");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: deposit :: accountTo is null");
             }
 
             if (!StringUtils.hasText(nameFrom)) {
-                throw new NullPointerException("AccountService :: deposit :: nameFrom is null");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: deposit :: nameFrom is null");
             }
 
             String accountNumberTo = accountTo.getAccountNumber();
             Account depositAccount = accountRepository.findById(accountNumberTo)
-                    .orElseThrow(IllegalStateException::new);
+                    .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: deposit :: depositAccount is null"); });
 
             Balance beforeBalance = new Balance(depositAccount.getBalance());
             Balance afterBalance = new Balance(depositAccount.getBalance() + amount);
@@ -131,16 +131,16 @@ public class AccountService {
             String nameTo = request.getNameOpponent();
 
             if (accountFrom == null) {
-                throw new NullPointerException("AccountService :: withdraw :: accountFrom is null");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: withdraw :: accountFrom is null");
             }
 
             if (!StringUtils.hasText(nameTo)) {
-                throw new NullPointerException("AccountService :: deposit :: nameTo is null");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: withdraw :: nameTo is null");
             }
 
             String accountNumberFrom = accountFrom.getAccountNumber();
             Account withdrawAccount = accountRepository.findById(accountNumberFrom)
-                    .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.FORBIDDEN); });
+                    .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountService :: withdraw :: withdrawAccount is null"); });
 
             validationService.equalPassword(request.getAccountPassword(), withdrawAccount.getPassword());
 
