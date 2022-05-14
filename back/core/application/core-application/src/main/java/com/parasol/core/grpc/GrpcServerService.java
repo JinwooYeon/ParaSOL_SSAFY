@@ -44,7 +44,7 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
                     .build();
 
             responseObserver.onNext(response);
-            responseObserver.onError(ex);
+            responseObserver.onCompleted();
         }
     }
 
