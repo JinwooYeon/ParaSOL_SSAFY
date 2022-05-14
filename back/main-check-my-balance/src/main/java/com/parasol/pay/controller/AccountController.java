@@ -1,7 +1,7 @@
 package com.parasol.pay.controller;
 
 import com.parasol.pay.api_request.AccountBalanceQueryRequest;
-import com.parasol.pay.api_response.AccountBalanceQueryResultResponse;
+import com.parasol.pay.api_response.AccountBalanceQueryResponse;
 import com.parasol.pay.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class AccountController {
     // 계좌 잔액 조회
     @PostMapping("account/balance")
     @ResponseBody
-    public Mono<AccountBalanceQueryResultResponse> getBalance(
+    public Mono<AccountBalanceQueryResponse> getBalance(
             @RequestBody @Valid AccountBalanceQueryRequest request
     ) {
         return accountService.getBalance(request);
