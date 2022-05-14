@@ -5,7 +5,10 @@ import com.parasol.accountHistory.api_response.*;
 import com.parasol.accountHistory.eenum.TransactionType;
 import com.parasol.accountHistory.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -23,6 +26,14 @@ public class AccountService {
                 .build();
 
         return userLoginSocketRequestFactory.userLoginRequest(loginParam)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+                })
                 .filter(LoginResult::getIsSuccess)
                 .flatMap(
                         loginResult -> {
@@ -34,6 +45,14 @@ public class AccountService {
                                     .build();
 
                             return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(param)
+                                    .doOnError( (throwable) -> {
+                                        WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                                        if (ex.getStatusCode().is4xxClientError())
+                                            throw new ResponseStatusException(ex.getStatusCode());
+                                        else if (ex.getStatusCode().is5xxServerError())
+                                            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+                                    })
                                     .map(queryResult ->
                                             AccountHistoryResultResponse.builder()
                                                     .accountHistories(queryResult.getAccountHistories())
