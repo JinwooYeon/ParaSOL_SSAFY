@@ -35,7 +35,7 @@ public class AccountService {
                                     .cusNo(cusNo)
                                     .build();
 
-                            return queryAccountListSocketRequestFactory.createQueryAccountListRequest(param)
+                            return queryAccountListRequestFactory.createQueryAccountListRequest(param)
                                     .map(queryResult ->
                                             AccountListQueryResultResponse.builder()
                                                     .accounts(queryResult.getAccounts())

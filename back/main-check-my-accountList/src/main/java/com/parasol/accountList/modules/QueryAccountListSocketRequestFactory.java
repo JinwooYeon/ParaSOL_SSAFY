@@ -31,62 +31,62 @@ public class QueryAccountListSocketRequestFactory {
     @Value("${core.interface.port}")
     private String corePort;
 
-    public Mono<List<AccountListQueryResultResponse>> createQueryAccountListRequest(AccountListQueryParam request) {
-        try {
-            socket = new Socket(coreIp, Integer.parseInt(corePort));
-
-            DepInpt depinpt = DepInpt.builder()
-                    .cusno(request.getCusNo().toString())
-                    .build();
-
-            String dep_acno_inq_condt_d = "";
-            String dep_acno_inq_t = "";
-            Long prdt_mng_trx_d = 0L;
-            Long trx_d = 0L;
-
-            char[] payload = new char[120];
-            System.arraycopy(depinpt.getCusno().toCharArray(), 0, payload, 20, depinpt.getCusno().length());
-
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream());
-
-            writer.print(payload);
-            writer.flush();
-
-            // response 구현 해야됨
-            char[] sockBuf = new char[11];
-            int responseLen = reader.read(sockBuf);
-            if (responseLen == -1) throw new IllegalStateException("으앙");
-
-            Mono<char[]> response = Mono.just(sockBuf);
-
-            return response
-//                    .flatMap(s -> {
-//                        boolean success;
-//                        Long cusno;
+//    public Mono<List<AccountListQueryResultResponse>> createQueryAccountListRequest(AccountListQueryParam request) {
+//        try {
+//            socket = new Socket(coreIp, Integer.parseInt(corePort));
 //
-//                        success = (sockBuf[0] == '1');
-//                        cusno = Long.parseLong(String.valueOf(sockBuf, 1, 10).trim());
+//            DepInpt depinpt = DepInpt.builder()
+//                    .cusno(request.getCusNo().toString())
+//                    .build();
 //
-//                        LoginResult loginResult = LoginResult.builder()
-//                                .isSuccess(success)
-//                                .cusNo(cusno)
-//                                .build();
+//            String dep_acno_inq_condt_d = "";
+//            String dep_acno_inq_t = "";
+//            Long prdt_mng_trx_d = 0L;
+//            Long trx_d = 0L;
 //
-//                        return Mono.just(loginResult);
-//                    });
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-
-            return null;
-        } finally {
-            try {
-                if (socket != null) { socket.close(); }
-                if (reader != null) { reader.close(); }
-                if (writer != null) { writer.close(); }
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
+//            char[] payload = new char[120];
+//            System.arraycopy(depinpt.getCusno().toCharArray(), 0, payload, 20, depinpt.getCusno().length());
+//
+//            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//            writer = new PrintWriter(socket.getOutputStream());
+//
+//            writer.print(payload);
+//            writer.flush();
+//
+//            // response 구현 해야됨
+//            char[] sockBuf = new char[11];
+//            int responseLen = reader.read(sockBuf);
+//            if (responseLen == -1) throw new IllegalStateException("으앙");
+//
+//            Mono<char[]> response = Mono.just(sockBuf);
+//
+//            return response
+////                    .flatMap(s -> {
+////                        boolean success;
+////                        Long cusno;
+////
+////                        success = (sockBuf[0] == '1');
+////                        cusno = Long.parseLong(String.valueOf(sockBuf, 1, 10).trim());
+////
+////                        LoginResult loginResult = LoginResult.builder()
+////                                .isSuccess(success)
+////                                .cusNo(cusno)
+////                                .build();
+////
+////                        return Mono.just(loginResult);
+////                    });
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//
+//            return null;
+//        } finally {
+//            try {
+//                if (socket != null) { socket.close(); }
+//                if (reader != null) { reader.close(); }
+//                if (writer != null) { writer.close(); }
+//            } catch (IOException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
+//    }
 }
