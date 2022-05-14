@@ -14,6 +14,9 @@ public class AccountService {
     private QueryAccountListRequestFactory queryAccountListRequestFactory;
 
     @Autowired
+    private QueryAccountListSocketRequestFactory queryAccountListSocketRequestFactory;
+
+    @Autowired
     private UserLoginSocketRequestFactory userLoginSocketRequestFactory;
 
     public Mono<AccountListQueryResultResponse> getAllAccount(AccountListQueryRequest request) {
@@ -32,7 +35,7 @@ public class AccountService {
                                     .cusNo(cusNo)
                                     .build();
 
-                            return queryAccountListRequestFactory.createQueryAccountListRequest(param)
+                            return queryAccountListSocketRequestFactory.createQueryAccountListRequest(param)
                                     .map(queryResult ->
                                             AccountListQueryResultResponse.builder()
                                                     .accounts(queryResult.getAccounts())
