@@ -19,8 +19,9 @@ public class AccountService {
         WithdrawParam param = WithdrawParam.builder()
                 .method(TransactionType.DEPOSIT)
                 .amount(request.getAmount())
-                .accountTo(request.getAccountFrom())
+                .accountFrom(request.getAccountFrom())
                 .nameOpponent(request.getNameTo())
+                .accountPassword(request.getAccountPassword())
                 .build();
 
         return withdrawRequestFactory.run(param)
