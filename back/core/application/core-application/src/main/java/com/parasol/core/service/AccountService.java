@@ -104,7 +104,8 @@ public class AccountService {
             }
 
             String accountNumberTo = accountTo.getAccountNumber();
-            Account depositAccount = accountRepository.findById(accountNumberTo).orElseThrow(IllegalStateException::new);
+            Account depositAccount = accountRepository.findById(accountNumberTo)
+                    .orElseThrow(IllegalStateException::new);
 
             Balance beforeBalance = new Balance(depositAccount.getBalance());
             Balance afterBalance = new Balance(depositAccount.getBalance() + amount);
