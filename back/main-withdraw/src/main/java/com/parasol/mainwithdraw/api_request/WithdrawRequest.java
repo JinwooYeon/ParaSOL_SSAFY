@@ -16,6 +16,12 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @ApiModel("WithdrawRequest")
 public class WithdrawRequest {
+    @ApiModelProperty(name="id", example = "nini6630")
+    @NotBlank
+    private String id;
+    @NotBlank
+    @ApiModelProperty(name="password", example = "1q2w3e4r")
+    private String password;
     @ApiModelProperty(name = "amount", example = "4500000000")
     @PositiveOrZero
     private long amount;
