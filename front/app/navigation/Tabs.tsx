@@ -25,6 +25,8 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
   // useState
   // 잔액
   const [balance, setBalance] = useState<string>("999,999");
+  // 아이디
+  const [id, setId] = useState<string>("ID");
   // 계좌 연결 정보
   const [bankInfo, setBankInfo] = useState({
     // 은행 이미지
@@ -121,7 +123,7 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
           },
         }}
       >
-        {(props) => <HomeStack {...props} balance={balance} />}
+        {(props) => <HomeStack {...props} balance={balance} id={id} />}
       </Tab.Screen>
       {/* 혜택 */}
       <Tab.Screen

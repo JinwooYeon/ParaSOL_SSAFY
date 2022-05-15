@@ -9,27 +9,20 @@ import {
   QRcodeContainer,
   QRcodeInfoContainer,
   QRcodeInfoName,
-  QRcodeInfoNum,
-  QRcodeInfoNumText,
 } from "../styled";
 import QRCode from "react-native-qrcode-svg";
 
 interface PropsType {
   // 잔액
   balance: string;
+  // ID
+  id: string;
   // stack navigation
   navigation: any;
 }
 
 // Component _ Home
-const Home: React.FC<PropsType> = ({ balance, navigation }) => {
-  // let
-  // 내 정보 QR 코드
-  let qrCodeInfo = {
-    name: "GS25 싸피점",
-    num: "0000-1234-9876",
-  };
-
+const Home: React.FC<PropsType> = ({ balance, id, navigation }) => {
   return (
     <LayoutContainer>
       <HeaderContainer>
@@ -39,9 +32,9 @@ const Home: React.FC<PropsType> = ({ balance, navigation }) => {
         <ContentContainer>
           {/* QR 코드 정보 */}
           <QRcodeContainer>
-            <QRCode value={qrCodeInfo.name} size={190} />
+            <QRCode value={id} size={190} />
             <QRcodeInfoContainer>
-              <QRcodeInfoName>{qrCodeInfo.name}</QRcodeInfoName>
+              <QRcodeInfoName>{id}</QRcodeInfoName>
               {/* <QRcodeInfoNum>
                 <QRcodeInfoNumText onPress={() => console.log(qrCodeInfo.num)}>
                   {qrCodeInfo.num}

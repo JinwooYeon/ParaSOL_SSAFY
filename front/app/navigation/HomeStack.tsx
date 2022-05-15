@@ -10,12 +10,12 @@ const Stack = createNativeStackNavigator();
 interface PropsType {
   // 잔액
   balance: string;
-  // stack navigation
-  navigation: any;
+  // ID
+  id: string;
 }
 
 // Component _ HomeStack
-const HomeStack: React.FC<PropsType> = ({ balance }) => {
+const HomeStack: React.FC<PropsType> = ({ balance, id }) => {
   // useState
   // 송금할 주소
   const [info, setInfo] = useState<string>("");
@@ -33,7 +33,7 @@ const HomeStack: React.FC<PropsType> = ({ balance }) => {
     >
       {/* 홈 첫 스크린 */}
       <Stack.Screen name="HomeMain">
-        {(props) => <Home {...props} balance={balance} />}
+        {(props) => <Home {...props} balance={balance} id={id} />}
       </Stack.Screen>
       {/* 송금 */}
       <Stack.Screen name="Transaction">
