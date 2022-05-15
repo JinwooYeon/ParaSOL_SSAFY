@@ -250,6 +250,21 @@ struct sdep0243a_in {
     char dpst_pn_nm[300];
 };
 
+struct sdep0244a_in {
+    struct stdheader stdheader;
+    struct dataheader dataheader;
+    struct depinpt depinpt;
+    char trx_amt[22];
+    char dep_ac_s[10];
+    char dep_trx_his_no[10];
+    char lkg_yn[1];
+    char lkg_ser[10];
+    char dep_trx_s[10];
+    char dep_trx_crt_canc_d[10];
+    char rcv_nm[300];
+    char dep_ac_pwd[24];
+};
+
 struct sdep0243a_out {
     struct stdheader stdheader;
     char rst_yn[1];
@@ -304,6 +319,8 @@ using core_api::LoginGrpcRequest;
 using core_api::LoginGrpcResponse;
 using core_api::DepositQueryGrpcRequest;
 using core_api::DepositQueryGrpcResponse;
+using core_api::WithdrawQueryGrpcRequest;
+using core_api::WithdrawQueryGrpcResponse;
 
 class CoreAPIClient {
     public:
@@ -323,6 +340,40 @@ class CoreAPIClient {
     //         return "RPC Failed";
     //     }
     // }
+
+    struct sdep0243a_out* withdraw(const struct sdep0244a_in raw_request) {
+        WithdrawQueryGrpcRequest request;
+        request.set_dep_trx_biz_d(raw_request.depinpt.dep_trx_biz_d);
+        request.set_cusno(raw_request.depinpt.cusno);
+        request.set_dep_acno(raw_request.depinpt.dep_acno);
+        request.set_trx_amt(raw_request.trx_amt);
+        request.set_rcv_nm(raw_request.rcv_nm);
+        request.set_dep_ac_pwd(raw_request.dep_ac_pwd);
+
+        std::cout << raw_request.depinpt.dep_trx_biz_d << "\n";
+        std::cout << raw_request.depinpt.cusno << "\n";
+        std::cout << raw_request.depinpt.dep_acno << "\n";
+        std::cout << raw_request.trx_amt << "\n";
+        std::cout << raw_request.rcv_nm << "\n";
+        std::cout << raw_request.dep_ac_pwd << "\n";
+
+        WithdrawQueryGrpcResponse response;
+	    ClientContext context;
+
+	    Status status = stub_->withdraw(&context, request, &response);
+
+        struct sdep0243a_out* raw_response = (struct sdep0243a_out*)malloc(sizeof(struct sdep0243a_out));
+
+        memset(raw_response, 0, sizeof(struct sdep0243a_out));
+
+        memcpy(&raw_response->rst_yn, response.is_success().c_str(), response.is_success().size());
+
+        if (status.ok()) {
+            return raw_response;
+        } else {
+            return NULL;
+        }
+    }
 
     struct sdep0243a_out* deposit(const struct sdep0243a_in raw_request) {
         DepositQueryGrpcRequest request;
@@ -529,6 +580,16 @@ int main(int argc, char **argv) {
                      memset(sock_buf, 0, sizeof(sock_buf));
 
                      struct sdep0243a_out *res_buf = client.deposit(req_buf);
+                     memcpy(sock_buf, res_buf, sizeof(struct sdep0243a_out));
+
+                     write(clnt_sock, sock_buf, sizeof(struct sdep0243a_out));
+                     free(res_buf);
+                } else if (payload_len == sizeof(struct sdep0244a_in)) {
+                     struct sdep0244a_in req_buf;
+                     memcpy(&req_buf, sock_buf, sizeof(struct sdep0244a_in));
+                     memset(sock_buf, 0, sizeof(sock_buf));
+
+                     struct sdep0243a_out *res_buf = client.withdraw(req_buf);
                      memcpy(sock_buf, res_buf, sizeof(struct sdep0243a_out));
 
                      write(clnt_sock, sock_buf, sizeof(struct sdep0243a_out));
