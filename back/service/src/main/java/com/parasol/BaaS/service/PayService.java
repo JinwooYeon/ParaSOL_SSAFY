@@ -1,5 +1,6 @@
 package com.parasol.BaaS.service;
 
+import com.parasol.BaaS.api_model.AccountInfo;
 import com.parasol.BaaS.api_model.BankInfo;
 import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.*;
@@ -20,6 +21,9 @@ import java.util.NoSuchElementException;
 
 @Service
 public class PayService {
+    @Autowired
+    private AccountService accountService;
+
     @Autowired
     private PayLedgerRepository payLedgerRepository;
 
@@ -47,10 +51,6 @@ public class PayService {
 
         User user = userRepository.findByUserId(id)
                 .orElseThrow(NoSuchElementException::new);
-
-        if (user == null) {
-            throw new IllegalStateException();
-        }
 
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(NoSuchElementException::new);
@@ -88,16 +88,12 @@ public class PayService {
         User user = userRepository.findByUserId(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        if(user == null) {
-            throw new IllegalStateException();
-        }
-
         PayLedger fromPayLedger = payLedgerRepository.findByOwnerUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(IllegalStateException::new);
 
         String transactionTo = request.getTransactionTo();
         PayLedger toPayLedger = payLedgerRepository.findByOwnerUserId(transactionTo)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(IllegalStateException::new);
 
         Long price = request.getPrice();
         // 보내는 사람 계좌 잔액 차감
@@ -134,12 +130,34 @@ public class PayService {
         User user = userRepository.findByUserId(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+        PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
+                .orElseThrow(IllegalStateException::new);
+
+        if(payLedger.getAccount() == null) {
+            throw new IllegalArgumentException("주거래계좌 등록");
         }
+
+        Mono<WithdrawResponse> withdrawResponse = accountService.withdraw(
+                WithdrawRequest.builder()
+                        .authentication(authentication)
+                        .bankName(payLedger.getAccount().getBankName())
+                        .bankAccountPassword("") // TODO : 비밀번호 필요합니다
+                        .amount(request.getPrice())
+                        .accountFrom(
+                                AccountInfo.builder()
+                                        .accountNumber(payLedger.getAccount().getBankAccountNumber())
+                                        .build()
+                        )
+                        .nameTo("pay charge")
+                        .build()
+        );
+
+        payLedger.setBalance(payLedger.getBalance()+ request.getPrice());
+        payLedgerRepository.save(payLedger);
 
         return Mono.just(
                 PayChargeResponse.builder()
+                        .balance(payLedger.getBalance())
                         .build()
         );
     }
