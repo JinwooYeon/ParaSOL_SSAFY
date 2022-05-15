@@ -28,13 +28,13 @@ struct stdheader {
     char in_msg_dttm[16];
     char out_msg_dttm[16];
     char filter[1];
-}
+};
 
 struct dataheader {
     char data_type[2]; 
     char data_len[8];
     char trx_code[12];
-}
+};
 
 struct err_msg_out {
     struct stdheader stdheader;
@@ -44,7 +44,7 @@ struct err_msg_out {
     char c_db_code[12];
     char c_db_msg[300];
     char add_message[300];
-}
+};
 
 struct depinpt {
     char dep_trx_biz_d[10];
@@ -58,7 +58,7 @@ struct depinpt {
     char lcl_ac_no[20];
     char inq_st_dt[8];
     char inq_close_dt[8];
-}
+};
 
 struct grid01 {
     char dep_acno[12];
@@ -79,7 +79,7 @@ struct grid01 {
     char lcl_br_nm[100];
     char cashcd_iss_dt[8];
     char dep_due_rnw_t[10];
-}
+};
 
 struct dep_ac_mas {
     char dep_acno[12];
@@ -102,25 +102,25 @@ struct dep_ac_mas {
     char bbk_issu_odr[5];
     char last_bbk_issu_dt[8];
     char last_bbk_deed_no[20];
-}
+};
 
 struct gtd_is_mas {
     char dep_acno[12];
     char ti_bot_itype_payt_dt[8];
     char tot_payt_cnt[5];
     char tot_payt_agrmt_cnt[5];
-}
+};
 
 struct gtd_td_mas {
     char dep_acno[12];
     char fst_new_dt[8];
     char fst_due_dt[8];
     char fst_ctrt_amt[22];
-}
+};
 
 struct mgcbbrcode {
     char lcl_br_nm[100];
-}
+};
 
 struct gtd_isctrchg_his {
     char itype_due_dt[8];
@@ -133,7 +133,7 @@ struct gtd_isctrchg_his {
     char et_payt_dd[2];
     char et_payt_amt[22];
     char apl_intrt[12];
-}
+};
 
 struct gtd_tdctrchg_his {
     char dep_acno[12];
@@ -144,7 +144,7 @@ struct gtd_tdctrchg_his {
     char ctrt_trm_cnt[5];
     char ctrt_trm_dcnt[5];
     char apl_intrt[12];
-}
+};
 
 struct dep_aclink_inf {
     char ac_connt_k[10]; 
@@ -156,7 +156,7 @@ struct dep_aclink_inf {
     char regis_trx_brno[4];
     char rls_trx_dt[8];
     char rls_trx_brno[4];
-}
+};
 
 struct deprnpinpt {
     char dep_trx_obj_c[10];
@@ -169,7 +169,7 @@ struct deprnpinpt {
     char dep_stmt_t[2];
     char dep_trx_memo_ctt1[400];
     char dep_trx_memo_ctt2[400];
-}
+};
 
 struct sdep0210a_in {
     struct stdheader stdheader;
@@ -178,13 +178,13 @@ struct sdep0210a_in {
     char dep_ac_s[10];
     char cus_t[3];
     char dep_due_rnw_t[10];
-}
+};
 
 struct sdep0210a_out {
     char grid_cnt_01[5];
     struct grid01 sdep0210a_out_sub01;
     char cus_snm_nm[300];
-}
+};
 
 struct sdep0240a_in {
     struct stdheader stdheader;
@@ -194,7 +194,7 @@ struct sdep0240a_in {
     char dep_acno_inq_t[2];
     char prdt_mng_trx_d[2];
     char trx_d[2];
-}
+};
 
 struct sdep0240a_out {
     struct dep_ac_mas dep_ac_mas_sub01;
@@ -214,7 +214,7 @@ struct sdep0240a_out {
     char due_int_amt[22];
     char due_aft_int_amt[22];
     char tot_tax_amt[22];
-}
+};
 
 struct sdep0242a_in {
     struct stdheader stdheader;
@@ -227,13 +227,13 @@ struct sdep0242a_in {
     char lkg_ser[10];
     char dep_trx_s[10];
     char dep_trx_crt_canc_d[10];
-}
+};
 
 struct sdep0242a_out {
     struct stdheader stdheader;
     char grid_cnt_01[5];
     struct grid01 sdep0242a_out_sub01; // 이상해씨
-}
+};
 
 struct scus0001a_in {
     char intnbk_user_id[10];
@@ -255,7 +255,7 @@ struct sdep0970a_in {
     char apl_exrt[14];
     char cvs_ccy_c[3];
     char exrt_cvs_amt[22];
-}
+};
 
 struct sdep0970a_out {
     struct stdheader stdheader;
@@ -270,7 +270,7 @@ struct sdep0970a_out {
     char apl_exrt[14];
     char cvs_ccy_c[3];
     char exrt_cvs_amt[22];
-}
+};
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -385,8 +385,6 @@ int main(int argc, char **argv) {
             int payload_len = 0;
 
             while((payload_len = read(clnt_sock, &sock_buf, BUF_SIZE)) != 0) {
-                int status = 200;
-
                 std::cout << "payload_len: " << payload_len << "\n";
                 std::cout << "sock_buf: " << sock_buf << "\n";
 
