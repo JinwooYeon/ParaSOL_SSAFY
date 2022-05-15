@@ -9,6 +9,8 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @GrpcService
 public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
 
@@ -41,6 +43,35 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
         } catch (ResponseStatusException ex) {
             LoginGrpcResponse response = LoginGrpcResponse.newBuilder()
                     .setIsSuccess("0")
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+    }
+
+    @Override
+    public void getAccountList(AccountListQueryGrpcRequest request, StreamObserver<AccountListQueryGrpcResponse> responseObserver) {
+        try {
+            Long cusNo = Long.parseLong(request.getCusno().trim());
+
+            AccountListQueryRequest queryRequest = AccountListQueryRequest.builder()
+                    .cusNo(cusNo)
+                    .build();
+
+            AccountListQueryResponse queryResponse = accountService.getAllAccount(queryRequest);
+
+            String accountNumber = queryResponse.getAccounts().get(0).getAccountNumber();
+            String convertedAccountNumber = accountNumber.replaceAll("-", "");
+
+            AccountListQueryGrpcResponse response = AccountListQueryGrpcResponse.newBuilder()
+                    .setDepAcno(convertedAccountNumber)
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (ResponseStatusException ex) {
+            AccountListQueryGrpcResponse response = AccountListQueryGrpcResponse.newBuilder()
                     .build();
 
             responseObserver.onNext(response);
