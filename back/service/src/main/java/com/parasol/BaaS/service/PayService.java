@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -90,24 +91,49 @@ public class PayService {
             throw new IllegalStateException();
         }
 
-        User user = userRepository.findByUserId(id)
+        String transactionTo = request.getTransactionTo();
+
+        User from = userRepository.findByUserId(id)
+                .orElseThrow(NoSuchElementException::new);
+        User to = userRepository.findByUserId(transactionTo)
                 .orElseThrow(NoSuchElementException::new);
 
         PayLedger fromPayLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(IllegalStateException::new);
 
-        String transactionTo = request.getTransactionTo();
+
         PayLedger toPayLedger = payLedgerRepository.findByOwnerUserId(transactionTo)
                 .orElseThrow(IllegalStateException::new);
 
         Long price = request.getPrice();
-        // 보내는 사람 계좌 잔액 차감
+
+        LocalDateTime now = LocalDateTime.now();
+        // 보내는 사람 계좌 잔액 차감, 거래 내역 추가
         fromPayLedger.setBalance(fromPayLedger.getBalance() - price);
-        // 받는 사람 계좌 잔액
-        toPayLedger.setBalance(fromPayLedger.getBalance() + price);
+        PayHistory fromPayHistory = PayHistory.builder()
+                .user(from)
+                .txDatetime(now)
+                .txOpponent(to.getUserName())
+                .amount(price)
+                .type(TransactionType.WITHDRAW)
+                .build();
 
         payLedgerRepository.save(fromPayLedger);
+        payHistoryRepository.save(fromPayHistory);
+
+
+        // 받는 사람 계좌 잔액 차증, 거래 내역 추가
+        toPayLedger.setBalance(fromPayLedger.getBalance() + price);
+        PayHistory toPayHistory = PayHistory.builder()
+                .user(to)
+                .txDatetime(now)
+                .txOpponent(from.getUserName())
+                .amount(price)
+                .type(TransactionType.DEPOSIT)
+                .build();
+
         payLedgerRepository.save(toPayLedger);
+        payHistoryRepository.save(toPayHistory);
 
         return Mono.just(
                 PayTransactionResponse.builder()
