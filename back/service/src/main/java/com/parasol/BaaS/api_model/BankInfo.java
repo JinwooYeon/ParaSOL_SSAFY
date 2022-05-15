@@ -1,12 +1,14 @@
 package com.parasol.BaaS.api_model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BankInfo {
+    private String bankImg;
     private String bankName;
-    private String id;
-    private String password;
+    private String bankNum;
 }
