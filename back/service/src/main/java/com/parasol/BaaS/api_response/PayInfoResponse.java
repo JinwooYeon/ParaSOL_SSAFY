@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.security.core.Authentication;
 
 @Getter
 @Setter
@@ -15,7 +14,7 @@ import org.springframework.security.core.Authentication;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PayInfoResponse {
-    private String balance;
+    private Long balance;
     private String id;
-    private BankAccountInfo bankInfo;
+    private BankInfo bankInfo;
 }
