@@ -7,6 +7,8 @@ import PayStack from "./PayStack";
 import MypageStack from "./MypageStack";
 import Benefit from "../screens/Benefit";
 import HomeStack from "./HomeStack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 interface PropsType {
   // 로그인 여부 set
@@ -16,6 +18,10 @@ interface PropsType {
 const Tab = createBottomTabNavigator();
 
 const Tabs: React.FC<PropsType> = ({ setLogin }) => {
+  // const
+  // Axios 새로운 인증 토큰 url
+  const tokenUrl = "http://k6S101.p.ssafy.io:8080/user/token";
+
   // useState
   // 잔액
   const [balance, setBalance] = useState<string>("999,999");
@@ -29,6 +35,23 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
     // 계좌 번호
     bankNum: "110-128-203947",
   });
+
+  // Axios
+  const getNewToken = async () => {
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+    await axios({
+      method: "get",
+      url: tokenUrl,
+      headers: { Authroization: `Bearer ${refreshToken}` },
+      params: refreshToken,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Tab.Navigator
