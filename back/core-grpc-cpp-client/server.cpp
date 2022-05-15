@@ -288,18 +288,40 @@ class CoreAPIClient {
     public:
     CoreAPIClient(std::shared_ptr<Channel> channel) : stub_(CoreAPI::NewStub(channel)) {}
 
-    std::string getBalance(const std::string& account_number) {
+    // std::string getBalance(const std::string& account_number) {
+    //     AccountBalanceQueryGrpcRequest request;
+    //     request.set_accountnumber(account_number);
+
+    //     AccountBalanceQueryGrpcResponse response;
+    //     ClientContext context;
+
+    //     Status status = stub_->getBalance(&context, request, &response);
+    //     if (status.ok()) {
+    //         return response.balance();
+    //     } else {
+    //         return "RPC Failed";
+    //     }
+    // }
+
+    struct sdep0240a_out* getBalance(const struct sdep0240a_in raw_request) {
         AccountBalanceQueryGrpcRequest request;
-        request.set_accountnumber(account_number);
+        request.set_cusno(raw_request.depinpt.cusno);
+        request.set_dep_acno(raw_request.depinpt.dep_acno);
 
         AccountBalanceQueryGrpcResponse response;
-        ClientContext context;
+	    ClientContext context;
 
-        Status status = stub_->getBalance(&context, request, &response);
+	    Status status = stub_->getBalance(&context, request, &response);
+
+        struct sdep0240a_out* raw_response = (struct sdep0240a_out*)malloc(sizeof(struct sdep0240a_out));
+        memset(raw_response, 121, sizeof(struct sdep0240a_out));
+
+        memcpy(&raw_response->dep_ac_mas_sub01, response.dep_ac_blc().c_str(), response.dep_ac_blc().size());
+
         if (status.ok()) {
-            return response.balance();
+            return raw_response;
         } else {
-            return "RPC Failed";
+            return NULL;
         }
     }
 
@@ -308,9 +330,9 @@ class CoreAPIClient {
         request.set_cusno(raw_request.depinpt.cusno);
 
         AccountListQueryGrpcResponse response;
-	ClientContext context;
+	    ClientContext context;
 
-	Status status = stub_->getAccountList(&context, request, &response);
+	    Status status = stub_->getAccountList(&context, request, &response);
 
         struct sdep0210a_out* raw_response = (struct sdep0210a_out*)malloc(sizeof(struct sdep0210a_out));
         memset(raw_response, 0, sizeof(struct sdep0210a_out));
@@ -420,13 +442,13 @@ int main(int argc, char **argv) {
                      struct scus0001a_out *res_buf = client.login(req_buf);
                      memcpy(sock_buf, res_buf, sizeof(struct scus0001a_out));
 
-		     //std::cout << "sock_buf: " << sock_buf << "\n";
+                    //std::cout << "sock_buf: " << sock_buf << "\n";
 
-		     //for (int k = 0; k < 11; k++)
-		     //	std::cout << "sock_buf[" << k << "]: " << (int)sock_buf[k] << "\n";
+                    //for (int k = 0; k < 11; k++)
+                    //	std::cout << "sock_buf[" << k << "]: " << (int)sock_buf[k] << "\n";
 
-		     //std::cout << "sizeof(sock_buf): " << sizeof(sock_buf) << "\n";
-		     //std::cout << "sizeof(struct scus0001a_out): " << sizeof(struct scus0001a_out) << "\n";
+                    //std::cout << "sizeof(sock_buf): " << sizeof(sock_buf) << "\n";
+                    //std::cout << "sizeof(struct scus0001a_out): " << sizeof(struct scus0001a_out) << "\n";
 
                      write(clnt_sock, sock_buf, sizeof(struct scus0001a_out));
                      free(res_buf);
@@ -440,12 +462,20 @@ int main(int argc, char **argv) {
 
                      write(clnt_sock, sock_buf, sizeof(struct sdep0210a_out));
                      free(res_buf);
-		 }
+		        } else if (payload_len == sizeof(struct sdep0240a_in)) {
+                     struct sdep0240a_in req_buf;
+                     memcpy(&req_buf, sock_buf, sizeof(struct sdep0240a_in));
+                     memset(sock_buf, 0, sizeof(sock_buf));
 
+                     struct sdep0240a_out *res_buf = client.getBalance(req_buf);
+                     memcpy(sock_buf, res_buf, sizeof(struct sdep0240a_out));
 
-            }
+                     write(clnt_sock, sock_buf, sizeof(struct sdep0240a_out));
+                     free(res_buf);
+                }
             close(clnt_sock);
             exit(0);
+            }
         }
 	}
 
