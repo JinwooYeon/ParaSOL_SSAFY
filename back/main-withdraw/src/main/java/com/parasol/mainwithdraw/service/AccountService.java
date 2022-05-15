@@ -8,6 +8,7 @@ import com.parasol.mainwithdraw.api_response.WithdrawResponse;
 import com.parasol.mainwithdraw.eenum.TransactionType;
 import com.parasol.mainwithdraw.modules.UserLoginSocketRequestFactory;
 import com.parasol.mainwithdraw.modules.WithdrawRequestFactory;
+import com.parasol.mainwithdraw.modules.WithdrawSocketRequestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,11 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class AccountService {
+//    @Autowired
+//    private WithdrawRequestFactory withdrawRequestFactory;
+
     @Autowired
-    private WithdrawRequestFactory withdrawRequestFactory;
+    private WithdrawSocketRequestFactory withdrawSocketRequestFactory;
 
     @Autowired
     private UserLoginSocketRequestFactory userLoginSocketRequestFactory;
@@ -47,14 +51,14 @@ public class AccountService {
 
                             WithdrawParam param = WithdrawParam.builder()
                                     .cusNo(cusNo)
-                                    .method(TransactionType.DEPOSIT)
+                                    .method(TransactionType.WITHDRAW)
                                     .amount(request.getAmount())
                                     .accountFrom(request.getAccountFrom())
                                     .nameOpponent(request.getNameTo())
                                     .accountPassword(request.getAccountPassword())
                                     .build();
 
-                            return withdrawRequestFactory.run(param)
+                            return withdrawSocketRequestFactory.run(param)
                                     .doOnError( (throwable) -> {
                                         WebClientResponseException ex = (WebClientResponseException)throwable;
 
@@ -65,7 +69,7 @@ public class AccountService {
                                     })
                                     .map(queryResult ->
                                             WithdrawResponse.builder()
-                                                    .isSuccess(queryResult.isSuccess())
+                                                    .isSuccess(queryResult.getIsSuccess())
                                                     .build()
                                     );
                         }

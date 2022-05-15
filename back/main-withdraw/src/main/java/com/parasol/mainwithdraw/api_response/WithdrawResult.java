@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @ApiModel("WithdrawResult")
 public class WithdrawResult {
-    private boolean success;
+    private Boolean isSuccess;
 }

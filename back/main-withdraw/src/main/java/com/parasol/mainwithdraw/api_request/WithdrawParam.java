@@ -20,7 +20,7 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @ApiModel("WithdrawParam")
 public class WithdrawParam extends Transaction {
-    private long cusNo;
+    private Long cusNo;
     @ApiModelProperty(name = "account_password", example = "0809")
     @NotNull
     private String accountPassword;

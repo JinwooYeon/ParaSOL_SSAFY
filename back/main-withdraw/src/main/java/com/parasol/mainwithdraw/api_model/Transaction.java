@@ -24,7 +24,7 @@ public class Transaction {
     private TransactionType method;
     @ApiModelProperty(name = "amount", example = "4500000000")
     @PositiveOrZero
-    private long amount;
+    private Long amount;
     @ApiModelProperty(name = "account_from", example = "110-437-525252")
     @Nullable
     private AccountInfo accountFrom;
