@@ -245,7 +245,15 @@ public class PayService {
         payLedger.setBalance(payLedger.getBalance() - request.getPrice());
         payLedgerRepository.save(payLedger);
 
+        PayHistory payHistory = PayHistory.builder()
+                .user(user)
+                .txDatetime(LocalDateTime.now())
+                .txOpponent("ParaSOL pay")
+                .amount(request.getPrice())
+                .type(TransactionType.WITHDRAW)
+                .build();
 
+        payHistoryRepository.save(payHistory);
 
         return Mono.just(
                 PayWithdrawResponse.builder()
