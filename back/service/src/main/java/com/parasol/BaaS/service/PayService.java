@@ -1,8 +1,10 @@
 package com.parasol.BaaS.service;
 
+import com.parasol.BaaS.api_model.BankInfo;
 import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.*;
 import com.parasol.BaaS.auth.jwt.UserDetail;
+import com.parasol.BaaS.db.entity.PayLedger;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.PayHistoryRepository;
 import com.parasol.BaaS.db.repository.PayLedgerRepository;
@@ -15,7 +17,6 @@ import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class PayService {
@@ -47,12 +48,23 @@ public class PayService {
         User user = userRepository.findByUserId(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+        if (user == null) {
+            throw new IllegalStateException();
         }
+
+        PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
+                .orElseThrow(NoSuchElementException::new);
 
         return Mono.just(
                 PayInfoResponse.builder()
+                        .id(id)
+                        .balance(payLedger.getBalance())
+                        .bankInfo(
+                                BankInfo.builder()
+                                        .bankName(payLedger.getAccount().getBankName())
+                                        .bankNum(payLedger.getAccount().getBankAccountNumber())
+                                        .build()
+                        )
                         .build()
         );
     }
@@ -76,12 +88,29 @@ public class PayService {
         User user = userRepository.findByUserId(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+        if(user == null) {
+            throw new IllegalStateException();
         }
+
+        PayLedger fromPayLedger = payLedgerRepository.findByOwnerUserId(id)
+                .orElseThrow(NoSuchElementException::new);
+
+        String transactionTo = request.getTransactionTo();
+        PayLedger toPayLedger = payLedgerRepository.findByOwnerUserId(transactionTo)
+                .orElseThrow(NoSuchElementException::new);
+
+        Long price = request.getPrice();
+        // 보내는 사람 계좌 잔액 차감
+        fromPayLedger.setBalance(fromPayLedger.getBalance() - price);
+        // 받는 사람 게좌 잔액
+        toPayLedger.setBalance(fromPayLedger.getBalance() + price);
+
+        payLedgerRepository.save(fromPayLedger);
+        payLedgerRepository.save(toPayLedger);
 
         return Mono.just(
                 PayTransactionResponse.builder()
+                        .balance(fromPayLedger.getBalance())
                         .build()
         );
     }
