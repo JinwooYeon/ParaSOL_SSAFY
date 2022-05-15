@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 interface PropsType {
   // 잔액
   balance: string;
-  // ID
+  // 아이디
   id: string;
 }
 

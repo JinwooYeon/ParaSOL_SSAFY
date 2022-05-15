@@ -153,13 +153,9 @@ export const QRcodeInfoContainer = styled.View`
   align-items: center;
   margin-top: 5%;
 `;
-export const QRcodeInfoName = styled.Text`
+export const QRcodeInfoName = styled.TouchableOpacity``;
+export const QRcodeInfoNameText = styled.Text`
   font-size: 25px;
-  color: black;
-`;
-export const QRcodeInfoNum = styled.TouchableOpacity``;
-export const QRcodeInfoNumText = styled.Text`
-  font-size: 18px;
   color: ${mainBlue};
 `;
 

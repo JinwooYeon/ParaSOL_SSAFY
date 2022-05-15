@@ -9,13 +9,16 @@ import {
   QRcodeContainer,
   QRcodeInfoContainer,
   QRcodeInfoName,
+  QRcodeInfoNameText,
 } from "../styled";
 import QRCode from "react-native-qrcode-svg";
+import * as Clipboard from "expo-clipboard";
+import { Alert } from "react-native";
 
 interface PropsType {
   // 잔액
   balance: string;
-  // ID
+  // 아이디
   id: string;
   // stack navigation
   navigation: any;
@@ -23,6 +26,12 @@ interface PropsType {
 
 // Component _ Home
 const Home: React.FC<PropsType> = ({ balance, id, navigation }) => {
+  // method
+  const copyToClipboard = () => {
+    Clipboard.setString(id);
+    Alert.alert(`아이디 "${id}"를 클립보드에 복사하였습니다.`);
+  };
+
   return (
     <LayoutContainer>
       <HeaderContainer>
@@ -34,12 +43,9 @@ const Home: React.FC<PropsType> = ({ balance, id, navigation }) => {
           <QRcodeContainer>
             <QRCode value={id} size={190} />
             <QRcodeInfoContainer>
-              <QRcodeInfoName>{id}</QRcodeInfoName>
-              {/* <QRcodeInfoNum>
-                <QRcodeInfoNumText onPress={() => console.log(qrCodeInfo.num)}>
-                  {qrCodeInfo.num}
-                </QRcodeInfoNumText>
-              </QRcodeInfoNum> */}
+              <QRcodeInfoName onPress={copyToClipboard}>
+                <QRcodeInfoNameText>{id}</QRcodeInfoNameText>
+              </QRcodeInfoName>
             </QRcodeInfoContainer>
           </QRcodeContainer>
         </ContentContainer>

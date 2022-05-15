@@ -12,6 +12,8 @@ import {
   TransactionTextInput,
   TransactionTextDelTouchableOpacity,
 } from "../styled";
+import * as Clipboard from "expo-clipboard";
+import { useEffect } from "react";
 
 interface PropsType {
   // 잔액
@@ -42,12 +44,21 @@ const Transaction: React.FC<PropsType> = ({
   const transactionData = { info, price };
 
   // method
+  const fetchCopiedText = async () => {
+    const text = await Clipboard.getStringAsync();
+    setInfo(text);
+  };
   const onChangeText = (s: string) => {
     setInfo(s);
   };
   const onPress = () => {
     setInfo("");
   };
+
+  // useEffect
+  useEffect(() => {
+    fetchCopiedText;
+  }, []);
 
   return (
     <LayoutContainer>
@@ -61,6 +72,7 @@ const Transaction: React.FC<PropsType> = ({
               placeholder="송금할 주소를 입력해주세요."
               value={info}
               onChangeText={onChangeText}
+              onFocus={fetchCopiedText}
             />
             <TransactionTextDelTouchableOpacity onPress={onPress}>
               <TransactionTextDel>X</TransactionTextDel>
