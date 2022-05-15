@@ -20,9 +20,10 @@ public class AccountAuthenticateService extends AuthenticateService{
         ApiKey apiKey = new ApiKey();
         apiKey.setClientId(clientId);
 
-        if(accountRepository.findByMethodAndClientIdAndPermitEndpoint(getMethodType(method), apiKey, getSubpath(pathName, endpoint)) == null)
-            return false;
-
-        return true;
+        return accountRepository.findByMethodAndClientIdAndPermitEndpoint(
+                getMethodType(method),
+                apiKey,
+                getSubpath(pathName, endpoint)
+        ) != null;
     }
 }
