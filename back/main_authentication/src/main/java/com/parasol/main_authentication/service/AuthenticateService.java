@@ -4,8 +4,14 @@ import com.parasol.main_authentication.enums.MethodType;
 import com.parasol.main_authentication.entity.ApiKey;
 import com.parasol.main_authentication.repository.ApiKeyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.RequestPath;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -24,14 +30,15 @@ public class AuthenticateService {
     }
 
     public boolean isValid(String ipAddr, String method, String endpoint, String clientId) {
-        Optional<ApiKey> apiKey = apiKeyRepository.findById(clientId);
+        ApiKey apiKey = apiKeyRepository.findById(clientId)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.FORBIDDEN); });
 
-        if (apiKey.isEmpty())
-            return false;
-        if (!apiKey.get().getIpAddr().equals(ipAddr))
+        String registeredIpAddr = apiKey.getIpAddr();
+
+        if (!StringUtils.hasText(ipAddr))
             return false;
 
-        return true;
+        return registeredIpAddr.equals(ipAddr);
     }
 
     public MethodType getMethodType(String method) {
