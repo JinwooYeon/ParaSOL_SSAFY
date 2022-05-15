@@ -17,12 +17,15 @@ interface PropsType {
   bankInfo?: any;
   // stack navigation
   navigation: any;
+  // 내 정보 페이지 여부
+  myPage?: boolean;
 }
 
 // Component _ ConnectedAccountBox
 const ConnectedAccountBox: React.FC<PropsType> = ({
   bankInfo,
   navigation: { navigate },
+  myPage,
 }) => {
   // const
   // 계좌 연결 정보 비구조화
@@ -44,11 +47,13 @@ const ConnectedAccountBox: React.FC<PropsType> = ({
     <ConnectedAccountContainer>
       <ConnectedAccountHeaderContainer empty={empty}>
         <ConnectedAccountHeaderText>연결된 계좌</ConnectedAccountHeaderText>
-        <ConnectedAccountHeaderSetting>
-          <ConnectedAccountHeaderSettingText onPress={onPress}>
-            {empty ? "추가" : "관리"}
-          </ConnectedAccountHeaderSettingText>
-        </ConnectedAccountHeaderSetting>
+        {!myPage && (
+          <ConnectedAccountHeaderSetting>
+            <ConnectedAccountHeaderSettingText onPress={onPress}>
+              {empty ? "추가" : "관리"}
+            </ConnectedAccountHeaderSettingText>
+          </ConnectedAccountHeaderSetting>
+        )}
       </ConnectedAccountHeaderContainer>
       {empty ? null : (
         <ConnectedAccountContentContainer>

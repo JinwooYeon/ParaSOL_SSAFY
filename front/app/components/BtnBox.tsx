@@ -34,6 +34,14 @@ const BtnBox: React.FC<PropsType> = ({
 
   const onPress = () => {
     switch (text) {
+      // 계좌 연결
+      case "계좌 연결":
+        setter?.();
+        break;
+      // 계좌 수정
+      case "계좌 수정":
+        setter?.();
+        break;
       // QR 스캔
       case "QR 스캔":
         navigation?.navigate("Scanner");

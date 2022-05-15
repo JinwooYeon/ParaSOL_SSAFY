@@ -12,10 +12,21 @@ const Stack = createNativeStackNavigator();
 interface PropsType {
   // 로그인 여부 set
   setLogin: (a: any) => void;
+  // 계좌 연결 정보
+  bankInfo: any;
+  // 계좌 연결 정보 set
+  setBankInfo: (a: any) => void;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 
 // Component _ MypageStack
-const MypageStack: React.FC<PropsType> = ({ setLogin }) => {
+const MypageStack: React.FC<PropsType> = ({
+  setLogin,
+  bankInfo,
+  setBankInfo,
+  getNewToken,
+}) => {
   return (
     <Stack.Navigator
       initialRouteName="MypageMain"
@@ -32,7 +43,16 @@ const MypageStack: React.FC<PropsType> = ({ setLogin }) => {
       {/* 회원정보 */}
       <Stack.Screen name="Profile" component={Profile} />
       {/* 계좌 관리하기 */}
-      <Stack.Screen name="ConnectAccount" component={ConnectAccount} />
+      <Stack.Screen name="ConnectAccount">
+        {(props) => (
+          <ConnectAccount
+            {...props}
+            bankInfo={bankInfo}
+            setBankInfo={setBankInfo}
+            getNewToken={getNewToken}
+          />
+        )}
+      </Stack.Screen>
       {/* 공동인증 발급/재발급 */}
       <Stack.Screen name="Oauth" component={Oauth} />
       {/* 생체인증 발급/재발급 */}
