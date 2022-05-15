@@ -13,11 +13,12 @@ service CoreAPI {
 }
 
 message AccountBalanceQueryGrpcRequest {
-  string accountNumber = 1;
+  string cusno = 1;
+  string dep_acno = 2;
 }
 
 message AccountBalanceQueryGrpcResponse {
-  string balance = 1;
+  string dep_ac_blc = 1;
 }
 
 message AccountListQueryGrpcRequest {
