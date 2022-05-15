@@ -186,6 +186,16 @@ public class PayService {
         payLedger.setBalance(payLedger.getBalance() + request.getPrice());
         payLedgerRepository.save(payLedger);
 
+        PayHistory payHistory = PayHistory.builder()
+                .user(user)
+                .txDatetime(LocalDateTime.now())
+                .txOpponent("ParaSOL pay")
+                .amount(request.getPrice())
+                .type(TransactionType.DEPOSIT)
+                .build();
+
+        payHistoryRepository.save(payHistory);
+
         return Mono.just(
                 PayChargeResponse.builder()
                         .balance(payLedger.getBalance())
@@ -234,6 +244,7 @@ public class PayService {
 
         payLedger.setBalance(payLedger.getBalance() - request.getPrice());
         payLedgerRepository.save(payLedger);
+
 
 
         return Mono.just(
