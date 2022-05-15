@@ -14,7 +14,7 @@
 #include "core_api.pb.h"
 #include "core_api.grpc.pb.h"
 
-#define BUF_SIZE 256
+#define BUF_SIZE 10240
 
 struct stdheader {
     char msg_len[8];
@@ -181,6 +181,7 @@ struct sdep0210a_in {
 };
 
 struct sdep0210a_out {
+    struct stdheader stdheader;
     char grid_cnt_01[5];
     struct grid01 sdep0210a_out_sub01;
     char cus_snm_nm[300];
@@ -278,6 +279,8 @@ using grpc::Status;
 using core_api::CoreAPI;
 using core_api::AccountBalanceQueryGrpcRequest;
 using core_api::AccountBalanceQueryGrpcResponse;
+using core_api::AccountListQueryGrpcRequest;
+using core_api::AccountListQueryGrpcResponse;
 using core_api::LoginGrpcRequest;
 using core_api::LoginGrpcResponse;
 
@@ -297,6 +300,27 @@ class CoreAPIClient {
             return response.balance();
         } else {
             return "RPC Failed";
+        }
+    }
+
+    struct sdep0210a_out* getAccountList(const struct sdep0210a_in raw_request) {
+        AccountListQueryGrpcRequest request;
+        request.set_cusno(raw_request.depinpt.cusno);
+
+        AccountListQueryGrpcResponse response;
+	ClientContext context;
+
+	Status status = stub_->getAccountList(&context, request, &response);
+
+        struct sdep0210a_out* raw_response = (struct sdep0210a_out*)malloc(sizeof(struct sdep0210a_out));
+        memset(raw_response, 0, sizeof(struct sdep0210a_out));
+
+        memcpy(&raw_response->sdep0210a_out_sub01, response.dep_acno().c_str(), response.dep_acno().size());
+
+        if (status.ok()) {
+            return raw_response;
+        } else {
+            return NULL;
         }
     }
 
@@ -334,7 +358,7 @@ class CoreAPIClient {
 };
 
 int main(int argc, char **argv) {
-    std::string baseURL = "172.24.176.1:9090";
+    std::string baseURL = "127.0.0.1:9090";
 
     int serv_sock;
     int clnt_sock;
@@ -406,7 +430,19 @@ int main(int argc, char **argv) {
 
                      write(clnt_sock, sock_buf, sizeof(struct scus0001a_out));
                      free(res_buf);
-                 }
+                 } else if (payload_len == sizeof(struct sdep0210a_in)) {
+                     struct sdep0210a_in req_buf;
+                     memcpy(&req_buf, sock_buf, sizeof(struct sdep0210a_in));
+                     memset(sock_buf, 0, sizeof(sock_buf));
+
+                     struct sdep0210a_out *res_buf = client.getAccountList(req_buf);
+                     memcpy(sock_buf, res_buf, sizeof(struct sdep0210a_out));
+
+                     write(clnt_sock, sock_buf, sizeof(struct sdep0210a_out));
+                     free(res_buf);
+		 }
+
+
             }
             close(clnt_sock);
             exit(0);
