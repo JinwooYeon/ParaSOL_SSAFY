@@ -137,7 +137,7 @@ public class PayService {
             throw new IllegalArgumentException("주거래계좌 등록");
         }
 
-        Mono<WithdrawResponse> withdrawResponse = accountService.withdraw(
+        accountService.withdraw(
                 WithdrawRequest.builder()
                         .authentication(authentication)
                         .bankName(payLedger.getAccount().getBankName())
@@ -148,11 +148,11 @@ public class PayService {
                                         .accountNumber(payLedger.getAccount().getBankAccountNumber())
                                         .build()
                         )
-                        .nameTo("pay charge")
+                        .nameTo("ParaSOL pay")
                         .build()
         );
 
-        payLedger.setBalance(payLedger.getBalance()+ request.getPrice());
+        payLedger.setBalance(payLedger.getBalance() + request.getPrice());
         payLedgerRepository.save(payLedger);
 
         return Mono.just(
@@ -181,12 +181,33 @@ public class PayService {
         User user = userRepository.findByUserId(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+        PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
+                .orElseThrow(IllegalStateException::new);
+
+        if(payLedger.getAccount() == null) {
+            throw new IllegalArgumentException("주거래계좌 등록");
         }
+
+        accountService.deposit(
+                DepositRequest.builder()
+                        .bankName("SBJ")
+                        .amount(request.getPrice())
+                        .nameFrom("ParaSOL pay")
+                        .accountTo(
+                                AccountInfo.builder()
+                                        .accountNumber(payLedger.getAccount().getBankAccountNumber())
+                                        .build()
+                        )
+                        .build()
+        );
+
+        payLedger.setBalance(payLedger.getBalance() - request.getPrice());
+        payLedgerRepository.save(payLedger);
+
 
         return Mono.just(
                 PayWithdrawResponse.builder()
+                        .balance(payLedger.getBalance())
                         .build()
         );
     }
