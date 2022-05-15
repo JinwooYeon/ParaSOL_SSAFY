@@ -34,6 +34,10 @@ const BtnBox: React.FC<PropsType> = ({
 
   const onPress = () => {
     switch (text) {
+      // QR 스캔
+      case "QR 스캔":
+        navigation?.navigate("Scanner");
+        break;
       // 충전하기
       case "충전하기":
         if (payData?.bankInfo.bankNum !== "" && payData?.price !== "0") {

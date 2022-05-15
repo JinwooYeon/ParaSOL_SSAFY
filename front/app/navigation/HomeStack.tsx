@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useState } from "react";
 import Home from "../screens/HomeStack/Home";
+import Scanner from "../screens/HomeStack/Scanner";
 import Transaction from "../screens/HomeStack/Transaction";
 import TransactionConfirm from "../screens/HomeStack/TransactionConfirm";
 
@@ -50,6 +51,10 @@ const HomeStack: React.FC<PropsType> = ({ balance }) => {
       {/* 송금 확인 */}
       <Stack.Screen name="TransactionConfirm">
         {(props) => <TransactionConfirm {...props} info={info} price={price} />}
+      </Stack.Screen>
+      {/* 스캐너 */}
+      <Stack.Screen name="Scanner">
+        {(props) => <Scanner {...props} balance={balance} setInfo={setInfo} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
