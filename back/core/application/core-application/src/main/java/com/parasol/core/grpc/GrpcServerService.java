@@ -130,4 +130,35 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
             responseObserver.onError(ex);
         }
     }
+
+    @Override
+    public void withdraw(WithdrawQueryGrpcRequest request, StreamObserver<WithdrawQueryGrpcResponse> responseObserver) {
+        try {
+            Long cusNo = Long.parseLong(request.getCusno().trim());
+            Long amount = Long.parseLong(request.getTrxAmt().trim());
+            String accountFrom = request.getDepAcno().substring(0,3) + "-" + request.getDepAcno().substring(3,6) + "-" + request.getDepAcno().substring(6,12);
+            String nameTo = request.getRcvNm();
+            String accountPassword = request.getDepAcPwd();
+
+            WithdrawRequest queryRequest = WithdrawRequest.builder()
+                    .type(TransactionType.WITHDRAW)
+                    .cusNo(cusNo)
+                    .accountFrom(AccountInfo.builder().accountNumber(accountFrom).build())
+                    .amount(amount)
+                    .nameOpponent(nameTo)
+                    .accountPassword(accountPassword)
+                    .build();
+
+            WithdrawResponse queryResponse = accountService.withdraw(queryRequest);
+
+            WithdrawQueryGrpcResponse response = WithdrawQueryGrpcResponse.newBuilder()
+                    .setIsSuccess("1")
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (ResponseStatusException ex) {
+            responseObserver.onError(ex);
+        }
+    }
 }
