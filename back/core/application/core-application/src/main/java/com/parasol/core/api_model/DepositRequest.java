@@ -3,9 +3,8 @@ package com.parasol.core.api_model;
 import com.parasol.core.eenum.TransactionType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.PositiveOrZero;
@@ -13,6 +12,8 @@ import javax.validation.constraints.PositiveOrZero;
 @Getter
 @Setter
 @ToString
+@SuperBuilder
+@NoArgsConstructor
 @ApiModel("DepositRequest")
 public class DepositRequest {
     @ApiModelProperty(name = "method", example = "0")
