@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @ApiModel("DepositResponse")
 public class DepositResponse {
-    private boolean isSuccess = false;
+    private Boolean isSuccess = false;
 }

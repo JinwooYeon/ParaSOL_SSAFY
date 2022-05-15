@@ -5,6 +5,7 @@ import com.parasol.maindeposit.api_request.DepositRequest;
 import com.parasol.maindeposit.api_response.DepositResponse;
 import com.parasol.maindeposit.eenum.TransactionType;
 import com.parasol.maindeposit.modules.DepositRequestFactory;
+import com.parasol.maindeposit.modules.DepositSocketRequestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,11 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class AccountService {
+//    @Autowired
+//    private DepositRequestFactory depositRequestFactory;
+
     @Autowired
-    private DepositRequestFactory depositRequestFactory;
+    private DepositSocketRequestFactory depositSocketRequestFactory;
 
     public Mono<DepositResponse> deposit(DepositRequest request) {
         DepositParam param = DepositParam.builder()
@@ -25,7 +29,7 @@ public class AccountService {
                 .nameOpponent(request.getNameFrom())
                 .build();
 
-        return depositRequestFactory.run(param)
+        return depositSocketRequestFactory.run(param)
                 .doOnError( (throwable) -> {
                     WebClientResponseException ex = (WebClientResponseException)throwable;
 
@@ -36,7 +40,7 @@ public class AccountService {
                 })
                 .map(queryResult ->
                         DepositResponse.builder()
-                                .isSuccess(queryResult.isSuccess())
+                                .isSuccess(queryResult.getIsSuccess())
                                 .build()
                 );
 
