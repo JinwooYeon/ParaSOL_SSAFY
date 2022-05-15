@@ -10,10 +10,16 @@ import {
 } from "react-native";
 import { useState } from "react";
 import styled from "styled-components/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 interface PropsType {
   // 잔액
   balance: string;
+  // 잔액 set
+  setBalance: (a: string) => void;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 interface ItemPropsType {
   // 거래내역 정보
@@ -51,7 +57,11 @@ const Item: React.FC<ItemPropsType> = ({ item }) => (
 );
 
 // Component _ History
-const History: React.FC<PropsType> = ({ balance }) => {
+const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
+  // const
+  // Axios 거래 내역 조회 url
+  const getHistoryUrl = "http://k6S101.p.ssafy.io:8080/pay/history";
+
   // useState
   // 리프레쉬
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -109,21 +119,54 @@ const History: React.FC<PropsType> = ({ balance }) => {
     },
   ]);
 
+  // Axios
+  // 거래 내역 조회
+  const getHistory = async () => {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "get",
+      url: getHistoryUrl,
+      headers: { Authroization: `Bearer ${accessToken}` },
+    })
+      .then((res) => {
+        console.log(res);
+        setTotal(res.data.total);
+        setData(res.data.data);
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === "401") {
+          getNewToken?.();
+          getHistory();
+        } else {
+          setTimeout(() => {
+            setRefreshing(false);
+          }, 2000);
+        }
+      });
+  };
+
   // method
   const renderItem = ({ item }: any) => {
     return <Item item={item} />;
   };
   const onRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    getHistory();
   };
 
   return (
     <LayoutContainer>
       <HistoryHeaderContainer>
-        <BalanceBox category="거래 내역" num={balance} />
+        <BalanceBox
+          category="거래 내역"
+          num={balance}
+          setBalance={setBalance}
+          getNewToken={getNewToken}
+        />
       </HistoryHeaderContainer>
       <View
         style={{
