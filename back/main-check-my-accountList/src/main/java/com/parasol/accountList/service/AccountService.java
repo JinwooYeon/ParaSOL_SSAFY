@@ -48,14 +48,15 @@ public class AccountService {
                                     .cusNo(cusNo)
                                     .build();
 
-                            return queryAccountListRequestFactory.createQueryAccountListRequest(param)
+                            return queryAccountListSocketRequestFactory.createQueryAccountListRequest(param)
                                     .doOnError( (throwable) -> {
-                                        WebClientResponseException ex = (WebClientResponseException)throwable;
-
-                                        if (ex.getStatusCode().is4xxClientError())
-                                            throw new ResponseStatusException(ex.getStatusCode());
-                                        else if (ex.getStatusCode().is5xxServerError())
-                                            throw new ResponseStatusException(ex.getStatusCode());
+                                        throwable.printStackTrace();
+//                                        WebClientResponseException ex = (WebClientResponseException)throwable;
+//
+//                                        if (ex.getStatusCode().is4xxClientError())
+//                                            throw new ResponseStatusException(ex.getStatusCode());
+//                                        else if (ex.getStatusCode().is5xxServerError())
+//                                            throw new ResponseStatusException(ex.getStatusCode());
                                     })
                                     .map(queryResult ->
                                             AccountListQueryResultResponse.builder()
