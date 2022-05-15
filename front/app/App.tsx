@@ -12,7 +12,7 @@ export default function App() {
   const [login, setLogin] = useState<boolean>(false);
 
   // method
-  const getToken = async () => {
+  const getAccessToken = async () => {
     const accessToken = await AsyncStorage.getItem("accessToken");
     if (accessToken != null) {
       setLogin(true);
@@ -21,7 +21,7 @@ export default function App() {
 
   // useEffect
   useEffect(() => {
-    getToken();
+    getAccessToken();
   }, []);
 
   if (login) {
