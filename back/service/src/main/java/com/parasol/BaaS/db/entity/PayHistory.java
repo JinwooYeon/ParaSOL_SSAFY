@@ -1,5 +1,6 @@
 package com.parasol.BaaS.db.entity;
 
+import com.parasol.BaaS.enums.TransactionType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -26,4 +27,5 @@ public class PayHistory {
     private String txOpponent;
     private Long amount;
 
+    private TransactionType type;
 }
