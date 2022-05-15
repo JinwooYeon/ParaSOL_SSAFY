@@ -3,7 +3,7 @@ package com.parasol.core.utils;
 import java.util.Random;
 
 public class AccountManager {
-    public static String GenerateAccountNumber() {
+    public static String generateAccountNumber() {
         Random random = new Random();
         int accountNumberHead = random.nextInt(900) + 100;
         int accountNumberBody = random.nextInt(999) + 1;

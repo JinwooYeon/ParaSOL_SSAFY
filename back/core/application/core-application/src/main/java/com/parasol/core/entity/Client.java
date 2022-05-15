@@ -2,6 +2,7 @@ package com.parasol.core.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -15,9 +16,8 @@ import javax.validation.constraints.Size;
 @Setter
 @DynamicInsert
 @DynamicUpdate
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

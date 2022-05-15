@@ -9,7 +9,9 @@ import com.parasol.core.entity.Client;
 import com.parasol.core.repository.BankUserRepository;
 import com.parasol.core.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -27,37 +29,58 @@ public class BankUserService {
 
     @Transactional
     public BankUserCreateResponse createBankUser(@Valid BankUserCreateRequest request) throws IllegalStateException{
-        BankUserCreateResponse result = new BankUserCreateResponse();
+        String id = UUID.randomUUID().toString();
+        String username = request.getId();
+        String password = request.getPassword();
+
         BankUser bankUser = BankUser.builder()
-                .id(UUID.randomUUID().toString())
-                .username(request.getId())
-                .password(request.getPassword())
+                .id(id)
+                .username(username)
+                .password(password)
                 .build();
 
-        Optional<Client> client = clientRepository.findByNameAndResidentNumber(request.getName(), request.getResidentNumber());
-        client.ifPresentOrElse(bankUser::setClient, () -> { throw new IllegalStateException("해당 고객이 없습니다."); });
+        Client client = clientRepository.findByNameAndResidentNumber(request.getName(), request.getResidentNumber())
+                .orElseThrow(() -> {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "BankUserService :: createBankUser :: client is null"
+                    );
+                });
 
-        String id = bankUserRepository.save(bankUser).getId();
-        result.setId(id);
+        bankUser.setClient(client);
 
-        return result;
+        return BankUserCreateResponse.builder()
+                .id(id)
+                .build();
     }
 
-    public BankUserLoginResponse login(@Valid BankUserLoginRequest request) throws IllegalStateException {
-        BankUserLoginResponse response = BankUserLoginResponse.builder()
-                .isSuccess(false)
+    public BankUserLoginResponse login(@Valid BankUserLoginRequest request) throws ResponseStatusException {
+        BankUser bankUser = bankUserRepository.findByUsername(request.getId())
+                .orElseThrow(() -> {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "BankUserService :: login :: bankUser does not exist"
+                    );
+                });
+
+        if (!bankUser.getPassword().equals(request.getPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "BankUserService :: login :: password is not matched"
+            );
+        }
+
+        Client client = bankUser.getClient();
+
+        if (client == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "BankUserService :: login :: client does not exist"
+            );
+        }
+
+        return BankUserLoginResponse.builder()
+                .cusno(client.getId())
                 .build();
-
-        Optional<BankUser> bankUser = bankUserRepository.findByUsername(request.getId());
-        bankUser.ifPresentOrElse(b -> {
-            if (!b.getPassword().equals(request.getPassword()))
-                throw new IllegalStateException("비밀번호가 틀립니다");
-
-            Client client = b.getClient();
-            response.setSuccess(true);
-            response.setCusno(Long.toString(client.getId()));
-        }, () -> { throw new IllegalStateException("해당 아이디를 찾을 수 없습니다."); });
-
-        return response;
     }
 }

@@ -2,9 +2,7 @@ package com.parasol.core.api_model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -12,6 +10,9 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel("AccountQueryRequest")
 public class AccountQueryRequest {
     @ApiModelProperty(name="account_number", example = "110-437-525252")

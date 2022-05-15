@@ -16,15 +16,10 @@ public class AccountRepositorySupport{
     private JPAQueryFactory jpaQueryFactory;
     private QTransactionHistory qTransactionHistory = QTransactionHistory.transactionHistory;
 
-    public List<TransactionHistory> getTransactionHistory(String accountNo){
-        Account account = new Account();
-
-        account.setId(accountNo);
-
+    public List<TransactionHistory> getTransactionHistory(String accountNumber){
         return jpaQueryFactory.select(qTransactionHistory)
                 .from(qTransactionHistory)
-                .where(qTransactionHistory.transactionAccount.eq(accountNo)
-                        .or(qTransactionHistory.account.eq(account)))
+                .where(qTransactionHistory.account.id.eq(accountNumber))
                 .join(qTransactionHistory.account, QAccount.account)
                 .fetchJoin().fetch();
     }

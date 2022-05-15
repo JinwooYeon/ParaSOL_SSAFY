@@ -3,8 +3,7 @@ package com.parasol.core.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -16,6 +15,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @DynamicInsert
 @DynamicUpdate
 public class Account {
@@ -26,7 +28,7 @@ public class Account {
     @Size(min = 4, max = 4)
     private String password;
 
-    private Long balance = Long.valueOf(0);
+    private Long balance;
 
     @JsonManagedReference
     @ManyToOne

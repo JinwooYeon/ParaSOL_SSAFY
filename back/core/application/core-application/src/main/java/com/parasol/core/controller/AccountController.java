@@ -4,10 +4,11 @@ import com.parasol.core.api_model.*;
 import com.parasol.core.service.AccountService;
 import com.parasol.core.service.TransactionHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 public class AccountController {
@@ -19,10 +20,11 @@ public class AccountController {
     // 계좌 개설
     @PostMapping("account")
     @ResponseBody
-    public String createAccount(
-            @RequestBody @Valid AccountOpenRequest accountOpenRequest
+    public ResponseEntity<AccountOpenResponse> createAccount(
+            @RequestBody @Valid AccountOpenRequest request
     ) {
-        return accountService.Create(accountOpenRequest);
+        AccountOpenResponse response = accountService.createAccount(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 폐쇄
@@ -37,46 +39,51 @@ public class AccountController {
 
     // 계좌 목록 조회
     @PostMapping("account/list")
-    public AccountListQueryResultResponse getAllAccount(
+    public ResponseEntity<AccountListQueryResponse> getAllAccount(
             @RequestBody @Valid AccountListQueryRequest request
     ) {
-        return accountService.getAllAccount(request);
+        AccountListQueryResponse response = accountService.getAllAccount(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 잔액 조회
     @PostMapping("account/balance")
     @ResponseBody
-    public AccountBalanceQueryResultResponse getBalance(
-            @RequestBody @Valid AccountQueryRequest accountQueryRequest
+    public ResponseEntity<AccountBalanceQueryResponse> getBalance(
+            @RequestBody @Valid AccountBalanceQueryRequest request
     ) {
-        return accountService.getBalanceWithPassword(accountQueryRequest);
+        AccountBalanceQueryResponse response = accountService.getBalance(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 거래 내역 조회
     @PostMapping("account/history")
     @ResponseBody
-    public AccountHistoryResultResponse getAccountHistory(
-            @RequestBody @Valid AccountQueryRequest accountQueryRequest
+    public ResponseEntity<AccountHistoryQueryResponse> getAccountHistory(
+            @RequestBody @Valid AccountHistoryQueryRequest request
     ) {
-        return transactionHistoryService.getAccountHistory(accountQueryRequest.getAccountNumber());
+        AccountHistoryQueryResponse response = transactionHistoryService.getAccountHistory(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 입금. to 계좌에 입금
     @PostMapping("account/deposit")
     @ResponseBody
-    public DepositResponse deposit(
-            @RequestBody @Valid AccountRequest request
+    public ResponseEntity<DepositResponse> deposit(
+            @RequestBody @Valid DepositRequest request
     ) {
-        return accountService.deposit(request);
+        DepositResponse response = accountService.deposit(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 계좌 출금. from 계좌에서 출금
     @PostMapping("account/withdraw")
     @ResponseBody
-    public TransactionExecutionResultResponse withdraw(
-            @RequestBody @Valid AccountWithdrawRequest request
+    public ResponseEntity<WithdrawResponse> withdraw(
+            @RequestBody @Valid WithdrawRequest request
     ) {
-        return accountService.withdraw(request);
+        WithdrawResponse response = accountService.withdraw(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 송금, from 계좌에서 출금, to 계좌에 입금
