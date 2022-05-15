@@ -8,6 +8,7 @@ option java_outer_classname = "CoreAPIProto";
 
 service CoreAPI {
   rpc getBalance(AccountBalanceQueryGrpcRequest) returns (AccountBalanceQueryGrpcResponse) {}
+  rpc getAccountList(AccountListQueryGrpcRequest) returns (AccountListQueryGrpcResponse) {}
   rpc login(LoginGrpcRequest) returns (LoginGrpcResponse) {}
 }
 
@@ -17,6 +18,14 @@ message AccountBalanceQueryGrpcRequest {
 
 message AccountBalanceQueryGrpcResponse {
   string balance = 1;
+}
+
+message AccountListQueryGrpcRequest {
+  string cusno = 1;
+}
+
+message AccountListQueryGrpcResponse {
+  string dep_acno = 1;
 }
 
 message LoginGrpcRequest {
