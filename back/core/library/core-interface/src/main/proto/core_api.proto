@@ -7,9 +7,21 @@ option java_package = "com.parasol.core_interface";
 option java_outer_classname = "CoreAPIProto";
 
 service CoreAPI {
+  rpc deposit(DepositQueryGrpcRequest) returns (DepositQueryGrpcResponse) {}
   rpc getBalance(AccountBalanceQueryGrpcRequest) returns (AccountBalanceQueryGrpcResponse) {}
   rpc getAccountList(AccountListQueryGrpcRequest) returns (AccountListQueryGrpcResponse) {}
   rpc login(LoginGrpcRequest) returns (LoginGrpcResponse) {}
+}
+
+message DepositQueryGrpcRequest {
+  string dep_trx_biz_d = 1;
+  string dep_acno = 2;
+  string trx_amt = 3;
+  string dpst_pn_nm = 4;
+}
+
+message DepositQueryGrpcResponse {
+  string is_success = 1;
 }
 
 message AccountBalanceQueryGrpcRequest {
