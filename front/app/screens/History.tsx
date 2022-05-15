@@ -8,10 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import RNPickerSelect from "react-native-picker-select";
 
 interface PropsType {
   // 잔액
@@ -118,6 +119,8 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
       price: "+34,000",
     },
   ]);
+  // 해당 월
+  const [month, setMonth] = useState("5");
 
   // Axios
   // 거래 내역 조회
@@ -127,6 +130,7 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
       method: "get",
       url: getHistoryUrl,
       headers: { Authroization: `Bearer ${accessToken}` },
+      params: month,
     })
       .then((res) => {
         console.log(res);
@@ -158,6 +162,11 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
     getHistory();
   };
 
+  // useEffect
+  useEffect(() => {
+    getHistory();
+  }, [month]);
+
   return (
     <LayoutContainer>
       <HistoryHeaderContainer>
@@ -176,7 +185,36 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 25, fontWeight: "bold" }}>5월</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 25, fontWeight: "bold" }}>{month}월</Text>
+          <RNPickerSelect
+            value
+            onValueChange={(month) => {
+              if (month !== null) setMonth(month);
+            }}
+            items={[
+              { label: "1월", value: "1" },
+              { label: "2월", value: "2" },
+              { label: "3월", value: "3" },
+              { label: "4월", value: "4" },
+              { label: "5월", value: "5" },
+              { label: "6월", value: "6" },
+              { label: "7월", value: "7" },
+              { label: "8월", value: "8" },
+              { label: "9월", value: "9" },
+              { label: "10월", value: "10" },
+              { label: "11월", value: "11" },
+              { label: "12월", value: "12" },
+            ]}
+            style={pickerSelectStyles}
+          />
+        </View>
         {total[0] === "-" ? (
           <Text style={{ color: "blue" }}>{total}원</Text>
         ) : (
@@ -206,6 +244,28 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
+  },
+});
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 24,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "black",
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 24,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: "purple",
+    borderRadius: 8,
+    color: "black",
+    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });
 
