@@ -10,6 +10,8 @@ import {
 } from "../styled";
 import * as LocalAuthentication from "expo-local-authentication";
 import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 interface PropsType {
   // 송금할 주소
@@ -18,6 +20,8 @@ interface PropsType {
   price: string;
   // stack navigation
   navigation: any;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 
 // Component _ TransactionConfirm
@@ -25,10 +29,52 @@ const TransactionConfirm: React.FC<PropsType> = ({
   navigation: { navigate, goBack },
   info,
   price,
+  getNewToken,
 }) => {
+  // const
+  // Axios url
+  const url = "http://k6s101.p.ssafy.io:8080/pay/transaction";
+
   // useState
   // 로딩
   const [loading, setLoading] = useState<boolean>(false);
+
+  // let
+  // 콤마 제거
+  let delPrice = parseInt(price.replace(/,/g, ""));
+
+  // Axios
+  // 송금
+  const transationPost = async () => {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "post",
+      url: url,
+      headers: { Authroization: `Bearer ${accessToken}` },
+      data: { method: "transaction", price: delPrice, transactionTo: info },
+    })
+      .then((res) => {
+        console.log(res);
+        Alert.alert("송금 완료!");
+        setTimeout(() => {
+          setLoading(false);
+          navigate?.("HomeMain");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === "401") {
+          getNewToken();
+          transationPost();
+        } else {
+          Alert.alert("송금에 실패하였습니다.");
+          setTimeout(() => {
+            setLoading(false);
+            navigate?.("HomeMain");
+          }, 2000);
+        }
+      });
+  };
 
   // method
   const onPressCancel = () => {
@@ -52,11 +98,7 @@ const TransactionConfirm: React.FC<PropsType> = ({
       Alert.alert(`${result.error} - Authentication unsuccessful (인증실패)`);
     if (result.success) {
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        navigate?.("HomeMain");
-      }, 2000);
-      console.log("success");
+      transationPost();
     }
     return;
   };
