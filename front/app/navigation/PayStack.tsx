@@ -12,6 +12,8 @@ import {
 } from "../screens/styled";
 import * as LocalAuthentication from "expo-local-authentication";
 import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +24,10 @@ interface PropsType {
   bankInfo: any;
   // stack navigation
   navigation: any;
+  // 잔액 set
+  setBalance: (a: string) => void;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 interface PayConfirmPropsType {
   // 충전 or 출금
@@ -32,6 +38,8 @@ interface PayConfirmPropsType {
   price: string;
   // stack navigation
   navigation: any;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 
 // Component _ PayConfirm
@@ -40,9 +48,83 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
   charge,
   price,
   bankInfo,
+  getNewToken,
 }) => {
+  // const
+  // Axios url
+  const chargeUrl = "http://k6s101.p.ssafy.io:8080/pay/charge";
+  const withdrawUrl = "http://k6s101.p.ssafy.io:8080/pay/withdraw";
+
+  // let
+  // 콤마 제거
+  let delPrice = parseInt(price.replace(/,/g, ""));
+
   // useState
   const [loading, setLoading] = useState(false);
+
+  // Axios
+  // 충전
+  const chargePost = async () => {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "post",
+      url: chargeUrl,
+      headers: { Authroization: `Bearer ${accessToken}` },
+      data: { method: "charge", price: delPrice },
+    })
+      .then((res) => {
+        console.log(res);
+        Alert.alert("충전 완료!");
+        setTimeout(() => {
+          setLoading(false);
+          navigate?.("PayMain");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === "401") {
+          getNewToken();
+          chargePost();
+        } else {
+          Alert.alert("충전에 실패하였습니다.");
+          setTimeout(() => {
+            setLoading(false);
+            navigate?.("PayMain");
+          }, 2000);
+        }
+      });
+  };
+  // 출금
+  const withdrawPost = async () => {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "post",
+      url: withdrawUrl,
+      headers: { Authroization: `Bearer ${accessToken}` },
+      data: { method: "withdraw", price: delPrice },
+    })
+      .then((res) => {
+        console.log(res);
+        Alert.alert("출금 완료!");
+        setTimeout(() => {
+          setLoading(false);
+          navigate?.("PayMain");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === "401") {
+          getNewToken();
+          withdrawPost();
+        } else {
+          Alert.alert("출금에 실패하였습니다.");
+          setTimeout(() => {
+            setLoading(false);
+            navigate?.("PayMain");
+          }, 2000);
+        }
+      });
+  };
 
   // method
   const onPressCancel = () => {
@@ -66,11 +148,11 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
       Alert.alert(`${result.error} - Authentication unsuccessful (인증실패)`);
     if (result.success) {
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        navigate?.("PayMain");
-      }, 2000);
-      console.log("success");
+      if (charge) {
+        chargePost();
+      } else {
+        withdrawPost();
+      }
     }
     return;
   };
@@ -102,7 +184,13 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
 };
 
 // Component _ PayStack
-const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
+const PayStack: React.FC<PropsType> = ({
+  balance,
+  bankInfo,
+  navigation,
+  setBalance,
+  getNewToken,
+}) => {
   // useState
   // 충전 or 출금
   const [charge, setCharge] = useState<boolean>(false);
@@ -128,6 +216,8 @@ const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
             setPrice={setPrice}
             navigation={navigation}
             setCharge={setCharge}
+            setBalance={setBalance}
+            getNewToken={getNewToken}
           />
         )}
       </Stack.Screen>
@@ -139,6 +229,7 @@ const PayStack: React.FC<PropsType> = ({ balance, bankInfo, navigation }) => {
             charge={charge}
             bankInfo={bankInfo}
             price={price}
+            getNewToken={getNewToken}
           />
         )}
       </Stack.Screen>
