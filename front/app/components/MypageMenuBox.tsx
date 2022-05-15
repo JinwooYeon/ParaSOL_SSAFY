@@ -35,7 +35,7 @@ const MypageMenuBox: React.FC<PropsType> = ({
         break;
       // 공동인증 발급/재발급
       case "공동인증 발급/재발급":
-        navigate("Oauth");
+        // navigate("Oauth");
         break;
       // 생체인증 발급/재발급
       case "생체인증 발급/재발급":
@@ -62,13 +62,23 @@ const MypageMenuBox: React.FC<PropsType> = ({
   return (
     <MypageMenuBtn onPress={onPress}>
       <MypageMenuTextContainer>
-        <MypageMenuText able={menu === "생체인증 발급/재발급" ? false : true}>
+        <MypageMenuText
+          able={
+            menu === "생체인증 발급/재발급" || menu === "공동인증 발급/재발급"
+              ? false
+              : true
+          }
+        >
           {menu}
         </MypageMenuText>
         <MaterialCommunityIcons
           name="chevron-right"
           size={35}
-          color={menu === "생체인증 발급/재발급" ? "grey" : "black"}
+          color={
+            menu === "생체인증 발급/재발급" || menu === "공동인증 발급/재발급"
+              ? "grey"
+              : "black"
+          }
         />
       </MypageMenuTextContainer>
     </MypageMenuBtn>
