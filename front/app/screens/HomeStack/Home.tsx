@@ -39,19 +39,20 @@ const Home: React.FC<PropsType> = ({ balance, navigation }) => {
         <ContentContainer>
           {/* QR 코드 정보 */}
           <QRcodeContainer>
-            <QRCode value={qrCodeInfo.num} size={190} />
+            <QRCode value={qrCodeInfo.name} size={190} />
             <QRcodeInfoContainer>
               <QRcodeInfoName>{qrCodeInfo.name}</QRcodeInfoName>
-              <QRcodeInfoNum>
+              {/* <QRcodeInfoNum>
                 <QRcodeInfoNumText onPress={() => console.log(qrCodeInfo.num)}>
                   {qrCodeInfo.num}
                 </QRcodeInfoNumText>
-              </QRcodeInfoNum>
+              </QRcodeInfoNum> */}
             </QRcodeInfoContainer>
           </QRcodeContainer>
         </ContentContainer>
         <FooterContainer>
           <BtnBox color="blue" text="송금하기" navigation={navigation} />
+          <BtnBox color="blue" text="QR 스캔" navigation={navigation} />
         </FooterContainer>
       </ContentFooterContainer>
     </LayoutContainer>
