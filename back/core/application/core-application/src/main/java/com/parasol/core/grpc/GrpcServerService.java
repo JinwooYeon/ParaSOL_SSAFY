@@ -82,16 +82,18 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
     @Override
     public void getBalance(AccountBalanceQueryGrpcRequest request, StreamObserver<AccountBalanceQueryGrpcResponse> responseObserver) {
         try {
-            String accountNumber = request.getAccountNumber();
+            Long cusNo = Long.parseLong(request.getCusno().trim());
+            String accountNumber = request.getDepAcno();
 
             AccountBalanceQueryRequest queryRequest = AccountBalanceQueryRequest.builder()
+                    .cusNo(cusNo)
                     .accountNumber(accountNumber)
                     .build();
 
             AccountBalanceQueryResponse queryResponse = accountService.getBalance(queryRequest);
 
             AccountBalanceQueryGrpcResponse response = AccountBalanceQueryGrpcResponse.newBuilder()
-                    .setBalance(queryResponse.getBalance().toString())
+                    .setDepAcBlc(queryResponse.getBalance().toString())
                     .build();
 
             responseObserver.onNext(response);
