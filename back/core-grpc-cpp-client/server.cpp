@@ -236,6 +236,25 @@ struct sdep0242a_out {
     struct grid01 sdep0242a_out_sub01; // 이상해씨
 };
 
+struct sdep0243a_in {
+    struct stdheader stdheader;
+    struct dataheader dataheader;
+    struct depinpt depinpt;
+    char trx_amt[22];
+    char dep_ac_s[10];
+    char dep_trx_his_no[10];
+    char lkg_yn[1];
+    char lkg_ser[10];
+    char dep_trx_s[10];
+    char dep_trx_crt_canc_d[10];
+    char dpst_pn_nm[300];
+};
+
+struct sdep0243a_out {
+    struct stdheader stdheader;
+    char rst_yn[1];
+};
+
 struct scus0001a_in {
     char intnbk_user_id[10];
     char intndk_pwd[24];
@@ -283,6 +302,8 @@ using core_api::AccountListQueryGrpcRequest;
 using core_api::AccountListQueryGrpcResponse;
 using core_api::LoginGrpcRequest;
 using core_api::LoginGrpcResponse;
+using core_api::DepositQueryGrpcRequest;
+using core_api::DepositQueryGrpcResponse;
 
 class CoreAPIClient {
     public:
@@ -302,6 +323,36 @@ class CoreAPIClient {
     //         return "RPC Failed";
     //     }
     // }
+
+    struct sdep0243a_out* deposit(const struct sdep0243a_in raw_request) {
+        DepositQueryGrpcRequest request;
+        request.set_dep_trx_biz_d(raw_request.depinpt.dep_trx_biz_d);
+        request.set_dep_acno(raw_request.depinpt.dep_acno);
+        request.set_trx_amt(raw_request.trx_amt);
+        request.set_dpst_pn_nm(raw_request.dpst_pn_nm);
+
+        // std::cout << raw_request.depinpt.dep_trx_biz_d << "\n";
+        // std::cout << raw_request.depinpt.dep_acno << "\n";
+        // std::cout << raw_request.trx_amt << "\n";
+        // std::cout << raw_request.dpst_pn_nm << "\n";
+
+        DepositQueryGrpcResponse response;
+	    ClientContext context;
+
+	    Status status = stub_->deposit(&context, request, &response);
+
+        struct sdep0243a_out* raw_response = (struct sdep0243a_out*)malloc(sizeof(struct sdep0243a_out));
+
+        memset(raw_response, 0, sizeof(struct sdep0243a_out));
+
+        memcpy(&raw_response->rst_yn, response.is_success().c_str(), response.is_success().size());
+
+        if (status.ok()) {
+            return raw_response;
+        } else {
+            return NULL;
+        }
+    }
 
     struct sdep0240a_out* getBalance(const struct sdep0240a_in raw_request) {
         AccountBalanceQueryGrpcRequest request;
@@ -471,6 +522,16 @@ int main(int argc, char **argv) {
                      memcpy(sock_buf, res_buf, sizeof(struct sdep0240a_out));
 
                      write(clnt_sock, sock_buf, sizeof(struct sdep0240a_out));
+                     free(res_buf);
+                } else if (payload_len == sizeof(struct sdep0243a_in)) {
+                     struct sdep0243a_in req_buf;
+                     memcpy(&req_buf, sock_buf, sizeof(struct sdep0243a_in));
+                     memset(sock_buf, 0, sizeof(sock_buf));
+
+                     struct sdep0243a_out *res_buf = client.deposit(req_buf);
+                     memcpy(sock_buf, res_buf, sizeof(struct sdep0243a_out));
+
+                     write(clnt_sock, sock_buf, sizeof(struct sdep0243a_out));
                      free(res_buf);
                 }
             close(clnt_sock);
