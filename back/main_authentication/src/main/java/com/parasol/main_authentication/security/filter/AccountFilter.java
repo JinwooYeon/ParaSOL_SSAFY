@@ -49,7 +49,8 @@ public class AccountFilter extends AbstractGatewayFilterFactory<AccountFilter.Co
             }
 
             if (!containsAuthorization(request)) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "Authorization: " + request.getHeaders().getOrEmpty(HttpHeaders.AUTHORIZATION).get(0));
             }
 
             String token = extractToken(request);
@@ -57,13 +58,15 @@ public class AccountFilter extends AbstractGatewayFilterFactory<AccountFilter.Co
             InetSocketAddress ipSocketAddr = request.getRemoteAddress();
 
             if (ipSocketAddr == null){
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "Authorization: " + request.getHeaders().getOrEmpty(HttpHeaders.AUTHORIZATION).get(0));
             }
 
             String ipAddr = ipSocketAddr.getAddress().toString();
 
             if (!hasPermission(ipAddr, method, uri, token)) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "Authorization: " + request.getHeaders().getOrEmpty(HttpHeaders.AUTHORIZATION).get(0) + ", IP: " + ipSocketAddr);
             }
 
             return chain.filter(exchange).then(Mono.fromRunnable(()->{
@@ -84,7 +87,8 @@ public class AccountFilter extends AbstractGatewayFilterFactory<AccountFilter.Co
 
     private boolean hasPermission(String ipAddr, String method, String uri, String token) {
         if (!service.isValid(ipAddr, method, uri, token)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Authorization: " + token + ", IP: " + ipAddr);
         }
 
         return true;

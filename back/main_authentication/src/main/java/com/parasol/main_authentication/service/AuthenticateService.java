@@ -31,7 +31,8 @@ public class AuthenticateService {
 
     public boolean isValid(String ipAddr, String method, String endpoint, String clientId) {
         ApiKey apiKey = apiKeyRepository.findById(clientId)
-                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.FORBIDDEN); });
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                        "Authorization: " + clientId + ", IP: " + ipAddr); });
 
         String registeredIpAddr = apiKey.getIpAddr();
 
