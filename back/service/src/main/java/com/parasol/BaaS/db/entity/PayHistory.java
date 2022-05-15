@@ -1,8 +1,7 @@
 package com.parasol.BaaS.db.entity;
 
 import com.parasol.BaaS.enums.TransactionType;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -12,6 +11,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @DynamicInsert
 @DynamicUpdate
 public class PayHistory {
