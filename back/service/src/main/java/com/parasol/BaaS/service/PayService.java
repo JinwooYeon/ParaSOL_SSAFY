@@ -2,14 +2,17 @@ package com.parasol.BaaS.service;
 
 import com.parasol.BaaS.api_model.AccountInfo;
 import com.parasol.BaaS.api_model.BankInfo;
+import com.parasol.BaaS.api_model.PayHistoryItem;
 import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.*;
 import com.parasol.BaaS.auth.jwt.UserDetail;
+import com.parasol.BaaS.db.entity.PayHistory;
 import com.parasol.BaaS.db.entity.PayLedger;
 import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.PayHistoryRepository;
 import com.parasol.BaaS.db.repository.PayLedgerRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
+import com.parasol.BaaS.enums.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -17,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class PayService {
@@ -98,7 +103,7 @@ public class PayService {
         Long price = request.getPrice();
         // 보내는 사람 계좌 잔액 차감
         fromPayLedger.setBalance(fromPayLedger.getBalance() - price);
-        // 받는 사람 게좌 잔액
+        // 받는 사람 계좌 잔액
         toPayLedger.setBalance(fromPayLedger.getBalance() + price);
 
         payLedgerRepository.save(fromPayLedger);
@@ -231,12 +236,32 @@ public class PayService {
         User user = userRepository.findByUserId(id)
                 .orElseThrow(NoSuchElementException::new);
 
-        if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
-        }
+        PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
+                .orElseThrow(IllegalStateException::new);
+
+        List<PayHistory> list = payHistoryRepository.findByUser_UserId(id);
 
         return Mono.just(
                 PayHistoryResponse.builder()
+                        .total(Long.valueOf(list.size()))
+                        .data(list.stream().map(payHistory -> {
+                            String formatPrice = String.valueOf(payHistory.getAmount()).replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+                            // 페이 충전일 때는 +
+                            if (payHistory.getType().equals(TransactionType.DEPOSIT)) {
+                                return PayHistoryItem.builder()
+                                        .id(payHistory.getTxDatetime())
+                                        .title(payHistory.getTxOpponent())
+                                        .price("+" + formatPrice)
+                                        .build();
+                            } else {
+                                // 페이 송금, 출금일 때는 -
+                                return PayHistoryItem.builder()
+                                        .id(payHistory.getTxDatetime())
+                                        .title(payHistory.getTxOpponent())
+                                        .price("-" + formatPrice)
+                                        .build();
+                            }
+                        }).collect(Collectors.toList()))
                         .build()
         );
     }
