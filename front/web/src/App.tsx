@@ -8,6 +8,7 @@ import User from "pages/user";
 import Account from "pages/account";
 import Pay from "pages/pay";
 import Header from "pages/header";
+import Footer from "pages/footer";
 
 function App() {
   const [value, setValue] = useState("1");
@@ -18,7 +19,9 @@ function App() {
 
   return (
     <>
+      {/* 헤더 */}
       <Header />
+      {/* 컨텐츠 */}
       <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -42,6 +45,8 @@ function App() {
           </TabPanel>
         </TabContext>
       </Box>
+      {/* 푸터 */}
+      <Footer />
     </>
   );
 }
