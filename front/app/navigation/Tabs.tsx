@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import History from "../screens/History";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { mainBlue } from "../color";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PayStack from "./PayStack";
 import MypageStack from "./MypageStack";
 import Benefit from "../screens/Benefit";
@@ -21,6 +21,8 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
   // const
   // Axios 새로운 인증 토큰 url
   const tokenUrl = "http://k6S101.p.ssafy.io:8080/user/token";
+  // Axios 내 정보 조회 url
+  const getMyInfoUrl = "http://k6S101.p.ssafy.io:8080/pay";
 
   // useState
   // 잔액
@@ -39,6 +41,7 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
   });
 
   // Axios
+  // 새로운 인증 토큰 발급
   const getNewToken = async () => {
     const refreshToken = await AsyncStorage.getItem("refreshToken");
     await axios({
@@ -54,6 +57,33 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
         console.log(err);
       });
   };
+  // 내 정보 조회
+  const getMyInfo = async () => {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "get",
+      url: getMyInfoUrl,
+      headers: { Authroization: `Bearer ${accessToken}` },
+    })
+      .then((res) => {
+        console.log(res);
+        setBalance(res.data.balance);
+        setId(res.data.id);
+        setBankInfo(res.data.bankInfo);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === "401") {
+          getNewToken?.();
+          getMyInfo();
+        }
+      });
+  };
+
+  // useEffect
+  useEffect(() => {
+    getMyInfo();
+  }, []);
 
   return (
     <Tab.Navigator
@@ -85,7 +115,14 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
           },
         }}
       >
-        {(props) => <History {...props} balance={balance} />}
+        {(props) => (
+          <History
+            {...props}
+            balance={balance}
+            setBalance={setBalance}
+            getNewToken={getNewToken}
+          />
+        )}
       </Tab.Screen>
       {/* 페이 */}
       <Tab.Screen
@@ -104,7 +141,13 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
         }}
       >
         {(props) => (
-          <PayStack {...props} balance={balance} bankInfo={bankInfo} />
+          <PayStack
+            {...props}
+            balance={balance}
+            bankInfo={bankInfo}
+            setBalance={setBalance}
+            getNewToken={getNewToken}
+          />
         )}
       </Tab.Screen>
       {/* 홈 */}
@@ -123,7 +166,15 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
           },
         }}
       >
-        {(props) => <HomeStack {...props} balance={balance} id={id} />}
+        {(props) => (
+          <HomeStack
+            {...props}
+            balance={balance}
+            id={id}
+            setBalance={setBalance}
+            getNewToken={getNewToken}
+          />
+        )}
       </Tab.Screen>
       {/* 혜택 */}
       <Tab.Screen
@@ -158,7 +209,15 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
           },
         }}
       >
-        {(props) => <MypageStack {...props} setLogin={setLogin} />}
+        {(props) => (
+          <MypageStack
+            {...props}
+            setLogin={setLogin}
+            bankInfo={bankInfo}
+            setBankInfo={setBankInfo}
+            getNewToken={getNewToken}
+          />
+        )}
       </Tab.Screen>
     </Tab.Navigator>
   );

@@ -19,9 +19,19 @@ interface PropsType {
   setInfo: (a: string) => void;
   // stack navigation
   navigation: any;
+  // 잔액 set
+  setBalance: (a: string) => void;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 
-const Scanner: React.FC<PropsType> = ({ balance, setInfo, navigation }) => {
+const Scanner: React.FC<PropsType> = ({
+  balance,
+  setInfo,
+  navigation,
+  setBalance,
+  getNewToken,
+}) => {
   // useState
   // 카메라 권한 허가 유무
   const [hasPermission, setHasPermission] = useState<any>(null);
@@ -54,7 +64,12 @@ const Scanner: React.FC<PropsType> = ({ balance, setInfo, navigation }) => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <BalanceBox category="QR 스캔" num={balance} />
+        <BalanceBox
+          category="QR 스캔"
+          num={balance}
+          setBalance={setBalance}
+          getNewToken={getNewToken}
+        />
       </HeaderContainer>
       <ContentFooterContainer>
         <QRScannerContainer>

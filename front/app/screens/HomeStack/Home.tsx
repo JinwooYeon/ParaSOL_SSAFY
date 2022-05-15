@@ -22,10 +22,20 @@ interface PropsType {
   id: string;
   // stack navigation
   navigation: any;
+  // 잔액 set
+  setBalance: (a: string) => void;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 
 // Component _ Home
-const Home: React.FC<PropsType> = ({ balance, id, navigation }) => {
+const Home: React.FC<PropsType> = ({
+  balance,
+  id,
+  navigation,
+  setBalance,
+  getNewToken,
+}) => {
   // method
   const copyToClipboard = () => {
     Clipboard.setString(id);
@@ -35,7 +45,12 @@ const Home: React.FC<PropsType> = ({ balance, id, navigation }) => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <BalanceBox category="파라솔 PAY" num={balance} />
+        <BalanceBox
+          category="파라솔 PAY"
+          num={balance}
+          setBalance={setBalance}
+          getNewToken={getNewToken}
+        />
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer>

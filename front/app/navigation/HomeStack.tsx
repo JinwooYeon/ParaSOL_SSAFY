@@ -12,10 +12,19 @@ interface PropsType {
   balance: string;
   // 아이디
   id: string;
+  // 잔액 set
+  setBalance: (a: string) => void;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 
 // Component _ HomeStack
-const HomeStack: React.FC<PropsType> = ({ balance, id }) => {
+const HomeStack: React.FC<PropsType> = ({
+  balance,
+  id,
+  setBalance,
+  getNewToken,
+}) => {
   // useState
   // 송금할 주소
   const [info, setInfo] = useState<string>("");
@@ -33,7 +42,15 @@ const HomeStack: React.FC<PropsType> = ({ balance, id }) => {
     >
       {/* 홈 첫 스크린 */}
       <Stack.Screen name="HomeMain">
-        {(props) => <Home {...props} balance={balance} id={id} />}
+        {(props) => (
+          <Home
+            {...props}
+            balance={balance}
+            id={id}
+            setBalance={setBalance}
+            getNewToken={getNewToken}
+          />
+        )}
       </Stack.Screen>
       {/* 송금 */}
       <Stack.Screen name="Transaction">
@@ -45,16 +62,33 @@ const HomeStack: React.FC<PropsType> = ({ balance, id }) => {
             setInfo={setInfo}
             price={price}
             setPrice={setPrice}
+            setBalance={setBalance}
+            getNewToken={getNewToken}
           />
         )}
       </Stack.Screen>
       {/* 송금 확인 */}
       <Stack.Screen name="TransactionConfirm">
-        {(props) => <TransactionConfirm {...props} info={info} price={price} />}
+        {(props) => (
+          <TransactionConfirm
+            {...props}
+            info={info}
+            price={price}
+            getNewToken={getNewToken}
+          />
+        )}
       </Stack.Screen>
       {/* 스캐너 */}
       <Stack.Screen name="Scanner">
-        {(props) => <Scanner {...props} balance={balance} setInfo={setInfo} />}
+        {(props) => (
+          <Scanner
+            {...props}
+            balance={balance}
+            setInfo={setInfo}
+            setBalance={setBalance}
+            getNewToken={getNewToken}
+          />
+        )}
       </Stack.Screen>
     </Stack.Navigator>
   );

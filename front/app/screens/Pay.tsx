@@ -24,6 +24,10 @@ interface PropsType {
   setCharge: (a: boolean) => void;
   // stack navigation
   navigation: any;
+  // 잔액 set
+  setBalance: (a: string) => void;
+  // 새로운 인증 토큰 발급
+  getNewToken: () => void;
 }
 
 // Component _ Pay
@@ -34,6 +38,8 @@ const Pay: React.FC<PropsType> = ({
   setPrice,
   setCharge,
   navigation,
+  setBalance,
+  getNewToken,
 }) => {
   // const
   // 충전 or 출금 데이터
@@ -45,7 +51,12 @@ const Pay: React.FC<PropsType> = ({
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <BalanceBox category="PAY 충전 / 출금" num={balance} />
+        <BalanceBox
+          category="PAY 충전 / 출금"
+          num={balance}
+          setBalance={setBalance}
+          getNewToken={getNewToken}
+        />
       </HeaderContainer>
       <ContentFooterContainer>
         <ContentContainer>
