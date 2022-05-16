@@ -1,6 +1,8 @@
 package com.parasol.BaaS.auth.oauth;
 
+import com.parasol.BaaS.db.entity.PayLedger;
 import com.parasol.BaaS.db.entity.User;
+import com.parasol.BaaS.db.repository.PayLedgerRepository;
 import com.parasol.BaaS.db.repository.TokenRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PayLedgerRepository payLedgerRepository;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
@@ -38,7 +43,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         
         Optional<User> checkUser = userRepository.findByUserId(id);
 
-        // 회원가입이 안 되어있는 경우 -> 회원 가입
+        // 회원가입이 안 되어있는 경우 -> 회원 가입 (페이도 동시 생성)
         if(!checkUser.isPresent()) {
             User user = User.builder()
                     .userId(id)
@@ -46,6 +51,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                     .build();
 
             userRepository.save(user);
+
+            PayLedger payLedger = PayLedger.builder()
+                    .owner(user)
+                    .balance(Long.valueOf(0))
+                    .build();
+
+            payLedgerRepository.save(payLedger);
         } else {
             User user = checkUser.get();
             user.setUserName(name);
