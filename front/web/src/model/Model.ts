@@ -19,11 +19,6 @@ export const UserInfo = [
   },
 ];
 export const Transaction = [
-  // {
-  //   value: "method",
-  //   type: "{TransactionType}",
-  //   required: true,
-  // },
   {
     value: "bankName",
     type: "string",
@@ -32,16 +27,6 @@ export const Transaction = [
   {
     value: "amount",
     type: "long",
-    required: true,
-  },
-  {
-    value: "nameFrom",
-    type: "string",
-    required: true,
-  },
-  {
-    value: "accountNumber",
-    type: "[accountTo]",
     required: true,
   },
 ];
@@ -148,12 +133,34 @@ export const AuthToken = [...AccessToken, ...RefreshToken];
 export const JwtHeader = [...AccessToken];
 //// Request
 export const LoginRequest = [...LoginInfo];
-export const BankConnectionRequest = [...BankInfo];
+export const BankConnectionRequest = [...BankInfo, ...LoginInfo];
 export const UserRegisterRequest = [...UserInfo];
 export const UserUpdateRequest = [...UserInfo];
-export const DepositRequest = [...Transaction];
+export const DepositRequest = [
+  ...Transaction,
+  {
+    value: "nameFrom",
+    type: "string",
+    required: true,
+  },
+  {
+    value: "accountNumber",
+    type: "[accountTo]",
+    required: true,
+  },
+];
 export const WithdrawRequest = [
   ...Transaction,
+  {
+    value: "nameTo",
+    type: "string",
+    required: true,
+  },
+  {
+    value: "accountNumber",
+    type: "[accountFrom]",
+    required: true,
+  },
   {
     value: "bankAccountPassword",
     type: "string",

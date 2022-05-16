@@ -43,34 +43,51 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
     switch (props.API.method) {
       // GET 요청
       case "GET":
-        await axios({
-          method: "get",
-          url: props.API.uri,
-          headers: { Authorization: `Bearer ${isRefresh(props.API.detail)}` },
-          params: data,
-        })
-          .then((response) => {
-            if (props.API.detail === "새로운 인증 토큰 요청") {
-              localStorage.setItem("accessToken", response.data.accessToken);
-              localStorage.setItem("refreshToken", response.data.refreshToken);
-            }
-            setResponseData({
-              status: response.status.toString(),
-              output: JSON.stringify(response.data),
-            });
+        // 구글 로그인 (Oauth)
+        if (props.API.uri === "/user/login/google") {
+          // 수정 필요
+          console.log("login");
+          window.open("http://k6s101.p.ssafy.io:8080/user/login/google");
+          // axios({
+          //   method: "get",
+          //   url: "http://k6s101.p.ssafy.io:8080/user/login/google",
+          // })
+          //   .then((res) => console.log(res))
+          //   .catch((err) => console.log(err));
+        } else {
+          await axios({
+            method: "get",
+            url: props.API.uri,
+            headers: { Authorization: `Bearer ${isRefresh(props.API.detail)}` },
+            params: data,
           })
-          .catch((err) => {
-            setResponseData({
-              status: err.response.status.toString(),
-              output: err.toString(),
+            .then((response) => {
+              if (props.API.detail === "새로운 인증 토큰 요청") {
+                localStorage.setItem("accessToken", response.data.accessToken);
+                localStorage.setItem(
+                  "refreshToken",
+                  response.data.refreshToken
+                );
+              }
+              setResponseData({
+                status: response.status.toString(),
+                output: JSON.stringify(response.data),
+              });
+            })
+            .catch((err) => {
+              setResponseData({
+                status: err.response.status.toString(),
+                output: err.toString(),
+              });
             });
-          });
+        }
         break;
       // POST 요청
       case "POST":
-        if (props.API.detail === "입금" || props.API.detail === "결제") {
+        if (props.API.detail === "입금") {
           data["accountTo"] = { accountNumber: data.accountNumber };
-          delete data.accountNumber;
+        } else if (props.API.detail === "결제") {
+          data["accountFrom"] = { accountNumber: data.accountNumber };
         }
         await axios({
           method: "post",
