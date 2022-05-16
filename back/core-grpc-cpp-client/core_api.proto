@@ -7,10 +7,39 @@ option java_package = "com.parasol.core_interface";
 option java_outer_classname = "CoreAPIProto";
 
 service CoreAPI {
+  rpc withdraw(WithdrawQueryGrpcRequest) returns (WithdrawQueryGrpcResponse) {}
   rpc deposit(DepositQueryGrpcRequest) returns (DepositQueryGrpcResponse) {}
   rpc getBalance(AccountBalanceQueryGrpcRequest) returns (AccountBalanceQueryGrpcResponse) {}
   rpc getAccountList(AccountListQueryGrpcRequest) returns (AccountListQueryGrpcResponse) {}
+  rpc getAccountHistory(AccountHistoryQueryGrpcRequest) returns (AccountHistoryQueryGrpcResponse) {}
   rpc login(LoginGrpcRequest) returns (LoginGrpcResponse) {}
+}
+
+message AccountHistoryQueryGrpcRequest {
+  string cusno = 1;
+  string dep_acno = 2;
+}
+
+message AccountHistoryQueryGrpcResponse {
+  string dep_acno = 1;
+  string trx_dt = 2;
+  string dep_trx_his_no = 3;
+  string dep_trx_biz_d = 4;
+  string dpst_rcv_nm = 5;
+  string trx_amt = 6;
+}
+
+message WithdrawQueryGrpcRequest {
+  string dep_trx_biz_d = 1;
+  string cusno = 2;
+  string dep_acno = 3;
+  string trx_amt = 4;
+  string rcv_nm = 5;
+  string dep_ac_pwd = 6;
+}
+
+message WithdrawQueryGrpcResponse {
+  string is_success = 1;
 }
 
 message DepositQueryGrpcRequest {
