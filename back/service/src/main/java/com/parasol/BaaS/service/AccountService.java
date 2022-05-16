@@ -182,7 +182,7 @@ public class AccountService {
         DepositParam param = DepositParam.builder()
                 .amount(amount)
                 .accountTo(accountTo)
-                .nameOpponent(nameFrom)
+                .nameFrom(nameFrom)
                 .build();
 
         return depositRequestFactory.create(param)
@@ -228,7 +228,7 @@ public class AccountService {
                 .accountPassword(accountPassword)
                 .amount(amount)
                 .accountFrom(accountFrom)
-                .nameOpponent(nameTo)
+                .nameTo(nameTo)
                 .id(bankConnection.getBankId())
                 .password(bankConnection.getBankPassword())
                 .build();
