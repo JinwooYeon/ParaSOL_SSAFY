@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class AccountService {
-//    @Autowired
-//    private QueryAccountHistoryRequestFactory queryAccountHistoryRequestFactory;
+    @Autowired
+    private QueryAccountHistoryRequestFactory queryAccountHistoryRequestFactory;
 
     @Autowired
     private QueryAccountHistorySocketRequestFactory queryAccountHistorySocketRequestFactory;
@@ -49,7 +49,7 @@ public class AccountService {
                                     .accountNumber(request.getAccountNumber())
                                     .build();
 
-                            return queryAccountHistorySocketRequestFactory.createQueryAccountHistoryRequest(param)
+                            return queryAccountHistoryRequestFactory.createQueryAccountHistoryRequest(param)
                                     .doOnError( (throwable) -> {
                                         WebClientResponseException ex = (WebClientResponseException)throwable;
 
