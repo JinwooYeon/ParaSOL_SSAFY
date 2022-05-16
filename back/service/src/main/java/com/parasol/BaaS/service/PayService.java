@@ -62,6 +62,10 @@ public class PayService {
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(NoSuchElementException::new);
 
+        if(payLedger.getBankAccountNumber() == null) {
+            throw new IllegalArgumentException("주거래계좌 등록");
+        }
+
         return Mono.just(
                 PayInfoResponse.builder()
                         .id(id)
@@ -106,9 +110,18 @@ public class PayService {
         PayLedger toPayLedger = payLedgerRepository.findByOwnerUserId(transactionTo)
                 .orElseThrow(IllegalStateException::new);
 
+        if(fromPayLedger.getBankAccountNumber() == null) {
+            throw new IllegalArgumentException("주거래계좌 등록");
+        }
+
+        if(fromPayLedger.getBankAccountNumber() == null) {
+            throw new IllegalArgumentException("송금 계좌 확인");
+        }
+
         Long price = request.getPrice();
 
         LocalDateTime now = LocalDateTime.now();
+
         // 보내는 사람 계좌 잔액 차감, 거래 내역 추가
         fromPayLedger.setBalance(fromPayLedger.getBalance() - price);
         PayHistory fromPayHistory = PayHistory.builder()
@@ -284,6 +297,10 @@ public class PayService {
 
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(IllegalStateException::new);
+
+        if(payLedger.getBankAccountNumber() == null) {
+            throw new IllegalArgumentException("주거래계좌 등록");
+        }
 
         List<PayHistory> list = payHistoryRepository.findByUser_UserId(id);
 
