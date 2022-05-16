@@ -22,12 +22,16 @@ public class BankLoginRequestFactory {
     @Value("${sbj-api-server.login}")
     private String endPoint;
 
+    @Value("${baas.auth.key}")
+    private String baasAuthKey;
+
     public Mono<BankLoginResult> create(BankLoginParam request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                         .path(endPoint)
                         .build()
                 )
+                .header("Authorization", "Bearer " + baasAuthKey)
                 .body(BodyInserters
                         .fromValue(request)
                 );

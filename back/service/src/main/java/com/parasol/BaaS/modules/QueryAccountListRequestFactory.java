@@ -34,7 +34,7 @@ public class QueryAccountListRequestFactory {
                 .path(endPoint)
                 .build()
         )
-                .header("ClientId", baasAuthKey)
+                .header("Authorization", "Bearer " + baasAuthKey)
                 .body(BodyInserters.fromValue(request));
 
         return bodySpec.retrieve().bodyToMono(QueryAccountListResult.class);
