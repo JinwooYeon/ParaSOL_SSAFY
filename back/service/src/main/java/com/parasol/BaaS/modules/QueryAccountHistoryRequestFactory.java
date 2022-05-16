@@ -36,7 +36,7 @@ public class QueryAccountHistoryRequestFactory {
                 .path(endPoint)
                 .build()
         )
-                .header("ClientId", baasAuthKey)
+                .header("Authorization", "Bearer " + baasAuthKey)
                 .body(BodyInserters.fromValue(request));
 
         String block = bodySpec.retrieve().bodyToMono(String.class).block();
