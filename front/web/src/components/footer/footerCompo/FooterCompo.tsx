@@ -28,17 +28,17 @@ export const FooterCompo = () => {
         <InfoDiv>
           {/* 링크 주소 연결 필요 */}
           <a href="/">
-            <text>Info |</text>
+            <div>Info |</div>
           </a>
           <span
             onClick={() => {
               console.log("click");
             }}
           >
-            <text> About | </text>
+            <div> About | </div>
           </span>
           <a href="/">
-            <text> Contact Us</text>
+            <div> Contact Us</div>
           </a>
         </InfoDiv>
         <div>@ 2022 TEAM ParaSOL</div>
