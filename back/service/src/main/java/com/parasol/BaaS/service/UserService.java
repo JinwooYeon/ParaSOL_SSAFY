@@ -13,12 +13,14 @@ import com.parasol.BaaS.db.entity.User;
 import com.parasol.BaaS.db.repository.TokenRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.util.NoSuchElementException;
@@ -43,17 +45,17 @@ public class UserService {
         String password = request.getPassword();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasText(password)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = getUserByUserId(id);
 
         if (!passwordEncoder.matches(password, user.getUserPassword())) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         AuthToken newToken = JwtTokenUtil.getToken(id);
@@ -84,7 +86,7 @@ public class UserService {
         String id = request.getId();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = getUserByUserId(id);
@@ -117,12 +119,12 @@ public class UserService {
         String id = request.getId();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         Optional<User> user = userRepository.findByUserId(id);
         if (user.isPresent()) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         return Mono.just(
@@ -138,17 +140,17 @@ public class UserService {
         String name = request.getName();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = getUserByUserId(id);
 
         if (!name.equals(user.getUserName())) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         String newPassword = createPassword();
@@ -178,17 +180,17 @@ public class UserService {
         String refreshToken = authentication.getPrincipal().toString();
 
         Token savedToken = tokenRepository.findByUser_UserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR); });
 
         String oldRefreshToken = savedToken.getRefreshToken();
         String message = JwtTokenUtil.handleError(oldRefreshToken);
 
         if(!StringUtils.hasText(message)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (!message.equals("success")) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (!oldRefreshToken.equals(refreshToken)) {
@@ -223,7 +225,7 @@ public class UserService {
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = getUserByUserId(id);
@@ -244,15 +246,15 @@ public class UserService {
         String name = request.getName();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasText(password)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = User.builder()
@@ -287,21 +289,21 @@ public class UserService {
         String newPassword = request.getNewPassword();
 
         if(!StringUtils.hasText(password)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         if(!StringUtils.hasText(newPassword)) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = getUserByUserId(id);
 
         if (!passwordEncoder.matches(password, user.getUserPassword())) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         if (passwordEncoder.matches(newPassword, user.getUserPassword())) {
-            throw new IllegalArgumentException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         user.setUserPassword(passwordEncoder.encode(request.getNewPassword()));
@@ -377,7 +379,7 @@ public class UserService {
             String id
     ) throws NoSuchElementException {
         return userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR); });
     }
 
 }

@@ -11,10 +11,12 @@ import com.parasol.BaaS.db.repository.BankConnectionRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import com.parasol.BaaS.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.util.NoSuchElementException;
@@ -45,22 +47,22 @@ public class AccountService {
 
     public Mono<QueryAccountBalanceResponse> getBalance(
             QueryAccountBalanceRequest request
-    ) throws IllegalStateException, IllegalArgumentException, AccessDeniedException, NoSuchElementException {
+    ) {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
 
         String bankName = request.getBankName();
         String bankAccountNumber = request.getBankAccountNumber();
@@ -68,7 +70,7 @@ public class AccountService {
         BankConnection bankConnection = getBankConnection(user, bankName);
 
         if (!bankName.equals("SBJ"))
-            throw new IllegalArgumentException("We can support SBJ Bank only.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
 
         QueryAccountBalanceParam param = QueryAccountBalanceParam.builder()
                 .accountNumber(bankAccountNumber)
@@ -91,25 +93,25 @@ public class AccountService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
 
         String bankName = request.getBankName();
 
         BankConnection bankConnection = getBankConnection(user, bankName);
 
         if (!bankName.equals("SBJ"))
-            throw new IllegalArgumentException("We can support SBJ Bank only.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
 
         QueryAccountListParam param = QueryAccountListParam.builder()
                 .id(bankConnection.getBankId())
@@ -130,18 +132,18 @@ public class AccountService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
 
         String bankName = request.getBankName();
         String bankAccountNumber = request.getBankAccountNumber();
@@ -149,7 +151,7 @@ public class AccountService {
         BankConnection bankConnection = getBankConnection(user, bankName);
 
         if (!bankName.equals("SBJ"))
-            throw new IllegalArgumentException("We can support SBJ Bank only.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
 
         QueryAccountHistoryParam param = QueryAccountHistoryParam.builder()
                 .accountNumber(bankAccountNumber)
@@ -175,12 +177,12 @@ public class AccountService {
         AccountInfo accountTo = request.getAccountTo();
 
         if (!bankName.equals("SBJ"))
-            throw new IllegalArgumentException("We can support SBJ Bank only.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
 
         DepositParam param = DepositParam.builder()
                 .amount(amount)
                 .accountTo(accountTo)
-                .nameOpponent(nameFrom)
+                .nameFrom(nameFrom)
                 .build();
 
         return depositRequestFactory.create(param)
@@ -198,18 +200,18 @@ public class AccountService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
 
         String bankName = request.getBankName();
         String accountPassword = request.getBankAccountPassword();
@@ -220,13 +222,13 @@ public class AccountService {
         BankConnection bankConnection = getBankConnection(user, bankName);
 
         if (!bankName.equals("SBJ"))
-            throw new IllegalArgumentException("We can support SBJ Bank only.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
 
         WithdrawParam param = WithdrawParam.builder()
                 .accountPassword(accountPassword)
                 .amount(amount)
                 .accountFrom(accountFrom)
-                .nameOpponent(nameTo)
+                .nameTo(nameTo)
                 .id(bankConnection.getBankId())
                 .password(bankConnection.getBankPassword())
                 .build();
@@ -243,7 +245,7 @@ public class AccountService {
     public BankConnection getBankConnection(User user, String bankName) throws IllegalStateException {
         return bankConnectionRepository
                 .findByUser_UserSeqAndBankName(user.getUserSeq(), bankName)
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
     }
 
 }
