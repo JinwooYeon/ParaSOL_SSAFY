@@ -233,7 +233,28 @@ struct sdep0242a_in {
 struct sdep0242a_out {
     struct stdheader stdheader;
     char grid_cnt_01[5];
-    struct grid01 sdep0242a_out_sub01; // 이상해씨
+    char dep_acno[12];
+    char lcl_ac_no[20];
+    char gisan_dt[8];
+    char trx_dt[8];
+    char dep_trx_his_no[10];
+    char dpst_pn_nm[300];
+    char cr_amt[22];
+    char dr_amt[22];
+    char bbk_smry[20];
+    char bbk_bk_yn[1];
+    char dep_trx_crt_canc_d[10];
+    char dep_ac_ledg_trx_bef_blc[22];
+    char dep_ac_ledg_trx_aft_blc[22];
+    char trx_brno[4];
+    char rcv_nm[300];
+    char dep_trx_biz_d[10];
+    char dep_trx_d[10];
+    char trx_exrt[14];
+    char trx_exrt_c[3];
+    char trx_ccy_c[3];
+    char dpst_rcv_nm[300];
+    char trx_amt[22];
 };
 
 struct sdep0243a_in {
@@ -315,6 +336,8 @@ using core_api::AccountBalanceQueryGrpcRequest;
 using core_api::AccountBalanceQueryGrpcResponse;
 using core_api::AccountListQueryGrpcRequest;
 using core_api::AccountListQueryGrpcResponse;
+using core_api::AccountHistoryQueryGrpcRequest;
+using core_api::AccountHistoryQueryGrpcResponse;
 using core_api::LoginGrpcRequest;
 using core_api::LoginGrpcResponse;
 using core_api::DepositQueryGrpcRequest;
@@ -350,12 +373,12 @@ class CoreAPIClient {
         request.set_rcv_nm(raw_request.rcv_nm);
         request.set_dep_ac_pwd(raw_request.dep_ac_pwd);
 
-        std::cout << raw_request.depinpt.dep_trx_biz_d << "\n";
-        std::cout << raw_request.depinpt.cusno << "\n";
-        std::cout << raw_request.depinpt.dep_acno << "\n";
-        std::cout << raw_request.trx_amt << "\n";
-        std::cout << raw_request.rcv_nm << "\n";
-        std::cout << raw_request.dep_ac_pwd << "\n";
+        // std::cout << raw_request.depinpt.dep_trx_biz_d << "\n";
+        // std::cout << raw_request.depinpt.cusno << "\n";
+        // std::cout << raw_request.depinpt.dep_acno << "\n";
+        // std::cout << raw_request.trx_amt << "\n";
+        // std::cout << raw_request.rcv_nm << "\n";
+        // std::cout << raw_request.dep_ac_pwd << "\n";
 
         WithdrawQueryGrpcResponse response;
 	    ClientContext context;
@@ -419,6 +442,39 @@ class CoreAPIClient {
         memset(raw_response, 121, sizeof(struct sdep0240a_out));
 
         memcpy(&raw_response->dep_ac_mas_sub01, response.dep_ac_blc().c_str(), response.dep_ac_blc().size());
+
+        if (status.ok()) {
+            return raw_response;
+        } else {
+            return NULL;
+        }
+    }
+
+    struct sdep0242a_out* getAccountHistory(const struct sdep0242a_in raw_request) {
+        AccountHistoryQueryGrpcRequest request;
+        request.set_cusno(raw_request.depinpt.cusno);
+        request.set_dep_acno(raw_request.depinpt.dep_acno);
+
+        // std::cout << raw_request.depinpt.cusno << "\n";
+        // std::cout << raw_request.depinpt.dep_acno << "\n";
+
+        AccountHistoryQueryGrpcResponse response;
+	    ClientContext context;
+
+	    Status status = stub_->getAccountHistory(&context, request, &response);
+
+        // std::cout << "status: " << status.ok() << "\n";
+
+        struct sdep0242a_out* raw_response = (struct sdep0242a_out*)malloc(sizeof(struct sdep0242a_out));
+        memset(raw_response, 0, sizeof(struct sdep0242a_out));
+
+        memcpy(&raw_response->dep_acno, response.dep_acno().c_str(), response.dep_acno().size());
+        memcpy(&raw_response->trx_dt, response.trx_dt().c_str(), response.trx_dt().size());
+        memcpy(&raw_response->dep_trx_his_no, response.dep_trx_his_no().c_str(), response.dep_trx_his_no().size());
+        memcpy(&raw_response->dep_trx_biz_d, response.dep_trx_biz_d().c_str(), response.dep_trx_biz_d().size());
+        memcpy(&raw_response->dpst_rcv_nm, response.dpst_rcv_nm().c_str(), response.dpst_rcv_nm().size());
+        memcpy(&raw_response->trx_amt, response.trx_amt().c_str(), response.trx_amt().size());
+    
 
         if (status.ok()) {
             return raw_response;
@@ -593,6 +649,16 @@ int main(int argc, char **argv) {
                      memcpy(sock_buf, res_buf, sizeof(struct sdep0243a_out));
 
                      write(clnt_sock, sock_buf, sizeof(struct sdep0243a_out));
+                     free(res_buf);
+                } else if (payload_len == sizeof(struct sdep0242a_in)) {
+                     struct sdep0242a_in req_buf;
+                     memcpy(&req_buf, sock_buf, sizeof(struct sdep0242a_in));
+                     memset(sock_buf, 0, sizeof(sock_buf));
+
+                     struct sdep0242a_out *res_buf = client.getAccountHistory(req_buf);
+                     memcpy(sock_buf, res_buf, sizeof(struct sdep0242a_out));
+
+                     write(clnt_sock, sock_buf, sizeof(struct sdep0242a_out));
                      free(res_buf);
                 }
             close(clnt_sock);
