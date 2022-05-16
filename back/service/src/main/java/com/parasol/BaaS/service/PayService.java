@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -291,17 +292,20 @@ public class PayService {
                         .total(Long.valueOf(list.size()))
                         .data(list.stream().map(payHistory -> {
                             String formatPrice = String.valueOf(payHistory.getAmount()).replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+                            String txTime = payHistory.getTxDatetime().format(DateTimeFormatter.ofPattern(
+                                    "yyyy년 MM월 dd일 HH시 mm분 ss초"
+                            ));
                             // 페이 충전일 때는 +
                             if (payHistory.getType().equals(TransactionType.DEPOSIT)) {
                                 return PayHistoryItem.builder()
-                                        .id(payHistory.getTxDatetime())
+                                        .id(txTime)
                                         .title(payHistory.getTxOpponent())
                                         .price("+" + formatPrice)
                                         .build();
                             } else {
                                 // 페이 송금, 출금일 때는 -
                                 return PayHistoryItem.builder()
-                                        .id(payHistory.getTxDatetime())
+                                        .id(txTime)
                                         .title(payHistory.getTxOpponent())
                                         .price("-" + formatPrice)
                                         .build();

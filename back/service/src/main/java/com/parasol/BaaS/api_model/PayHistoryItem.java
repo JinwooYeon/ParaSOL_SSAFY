@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PayHistoryItem {
     @NotNull
-    private LocalDateTime id; // 날짜데이터
+    private String id; // 날짜데이터
     @NotNull
     private String title; // 사용처
     @NotNull
