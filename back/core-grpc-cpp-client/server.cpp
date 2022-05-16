@@ -405,10 +405,10 @@ class CoreAPIClient {
         request.set_trx_amt(raw_request.trx_amt);
         request.set_dpst_pn_nm(raw_request.dpst_pn_nm);
 
-        // std::cout << raw_request.depinpt.dep_trx_biz_d << "\n";
-        // std::cout << raw_request.depinpt.dep_acno << "\n";
-        // std::cout << raw_request.trx_amt << "\n";
-        // std::cout << raw_request.dpst_pn_nm << "\n";
+        std::cout << raw_request.depinpt.dep_trx_biz_d << "\n";
+        std::cout << raw_request.depinpt.dep_acno << "\n";
+        std::cout << raw_request.trx_amt << "\n";
+        std::cout << raw_request.dpst_pn_nm << "\n";
 
         DepositQueryGrpcResponse response;
 	    ClientContext context;
@@ -592,7 +592,18 @@ int main(int argc, char **argv) {
                 std::cout << "payload_len: " << payload_len << "\n";
                 std::cout << "sock_buf: " << sock_buf << "\n";
 
+		std::cout << "\n";
+		std::cout << "-----\n";
+		std::cout << "sizeof(struct scus0001a_in): " <<  sizeof(struct scus0001a_in) << "\n";
+		std::cout << "sizeof(struct sdep0210a_in): " <<  sizeof(struct sdep0210a_in) << "\n";
+		std::cout << "sizeof(struct sdep0240a_in): " <<  sizeof(struct sdep0240a_in) << "\n";
+		std::cout << "sizeof(struct sdep0242a_in): " <<  sizeof(struct sdep0242a_in) << "\n";
+		std::cout << "sizeof(struct sdep0243a_in): " <<  sizeof(struct sdep0243a_in) << "\n";
+		std::cout << "-----\n";
+
                 if (payload_len == sizeof(struct scus0001a_in)) {
+                     std::cout << "scus0001a_in handled\n";
+
                      struct scus0001a_in req_buf;
                      memcpy(&req_buf, sock_buf, sizeof(struct scus0001a_in));
                      memset(sock_buf, 0, sizeof(sock_buf));
@@ -611,6 +622,8 @@ int main(int argc, char **argv) {
                      write(clnt_sock, sock_buf, sizeof(struct scus0001a_out));
                      free(res_buf);
                  } else if (payload_len == sizeof(struct sdep0210a_in)) {
+                     std::cout << "sdep0210a_in handled\n";
+
                      struct sdep0210a_in req_buf;
                      memcpy(&req_buf, sock_buf, sizeof(struct sdep0210a_in));
                      memset(sock_buf, 0, sizeof(sock_buf));
@@ -620,7 +633,8 @@ int main(int argc, char **argv) {
 
                      write(clnt_sock, sock_buf, sizeof(struct sdep0210a_out));
                      free(res_buf);
-		        } else if (payload_len == sizeof(struct sdep0240a_in)) {
+		        } else if (payload_len == sizeof(struct sdep0240a_in)) {		
+                     std::cout << "scus0240a_in handled\n";
                      struct sdep0240a_in req_buf;
                      memcpy(&req_buf, sock_buf, sizeof(struct sdep0240a_in));
                      memset(sock_buf, 0, sizeof(sock_buf));
@@ -631,6 +645,8 @@ int main(int argc, char **argv) {
                      write(clnt_sock, sock_buf, sizeof(struct sdep0240a_out));
                      free(res_buf);
                 } else if (payload_len == sizeof(struct sdep0243a_in)) {
+                     std::cout << "sdep0243a_in handled\n";
+
                      struct sdep0243a_in req_buf;
                      memcpy(&req_buf, sock_buf, sizeof(struct sdep0243a_in));
                      memset(sock_buf, 0, sizeof(sock_buf));
@@ -640,7 +656,8 @@ int main(int argc, char **argv) {
 
                      write(clnt_sock, sock_buf, sizeof(struct sdep0243a_out));
                      free(res_buf);
-                } else if (payload_len == sizeof(struct sdep0244a_in)) {
+                } else if (payload_len == sizeof(struct sdep0244a_in)) {	
+                     std::cout << "sdep0244a_in handled\n";
                      struct sdep0244a_in req_buf;
                      memcpy(&req_buf, sock_buf, sizeof(struct sdep0244a_in));
                      memset(sock_buf, 0, sizeof(sock_buf));
@@ -651,6 +668,7 @@ int main(int argc, char **argv) {
                      write(clnt_sock, sock_buf, sizeof(struct sdep0243a_out));
                      free(res_buf);
                 } else if (payload_len == sizeof(struct sdep0242a_in)) {
+                     std::cout << "sdep0242a_in handled\n";
                      struct sdep0242a_in req_buf;
                      memcpy(&req_buf, sock_buf, sizeof(struct sdep0242a_in));
                      memset(sock_buf, 0, sizeof(sock_buf));
