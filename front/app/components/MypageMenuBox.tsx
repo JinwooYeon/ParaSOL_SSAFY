@@ -33,13 +33,13 @@ const MypageMenuBox: React.FC<PropsType> = ({
       case "계좌 관리하기":
         navigate("ConnectAccount");
         break;
-      // 공동인증 발급/재발급
-      case "공동인증 발급/재발급":
-        // navigate("Oauth");
+      // OTP 정보 등록
+      case "OTP 정보 등록":
+        navigate("Oauth");
         break;
-      // 생체인증 발급/재발급
-      case "생체인증 발급/재발급":
-        // navigate("AuthBio");
+      // 생체인증 정보 등록
+      case "생체인증 정보 등록":
+        navigate("AuthBio");
         break;
       // 고객 문의
       case "고객 문의":

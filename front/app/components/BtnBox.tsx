@@ -34,6 +34,10 @@ const BtnBox: React.FC<PropsType> = ({
 
   const onPress = () => {
     switch (text) {
+      // 등록하기
+      case "등록하기":
+        setter?.();
+        break;
       // 계좌 연결
       case "계좌 연결":
         setter?.();

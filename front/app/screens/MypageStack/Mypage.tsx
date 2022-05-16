@@ -15,8 +15,8 @@ const Mypage: React.FC<PropsType> = ({ navigation, setLogin }) => {
   const menus = [
     "회원정보",
     "계좌 관리하기",
-    "공동인증 발급/재발급",
-    "생체인증 발급/재발급",
+    "OTP 정보 등록",
+    "생체인증 정보 등록",
     "고객 문의",
     "회원 탈퇴",
     "로그아웃",

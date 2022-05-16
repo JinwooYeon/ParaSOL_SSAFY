@@ -53,9 +53,9 @@ const MypageStack: React.FC<PropsType> = ({
           />
         )}
       </Stack.Screen>
-      {/* 공동인증 발급/재발급 */}
+      {/* OTP 정보 등록 */}
       <Stack.Screen name="Oauth" component={Oauth} />
-      {/* 생체인증 발급/재발급 */}
+      {/* 생체인증 정보 등록 */}
       <Stack.Screen name="AuthBio" component={AuthBio} />
       {/* 고객 문의 */}
       <Stack.Screen name="Service" component={Service} />
