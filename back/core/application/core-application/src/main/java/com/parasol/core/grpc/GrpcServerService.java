@@ -2,6 +2,7 @@ package com.parasol.core.grpc;
 
 import com.parasol.core.api_model.*;
 import com.parasol.core.eenum.TransactionType;
+import com.parasol.core.service.TransactionHistoryService;
 import com.parasol.core_interface.*;
 import com.parasol.core.service.AccountService;
 import com.parasol.core.service.BankUserService;
@@ -20,6 +21,9 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    TransactionHistoryService transactionHistoryService;
 
     @Override
     public void login(LoginGrpcRequest request, StreamObserver<LoginGrpcResponse> responseObserver) {
@@ -73,6 +77,57 @@ public class GrpcServerService extends CoreAPIGrpc.CoreAPIImplBase {
             responseObserver.onCompleted();
         } catch (ResponseStatusException ex) {
             AccountListQueryGrpcResponse response = AccountListQueryGrpcResponse.newBuilder()
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+    }
+
+    @Override
+    public void getAccountHistory(AccountHistoryQueryGrpcRequest request, StreamObserver<AccountHistoryQueryGrpcResponse> responseObserver) {
+        try {
+            Long cusNo = Long.parseLong(request.getCusno().trim());
+            String accountNumber = request.getDepAcno().substring(0,3) + "-" + request.getDepAcno().substring(3,6) + "-" + request.getDepAcno().substring(6,12);
+
+            AccountHistoryQueryRequest queryRequest = AccountHistoryQueryRequest.builder()
+                    .cusNo(cusNo)
+                    .accountNumber(accountNumber)
+                    .build();
+
+            AccountHistoryQueryResponse queryResponse = transactionHistoryService.getAccountHistory(queryRequest);
+            String accountNo = queryResponse.getAccountHistories().get(0).getAccount();
+            String convertedAccountNumber = accountNo.replaceAll("-", "");
+
+            TransactionType method = queryResponse.getAccountHistories().get(0).getMethod();
+            String transactionMethod = "";
+            if(method==TransactionType.DEPOSIT)
+                transactionMethod="DEPOSIT";
+            else if(method==TransactionType.WITHDRAW)
+                transactionMethod="WITHDRAW";
+
+            String dateTime = queryResponse.getAccountHistories().get(0).getDatetime().toString();
+            String idNo = queryResponse.getAccountHistories().get(0).getId().toString();
+            String nameOpponent = queryResponse.getAccountHistories().get(0).getNameOpponent();
+
+            if(nameOpponent==null)
+                nameOpponent = "";
+
+            String amount = queryResponse.getAccountHistories().get(0).getAmount().toString();
+
+            AccountHistoryQueryGrpcResponse response = AccountHistoryQueryGrpcResponse.newBuilder()
+                    .setDepAcno(convertedAccountNumber)
+                    .setTrxDt(dateTime)
+                    .setDepTrxHisNo(idNo)
+                    .setDepTrxBizD(transactionMethod)
+                    .setDpstRcvNm(nameOpponent)
+                    .setTrxAmt(amount)
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (ResponseStatusException ex) {
+            AccountHistoryQueryGrpcResponse response = AccountHistoryQueryGrpcResponse.newBuilder()
                     .build();
 
             responseObserver.onNext(response);
