@@ -41,7 +41,9 @@ const MypageStack: React.FC<PropsType> = ({
         {(props) => <Mypage {...props} setLogin={setLogin} />}
       </Stack.Screen>
       {/* 회원정보 */}
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Profile">
+        {(props) => <Profile {...props} getNewToken={getNewToken} />}
+      </Stack.Screen>
       {/* 계좌 관리하기 */}
       <Stack.Screen name="ConnectAccount">
         {(props) => (

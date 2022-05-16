@@ -23,6 +23,17 @@ const ForgetPassword: React.FC<PropsType> = ({ navigation }) => {
 
   // Axios
   const getNewPassword = async () => {
+    // [Error] 빈 입력값
+    if (!id) {
+      Alert.alert("아이디를 입력해주세요.");
+      console.log("아이디를 입력해주세요.");
+      return;
+    }
+    if (!name) {
+      Alert.alert("이름을 입력해주세요.");
+      console.log("이름을 입력해주세요.");
+      return;
+    }
     const data = {
       id: id,
       name: name,
@@ -39,6 +50,7 @@ const ForgetPassword: React.FC<PropsType> = ({ navigation }) => {
         Alert.alert(
           "비밀번호 재설정에 실패했습니다. 입력값을 다시 한번 확인해주세요."
         );
+
         console.log(err);
       });
   };
