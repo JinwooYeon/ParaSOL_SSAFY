@@ -50,15 +50,32 @@ const Profile: React.FC<PropsType> = ({ getNewToken, navigation }) => {
       .catch((err) => {
         if (err.response.status === 401) {
           getNewToken?.();
-          // getMyInfo();
         }
       });
   };
 
   // method
   const updatePassword = async () => {
+    // [Error] 빈 입력값
+    if (!password) {
+      Alert.alert("비밀번호를 입력해주세요.");
+      console.log("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!newPassword) {
+      Alert.alert("새 비밀번호를 입력해주세요.");
+      console.log("새 비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!newPasswordConfirm) {
+      Alert.alert("새 비밀번호 확인을 입력해주세요.");
+      console.log("새 비밀번호 확인을 입력해주세요.");
+      return;
+    }
+    // [Error] 비밀번호와 비밀번호 확인이 일치하지 않음
     if (newPassword !== newPasswordConfirm) {
       Alert.alert("새 비밀번호가 일치하는지 확인해주세요.");
+      console.log("새 비밀번호가 일치하는지 확인해주세요.");
       return;
     }
     const data = {
@@ -68,10 +85,22 @@ const Profile: React.FC<PropsType> = ({ getNewToken, navigation }) => {
     await axios
       .patch(url, data)
       .then((res) => {
+        console.log(res);
+        Alert.alert("비밀번호가 수정되었습니다.");
+        console.log("비밀번호가 수정되었습니다.");
         setIsUpdate(false);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
+        // [Error] token 값 만료
+        if (err.response.status === 401 && (await getNewToken?.())) {
+          updatePassword();
+        }
+        // [Error] 잘못된 입력값
+        if (err.response.status === 400) {
+          Alert.alert("기존 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+          console.log("기존 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+        }
       });
   };
 
