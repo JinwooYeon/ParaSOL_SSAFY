@@ -15,8 +15,8 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class AccountService {
-//    @Autowired
-//    private DepositRequestFactory depositRequestFactory;
+    @Autowired
+    private DepositRequestFactory depositRequestFactory;
 
     @Autowired
     private DepositSocketRequestFactory depositSocketRequestFactory;
@@ -29,7 +29,7 @@ public class AccountService {
                 .nameOpponent(request.getNameFrom())
                 .build();
 
-        return depositSocketRequestFactory.run(param)
+        return depositRequestFactory.run(param)
                 .doOnError( (throwable) -> {
                     WebClientResponseException ex = (WebClientResponseException)throwable;
 
