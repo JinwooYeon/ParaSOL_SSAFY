@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -28,7 +29,7 @@ public class BankConnectionController {
             @RequestBody BankConnectionRequest request
     ){
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
