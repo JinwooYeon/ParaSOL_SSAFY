@@ -17,7 +17,7 @@ interface PropsType {
   // 계좌 연결 정보 set
   setBankInfo: (a: any) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
 }
 
 // Component _ MypageStack

@@ -9,6 +9,7 @@ import Benefit from "../screens/Benefit";
 import HomeStack from "./HomeStack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { Alert } from "react-native";
 
 interface PropsType {
   // 로그인 여부 set
@@ -42,19 +43,25 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
 
   // Axios
   // 새로운 인증 토큰 발급
-  const getNewToken = async () => {
+  const getNewToken = async (): Promise<any> => {
     const refreshToken = await AsyncStorage.getItem("refreshToken");
     await axios({
       method: "get",
       url: tokenUrl,
-      headers: { Authroization: `Bearer ${refreshToken}` },
+      headers: { Authorization: `Bearer ${refreshToken}` },
       params: refreshToken,
     })
       .then((response) => {
         console.log(response);
+        AsyncStorage.setItem("accessToken", response.data.accessToken);
+        return true;
       })
       .catch((err) => {
         console.log(err);
+        Alert.alert("토큰 만료! 다시 로그인해주세요.");
+        AsyncStorage.clear();
+        setLogin(false);
+        return false;
       });
   };
   // 내 정보 조회
@@ -63,7 +70,7 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
     await axios({
       method: "get",
       url: getMyInfoUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((res) => {
         console.log(res);
@@ -71,12 +78,9 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
         setId(res.data.id);
         setBankInfo(res.data.bankInfo);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken?.();
-          getMyInfo();
-        }
+        if (err.response.status === 401 && (await getNewToken?.())) getMyInfo();
       });
   };
 

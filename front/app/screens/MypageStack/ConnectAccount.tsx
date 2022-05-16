@@ -23,7 +23,7 @@ interface PropsType {
   // stack navigation
   navigation: any;
   // 새로운 인증 토큰 발급
-  getNewToken?: () => void;
+  getNewToken?: () => Promise<any>;
 }
 
 // Component _ HasAccount
@@ -78,7 +78,7 @@ const HasNotAccount: React.FC<PropsType> = ({
     await axios({
       method: "post",
       url: url,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       data,
     })
       .then((res) => {
@@ -86,10 +86,9 @@ const HasNotAccount: React.FC<PropsType> = ({
         Alert.alert("계좌 연결 성공!");
         setEmpty?.(false);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err.response.status);
-        if (err.response.status === "401") {
-          getNewToken?.();
+        if (err.response.status === 401 && (await getNewToken?.())) {
           bankPost();
         } else {
           Alert.alert("계좌 연결에 실패하였습니다.");

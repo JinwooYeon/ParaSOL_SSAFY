@@ -20,7 +20,7 @@ interface PropsType {
   // 잔액 set
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
 }
 interface ItemPropsType {
   // 거래내역 정보
@@ -129,7 +129,7 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
     await axios({
       method: "get",
       url: getHistoryUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       params: month,
     })
       .then((res) => {
@@ -140,10 +140,9 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
           setRefreshing(false);
         }, 2000);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken?.();
+        if (err.response.status === 401 && (await getNewToken?.())) {
           getHistory();
         } else {
           setTimeout(() => {
@@ -181,7 +180,6 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          marginVertical: "5%",
           alignItems: "center",
         }}
       >
@@ -249,7 +247,7 @@ const styles = StyleSheet.create({
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 24,
-    paddingVertical: 12,
+    // paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: "gray",
@@ -260,7 +258,7 @@ const pickerSelectStyles = StyleSheet.create({
   inputAndroid: {
     fontSize: 24,
     paddingHorizontal: 10,
-    paddingVertical: 8,
+    // paddingVertical: 8,
     borderWidth: 0.5,
     borderColor: "purple",
     borderRadius: 8,

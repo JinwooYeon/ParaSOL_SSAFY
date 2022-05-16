@@ -27,7 +27,7 @@ interface PropsType {
   // 잔액 set
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
 }
 interface PayConfirmPropsType {
   // 충전 or 출금
@@ -39,7 +39,7 @@ interface PayConfirmPropsType {
   // stack navigation
   navigation: any;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
 }
 
 // Component _ PayConfirm
@@ -69,7 +69,7 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
     await axios({
       method: "post",
       url: chargeUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       data: { method: "charge", price: delPrice },
     })
       .then((res) => {
@@ -80,10 +80,9 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
           navigate?.("PayMain");
         }, 2000);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken();
+        if (err.response.status === 401 && (await getNewToken())) {
           chargePost();
         } else {
           Alert.alert("충전에 실패하였습니다.");
@@ -100,7 +99,7 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
     await axios({
       method: "post",
       url: withdrawUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       data: { method: "withdraw", price: delPrice },
     })
       .then((res) => {
@@ -111,10 +110,9 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
           navigate?.("PayMain");
         }, 2000);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken();
+        if (err.response.status === 401 && (await getNewToken())) {
           withdrawPost();
         } else {
           Alert.alert("출금에 실패하였습니다.");

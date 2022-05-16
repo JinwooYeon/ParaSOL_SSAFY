@@ -21,7 +21,7 @@ interface PropsType {
   // stack navigation
   navigation: any;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
 }
 
 // Component _ TransactionConfirm
@@ -50,7 +50,7 @@ const TransactionConfirm: React.FC<PropsType> = ({
     await axios({
       method: "post",
       url: url,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       data: { method: "transaction", price: delPrice, transactionTo: info },
     })
       .then((res) => {
@@ -61,10 +61,9 @@ const TransactionConfirm: React.FC<PropsType> = ({
           navigate?.("HomeMain");
         }, 2000);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken();
+        if (err.response.status === 401 && (await getNewToken())) {
           transationPost();
         } else {
           Alert.alert("송금에 실패하였습니다.");

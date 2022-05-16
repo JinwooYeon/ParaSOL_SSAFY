@@ -17,7 +17,7 @@ interface PropsType {
   // 잔액 set
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
 }
 
 // Component _ BalanceBox
@@ -42,17 +42,16 @@ const BalanceBox: React.FC<PropsType> = ({
     await axios({
       method: "get",
       url: getMyInfoUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((res) => {
         console.log(res);
         setBalance(res.data.balance);
         setTimeout(() => setRefreshing(false), 2000);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken?.();
+        if (err.response.status === 401 && (await getNewToken?.())) {
           getMyInfo();
         } else {
           setTimeout(() => setRefreshing(false), 2000);
