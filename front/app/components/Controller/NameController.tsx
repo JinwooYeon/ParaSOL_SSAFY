@@ -3,20 +3,20 @@ import { View } from "react-native";
 import { TextInputController } from "./controllerStyled";
 
 interface PropsType {
-  // 아이디 placeholder
+  // 이름 placeholder
   text: string;
-  // 아이디 입력 데이터
+  // 이름 입력 데이터
   value: string;
-  // 아이디 데이터 set
-  setId: (a: any) => void;
+  // 이름 입력 데이터 set
+  setName: (a: any) => void;
 }
 
-// Component _ IdController
-const IdController: React.FC<PropsType> = ({ text, value, setId }) => {
+// Component _ NameController
+const NameController: React.FC<PropsType> = ({ text, value, setName }) => {
   return (
     <View>
       <TextInputController
-        onChangeText={setId}
+        onChangeText={setName}
         value={value}
         placeholder={text}
         keyboardType="visible-password"
@@ -25,4 +25,4 @@ const IdController: React.FC<PropsType> = ({ text, value, setId }) => {
   );
 };
 
-export default IdController;
+export default NameController;

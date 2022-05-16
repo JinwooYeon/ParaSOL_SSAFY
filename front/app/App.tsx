@@ -1,19 +1,31 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "./components/Logo";
 import Tabs from "./navigation/Tabs";
-import Login from "./screens/User/Login";
-import Register from "./screens/User/Register";
-import ForgetPassword from "./screens/User/ForgetPassword";
+import LoginStack from "./navigation/LoginStack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
-  const [login, setLogin] = useState(false);
+  // useState
+  // 로그인 여부
+  const [login, setLogin] = useState<boolean>(false);
 
-  const Stack = createNativeStackNavigator();
+  // method
+  const getAccessToken = async () => {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    if (accessToken != null) {
+      setLogin(true);
+    }
+  };
+
+  // useEffect
+  useEffect(() => {
+    getAccessToken();
+  }, []);
 
   if (login) {
+    // 로그인
     return (
       <SafeAreaProvider>
         <NavigationContainer>
@@ -23,21 +35,12 @@ export default function App() {
       </SafeAreaProvider>
     );
   } else {
+    // 로그아웃
     return (
       <SafeAreaProvider>
         <NavigationContainer>
           <Logo />
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="Login">
-              {(props) => <Login {...props} setLogin={setLogin} />}
-            </Stack.Screen>
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-          </Stack.Navigator>
+          <LoginStack setLogin={setLogin} />
         </NavigationContainer>
       </SafeAreaProvider>
     );

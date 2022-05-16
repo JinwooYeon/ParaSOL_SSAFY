@@ -2,14 +2,14 @@ import styled from "styled-components/native";
 import { mainBlue, balanceGrey } from "../color";
 
 // Container
-export const LogoContainer = styled.View`
+export const LogoContainer = styled.SafeAreaView`
   /* background-color: black; */
   margin-top: 10%;
   margin-bottom: 4%;
   margin-left: 5%;
   flex-direction: row;
 `;
-export const BoxContainer = styled.View`
+export const BoxContainer = styled.SafeAreaView`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -23,7 +23,7 @@ export const BoxContainer = styled.View`
   padding-bottom: 5%;
   padding-left: 3%;
 `;
-export const LayoutContainer = styled.View`
+export const LayoutContainer = styled.SafeAreaView`
   /* background-color: teal; */
   flex: 1;
   margin-right: 5%;
@@ -31,8 +31,8 @@ export const LayoutContainer = styled.View`
 `;
 export const HeaderContainer = styled.View`
   /* background-color: red; */
-  height: 110px;
-  margin-bottom: 8%;
+  height: 23%;
+  margin-bottom: 2%;
 `;
 export const ContentFooterContainer = styled.View`
   /* background-color: black; */
@@ -66,10 +66,97 @@ export const BalanceTextContainer = styled.View`
   justify-content: space-between;
 `;
 export const Balance = styled.Text`
-  font-size: 23px;
+  font-size: 20px;
   font-weight: bold;
   margin-right: 2%;
   margin-left: 2%;
+`;
+
+// Content _ Confirm
+export const ConfirmContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  margin: 20%;
+`;
+export const ConfirmTargetContainer = styled.View`
+  width: 100%;
+  margin-bottom: 5%;
+  border-width: 2px;
+  border-radius: 5px;
+  padding: 1% 5%;
+`;
+export const ConfirmTargetText = styled.Text`
+  font-size: 18px;
+`;
+export const ConfirmBtnContainer = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+export const ConfirmBtnTouchableOpacity = styled.TouchableOpacity<{
+  ok: boolean;
+}>`
+  border-width: 2px;
+  border-color: ${(props) => (props.ok ? mainBlue : "red")};
+  border-radius: 5px;
+  padding: 1% 15%;
+`;
+export const ConfirmBtnText = styled.Text`
+  font-size: 25px;
+  font-weight: bold;
+`;
+
+// Content _ Home _ Transaction
+export const TransactionContainer = styled.View`
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background-color: ${balanceGrey};
+  padding-top: 5%;
+  padding-right: 3%;
+  padding-bottom: 5%;
+  padding-left: 3%;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+`;
+export const TransactionTextInput = styled.TextInput`
+  /* background-color: green; */
+  width: 90%;
+  height: auto;
+  font-size: 25px;
+`;
+export const TransactionTextDelTouchableOpacity = styled.TouchableOpacity``;
+export const TransactionTextDel = styled.Text`
+  font-size: 28px;
+  font-weight: bold;
+  color: grey;
+`;
+
+// Content _ Home
+export const QRcodeContainer = styled.View`
+  border-width: 2px;
+  border-radius: 10px;
+  border-color: ${mainBlue};
+  justify-content: space-between;
+  align-items: center;
+  /* margin-top: 18%; */
+  margin-top: 8%;
+  /* margin-bottom: 18%; */
+  padding-top: 5%;
+  padding-bottom: 5%;
+`;
+export const QRcodeInfoContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+`;
+export const QRcodeInfoName = styled.TouchableOpacity``;
+export const QRcodeInfoNameText = styled.Text`
+  font-size: 25px;
+  color: ${mainBlue};
 `;
 
 // Content _ ConnectedAccount
@@ -117,17 +204,20 @@ export const PriceInputContainer = styled.View`
   align-items: center;
   border-bottom-color: black;
   border-bottom-width: 2px;
+  margin-top: 10%;
   margin-bottom: 2%;
 `;
 export const PriceInputText = styled.Text`
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   padding-right: 1%;
   padding-left: 1%;
+  padding-bottom: 2%;
 `;
 export const PriceInput = styled.TextInput`
-  height: 30px;
-  font-size: 25px;
+  width: 220px;
+  font-size: 20px;
+  padding-bottom: 2%;
 `;
 export const PriceInputTextContainer = styled.View`
   flex-direction: row;
@@ -152,14 +242,14 @@ export const PriceBtnText = styled.Text`
 `;
 
 // Content _ Benefit
-export const BenefitContainer = styled.View`
+export const BenefitContainer = styled.SafeAreaView`
   /* background-color: grey; */
+  flex: 0.8;
   justify-content: center;
   align-items: center;
-  height: 100%;
 `;
 export const BenefitText = styled.Text`
-  font-size: 55px;
+  font-size: 25px;
 `;
 
 // Content _ MypageMenu
@@ -179,9 +269,10 @@ export const MypageMenuTextContainer = styled.View`
   margin-bottom: 5%;
 `;
 export const MypageMenuBtn = styled.TouchableOpacity``;
-export const MypageMenuText = styled.Text`
-  font-size: 30px;
+export const MypageMenuText = styled.Text<{ able?: boolean }>`
+  font-size: 23px;
   font-weight: bold;
+  color: ${(props) => (props.able ? "black" : "grey")};
 `;
 
 // Footer _ Button
@@ -204,8 +295,8 @@ export const Btn = styled.TouchableOpacity<{ color: string }>`
       return "white";
     }
   }};
-  border-color: ${mainBlue};
-  border-width: ${({ color }) => (color === "white" ? "1px" : "0px")};
+  border-color: ${({ color }) => (color === "red" ? "red" : mainBlue)};
+  border-width: ${({ color }) => (color === "white" ? "1px" : "1px")};
   justify-content: center;
   align-items: center;
   padding-top: 2%;

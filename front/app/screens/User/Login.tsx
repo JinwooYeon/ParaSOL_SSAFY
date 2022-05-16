@@ -1,34 +1,36 @@
-import React, { useState } from "react";
-import { Text, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { Text, StyleSheet, TouchableOpacity, Alert, View } from "react-native";
 import styled from "styled-components/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import IdController from "../../components/Controller/IdController";
 import PasswordController from "../../components/Controller/PasswordController";
-import { LayoutContainer, HeaderText } from "../styled";
-
-const ContentContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+import { LayoutContainer, HeaderText, FooterContainer } from "../styled";
+import BtnBox from "../../components/BtnBox";
 
 interface PropsType {
-  setLogin: (a: any) => void;
+  // 로그인 여부 set
+  setLogin: (a: boolean) => void;
+  // stack navigation
   navigation: any;
 }
 
+// Component _ Login
 const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+  // const
+  // Axios url
   const url = "http://k6S101.p.ssafy.io:8080/user/login";
 
-  const onSubmit = async (id: string, password: string) => {
+  // useState
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Axios
+  const onSubmit = async () => {
     const data = {
       id: id,
       password: password,
     };
-    console.log(data);
     await axios
       .post(url, data, {
         headers: {
@@ -36,60 +38,64 @@ const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
         },
       })
       .then((res: any) => {
-        console.log(res);
-        const token = res.data.token;
-        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-        AsyncStorage.setItem("token", token);
+        if (res.data) {
+          const accessToken = res.data.accessToken;
+          const refreshToken = res.data.refreshToken;
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + accessToken;
+          AsyncStorage.setItem("accessToken", accessToken);
+          AsyncStorage.setItem("refreshToken", refreshToken);
+          setLogin(true);
+        } else {
+          Alert.alert("아이디와 비밀번호를 확인해주세요.");
+          setId("");
+          setPassword("");
+        }
       })
       .catch((err: any) => {
-        console.log(err);
+        Alert.alert("에러가 발생했습니다. 잠시 후에 다시 시도해주세요.");
       });
-    setId("");
-    setPassword("");
-  };
-
-  const onLoginTemp = () => {
-    setLogin(true);
   };
 
   return (
     <LayoutContainer>
       <HeaderText>로그인</HeaderText>
       <ContentContainer>
-        <IdController setId={setId} />
-        <PasswordController setPassword={setPassword} />
-        <Button title="Submit" onPress={() => onSubmit(id, password)}></Button>
-        <Button title="LOGIN" onPress={onLoginTemp}></Button>
-
-        <TouchableOpacity
-          style={styles.textBtn}
-          onPress={() => navigate("Register")}
-        >
-          <Text>회원이 아니신가요?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.textBtn}
-          onPress={() => navigate("ForgetPassword")}
-        >
-          <Text>비밀번호를 잊으셨나요?</Text>
-        </TouchableOpacity>
+        <View style={{ marginBottom: 200 }}>
+          <IdController setId={setId} text="아이디" value={id} />
+          <PasswordController
+            setPassword={setPassword}
+            text="비밀번호"
+            value={password}
+          />
+        </View>
+        <FooterContainer>
+          <BtnBox color="blue" text="로그인" setter={onSubmit} />
+          <TouchableOpacity onPress={() => navigate("Register")}>
+            <Text style={styles.textBtn}>회원이 아니신가요?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigate("ForgetPassword")}>
+            <Text style={styles.textBtn}>비밀번호를 잊으셨나요?</Text>
+          </TouchableOpacity>
+        </FooterContainer>
       </ContentContainer>
     </LayoutContainer>
   );
 };
 
+const ContentContainer = styled.View`
+  flex: 1;
+  margin: 30px auto;
+  width: 80%;
+`;
+
 const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    width: 300,
-    // backgroundColor: "#A23412",
-    fontSize: 30,
-    fontWeight: "200",
-    borderColor: "black",
-    borderStyle: "solid",
-    borderWidth: 1,
+  textBtn: {
+    fontSize: 18,
+    color: "grey",
+    marginVertical: 7,
+    textAlign: "center",
   },
-  textBtn: {},
 });
 
 export default Login;

@@ -1,5 +1,6 @@
 import { LogoContainer, LogoText } from "../screens/styled";
 
+// Component _ Logo
 const Logo = () => (
   <LogoContainer>
     <LogoText blue={false}>Para</LogoText>
