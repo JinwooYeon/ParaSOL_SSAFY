@@ -1,5 +1,5 @@
-import AuthBioDELETE from "components/pay/authBioDELETE";
-import AuthBioPOST from "components/pay/authBioPOST";
+// import AuthBioDELETE from "components/pay/authBioDELETE";
+// import AuthBioPOST from "components/pay/authBioPOST";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import BankPOST from "components/bank/bankPOST";
