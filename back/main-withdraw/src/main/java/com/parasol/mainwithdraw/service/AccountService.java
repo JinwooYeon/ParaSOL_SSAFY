@@ -18,8 +18,8 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class AccountService {
-//    @Autowired
-//    private WithdrawRequestFactory withdrawRequestFactory;
+    @Autowired
+    private WithdrawRequestFactory withdrawRequestFactory;
 
     @Autowired
     private WithdrawSocketRequestFactory withdrawSocketRequestFactory;
@@ -58,7 +58,7 @@ public class AccountService {
                                     .accountPassword(request.getAccountPassword())
                                     .build();
 
-                            return withdrawSocketRequestFactory.run(param)
+                            return withdrawRequestFactory.run(param)
                                     .doOnError( (throwable) -> {
                                         WebClientResponseException ex = (WebClientResponseException)throwable;
 
