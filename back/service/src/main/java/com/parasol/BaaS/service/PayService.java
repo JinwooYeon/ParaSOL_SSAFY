@@ -67,8 +67,8 @@ public class PayService {
                         .balance(payLedger.getBalance())
                         .bankInfo(
                                 BankInfo.builder()
-                                        .bankName(payLedger.getAccount().getBankName())
-                                        .bankNum(payLedger.getAccount().getBankAccountNumber())
+                                        .bankName(payLedger.getBankName())
+                                        .bankNum(payLedger.getBankAccountNumber())
                                         .build()
                         )
                         .build()
@@ -164,19 +164,19 @@ public class PayService {
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(IllegalStateException::new);
 
-        if(payLedger.getAccount() == null) {
+        if(payLedger.getBankAccountNumber() == null) {
             throw new IllegalArgumentException("주거래계좌 등록");
         }
 
         accountService.withdraw(
                 WithdrawRequest.builder()
                         .authentication(authentication)
-                        .bankName(payLedger.getAccount().getBankName())
-                        .bankAccountPassword("") // TODO : 비밀번호 필요합니다
+                        .bankName(payLedger.getBankName())
+                        .bankAccountPassword("1234") // TODO : 비밀번호 필요합니다
                         .amount(request.getPrice())
                         .accountFrom(
                                 AccountInfo.builder()
-                                        .accountNumber(payLedger.getAccount().getBankAccountNumber())
+                                        .accountNumber(payLedger.getBankAccountNumber())
                                         .build()
                         )
                         .nameTo("ParaSOL pay")
@@ -225,7 +225,7 @@ public class PayService {
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(IllegalStateException::new);
 
-        if(payLedger.getAccount() == null) {
+        if(payLedger.getBankAccountNumber() == null) {
             throw new IllegalArgumentException("주거래계좌 등록");
         }
 
@@ -236,7 +236,7 @@ public class PayService {
                         .nameFrom("ParaSOL pay")
                         .accountTo(
                                 AccountInfo.builder()
-                                        .accountNumber(payLedger.getAccount().getBankAccountNumber())
+                                        .accountNumber(payLedger.getBankAccountNumber())
                                         .build()
                         )
                         .build()

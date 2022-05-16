@@ -27,7 +27,6 @@ public class PayLedger {
     private LocalDateTime lastTxDatetime;
     private Long balance;
 
-    @OneToOne
-    @JoinColumn(name = "account_seq")
-    private Account account;
+    private String bankName;
+    private String bankAccountNumber;
 }
