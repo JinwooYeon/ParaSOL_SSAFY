@@ -38,7 +38,7 @@ const LogoContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const LogoText = styled.div<{ blue?: boolean }>`
+const LogoText = styled.text<{ blue?: boolean }>`
   color: ${(props) => (props.blue ? "#3182f6" : "black")};
   font-size: 35px;
   font-weight: bold;
