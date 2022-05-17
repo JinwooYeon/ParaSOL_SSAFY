@@ -71,9 +71,9 @@ public class PayService {
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
-        if(payLedger.getBankAccountNumber() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록 필요");
-        }
+//        if (payLedger.getBankAccountNumber() == null) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록 필요");
+//        }
 
         Long payLedgerBalance = payLedger.getBalance();
         BankInfo payLedgerMainAccount = BankInfo.builder()
