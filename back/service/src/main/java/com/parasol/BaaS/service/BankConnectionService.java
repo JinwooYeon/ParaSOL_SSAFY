@@ -39,8 +39,8 @@ public class BankConnectionService {
 
         if (
                 bankName == null || bankName.isEmpty() ||
-                id == null || id.isEmpty() ||
-                password == null || password.isEmpty()
+                        id == null || id.isEmpty() ||
+                        password == null || password.isEmpty()
         )
             throw new IllegalArgumentException();
 
@@ -69,6 +69,47 @@ public class BankConnectionService {
 
                     bankConnectionRepository.save(bankConnection);
                 });
+    }
+
+    public Mono<BankConnectionResponse> checkBankConnection(User user, BankConnectionRequest request) throws IllegalArgumentException, NullPointerException, NoSuchElementException {
+        Long userSeq = user.getUserSeq();
+        String bankName = request.getBankName();
+
+        if (
+                bankName == null || bankName.isEmpty()
+        )
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        BankConnection bankConnection = bankConnectionRepository.findByUser_UserSeqAndBankName(userSeq, bankName)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
+
+        return Mono.just(
+                BankConnectionResponse.builder()
+                        .isSuccess(true)
+                        .build()
+        );
+    }
+
+    @Transactional
+    public Mono<BankConnectionResponse> deleteBankConnection(User user, BankConnectionRequest request) throws IllegalArgumentException, NullPointerException, NoSuchElementException {
+        Long userSeq = user.getUserSeq();
+        String bankName = request.getBankName();
+
+        if (
+                bankName == null || bankName.isEmpty()
+        )
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        BankConnection bankConnection = bankConnectionRepository.findByUser_UserSeqAndBankName(userSeq, bankName)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
+
+        bankConnectionRepository.delete(bankConnection);
+
+        return Mono.just(
+                BankConnectionResponse.builder()
+                    .isSuccess(true)
+                    .build()
+        );
     }
 
 }
