@@ -163,6 +163,16 @@ public class BankConnectionService {
 
         bankConnectionRepository.delete(bankConnection);
 
+        Optional<PayLedger> payLedgerObj = payLedgerRepository.findByOwnerUserId(user.getUserId());
+
+        if (payLedgerObj.isPresent()) {
+            PayLedger ledger = payLedgerObj.get();
+            ledger.setBankName(null);
+            ledger.setBankAccountNumber(null);
+
+            payLedgerRepository.save(ledger);
+        }
+
         return Mono.just(
                 BankConnectionResponse.builder()
                     .isSuccess(true)
