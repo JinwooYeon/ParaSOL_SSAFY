@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PayInfoResponse {
-    private Long balance;
+    private String balance;
     private String id;
     private BankInfo bankInfo;
 }

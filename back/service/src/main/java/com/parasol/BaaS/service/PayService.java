@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class PayService {
+    private static final String SBJ_IMAGE_URL = "http://www.shinhangroup.com/kr/asset/images/introduce/ci_story_04.jpg";
+
     @Autowired
     private AccountService accountService;
 
@@ -76,7 +78,10 @@ public class PayService {
 //        }
 
         Long payLedgerBalance = payLedger.getBalance();
+        String formattedPayLedgerBalance = String.valueOf(payLedgerBalance).replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+
         BankInfo payLedgerMainAccount = BankInfo.builder()
+                .bankImg(SBJ_IMAGE_URL)
                 .bankName(payLedger.getBankName())
                 .bankNum(payLedger.getBankAccountNumber())
                 .build();
@@ -84,7 +89,7 @@ public class PayService {
         return Mono.just(
                 PayInfoResponse.builder()
                         .id(id)
-                        .balance(payLedgerBalance)
+                        .balance(formattedPayLedgerBalance)
                         .bankInfo(payLedgerMainAccount)
                         .build()
         );
@@ -341,32 +346,46 @@ public class PayService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
         }
 
-        List<PayHistory> list = payHistoryRepository.findByUser_UserId(id);
+        List<PayHistory> payHistories = payHistoryRepository.findByUser_UserId(id).parallelStream()
+                .filter(payHistory -> payHistory.getTxDatetime().getMonthValue() == request.getMonth())
+                .collect(Collectors.toList());
+
+        Long total = payHistories.parallelStream()
+                .map(PayHistory::getAmount)
+                .reduce(0L, Long::sum);
+        String formattedTotal = String.valueOf(total)
+                .replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+
+        List<PayHistoryItem> data = payHistories.parallelStream()
+                .map(payHistory -> {
+                    String formatPrice = String.valueOf(payHistory.getAmount())
+                            .replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+                    String txTime = payHistory.getTxDatetime()
+                            .format(DateTimeFormatter.ofPattern(
+                                    "yyyy년 MM월 dd일 HH시 mm분 ss초"
+                            ));
+                    // 페이 충전일 때는 +
+                    if (payHistory.getType().equals(TransactionType.DEPOSIT)) {
+                        return PayHistoryItem.builder()
+                                .id(txTime)
+                                .title(payHistory.getTxOpponent())
+                                .price("+" + formatPrice)
+                                .build();
+                    } else {
+                        // 페이 송금, 출금일 때는 -
+                        return PayHistoryItem.builder()
+                                .id(txTime)
+                                .title(payHistory.getTxOpponent())
+                                .price("-" + formatPrice)
+                                .build();
+                    }
+                })
+                .collect(Collectors.toList());
 
         return Mono.just(
                 PayHistoryResponse.builder()
-                        .total(Long.valueOf(list.size()))
-                        .data(list.stream().map(payHistory -> {
-                            String formatPrice = String.valueOf(payHistory.getAmount()).replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-                            String txTime = payHistory.getTxDatetime().format(DateTimeFormatter.ofPattern(
-                                    "yyyy년 MM월 dd일 HH시 mm분 ss초"
-                            ));
-                            // 페이 충전일 때는 +
-                            if (payHistory.getType().equals(TransactionType.DEPOSIT)) {
-                                return PayHistoryItem.builder()
-                                        .id(txTime)
-                                        .title(payHistory.getTxOpponent())
-                                        .price("+" + formatPrice)
-                                        .build();
-                            } else {
-                                // 페이 송금, 출금일 때는 -
-                                return PayHistoryItem.builder()
-                                        .id(txTime)
-                                        .title(payHistory.getTxOpponent())
-                                        .price("-" + formatPrice)
-                                        .build();
-                            }
-                        }).collect(Collectors.toList()))
+                        .total(formattedTotal)
+                        .data(data)
                     .build()
         );
     }

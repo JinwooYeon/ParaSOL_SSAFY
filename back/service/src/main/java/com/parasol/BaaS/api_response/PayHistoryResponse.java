@@ -16,6 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PayHistoryResponse {
-    private Long total;
+    private String total;
     private List<PayHistoryItem> data;
 }
