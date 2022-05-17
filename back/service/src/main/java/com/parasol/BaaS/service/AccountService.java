@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
@@ -79,6 +80,14 @@ public class AccountService {
                 .build();
 
         return queryAccountBalanceRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
                 .map(result -> QueryAccountBalanceResponse.builder()
                         .bankName(bankName)
                         .bankAccountNumber(bankAccountNumber)
@@ -119,6 +128,14 @@ public class AccountService {
                 .build();
 
         return queryAccountListRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
                 .map(result -> QueryAccountListResponse.builder()
                         .bankName(bankName)
                         .bankAccounts(result.getAccounts())
@@ -160,6 +177,14 @@ public class AccountService {
                 .build();
 
         return queryAccountHistoryRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
                 .map(result -> QueryAccountHistoryResponse.builder()
                         .bankName(bankName)
                         .bankAccountNumber(bankAccountNumber)
@@ -186,6 +211,14 @@ public class AccountService {
                 .build();
 
         return depositRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
                 .map(result -> DepositResponse.builder()
                         .amount(amount)
                         .nameFrom(nameFrom)
@@ -234,6 +267,14 @@ public class AccountService {
                 .build();
 
         return withdrawRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
                 .map(result -> WithdrawResponse.builder()
                         .amount(amount)
                         .nameTo(nameTo)
