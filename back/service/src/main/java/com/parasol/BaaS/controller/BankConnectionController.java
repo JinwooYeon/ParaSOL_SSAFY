@@ -64,7 +64,7 @@ public class BankConnectionController {
         UserDetail userDetail = (UserDetail) authentication.getDetails();
         User user = userDetail.getUser();
 
-        return bankConnectionService.checkBankConnection(user, request)
+        return bankConnectionService.deleteBankConnection(user, request)
                 .map(response -> new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
     }
 }
