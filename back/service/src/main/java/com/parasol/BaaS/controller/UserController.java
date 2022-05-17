@@ -75,7 +75,7 @@ public class UserController {
             @RequestBody PasswordResetRequest request
     ) {
         return userService.resetPassword(request)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.NO_CONTENT));
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
     @GetMapping("/token")
