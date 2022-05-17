@@ -7,12 +7,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { GoogleLogin } from "react-google-login";
 
 interface IMyprops {
   requestBody: any;
   formData: any;
   setFormData: (formDate: any) => void;
   onSubmit: (a: any) => void;
+  API?: any;
 }
 interface State extends SnackbarOrigin {
   open: boolean;
@@ -23,6 +25,7 @@ export const Request: React.FC<IMyprops> = ({
   formData,
   setFormData,
   onSubmit,
+  API,
 }) => {
   // localStorage
   const accessToken = localStorage.getItem("accessToken");
@@ -159,21 +162,39 @@ export const Request: React.FC<IMyprops> = ({
               })
             )}
           </Box>{" "}
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => setFormData({})}
-          >
-            입력값 초기화
-          </Button>
-          <Button
-            variant="contained"
-            type="button"
-            color="primary"
-            onClick={() => onSubmit(formData)}
-          >
-            출력값 확인하기
-          </Button>
+          {API.uri === "/user/login/google" ? (
+            <GoogleLogin
+              clientId="1009903647359-f2vbgn02jqquqsqhghutt2252fkv32fc.apps.googleusercontent.com"
+              buttonText="Login with Google"
+              onSuccess={(res) => {
+                console.log("success");
+                console.log(res);
+              }}
+              onFailure={(err) => {
+                console.log("fail");
+                console.log(err);
+              }}
+              cookiePolicy={"single_host_origin"}
+            />
+          ) : (
+            <>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => setFormData({})}
+              >
+                입력값 초기화
+              </Button>
+              <Button
+                variant="contained"
+                type="button"
+                color="primary"
+                onClick={() => onSubmit(formData)}
+              >
+                출력값 확인하기
+              </Button>
+            </>
+          )}
           <Snackbar
             anchorOrigin={{ vertical, horizontal }}
             open={open}
