@@ -221,6 +221,14 @@ public class PayService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        Long beforeBalance = payLedger.getBalance();
+        Long afterBalance = beforeBalance + price;
+
+        if (afterBalance < 0L) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+
         WithdrawRequest withdrawRequest = WithdrawRequest.builder()
                 .authentication(authentication)
                 .bankName(payLedger.getBankName())
@@ -236,13 +244,6 @@ public class PayService {
 
         return accountService.withdraw(withdrawRequest)
                 .doOnSuccess(result -> {
-                    Long beforeBalance = payLedger.getBalance();
-                    Long afterBalance = beforeBalance + price;
-
-                    if (afterBalance < 0L) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-                    }
-
                     payLedger.setBalance(afterBalance);
                     payLedgerRepository.save(payLedger);
 
@@ -256,9 +257,14 @@ public class PayService {
 
                     payHistoryRepository.save(payHistory);
                 })
-                .map(result -> PayChargeResponse.builder()
-                        .balance(payLedger.getBalance())
-                        .build());
+                .map(result -> {
+                    String formattedBalance = String.valueOf(afterBalance)
+                            .replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+
+                    return PayChargeResponse.builder()
+                            .balance(formattedBalance)
+                            .build();
+                });
     }
 
     @Transactional
@@ -294,6 +300,13 @@ public class PayService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        Long beforeBalance = payLedger.getBalance();
+        Long afterBalance = beforeBalance - price;
+
+        if (afterBalance < 0L) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
         DepositRequest depositRequest = DepositRequest.builder()
                 .bankName(payLedger.getBankName())
                 .amount(price)
@@ -307,12 +320,6 @@ public class PayService {
 
         return accountService.deposit(depositRequest)
                 .doOnSuccess(result -> {
-                    Long beforeBalance = payLedger.getBalance();
-                    Long afterBalance = beforeBalance - price;
-
-                    if (afterBalance < 0L) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-                    }
 
                     payLedger.setBalance(afterBalance);
                     payLedgerRepository.save(payLedger);
@@ -327,9 +334,14 @@ public class PayService {
 
                     payHistoryRepository.save(payHistory);
                 })
-                .map(result -> PayWithdrawResponse.builder()
-                                .balance(payLedger.getBalance())
-                                .build());
+                .map(result -> {
+                    String formattedBalance = String.valueOf(afterBalance)
+                            .replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+
+                    return PayWithdrawResponse.builder()
+                            .balance(formattedBalance)
+                            .build();
+                });
     }
 
     public Mono<PayHistoryResponse> getPayHistory(
