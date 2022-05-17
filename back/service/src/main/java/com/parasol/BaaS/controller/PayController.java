@@ -99,4 +99,16 @@ public class PayController {
         return payService.registerBio(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
+
+    @DeleteMapping("/auth/bio")
+    public Mono<ResponseEntity<PayDeleteBioResponse>> registerBio(
+            Authentication authentication
+    ) {
+        PayDeleteBioRequest request = PayDeleteBioRequest.builder()
+                .authentication(authentication)
+                .build();
+
+        return payService.deleteBio(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+    }
 }

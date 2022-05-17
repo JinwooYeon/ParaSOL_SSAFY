@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -459,6 +460,37 @@ public class PayService {
 
         return Mono.just(
                 PayRegisterBioResponse.builder()
+                        .isSuccess(true)
+                        .build()
+        );
+    }
+
+    @Transactional
+    public Mono<PayDeleteBioResponse> deleteBio(
+            PayDeleteBioRequest request
+    ) {
+        Authentication authentication = request.getAuthentication();
+
+        if (authentication == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
+        if (!StringUtils.hasText(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userService.getUserByUserId(id);
+
+        BioInfo bioInfo = bioInfoRepository.findByOwnerUserId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        bioInfoRepository.delete(bioInfo);
+
+        return Mono.just(
+                PayDeleteBioResponse.builder()
                         .isSuccess(true)
                         .build()
         );
