@@ -13,5 +13,5 @@ import org.springframework.security.core.Authentication;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PayChargeResponse {
-    private Long balance;
+    private String balance;
 }
