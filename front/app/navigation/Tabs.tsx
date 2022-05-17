@@ -24,6 +24,8 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
   const tokenUrl = "http://k6S101.p.ssafy.io:8080/user/token";
   // Axios 내 정보 조회 url
   const getMyInfoUrl = "http://k6S101.p.ssafy.io:8080/pay";
+  // Axios 2차 인증 정보 등록 여부 확인 url
+  const getMyAuthUrl = "http://k6S101.p.ssafy.io:8080/pay/auth";
 
   // useState
   // 잔액
@@ -40,6 +42,11 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
     // 계좌 번호
     bankNum: "110-128-203947",
   });
+  // 2차 인증 정보 등록 여부
+  const [auth, setAuth] = useState({
+    otp: false,
+    bio: false,
+  });
 
   // Axios
   // 새로운 인증 토큰 발급
@@ -52,7 +59,7 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
       params: refreshToken,
     })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
         AsyncStorage.setItem("accessToken", response.data.accessToken);
         return true;
       })
@@ -73,7 +80,7 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setBalance(res.data.balance);
         setId(res.data.id);
         setBankInfo(res.data.bankInfo);
@@ -83,10 +90,28 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
         if (err.response.status === 401 && (await getNewToken?.())) getMyInfo();
       });
   };
+  // 2차 인증 정보 등록 여부 확인
+  const getMyAuth = async () => {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "get",
+      url: getMyAuthUrl,
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setAuth(res.data);
+      })
+      .catch(async (err) => {
+        console.log(err);
+        if (err.response.status === 401 && (await getNewToken?.())) getMyAuth();
+      });
+  };
 
   // useEffect
   useEffect(() => {
     getMyInfo();
+    getMyAuth();
   }, []);
 
   return (
@@ -151,6 +176,7 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
             bankInfo={bankInfo}
             setBalance={setBalance}
             getNewToken={getNewToken}
+            auth={auth}
           />
         )}
       </Tab.Screen>
@@ -177,6 +203,7 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
             id={id}
             setBalance={setBalance}
             getNewToken={getNewToken}
+            auth={auth}
           />
         )}
       </Tab.Screen>
@@ -220,6 +247,8 @@ const Tabs: React.FC<PropsType> = ({ setLogin }) => {
             bankInfo={bankInfo}
             setBankInfo={setBankInfo}
             getNewToken={getNewToken}
+            auth={auth}
+            getMyAuth={getMyAuth}
           />
         )}
       </Tab.Screen>

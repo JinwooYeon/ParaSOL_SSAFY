@@ -28,6 +28,8 @@ interface PropsType {
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
   getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
 }
 interface PayConfirmPropsType {
   // 충전 or 출금
@@ -40,6 +42,8 @@ interface PayConfirmPropsType {
   navigation: any;
   // 새로운 인증 토큰 발급
   getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
 }
 
 // Component _ PayConfirm
@@ -49,6 +53,7 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
   price,
   bankInfo,
   getNewToken,
+  auth,
 }) => {
   // const
   // Axios url
@@ -73,7 +78,7 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
       data: { method: "charge", price: delPrice },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         Alert.alert("충전 완료!");
         setTimeout(() => {
           setLoading(false);
@@ -103,7 +108,7 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
       data: { method: "withdraw", price: delPrice },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         Alert.alert("출금 완료!");
         setTimeout(() => {
           setLoading(false);
@@ -172,7 +177,21 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
           <ConfirmBtnTouchableOpacity onPress={onPressCancel} ok={false}>
             <ConfirmBtnText>취소</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
-          <ConfirmBtnTouchableOpacity onPress={biometricsAuth} ok={true}>
+          <ConfirmBtnTouchableOpacity
+            onPress={
+              auth.bio
+                ? biometricsAuth
+                : () => {
+                    setLoading(true);
+                    if (charge) {
+                      chargePost();
+                    } else {
+                      withdrawPost();
+                    }
+                  }
+            }
+            ok={true}
+          >
             <ConfirmBtnText>확인</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
         </ConfirmBtnContainer>
@@ -188,6 +207,7 @@ const PayStack: React.FC<PropsType> = ({
   navigation,
   setBalance,
   getNewToken,
+  auth,
 }) => {
   // useState
   // 충전 or 출금
@@ -228,6 +248,7 @@ const PayStack: React.FC<PropsType> = ({
             bankInfo={bankInfo}
             price={price}
             getNewToken={getNewToken}
+            auth={auth}
           />
         )}
       </Stack.Screen>

@@ -18,6 +18,10 @@ interface PropsType {
   setBankInfo: (a: any) => void;
   // 새로운 인증 토큰 발급
   getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
+  // 2차 인증 정보 등록 여부 확인
+  getMyAuth: () => void;
 }
 
 // Component _ MypageStack
@@ -26,6 +30,8 @@ const MypageStack: React.FC<PropsType> = ({
   bankInfo,
   setBankInfo,
   getNewToken,
+  auth,
+  getMyAuth,
 }) => {
   return (
     <Stack.Navigator
@@ -58,7 +64,16 @@ const MypageStack: React.FC<PropsType> = ({
       {/* OTP 정보 등록 */}
       <Stack.Screen name="Oauth" component={Oauth} />
       {/* 생체인증 정보 등록 */}
-      <Stack.Screen name="AuthBio" component={AuthBio} />
+      <Stack.Screen name="AuthBio">
+        {(props) => (
+          <AuthBio
+            {...props}
+            auth={auth}
+            getNewToken={getNewToken}
+            getMyAuth={getMyAuth}
+          />
+        )}
+      </Stack.Screen>
       {/* 고객 문의 */}
       <Stack.Screen name="Service" component={Service} />
       {/* 회원 탈퇴 */}

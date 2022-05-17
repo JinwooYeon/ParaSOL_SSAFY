@@ -22,6 +22,8 @@ interface PropsType {
   navigation: any;
   // 새로운 인증 토큰 발급
   getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
 }
 
 // Component _ TransactionConfirm
@@ -30,6 +32,7 @@ const TransactionConfirm: React.FC<PropsType> = ({
   info,
   price,
   getNewToken,
+  auth,
 }) => {
   // const
   // Axios url
@@ -54,7 +57,7 @@ const TransactionConfirm: React.FC<PropsType> = ({
       data: { method: "transaction", price: delPrice, transactionTo: info },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         Alert.alert("송금 완료!");
         setTimeout(() => {
           setLoading(false);
@@ -116,7 +119,17 @@ const TransactionConfirm: React.FC<PropsType> = ({
           <ConfirmBtnTouchableOpacity onPress={onPressCancel} ok={false}>
             <ConfirmBtnText>취소</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
-          <ConfirmBtnTouchableOpacity onPress={biometricsAuth} ok={true}>
+          <ConfirmBtnTouchableOpacity
+            onPress={
+              auth.bio
+                ? biometricsAuth
+                : () => {
+                    setLoading(true);
+                    transationPost();
+                  }
+            }
+            ok={true}
+          >
             <ConfirmBtnText>확인</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
         </ConfirmBtnContainer>

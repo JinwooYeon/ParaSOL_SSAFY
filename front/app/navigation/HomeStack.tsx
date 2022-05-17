@@ -16,6 +16,8 @@ interface PropsType {
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
   getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
 }
 
 // Component _ HomeStack
@@ -24,6 +26,7 @@ const HomeStack: React.FC<PropsType> = ({
   id,
   setBalance,
   getNewToken,
+  auth,
 }) => {
   // useState
   // 송금할 주소
@@ -75,6 +78,7 @@ const HomeStack: React.FC<PropsType> = ({
             info={info}
             price={price}
             getNewToken={getNewToken}
+            auth={auth}
           />
         )}
       </Stack.Screen>
