@@ -24,6 +24,8 @@ interface PropsType {
   navigation: any;
   // 새로운 인증 토큰 발급
   getNewToken?: () => Promise<any>;
+  // 내 정보 가져오기
+  getMyInfo: () => void;
 }
 
 // Component _ HasAccount
@@ -32,6 +34,13 @@ const HasAccount: React.FC<PropsType> = ({
   bankInfo,
   setEmpty,
 }) => {
+  // useEffect
+  useEffect(() => {
+    if (bankInfo.bankNum === null) {
+      setEmpty?.(true);
+    }
+  }, [bankInfo.bankNum]);
+
   return (
     <>
       <ContentContainer>
@@ -59,6 +68,8 @@ const HasNotAccount: React.FC<PropsType> = ({
   navigation,
   setEmpty,
   getNewToken,
+  bankInfo,
+  getMyInfo,
 }) => {
   // const
   // Axios url
@@ -67,13 +78,16 @@ const HasNotAccount: React.FC<PropsType> = ({
   // useState
   // 계좌 연결 정보
   const [data, setData] = useState({
-    bankName: "",
+    bankName: "SBJ",
     id: "",
     password: "",
   });
 
   // Axios
+  // 계좌 연결
   const bankPost = async () => {
+    console.log("post");
+    console.log(data);
     const accessToken = await AsyncStorage.getItem("accessToken");
     await axios({
       method: "post",
@@ -83,11 +97,12 @@ const HasNotAccount: React.FC<PropsType> = ({
     })
       .then((res) => {
         console.log(res.data);
-        Alert.alert("계좌 연결 성공!");
         setEmpty?.(false);
+        Alert.alert("계좌 연결 성공!");
+        getMyInfo();
       })
       .catch(async (err) => {
-        console.log(err.response.status);
+        console.log(err);
         if (err.response.status === 401 && (await getNewToken?.())) {
           bankPost();
         } else {
@@ -95,11 +110,35 @@ const HasNotAccount: React.FC<PropsType> = ({
         }
       });
   };
+  // 연결 계좌 삭제
+  const bankDel = async () => {
+    console.log("del");
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "delete",
+      url: url,
+      headers: { Authorization: `Bearer ${accessToken}` },
+      data: { bankName: "SBJ" },
+    })
+      .then((res) => {
+        console.log(res);
+        console.log("계좌 연결 정보 삭제 성공!");
+        bankPost();
+      })
+      .catch(async (err) => {
+        console.log(err);
+        if (err.response.status === 401 && (await getNewToken?.())) {
+          bankDel();
+        } else {
+          Alert.alert("계좌 연결에 실패하였습니다.");
+        }
+      });
+  };
 
   // method
-  const setBankName = (s: string) => {
-    setData({ ...data, bankName: s });
-  };
+  // const setBankName = (s: string) => {
+  //   setData({ ...data, bankName: s });
+  // };
   const setId = (s: string) => {
     setData({ ...data, id: s });
   };
@@ -112,10 +151,11 @@ const HasNotAccount: React.FC<PropsType> = ({
       <ContentContainer>
         <View>
           <TextInputController
-            onChangeText={setBankName}
-            value={data.bankName}
+            // onChangeText={setBankName}
+            value={`은행명: ${data.bankName}`}
             placeholder="은행명"
             keyboardType="visible-password"
+            editable={false}
           />
           <TextInputController
             onChangeText={setId}
@@ -136,7 +176,7 @@ const HasNotAccount: React.FC<PropsType> = ({
           color="blue"
           text="계좌 연결"
           navigation={navigation}
-          setter={bankPost}
+          setter={bankInfo.bankNum === null ? bankPost : bankDel}
         />
         <BtnBox color="white" text="뒤로" navigation={navigation} />
       </FooterContainer>
@@ -150,6 +190,7 @@ const ConnectAccount: React.FC<PropsType> = ({
   bankInfo,
   setBankInfo,
   getNewToken,
+  getMyInfo,
 }) => {
   // const
   // 계좌 연결 정보 비구조화
@@ -159,7 +200,12 @@ const ConnectAccount: React.FC<PropsType> = ({
 
   // useEffect
   useEffect(() => {
-    if (bankNum !== null) setEmpty(false);
+    getMyInfo();
+    if (bankNum !== null) {
+      setEmpty(false);
+    } else {
+      setEmpty?.(true);
+    }
   }, []);
 
   return (
@@ -172,6 +218,7 @@ const ConnectAccount: React.FC<PropsType> = ({
             bankInfo={bankInfo}
             setEmpty={setEmpty}
             getNewToken={getNewToken}
+            getMyInfo={getMyInfo}
           />
         ) : (
           <HasAccount
@@ -179,6 +226,7 @@ const ConnectAccount: React.FC<PropsType> = ({
             bankInfo={bankInfo}
             setBankInfo={setBankInfo}
             setEmpty={setEmpty}
+            getMyInfo={getMyInfo}
           />
         )}
       </ContentFooterContainer>
