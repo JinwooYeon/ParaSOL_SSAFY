@@ -83,37 +83,44 @@ public class BankConnectionService {
                     bankConnection.setUser(user);
 
                     bankConnectionRepository.save(bankConnection);
+                })
+                .filter(result -> {
+                    Optional<PayLedger> ledger = payLedgerRepository.findByOwnerUserId(user.getUserId());
+                    if (ledger.isEmpty()) return false;
 
+                    boolean hasId = StringUtils.hasText(ledger.get().getBankName());
+                    boolean hasAccountNumber = StringUtils.hasText(ledger.get().getBankAccountNumber());
+                    return !hasId || !hasAccountNumber;
+                })
+                .flatMap(result ->
+                {
                     PayLedger ledger = payLedgerRepository.findByOwnerUserId(user.getUserId())
                             .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "invalid account"));
 
-                    if (
-                            !StringUtils.hasText(ledger.getBankName()) ||
-                            !StringUtils.hasText(ledger.getBankAccountNumber())
-                    ) {
-                        QueryAccountListParam queryParam = QueryAccountListParam.builder()
-                                        .id(id)
-                                        .password(password)
-                                        .build();
+                    QueryAccountListParam queryParam = QueryAccountListParam.builder()
+                            .id(id)
+                            .password(password)
+                            .build();
 
-                        accountListRequestFactory.create(queryParam)
-                                        .filter(queryResult -> Objects.nonNull(queryResult.getAccounts()))
-                                        .doOnSuccess(queryResult -> {
-                                            if (
-                                                    queryResult.getAccounts() != null &&
-                                                    queryResult.getAccounts().size() > 0
-                                            ) {
-                                                AccountInfo bankAccountInfo = queryResult.getAccounts().get(0);
-                                                String bankAccountNumber = bankAccountInfo.getAccountNumber();
+                    return accountListRequestFactory.create(queryParam)
+                            .map(queryResult -> {
+                                if (
+                                    queryResult.getAccounts() != null && queryResult.getAccounts().size() > 0
+                                ) {
+                                    AccountInfo bankAccountInfo = queryResult.getAccounts().get(0);
+                                    String bankAccountNumber = bankAccountInfo.getAccountNumber();
 
-                                                if (StringUtils.hasText(bankAccountNumber))
-                                                {
-                                                    ledger.setBankName(bankName);
-                                                    ledger.setBankAccountNumber(bankAccountNumber);
-                                                }
-                                            }
-                                        });
-                    }
+                                    if (StringUtils.hasText(bankAccountNumber)) {
+                                        ledger.setBankName(bankName);
+                                        ledger.setBankAccountNumber(bankAccountNumber);
+                                        payLedgerRepository.save(ledger);
+                                    }
+                                }
+
+                                return BankConnectionResponse.builder()
+                                                .isSuccess(result.getIsSuccess())
+                                                .build();
+                            });
                 });
     }
 
