@@ -10,9 +10,11 @@ import com.parasol.BaaS.db.repository.BankConnectionRepository;
 import com.parasol.BaaS.modules.BankLoginRequestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
@@ -30,6 +32,7 @@ public class BankConnectionService {
 
     @Transactional
     public Mono<BankConnectionResponse> addBankConnection(User user, BankConnectionRequest request) throws IllegalArgumentException, NullPointerException, NoSuchElementException {
+        Long userSeq = user.getUserSeq();
         String bankName = request.getBankName();
         String id = request.getId();
         String password = request.getPassword();
@@ -40,6 +43,9 @@ public class BankConnectionService {
                 password == null || password.isEmpty()
         )
             throw new IllegalArgumentException();
+
+        bankConnectionRepository.findByUser_UserSeqAndBankName(userSeq, bankName)
+                .ifPresent(bankConnection -> { throw new ResponseStatusException(HttpStatus.BAD_REQUEST);});
 
         BankLoginParam param = BankLoginParam.builder()
                 .id(request.getId())
