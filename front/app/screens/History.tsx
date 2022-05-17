@@ -268,7 +268,7 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const HistoryHeaderContainer = styled(HeaderContainer)`
-  flex: 0.2;
+  flex: 0.3;
 `;
 
 export default History;
