@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface BankConnectionRepository extends JpaRepository<BankConnection, Long> {
     Optional<BankConnection> findByUser_UserSeqAndBankName(Long userSeq, String bankName);
+    Long deleteByUser_UserId(String id);
 }

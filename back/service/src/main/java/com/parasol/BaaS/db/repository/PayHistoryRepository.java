@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PayHistoryRepository  extends JpaRepository<PayHistory, Long> {
     List<PayHistory> findByUser_UserId(String id);
+    Long deleteByUser_UserId(String id);
 }

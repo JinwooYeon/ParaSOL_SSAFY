@@ -125,6 +125,10 @@ public class PayService {
         PayLedger toPayLedger = payLedgerRepository.findByOwnerUserId(transactionTo)
                 .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
+        if (from == to) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
 //        if(fromPayLedger.getBankAccountNumber() == null) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
 //        }

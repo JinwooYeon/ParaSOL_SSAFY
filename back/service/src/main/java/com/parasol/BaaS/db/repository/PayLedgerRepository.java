@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface PayLedgerRepository extends JpaRepository<PayLedger, Long> {
     Optional<PayLedger> findByOwnerUserId(String id);
+    Long deleteByOwnerUserId(String id);
     
 }

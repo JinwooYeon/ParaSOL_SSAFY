@@ -12,9 +12,7 @@ import com.parasol.BaaS.db.entity.PayHistory;
 import com.parasol.BaaS.db.entity.PayLedger;
 import com.parasol.BaaS.db.entity.Token;
 import com.parasol.BaaS.db.entity.User;
-import com.parasol.BaaS.db.repository.PayLedgerRepository;
-import com.parasol.BaaS.db.repository.TokenRepository;
-import com.parasol.BaaS.db.repository.UserRepository;
+import com.parasol.BaaS.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -36,10 +34,19 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private TokenRepository tokenRepository;
+    private BankConnectionRepository bankConnectionRepository;
+
+    @Autowired
+    private BioInfoRepository bioInfoRepository;
 
     @Autowired
     private PayLedgerRepository payLedgerRepository;
+
+    @Autowired
+    private PayHistoryRepository payHistoryRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -337,23 +344,18 @@ public class UserService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
         String id = userDetail.getUsername();
 
+        Long bankConnectionDeleteResult = bankConnectionRepository.deleteByUser_UserId(id);
+        Long bioInfoDeleteResult = bioInfoRepository.deleteByOwnerUserId(id);
+        Long payHistoryDeleteResult = payHistoryRepository.deleteByUser_UserId(id);
+        Long payLedgerDeleteResult = payLedgerRepository.deleteByOwnerUserId(id);
         Long tokenDeleteResult = tokenRepository.deleteByUserUserId(id);
-
-        if (tokenDeleteResult <= 0) {
-            throw new IllegalStateException();
-        }
-
         Long userDeleteResult = userRepository.deleteByUserId(id);
-
-        if (userDeleteResult <= 0) {
-            throw new IllegalStateException();
-        }
 
         return Mono.just(
                 DeleteResponse.builder()
