@@ -9,10 +9,10 @@ export const Footer = () => {
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
-          width: "80%",
+          width: "10%",
         }}
       >
         <FooterTeamComponent />
