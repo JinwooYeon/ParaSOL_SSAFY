@@ -38,8 +38,9 @@ const LogoContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const LogoText = styled.text<{ blue?: boolean }>`
+const LogoText = styled.div<{ blue?: boolean }>`
   color: ${(props) => (props.blue ? "#3182f6" : "black")};
+  display: inline-flex;
   font-size: 35px;
   font-weight: bold;
 `;
