@@ -70,6 +70,7 @@ public class PayController {
     ) {
         PayHistoryRequest request = PayHistoryRequest.builder()
                 .authentication(authentication)
+                .month(month)
                 .build();
 
         return payService.getPayHistory(request)

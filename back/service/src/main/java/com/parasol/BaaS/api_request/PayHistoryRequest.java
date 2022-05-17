@@ -14,5 +14,5 @@ import org.springframework.security.core.Authentication;
 @AllArgsConstructor
 public class PayHistoryRequest {
     private Authentication authentication;
-    private Long month;
+    private String month;
 }
