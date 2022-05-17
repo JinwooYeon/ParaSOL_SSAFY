@@ -153,13 +153,13 @@ const ConnectAccount: React.FC<PropsType> = ({
 }) => {
   // const
   // 계좌 연결 정보 비구조화
-  const { bankImg, bankName, bankNum } = bankInfo;
+  const { bankNum } = bankInfo;
   // 계좌 연결 정보 존재 여부
   const [empty, setEmpty] = useState<boolean>(true);
 
   // useEffect
   useEffect(() => {
-    if (bankImg + bankName + bankNum !== "") setEmpty(false);
+    if (bankNum !== null) setEmpty(false);
   }, []);
 
   return (

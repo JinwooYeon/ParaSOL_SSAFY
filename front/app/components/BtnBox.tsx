@@ -52,11 +52,11 @@ const BtnBox: React.FC<PropsType> = ({
         break;
       // 충전하기
       case "충전하기":
-        if (payData?.bankInfo.bankNum !== "" && payData?.price !== "0") {
+        if (payData?.bankInfo.bankNum !== null && payData?.price !== "0") {
           setCharge?.(true);
           navigation?.navigate("PayConfirm");
         } else {
-          if (payData.bankInfo.bankNum === "") {
+          if (payData.bankInfo.bankNum === null) {
             msg = "계좌를 연결해주세요!";
           } else if (payData.price === "0") {
             msg = "금액을 채워주세요!";
@@ -70,11 +70,11 @@ const BtnBox: React.FC<PropsType> = ({
         break;
       // 출금하기
       case "출금하기":
-        if (payData?.bankInfo.bankNum !== "" && payData?.price !== "0") {
+        if (payData?.bankInfo.bankNum !== null && payData?.price !== "0") {
           setCharge?.(false);
           navigation?.navigate("PayConfirm");
         } else {
-          if (payData.bankInfo.bankNum === "") {
+          if (payData.bankInfo.bankNum === null) {
             msg = "계좌를 연결해주세요!";
           } else if (payData.price === "0") {
             msg = "금액을 채워주세요!";
