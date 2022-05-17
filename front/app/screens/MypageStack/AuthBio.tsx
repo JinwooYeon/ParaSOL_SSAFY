@@ -71,6 +71,29 @@ const AuthBio: React.FC<PropsType> = ({
         }
       });
   };
+  // 생체인증 정보 삭제
+  const bioDel = async () => {
+    console.log("del");
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "delete",
+      url: bioUrl,
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+      .then((res) => {
+        console.log(res);
+        console.log("생체 인증 정보 삭제 성공!");
+        bioPost();
+      })
+      .catch(async (err) => {
+        console.log(err);
+        if (err.response.status === 401 && (await getNewToken?.())) {
+          bioDel();
+        } else {
+          Alert.alert("등록에 실패하였습니다.");
+        }
+      });
+  };
 
   // method
   const registBio = () => {
@@ -84,7 +107,7 @@ const AuthBio: React.FC<PropsType> = ({
         {
           text: "네",
           onPress: () => {
-            bioPost();
+            bioDel();
           },
         },
       ]);
