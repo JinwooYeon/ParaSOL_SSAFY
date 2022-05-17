@@ -273,7 +273,7 @@ public class UserService {
 
         PayLedger payLedger = PayLedger.builder()
                 .owner(user)
-                .balance(Long.valueOf(0))
+                .balance(0L)
                 .build();
 
         payLedgerRepository.save(payLedger);

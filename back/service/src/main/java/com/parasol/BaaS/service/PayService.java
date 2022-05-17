@@ -14,10 +14,12 @@ import com.parasol.BaaS.db.repository.PayLedgerRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import com.parasol.BaaS.enums.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -46,24 +48,21 @@ public class PayService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        User user = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
-
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         if(payLedger.getBankAccountNumber() == null) {
-            throw new IllegalArgumentException("주거래계좌 등록");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록 필요");
         }
 
         return Mono.just(
@@ -86,36 +85,34 @@ public class PayService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         String transactionTo = request.getTransactionTo();
 
         User from = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
         User to = userRepository.findByUserId(transactionTo)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         PayLedger fromPayLedger = payLedgerRepository.findByOwnerUserId(id)
-                .orElseThrow(IllegalStateException::new);
-
-
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
         PayLedger toPayLedger = payLedgerRepository.findByOwnerUserId(transactionTo)
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         if(fromPayLedger.getBankAccountNumber() == null) {
-            throw new IllegalArgumentException("주거래계좌 등록");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
         }
 
-        if(fromPayLedger.getBankAccountNumber() == null) {
-            throw new IllegalArgumentException("송금 계좌 확인");
+        if(toPayLedger.getBankAccountNumber() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "송금 계좌 확인");
         }
 
         Long price = request.getPrice();
@@ -162,7 +159,7 @@ public class PayService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
@@ -173,13 +170,13 @@ public class PayService {
         }
 
         User user = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         if(payLedger.getBankAccountNumber() == null) {
-            throw new IllegalArgumentException("주거래계좌 등록");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
         }
 
         accountService.withdraw(
@@ -223,7 +220,7 @@ public class PayService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
@@ -234,13 +231,13 @@ public class PayService {
         }
 
         User user = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         if(payLedger.getBankAccountNumber() == null) {
-            throw new IllegalArgumentException("주거래계좌 등록");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
         }
 
         accountService.deposit(
@@ -282,7 +279,7 @@ public class PayService {
         Authentication authentication = request.getAuthentication();
 
         if (authentication == null) {
-            throw new AccessDeniedException("give me a token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
 
         UserDetail userDetail = (UserDetail) authentication.getDetails();
@@ -293,13 +290,13 @@ public class PayService {
         }
 
         User user = userRepository.findByUserId(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         if(payLedger.getBankAccountNumber() == null) {
-            throw new IllegalArgumentException("주거래계좌 등록");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
         }
 
         List<PayHistory> list = payHistoryRepository.findByUser_UserId(id);
