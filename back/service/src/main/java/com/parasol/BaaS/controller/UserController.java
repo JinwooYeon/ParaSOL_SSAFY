@@ -75,7 +75,7 @@ public class UserController {
             @RequestBody PasswordResetRequest request
     ) {
         return userService.resetPassword(request)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+                .map(response -> new ResponseEntity<>(response, HttpStatus.NO_CONTENT));
     }
 
     @GetMapping("/token")
@@ -87,7 +87,7 @@ public class UserController {
                 .build();
 
         return userService.reissueAuthToken(request)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+                .map(response -> new ResponseEntity<>(response, HttpStatus.NO_CONTENT));
     }
 
     @GetMapping
@@ -107,7 +107,7 @@ public class UserController {
             @RequestBody RegisterRequest request
     ) {
         return userService.createUser(request)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+                .map(response -> new ResponseEntity<>(response, HttpStatus.CREATED));
     }
 
     @PatchMapping
@@ -118,7 +118,7 @@ public class UserController {
         request.setAuthentication(authentication);
 
         return userService.updateUser(request)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+                .map(response -> new ResponseEntity<>(response, HttpStatus.NO_CONTENT));
     }
 
     @DeleteMapping
@@ -130,6 +130,6 @@ public class UserController {
                 .build();
 
         return userService.deleteUser(request)
-                .map(response -> new ResponseEntity<>(null, HttpStatus.OK));
+                .map(response -> new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
     }
 }
