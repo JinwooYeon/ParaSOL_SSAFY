@@ -1,7 +1,6 @@
 package com.parasol.BaaS.api_response;
 
-import com.parasol.BaaS.api_model.BankAccountInfo;
-import com.parasol.BaaS.api_model.BankInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PayInfoResponse {
-    private String balance;
-    private String id;
-    private BankInfo bankInfo;
+public class PayDeleteBioResponse {
+    @JsonProperty(value="isSuccess")
+    private boolean isSuccess;
 }

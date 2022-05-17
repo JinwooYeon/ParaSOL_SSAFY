@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
@@ -68,6 +69,10 @@ public class BankConnectionService {
                 .build();
 
         return bankLoginRequestFactory.create(param)
+                .doOnError(throwable -> {
+                    WebClientResponseException ex = (WebClientResponseException) throwable;
+                    throw new ResponseStatusException(ex.getStatusCode());
+                })
                 .flatMap(result -> Mono.just(
                         BankConnectionResponse.builder()
                                 .isSuccess(result.getIsSuccess())
