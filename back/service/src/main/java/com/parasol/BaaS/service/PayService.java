@@ -348,7 +348,7 @@ public class PayService {
         }
 
         List<PayHistory> payHistories = payHistoryRepository.findByUser_UserId(id).parallelStream()
-                .filter(payHistory -> payHistory.getTxDatetime().getMonthValue() == request.getMonth())
+                .filter(payHistory -> payHistory.getTxDatetime().getMonthValue() == Long.parseLong(request.getMonth().trim()))
                 .collect(Collectors.toList());
 
         Long total = payHistories.parallelStream()
