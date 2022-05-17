@@ -83,6 +83,8 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
           setPassword("");
           setPasswordConfirm("");
           setName("");
+          Alert.alert("회원가입 성공!");
+          navigation.navigate("Login");
         }
       })
       .catch((err) => {
