@@ -27,6 +27,9 @@ export const Request: React.FC<IMyprops> = ({
   onSubmit,
   API,
 }) => {
+  // const
+  const REACT_APP_GOOGLE_CLIENT_ID: any =
+    process.env.REACT_APP_GOOGLE_CLIENT_ID;
   // localStorage
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
@@ -164,7 +167,7 @@ export const Request: React.FC<IMyprops> = ({
           </Box>{" "}
           {API.uri === "/user/login/google" ? (
             <GoogleLogin
-              clientId="1009903647359-f2vbgn02jqquqsqhghutt2252fkv32fc.apps.googleusercontent.com"
+              clientId={REACT_APP_GOOGLE_CLIENT_ID}
               buttonText="Login with Google"
               onSuccess={(res) => {
                 console.log("success");
