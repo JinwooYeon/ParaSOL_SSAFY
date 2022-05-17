@@ -130,7 +130,7 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
       method: "get",
       url: getHistoryUrl,
       headers: { Authorization: `Bearer ${accessToken}` },
-      params: month,
+      params: { month },
     })
       .then((res) => {
         console.log(res.data);
