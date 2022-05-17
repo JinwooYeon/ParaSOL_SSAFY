@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface BioInfoRepository extends JpaRepository<BioInfo, Long> {
     Optional<BioInfo> findByOwnerUserId(String id);
+    Long deleteByOwnerUserId(String id);
 }
