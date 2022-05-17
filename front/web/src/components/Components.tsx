@@ -179,6 +179,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
                     formData={formData}
                     setFormData={setFormData}
                     onSubmit={onSubmit}
+                    API={props.API}
                   />
                 </Stack>
               </Box>

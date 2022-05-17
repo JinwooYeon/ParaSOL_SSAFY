@@ -3,14 +3,21 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import styles from "./styles";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { GoogleLogin } from "react-google-login";
 
 interface IMyprops {
   requestBody: any;
   formData: any;
   setFormData: (formDate: any) => void;
   onSubmit: (a: any) => void;
+  API?: any;
+}
+interface State extends SnackbarOrigin {
+  open: boolean;
 }
 
 export const Request: React.FC<IMyprops> = ({
@@ -18,16 +25,31 @@ export const Request: React.FC<IMyprops> = ({
   formData,
   setFormData,
   onSubmit,
+  API,
 }) => {
+  // const
+  const REACT_APP_GOOGLE_CLIENT_ID: any =
+    process.env.REACT_APP_GOOGLE_CLIENT_ID;
   // localStorage
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
 
   // useState
-  const [state, setState] = useState({ value: "some\ntext", copied: false });
-
+  // 복사
+  const [state, setState] = useState({ value: "copy\ntext", copied: false });
   const onCopy = () => {
     setState({ ...state, copied: true });
+    setAlert({ ...alert, open: true });
+  };
+  // 복사 확인 메시지
+  const [alert, setAlert] = useState<State>({
+    open: false,
+    vertical: "bottom",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = alert;
+  const handleClose = () => {
+    setAlert({ ...alert, open: false });
   };
 
   // method
@@ -143,21 +165,55 @@ export const Request: React.FC<IMyprops> = ({
               })
             )}
           </Box>{" "}
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => setFormData({})}
+          {API.uri === "/user/login/google" ? (
+            <GoogleLogin
+              clientId={REACT_APP_GOOGLE_CLIENT_ID}
+              buttonText="Login with Google"
+              onSuccess={(res) => {
+                console.log("success");
+                console.log(res);
+              }}
+              onFailure={(err) => {
+                console.log("fail");
+                console.log(err);
+              }}
+              cookiePolicy={"single_host_origin"}
+            />
+          ) : (
+            <>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => setFormData({})}
+              >
+                입력값 초기화
+              </Button>
+              <Button
+                variant="contained"
+                type="button"
+                color="primary"
+                onClick={() => onSubmit(formData)}
+              >
+                출력값 확인하기
+              </Button>
+            </>
+          )}
+          <Snackbar
+            anchorOrigin={{ vertical, horizontal }}
+            open={open}
+            onClose={handleClose}
+            autoHideDuration={2000}
+            key={vertical + horizontal}
           >
-            입력값 초기화
-          </Button>
-          <Button
-            variant="contained"
-            type="button"
-            color="primary"
-            onClick={() => onSubmit(formData)}
-          >
-            출력값 확인하기
-          </Button>
+            <Alert
+              onClose={handleClose}
+              variant="outlined"
+              severity="success"
+              sx={{ width: "100%" }}
+            >
+              클립보드에 복사되었습니다.
+            </Alert>
+          </Snackbar>
         </>
       ) : null}
     </>
