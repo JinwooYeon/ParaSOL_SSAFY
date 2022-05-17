@@ -79,6 +79,7 @@ const HomeStack: React.FC<PropsType> = ({
             price={price}
             getNewToken={getNewToken}
             auth={auth}
+            setBalance={setBalance}
           />
         )}
       </Stack.Screen>

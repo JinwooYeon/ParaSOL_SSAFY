@@ -22,6 +22,8 @@ interface PropsType {
   auth: any;
   // 2차 인증 정보 등록 여부 확인
   getMyAuth: () => void;
+  // 내 정보 가져오기
+  getMyInfo: () => void;
 }
 
 // Component _ MypageStack
@@ -32,6 +34,7 @@ const MypageStack: React.FC<PropsType> = ({
   getNewToken,
   auth,
   getMyAuth,
+  getMyInfo,
 }) => {
   return (
     <Stack.Navigator
@@ -58,6 +61,7 @@ const MypageStack: React.FC<PropsType> = ({
             bankInfo={bankInfo}
             setBankInfo={setBankInfo}
             getNewToken={getNewToken}
+            getMyInfo={getMyInfo}
           />
         )}
       </Stack.Screen>
