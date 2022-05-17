@@ -51,7 +51,8 @@ const MypageMenuBox: React.FC<PropsType> = ({
         break;
       // 로그아웃
       case "로그아웃":
-        AsyncStorage.clear();
+        AsyncStorage.removeItem("accessToken");
+        AsyncStorage.removeItem("refreshToken");
         setLogin(false);
         break;
       default:
