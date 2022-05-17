@@ -63,7 +63,7 @@ public class PayController {
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
-    @PostMapping("history")
+    @GetMapping("history")
     public Mono<ResponseEntity<PayHistoryResponse>> getPayHistory(
             Authentication authentication,
             @RequestParam String month
@@ -73,6 +73,29 @@ public class PayController {
                 .build();
 
         return payService.getPayHistory(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+    }
+
+    @GetMapping("/auth")
+    public Mono<ResponseEntity<PayQueryTwoFactorResponse>> queryTwoFactor(
+            Authentication authentication
+    ) {
+        PayQueryTwoFactorRequest request = PayQueryTwoFactorRequest.builder()
+                .authentication(authentication)
+                .build();
+
+        return payService.queryTwoFactor(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+    }
+
+    @PostMapping("/auth/bio")
+    public Mono<ResponseEntity<PayRegisterBioResponse>> registerBio(
+            Authentication authentication,
+            @RequestBody PayRegisterBioRequest request
+    ) {
+        request.setAuthentication(authentication);
+
+        return payService.registerBio(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 }

@@ -3,12 +3,15 @@ package com.parasol.BaaS.service;
 import com.parasol.BaaS.api_model.AccountInfo;
 import com.parasol.BaaS.api_model.BankInfo;
 import com.parasol.BaaS.api_model.PayHistoryItem;
+import com.parasol.BaaS.api_param.WithdrawParam;
 import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.*;
 import com.parasol.BaaS.auth.jwt.UserDetail;
+import com.parasol.BaaS.db.entity.BioInfo;
 import com.parasol.BaaS.db.entity.PayHistory;
 import com.parasol.BaaS.db.entity.PayLedger;
 import com.parasol.BaaS.db.entity.User;
+import com.parasol.BaaS.db.repository.BioInfoRepository;
 import com.parasol.BaaS.db.repository.PayHistoryRepository;
 import com.parasol.BaaS.db.repository.PayLedgerRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
@@ -22,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -41,6 +45,12 @@ public class PayService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BioInfoRepository bioInfoRepository;
+
+    @Autowired
+    private UserService userService;
 
     public Mono<PayInfoResponse> getPayInfo(
             PayInfoRequest request
@@ -65,20 +75,22 @@ public class PayService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록 필요");
         }
 
+        Long payLedgerBalance = payLedger.getBalance();
+        BankInfo payLedgerMainAccount = BankInfo.builder()
+                .bankName(payLedger.getBankName())
+                .bankNum(payLedger.getBankAccountNumber())
+                .build();
+
         return Mono.just(
                 PayInfoResponse.builder()
                         .id(id)
-                        .balance(payLedger.getBalance())
-                        .bankInfo(
-                                BankInfo.builder()
-                                        .bankName(payLedger.getBankName())
-                                        .bankNum(payLedger.getBankAccountNumber())
-                                        .build()
-                        )
+                        .balance(payLedgerBalance)
+                        .bankInfo(payLedgerMainAccount)
                         .build()
         );
     }
 
+    @Transactional
     public Mono<PayTransactionResponse> doPayTransact(
             PayTransactionRequest request
     ) throws IllegalArgumentException {
@@ -107,20 +119,37 @@ public class PayService {
         PayLedger toPayLedger = payLedgerRepository.findByOwnerUserId(transactionTo)
                 .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
-        if(fromPayLedger.getBankAccountNumber() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
-        }
-
-        if(toPayLedger.getBankAccountNumber() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "송금 계좌 확인");
-        }
+//        if(fromPayLedger.getBankAccountNumber() == null) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
+//        }
+//
+//        if(toPayLedger.getBankAccountNumber() == null) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "송금 계좌 확인");
+//        }
 
         Long price = request.getPrice();
-
         LocalDateTime now = LocalDateTime.now();
 
+        Long beforeFromBalance = fromPayLedger.getBalance();
+        Long beforeToBalance = toPayLedger.getBalance();
+
+        Long afterFromBalance = beforeFromBalance - price;
+        Long afterToBalance = beforeToBalance + price;
+
+        if (price <= 0L) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        if (afterFromBalance < 0L) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        if (afterToBalance < 0L) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
         // 보내는 사람 계좌 잔액 차감, 거래 내역 추가
-        fromPayLedger.setBalance(fromPayLedger.getBalance() - price);
+        fromPayLedger.setBalance(afterFromBalance);
         PayHistory fromPayHistory = PayHistory.builder()
                 .user(from)
                 .txDatetime(now)
@@ -134,7 +163,7 @@ public class PayService {
 
 
         // 받는 사람 계좌 잔액 차증, 거래 내역 추가
-        toPayLedger.setBalance(fromPayLedger.getBalance() + price);
+        toPayLedger.setBalance(afterToBalance);
         PayHistory toPayHistory = PayHistory.builder()
                 .user(to)
                 .txDatetime(now)
@@ -148,11 +177,12 @@ public class PayService {
 
         return Mono.just(
                 PayTransactionResponse.builder()
-                        .balance(fromPayLedger.getBalance())
+                        .balance(afterFromBalance)
                         .build()
         );
     }
 
+    @Transactional
     public Mono<PayChargeResponse> doPayCharge(
             PayChargeRequest request
     ) throws IllegalArgumentException {
@@ -175,45 +205,53 @@ public class PayService {
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
+        Long price = request.getPrice();
+
         if(payLedger.getBankAccountNumber() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
         }
 
-        accountService.withdraw(
-                WithdrawRequest.builder()
-                        .authentication(authentication)
-                        .bankName(payLedger.getBankName())
-                        .bankAccountPassword("1234") // TODO : 비밀번호 필요합니다
-                        .amount(request.getPrice())
-                        .accountFrom(
-                                AccountInfo.builder()
-                                        .accountNumber(payLedger.getBankAccountNumber())
-                                        .build()
-                        )
-                        .nameTo("ParaSOL pay")
-                        .build()
-        );
+        if (price <= 0L) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
-        payLedger.setBalance(payLedger.getBalance() + request.getPrice());
-        payLedgerRepository.save(payLedger);
-
-        PayHistory payHistory = PayHistory.builder()
-                .user(user)
-                .txDatetime(LocalDateTime.now())
-                .txOpponent("ParaSOL pay")
-                .amount(request.getPrice())
-                .type(TransactionType.DEPOSIT)
+        WithdrawRequest withdrawRequest = WithdrawRequest.builder()
+                .authentication(authentication)
+                .bankName(payLedger.getBankName())
+                .bankAccountPassword("1234") // TODO : 비밀번호 필요합니다
+                .amount(price)
+                .accountFrom(
+                        AccountInfo.builder()
+                                .accountNumber(payLedger.getBankAccountNumber())
+                                .build()
+                )
+                .nameTo("ParaSOL Pay")
                 .build();
 
-        payHistoryRepository.save(payHistory);
+        return accountService.withdraw(withdrawRequest)
+                .doOnSuccess(result -> {
+                    Long beforeBalance = payLedger.getBalance();
+                    Long afterBalance = beforeBalance + price;
 
-        return Mono.just(
-                PayChargeResponse.builder()
+                    payLedger.setBalance(afterBalance);
+                    payLedgerRepository.save(payLedger);
+
+                    PayHistory payHistory = PayHistory.builder()
+                            .user(user)
+                            .txDatetime(LocalDateTime.now())
+                            .txOpponent("ParaSOL pay")
+                            .amount(price)
+                            .type(TransactionType.DEPOSIT)
+                            .build();
+
+                    payHistoryRepository.save(payHistory);
+                })
+                .map(result -> PayChargeResponse.builder()
                         .balance(payLedger.getBalance())
-                        .build()
-        );
+                        .build());
     }
 
+    @Transactional
     public Mono<PayWithdrawResponse> doPayWithdraw(
             PayWithdrawRequest request
     ) throws IllegalArgumentException {
@@ -227,7 +265,7 @@ public class PayService {
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         User user = userRepository.findByUserId(id)
@@ -236,41 +274,48 @@ public class PayService {
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
+        Long price = request.getPrice();
+
         if(payLedger.getBankAccountNumber() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
         }
 
-        accountService.deposit(
-                DepositRequest.builder()
-                        .bankName("SBJ")
-                        .amount(request.getPrice())
-                        .nameFrom("ParaSOL pay")
-                        .accountTo(
-                                AccountInfo.builder()
-                                        .accountNumber(payLedger.getBankAccountNumber())
-                                        .build()
-                        )
-                        .build()
-        );
+        if (price <= 0L) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
-        payLedger.setBalance(payLedger.getBalance() - request.getPrice());
-        payLedgerRepository.save(payLedger);
-
-        PayHistory payHistory = PayHistory.builder()
-                .user(user)
-                .txDatetime(LocalDateTime.now())
-                .txOpponent("ParaSOL pay")
-                .amount(request.getPrice())
-                .type(TransactionType.WITHDRAW)
+        DepositRequest depositRequest = DepositRequest.builder()
+                .bankName(payLedger.getBankName())
+                .amount(price)
+                .nameFrom("ParaSOL pay")
+                .accountTo(
+                        AccountInfo.builder()
+                                .accountNumber(payLedger.getBankAccountNumber())
+                                .build()
+                )
                 .build();
 
-        payHistoryRepository.save(payHistory);
+        return accountService.deposit(depositRequest)
+                .doOnSuccess(result -> {
+                    Long beforeBalance = payLedger.getBalance();
+                    Long afterBalance = beforeBalance - price;
 
-        return Mono.just(
-                PayWithdrawResponse.builder()
-                        .balance(payLedger.getBalance())
-                        .build()
-        );
+                    payLedger.setBalance(afterBalance);
+                    payLedgerRepository.save(payLedger);
+
+                    PayHistory payHistory = PayHistory.builder()
+                            .user(user)
+                            .txDatetime(LocalDateTime.now())
+                            .txOpponent("ParaSOL pay")
+                            .amount(price)
+                            .type(TransactionType.WITHDRAW)
+                            .build();
+
+                    payHistoryRepository.save(payHistory);
+                })
+                .map(result -> PayWithdrawResponse.builder()
+                                .balance(payLedger.getBalance())
+                                .build());
     }
 
     public Mono<PayHistoryResponse> getPayHistory(
@@ -286,11 +331,8 @@ public class PayService {
         String id = userDetail.getUsername();
 
         if (!StringUtils.hasText(id)) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-
-        User user = userRepository.findByUserId(id)
-                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
@@ -325,6 +367,80 @@ public class PayService {
                                         .build();
                             }
                         }).collect(Collectors.toList()))
+                    .build()
+        );
+    }
+
+    public Mono<PayQueryTwoFactorResponse> queryTwoFactor(
+            PayQueryTwoFactorRequest request
+    ) {
+        Authentication authentication = request.getAuthentication();
+
+        if (authentication == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
+        if (!StringUtils.hasText(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        boolean isOtpRegistered = false;
+        boolean isBioRegistered = bioInfoRepository.findByOwnerUserId(id).isPresent();
+
+        return Mono.just(
+                PayQueryTwoFactorResponse.builder()
+                        .otp(isOtpRegistered)
+                        .bio(isBioRegistered)
+                        .build()
+        );
+    }
+
+    public Mono<PayRegisterBioResponse> registerBio(
+            PayRegisterBioRequest request
+    ) {
+        Authentication authentication = request.getAuthentication();
+
+        if (authentication == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
+        if (!StringUtils.hasText(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userService.getUserByUserId(id);
+        String serial_no = request.getId();
+        String model = request.getModel();
+
+        if (!StringUtils.hasText(serial_no)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        if (!StringUtils.hasText(model)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        if (bioInfoRepository.findByOwnerUserId(id).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        BioInfo bioInfo = BioInfo.builder()
+                .owner(user)
+                .serial_no(serial_no)
+                .model(model)
+                .build();
+
+        bioInfoRepository.save(bioInfo);
+
+        return Mono.just(
+                PayRegisterBioResponse.builder()
+                        .isSuccess(true)
                         .build()
         );
     }
