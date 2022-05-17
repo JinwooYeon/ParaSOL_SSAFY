@@ -21,6 +21,8 @@ interface PropsType {
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
   getNewToken: () => Promise<any>;
+  // 내 정보 조회
+  getMyInfo: () => void;
 }
 interface ItemPropsType {
   // 거래내역 정보
@@ -58,7 +60,12 @@ const Item: React.FC<ItemPropsType> = ({ item }) => (
 );
 
 // Component _ History
-const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
+const History: React.FC<PropsType> = ({
+  balance,
+  setBalance,
+  getNewToken,
+  getMyInfo,
+}) => {
   // const
   // Axios 거래 내역 조회 url
   const getHistoryUrl = "http://k6S101.p.ssafy.io:8080/pay/history";
@@ -136,18 +143,15 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
         console.log(res.data);
         setTotal(res.data.total);
         setData(res.data.data);
-        setTimeout(() => {
-          setRefreshing(false);
-        }, 2000);
+        getMyInfo();
+        setRefreshing(false);
       })
       .catch(async (err) => {
         console.log(err);
         if (err.response.status === 401 && (await getNewToken?.())) {
           getHistory();
         } else {
-          setTimeout(() => {
-            setRefreshing(false);
-          }, 2000);
+          setRefreshing(false);
         }
       });
   };

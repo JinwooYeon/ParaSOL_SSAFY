@@ -47,14 +47,14 @@ const BalanceBox: React.FC<PropsType> = ({
       .then((res) => {
         console.log(res.data);
         setBalance(res.data.balance);
-        setTimeout(() => setRefreshing(false), 2000);
+        setRefreshing(false);
       })
       .catch(async (err) => {
         console.log(err);
         if (err.response.status === 401 && (await getNewToken?.())) {
           getMyInfo();
         } else {
-          setTimeout(() => setRefreshing(false), 2000);
+          setRefreshing(false);
         }
       });
   };

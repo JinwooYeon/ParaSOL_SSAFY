@@ -44,6 +44,8 @@ interface PayConfirmPropsType {
   getNewToken: () => Promise<any>;
   // 2차 인증 정보 등록 여부
   auth: any;
+  // 잔액 set
+  setBalance: (a: string) => void;
 }
 
 // Component _ PayConfirm
@@ -54,6 +56,7 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
   bankInfo,
   getNewToken,
   auth,
+  setBalance,
 }) => {
   // const
   // Axios url
@@ -79,22 +82,19 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
     })
       .then((res) => {
         console.log(res.data);
+        setBalance(res.data.balance);
+        setLoading(false);
+        navigate?.("PayMain");
         Alert.alert("충전 완료!");
-        setTimeout(() => {
-          setLoading(false);
-          navigate?.("PayMain");
-        }, 2000);
       })
       .catch(async (err) => {
         console.log(err);
         if (err.response.status === 401 && (await getNewToken())) {
           chargePost();
         } else {
+          setLoading(false);
+          navigate?.("PayMain");
           Alert.alert("충전에 실패하였습니다.");
-          setTimeout(() => {
-            setLoading(false);
-            navigate?.("PayMain");
-          }, 2000);
         }
       });
   };
@@ -109,22 +109,20 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
     })
       .then((res) => {
         console.log(res.data);
+        setBalance(res.data.balance);
+        setLoading(false);
+        navigate?.("PayMain");
+
         Alert.alert("출금 완료!");
-        setTimeout(() => {
-          setLoading(false);
-          navigate?.("PayMain");
-        }, 2000);
       })
       .catch(async (err) => {
         console.log(err);
         if (err.response.status === 401 && (await getNewToken())) {
           withdrawPost();
         } else {
+          setLoading(false);
+          navigate?.("PayMain");
           Alert.alert("출금에 실패하였습니다.");
-          setTimeout(() => {
-            setLoading(false);
-            navigate?.("PayMain");
-          }, 2000);
         }
       });
   };
@@ -167,8 +165,10 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
     return (
       <ConfirmContainer>
         <ConfirmTargetContainer>
-          <ConfirmTargetText>{bankInfo.bankName}</ConfirmTargetText>
-          <ConfirmTargetText>{bankInfo.bankNum} 으로</ConfirmTargetText>
+          <ConfirmTargetText>은행명: {bankInfo.bankName}</ConfirmTargetText>
+          <ConfirmTargetText>
+            {bankInfo.bankNum} {charge ? "에서 페이로" : "으로"}
+          </ConfirmTargetText>
           <ConfirmTargetText>
             {price}원을 {charge ? "충전" : "출금"}하시겠습니까?
           </ConfirmTargetText>
@@ -249,6 +249,7 @@ const PayStack: React.FC<PropsType> = ({
             price={price}
             getNewToken={getNewToken}
             auth={auth}
+            setBalance={setBalance}
           />
         )}
       </Stack.Screen>
