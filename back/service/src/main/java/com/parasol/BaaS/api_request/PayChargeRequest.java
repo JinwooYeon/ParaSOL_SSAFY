@@ -12,7 +12,8 @@ import org.springframework.security.core.Authentication;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryAccountListRequest {
+public class PayChargeRequest {
     private Authentication authentication;
-    private String bankName;
+    private String method;
+    private Long price;
 }

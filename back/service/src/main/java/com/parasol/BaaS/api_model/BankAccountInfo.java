@@ -1,14 +1,12 @@
 package com.parasol.BaaS.api_model;
 
-import lombok.*;
+import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class BankInfo {
+public class BankAccountInfo {
+    @NotNull
     private String bankImg;
+    @NotNull
     private String bankName;
+    @NotNull
     private String bankNum;
 }

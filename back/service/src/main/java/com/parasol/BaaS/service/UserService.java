@@ -8,8 +8,11 @@ import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.*;
 import com.parasol.BaaS.auth.jwt.UserDetail;
 import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
+import com.parasol.BaaS.db.entity.PayHistory;
+import com.parasol.BaaS.db.entity.PayLedger;
 import com.parasol.BaaS.db.entity.Token;
 import com.parasol.BaaS.db.entity.User;
+import com.parasol.BaaS.db.repository.PayLedgerRepository;
 import com.parasol.BaaS.db.repository.TokenRepository;
 import com.parasol.BaaS.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,9 @@ public class UserService {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private PayLedgerRepository payLedgerRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -264,6 +270,13 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+
+        PayLedger payLedger = PayLedger.builder()
+                .owner(user)
+                .balance(0L)
+                .build();
+
+        payLedgerRepository.save(payLedger);
 
         return Mono.just(
                 RegisterResponse.builder()

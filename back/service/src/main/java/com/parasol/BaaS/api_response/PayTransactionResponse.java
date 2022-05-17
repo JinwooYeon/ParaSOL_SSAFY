@@ -1,4 +1,4 @@
-package com.parasol.BaaS.api_request;
+package com.parasol.BaaS.api_response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryAccountListRequest {
-    private Authentication authentication;
-    private String bankName;
+public class PayTransactionResponse {
+    private Long balance;
 }

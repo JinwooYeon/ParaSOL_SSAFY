@@ -1,5 +1,6 @@
 package com.parasol.BaaS.api_request;
 
+import com.parasol.BaaS.api_model.LoginInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.security.core.Authentication;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryAccountListRequest {
+public class PayInfoRequest {
     private Authentication authentication;
-    private String bankName;
 }

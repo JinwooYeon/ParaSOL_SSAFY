@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryAccountListRequest {
+public class PayHistoryRequest {
     private Authentication authentication;
-    private String bankName;
+    private Long month;
 }
