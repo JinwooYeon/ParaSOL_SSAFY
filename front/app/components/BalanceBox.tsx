@@ -45,7 +45,7 @@ const BalanceBox: React.FC<PropsType> = ({
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setBalance(res.data.balance);
         setTimeout(() => setRefreshing(false), 2000);
       })

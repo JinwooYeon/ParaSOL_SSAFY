@@ -82,7 +82,7 @@ const HasNotAccount: React.FC<PropsType> = ({
       data,
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         Alert.alert("계좌 연결 성공!");
         setEmpty?.(false);
       })

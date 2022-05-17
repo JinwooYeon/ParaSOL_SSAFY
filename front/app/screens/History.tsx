@@ -133,7 +133,7 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
       params: month,
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setTotal(res.data.total);
         setData(res.data.data);
         setTimeout(() => {
@@ -268,7 +268,7 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const HistoryHeaderContainer = styled(HeaderContainer)`
-  flex: 0.2;
+  flex: 0.3;
 `;
 
 export default History;

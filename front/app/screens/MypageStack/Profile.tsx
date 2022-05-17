@@ -85,7 +85,7 @@ const Profile: React.FC<PropsType> = ({ getNewToken, navigation }) => {
     await axios
       .patch(url, data)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         Alert.alert("비밀번호가 수정되었습니다.");
         console.log("비밀번호가 수정되었습니다.");
         setIsUpdate(false);
