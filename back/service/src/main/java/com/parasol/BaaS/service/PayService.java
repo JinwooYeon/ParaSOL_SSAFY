@@ -372,11 +372,15 @@ public class PayService {
                 .collect(Collectors.toList());
 
         Long total = payHistories.parallelStream()
-                .map(PayHistory::getAmount)
+                .map(payHistory ->
+                        payHistory.getType().equals(TransactionType.WITHDRAW)
+                        ? -payHistory.getAmount()
+                        : payHistory.getAmount()
+                )
                 .reduce(0L, Long::sum);
         String formattedTotal = String.valueOf(total)
                 .replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-        formattedTotal = (total > 0 ? "+" : total < 0 ? "-" : "") + formattedTotal;
+        //formattedTotal = (total > 0 ? "+" : total < 0 ? "-" : "") + formattedTotal;
 
         List<PayHistoryItem> data = payHistories.parallelStream()
                 .map(payHistory -> {
