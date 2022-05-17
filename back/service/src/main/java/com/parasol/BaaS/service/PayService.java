@@ -239,6 +239,10 @@ public class PayService {
                     Long beforeBalance = payLedger.getBalance();
                     Long afterBalance = beforeBalance + price;
 
+                    if (afterBalance < 0L) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                    }
+
                     payLedger.setBalance(afterBalance);
                     payLedgerRepository.save(payLedger);
 
@@ -305,6 +309,10 @@ public class PayService {
                 .doOnSuccess(result -> {
                     Long beforeBalance = payLedger.getBalance();
                     Long afterBalance = beforeBalance - price;
+
+                    if (afterBalance < 0L) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                    }
 
                     payLedger.setBalance(afterBalance);
                     payLedgerRepository.save(payLedger);

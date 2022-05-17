@@ -73,12 +73,7 @@ public class BankConnectionService {
                     WebClientResponseException ex = (WebClientResponseException) throwable;
                     throw new ResponseStatusException(ex.getStatusCode());
                 })
-                .flatMap(result -> Mono.just(
-                        BankConnectionResponse.builder()
-                                .isSuccess(result.getIsSuccess())
-                                .build()
-                ))
-                .filter(BankConnectionResponse::getIsSuccess)
+                .filter(BankLoginResult::getIsSuccess)
                 .doOnSuccess(result ->
                 {
                     BankConnection bankConnection = new BankConnection();
@@ -89,6 +84,11 @@ public class BankConnectionService {
 
                     bankConnectionRepository.save(bankConnection);
                 })
+                .flatMap(result -> Mono.just(
+                        BankConnectionResponse.builder()
+                                .isSuccess(result.getIsSuccess())
+                                .build()
+                ))
                 .filter(result -> {
                     Optional<PayLedger> ledger = payLedgerRepository.findByOwnerUserId(user.getUserId());
                     if (ledger.isEmpty()) return false;
