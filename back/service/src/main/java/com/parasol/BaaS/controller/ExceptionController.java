@@ -8,6 +8,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
 
@@ -64,10 +65,10 @@ public class ExceptionController {
     }
 
     @ExceptionHandler({
-            Exception.class // 기타 모든 오류
+            ResponseStatusException.class // 기타 모든 오류
     })
-    public ResponseEntity<Object> InternalServerErrorException(final Exception ex) {
-        log.error("Internal Server Error", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    public ResponseEntity<Object> ResponseStatusException(final ResponseStatusException ex) {
+        log.error("Status handled", ex);
+        return ResponseEntity.status(ex.getStatus()).build();
     }
 }
