@@ -68,7 +68,7 @@ const History: React.FC<PropsType> = ({
 }) => {
   // const
   // Axios 거래 내역 조회 url
-  const getHistoryUrl = "http://k6S101.p.ssafy.io:8080/pay/history";
+  const getHistoryUrl = "/pay/history";
 
   // useState
   // 리프레쉬

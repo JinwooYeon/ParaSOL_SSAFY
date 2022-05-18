@@ -73,7 +73,7 @@ const HasNotAccount: React.FC<PropsType> = ({
 }) => {
   // const
   // Axios url
-  const url = "http://k6s101.p.ssafy.io:8080/bank";
+  const url = "/bank";
 
   // useState
   // 계좌 연결 정보

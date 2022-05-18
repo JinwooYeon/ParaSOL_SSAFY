@@ -60,8 +60,8 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
 }) => {
   // const
   // Axios url
-  const chargeUrl = "http://k6s101.p.ssafy.io:8080/pay/charge";
-  const withdrawUrl = "http://k6s101.p.ssafy.io:8080/pay/withdraw";
+  const chargeUrl = "/pay/charge";
+  const withdrawUrl = "/pay/withdraw";
 
   // let
   // 콤마 제거

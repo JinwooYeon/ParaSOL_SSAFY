@@ -19,9 +19,9 @@ interface PropsType {
 const Delete: React.FC<PropsType> = ({ navigation, setLogin }) => {
   // const
   // Axios 새로운 인증 토큰 url
-  const tokenUrl = "http://k6S101.p.ssafy.io:8080/user/token";
+  const tokenUrl = "/user/token";
   // Axios 회원 탈퇴 url
-  const delUrl = "http://k6s101.p.ssafy.io:8080/user";
+  const delUrl = "/user";
 
   // Axios
   // 새로운 인증 토큰 발급

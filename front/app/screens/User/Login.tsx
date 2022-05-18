@@ -19,7 +19,7 @@ interface PropsType {
 const Login: React.FC<PropsType> = ({ setLogin, navigation: { navigate } }) => {
   // const
   // Axios url
-  const url = "http://k6S101.p.ssafy.io:8080/user/login";
+  const url = "/user/login";
 
   // useState
   const [id, setId] = useState("");

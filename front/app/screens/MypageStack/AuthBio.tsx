@@ -35,7 +35,7 @@ const AuthBio: React.FC<PropsType> = ({
 }) => {
   // const
   // Axios url
-  const bioUrl = "http://k6s101.p.ssafy.io:8080/pay/auth/bio";
+  const bioUrl = "/pay/auth/bio";
 
   // 안드로이드 앱 서명 키
   const androidId = Application.androidId;

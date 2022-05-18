@@ -21,11 +21,11 @@ const Tab = createBottomTabNavigator();
 const Tabs: React.FC<PropsType> = ({ setLogin }) => {
   // const
   // Axios 새로운 인증 토큰 url
-  const tokenUrl = "http://k6S101.p.ssafy.io:8080/user/token";
+  const tokenUrl = "/user/token";
   // Axios 내 정보 조회 url
-  const getMyInfoUrl = "http://k6S101.p.ssafy.io:8080/pay";
+  const getMyInfoUrl = "/pay";
   // Axios 2차 인증 정보 등록 여부 확인 url
-  const getMyAuthUrl = "http://k6S101.p.ssafy.io:8080/pay/auth";
+  const getMyAuthUrl = "/pay/auth";
 
   // useState
   // 잔액

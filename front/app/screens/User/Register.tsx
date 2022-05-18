@@ -22,9 +22,9 @@ interface PropsType {
 const Register: React.FC<PropsType> = ({ navigation }) => {
   // const
   // Axios 회원가입 url
-  const registUrl = "http://k6S101.p.ssafy.io:8080/user/register";
+  const registUrl = "/user/register";
   // Axios 아이디 중복 체크 url
-  const idcheckUrl = "http://k6S101.p.ssafy.io:8080/user/idcheck";
+  const idcheckUrl = "/user/idcheck";
 
   // useState
   const [id, setId] = useState("");

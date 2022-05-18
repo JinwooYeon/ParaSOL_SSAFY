@@ -5,8 +5,11 @@ import Logo from "./components/Logo";
 import Tabs from "./navigation/Tabs";
 import LoginStack from "./navigation/LoginStack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 export default function App() {
+  // default url
+  axios.defaults.baseURL = "https://k6S101.p.ssafy.io:8080";
   // useState
   // 로그인 여부
   const [login, setLogin] = useState<boolean>(false);

@@ -29,7 +29,7 @@ const BalanceBox: React.FC<PropsType> = ({
 }) => {
   // const
   // Axios 내 정보 조회 url
-  const getMyInfoUrl = "http://k6S101.p.ssafy.io:8080/pay";
+  const getMyInfoUrl = "/pay";
 
   // useState
   // 리프레쉬

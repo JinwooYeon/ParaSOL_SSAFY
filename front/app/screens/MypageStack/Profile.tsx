@@ -23,7 +23,7 @@ interface PropsType {
 const Profile: React.FC<PropsType> = ({ getNewToken, navigation }) => {
   // const
   // Axios url
-  const url = "http://k6S101.p.ssafy.io:8080/user";
+  const url = "/user";
 
   // useState
   const [myInfo, setMyInfo] = useState([]);

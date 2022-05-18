@@ -15,7 +15,7 @@ interface PropsType {
 const ForgetPassword: React.FC<PropsType> = ({ navigation }) => {
   // const
   // Axios url
-  const url = "http://k6S101.p.ssafy.io:8080/client/password";
+  const url = "/client/password";
 
   // useState
   const [id, setId] = useState("");
