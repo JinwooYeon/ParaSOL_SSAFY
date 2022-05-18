@@ -1,46 +1,70 @@
-# Getting Started with Create React App
+# ParaSOL Frontend Web Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 서비스 소개
 
-## Available Scripts
+- 뱅킹 서비스 제공에 필요한 기능별로 API를 목록화하여 정의하고 구현
+- API 기능별 단위 테스트를 위한 웹 대시보드
+- Swagger, Postman을 모티브로 하여 레이아웃 및 디자인 설계
+- API 개발 완료 여부, HTTP method, 기능명, URI 등 Rest API의 정보에 대해 쉽게 알아볼 수 있음
+- 입력, 출력값과 응답 코드를 표시
+- 사용자가 직접 입력하는 값과 자동으로 입력되는 값(ex. header token)을 구분
 
-In the project directory, you can run:
+<br>
 
-### `npm start`
+## 기술 스택
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- React JS
+- HTML5/CSS
+- Axios
+- styled components
+- Material UI
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<br>
 
-### `npm test`
+## 빌드
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- node pacakge manager 설치 - [Node.js](https://nodejs.org/ko/)
 
-### `npm run build`
+```bash
+# npm 버전 확인
+node -v
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# npm 버전 확인
+npm -v
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# 패키지 라이브러리 설치
+npm install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 환경변수 설정
+  - 프로젝트 최상단에 `.env` 파일 생성
 
-### `npm run eject`
+```
+REACT_APP_BASE_URL=https://k6S101.p.ssafy.io:8080/
+REACT_APP_GOOGLE_CLIENT_ID={구글 API key}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<br>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 주요 기능
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**기능 별 API 목록 분류**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- 유저, 계좌, 인증 및 페이 탭
 
-## Learn More
+| ![image-20220518174522157](README.assets/image-20220518174522157.png) | ![image-20220518174544683](README.assets/image-20220518174544683.png) |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![image-20220518174554843](README.assets/image-20220518174554843.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**입력값, 출력값 확인**
+
+- 사용자가 직접 입력하는 데이터는 활성화
+- default로 입력되는 데이터는 비활성화(ex. jwt token header)
+
+| ![image-20220518174611235](README.assets/image-20220518174611235.png) | ![image-20220518174617105](README.assets/image-20220518174617105.png) | ![image-20220518174622670](README.assets/image-20220518174622670.png) |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+
+| ![image-20220518174632165](README.assets/image-20220518174632165.png) | ![image-20220518174636524](README.assets/image-20220518174636524.png) |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+
