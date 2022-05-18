@@ -39,7 +39,7 @@ const TransactionConfirm: React.FC<PropsType> = ({
 }) => {
   // const
   // Axios url
-  const url = "/transaction";
+  const url = "/pay/transaction";
 
   // useState
   // 로딩
@@ -57,7 +57,11 @@ const TransactionConfirm: React.FC<PropsType> = ({
       method: "post",
       url: url,
       headers: { Authorization: `Bearer ${accessToken}` },
-      data: { method: "transaction", price: delPrice, transactionTo: info },
+      data: {
+        method: "transaction",
+        price: delPrice,
+        transactionTo: info,
+      },
     })
       .then((res) => {
         console.log(res.data);
