@@ -4,7 +4,7 @@ export const FooterTeamComponent = () => {
   return (
     <TeamDiv>
       {/* 팀 미모지로 수정해야함 */}
-      <TeamImg src="footerImg.jpg" />
+      <TeamImg src="footer.jpg" />
     </TeamDiv>
   );
 };

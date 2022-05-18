@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Container } from "@mui/material";
 
 export const HeaderCompo = () => {
   return (
@@ -7,59 +8,98 @@ export const HeaderCompo = () => {
         <LogoTextContainer>
           <LogoText>Para</LogoText>
           <LogoText blue={true}>SOL</LogoText>
+          <LogoTextWith>with SBJ DNX</LogoTextWith>
         </LogoTextContainer>
-        <LogoSubTextContainer>
+        {/* <LogoSubTextContainer>
           <LogoSubText>SBJ 기업연계 (API 단위 테스트)</LogoSubText>
-        </LogoSubTextContainer>
+        </LogoSubTextContainer> */}
       </LogoContainer>
-      <SubContainer>
-        <SubText>[목표]</SubText>
-        <SubText>
-          → 뱅킹서비스 제공에 필요한 기능별로 API목록화 하여 정의하고 해당
-          목록별 API 서버 서비스를 구현
-        </SubText>
-        <SubText>
-          → API 호출 시 적용 가능한 모든 보안 기능을 검토하여 구현 （인증,
-          구간암호화, 이상트래픽 탐지/차단 등）
-        </SubText>
-        <SubText>
-          → 각종 홍보 이벤트 및 거래 Peak일을 감안하여 대량 Transaction을
-          효율적으로 소화할수 있는 아키텍쳐를 설계 및 구축
-        </SubText>
-      </SubContainer>
+      <Container maxWidth="md">
+        <SubContainer>
+          <SubTextMain>
+            BaaS 플랫폼 구축을 위한 API 서버 설계 및 구축
+          </SubTextMain>
+          <SubTextTitle>&lt;사용자 가이드&gt;</SubTextTitle>
+          <SubText>
+            1. [유저] 아이디 중복확인 후 ParaSOL페이에 회원가입하세요.
+          </SubText>
+          <SubText>2. 가입된 아이디로 ParaSOL페이에 로그인하세요.</SubText>
+          <SubTextDetail>
+            - 로그인이 완료되었다면 사용자 인증이 필요한 서비스에 자동으로
+            인증토큰값이 입력됩니다.
+          </SubTextDetail>
+          <SubTextDetail>
+            - 비밀번호를 잊으신 경우, 비밀번호 재설정을 통해 임시 비밀번호를
+            받으실 수 있습니다.
+          </SubTextDetail>
+          <SubText>
+            3. [인증 및 페이] 은행연결 후 [계좌] 서비스 이용이 가능합니다.
+          </SubText>
+          <SubTextDetail>- 은행명은 SBJ만 가능합니다.</SubTextDetail>
+          <SubTextDetail>
+            - 은행연결시 테스트 계정은 다음과 같습니다. id : test, password :
+            test
+          </SubTextDetail>
+        </SubContainer>
+      </Container>
     </>
   );
 };
 
 const LogoContainer = styled.div`
-  margin: 2%;
+  margin: 0;
   flex-direction: row;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #3182f6;
 `;
 const LogoText = styled.div<{ blue?: boolean }>`
-  color: ${(props) => (props.blue ? "#3182f6" : "black")};
+  color: ${(props) => (props.blue ? "white" : "navy")};
   display: inline-flex;
   font-size: 35px;
   font-weight: bold;
 `;
-const LogoSubText = styled(LogoText)`
-  font-size: 24px;
-  text-align: right;
+const LogoTextWith = styled(LogoText)`
+  margin-left: 8px;
+  color: lightgray;
+  font-size: 28px;
+  font-weight: normal;
 `;
 const LogoTextContainer = styled.div`
-  flex: auto;
+  /* flex: auto; */
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
 `;
-const LogoSubTextContainer = styled.div`
-  float: right;
-`;
+// const LogoSubText = styled(LogoText)`
+//   color: black;
+//   font-size: 24px;
+//   text-align: right;
+// `;
+// const LogoSubTextContainer = styled.div`
+//   float: right;
+// `;
 const SubText = styled(LogoText)`
-  font-size: 11px;
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
   margin-bottom: 1%;
 `;
+const SubTextMain = styled(SubText)`
+  font-size: 20px;
+  margin-bottom: 3%;
+`;
+const SubTextDetail = styled(SubText)`
+  font-weight: normal;
+`;
+const SubTextTitle = styled(SubText)`
+  color: #3182f6;
+`;
 const SubContainer = styled(LogoContainer)`
+  margin: 2%;
   display: flex;
   flex-direction: column;
   align-items: initial;
+  background-color: white;
 `;
