@@ -127,7 +127,6 @@ const HasNotAccount: React.FC<PropsType> = ({
       .then(async (res) => {
         console.log(res.data);
         console.log("계좌 연결 정보 삭제 성공!");
-        await bankPost();
       })
       .catch(async (err) => {
         console.log(err);
@@ -136,6 +135,9 @@ const HasNotAccount: React.FC<PropsType> = ({
         } else {
           Alert.alert("계좌 연결에 실패하였습니다.");
         }
+      })
+      .finally(async () => {
+        await bankPost();
       });
   };
 
