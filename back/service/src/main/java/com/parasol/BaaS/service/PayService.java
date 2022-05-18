@@ -28,6 +28,7 @@ import reactor.core.publisher.Mono;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -386,7 +387,7 @@ public class PayService {
                 .replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
         //formattedTotal = (total > 0 ? "+" : total < 0 ? "-" : "") + formattedTotal;
 
-        List<PayHistoryItem> data = payHistories.parallelStream()
+        List<PayHistoryItem> data = payHistories.stream()
                 .map(payHistory -> {
                     String formatPrice = String.valueOf(payHistory.getAmount())
                             .replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
@@ -411,6 +412,8 @@ public class PayService {
                     }
                 })
                 .collect(Collectors.toList());
+        
+        Collections.reverse(data);
 
         return Mono.just(
                 PayHistoryResponse.builder()
