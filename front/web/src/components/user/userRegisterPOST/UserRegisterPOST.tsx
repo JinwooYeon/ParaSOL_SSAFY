@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { UserInfo } from "model/Model";
+import { UserRegisterRequest } from "model/Model";
 
 export const UserRegisterPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -7,10 +7,10 @@ export const UserRegisterPOST = () => {
     uri: "/user/register",
     method: "POST",
     detail: "회원 등록",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
-    UserInfo,
+    UserRegisterRequest,
   };
   ///////////////////////////////////
 

@@ -2,11 +2,11 @@ package com.parasol.BaaS.modules;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
+import com.parasol.BaaS.api_param.QueryAccountHistoryParam;
 import com.parasol.BaaS.api_request.QueryAccountHistoryRequest;
-import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountHistoryQueryResultResponse;
-import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
+import com.parasol.BaaS.api_response.QueryAccountHistoryResponse;
+import com.parasol.BaaS.api_result.QueryAccountHistoryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,25 +23,23 @@ public class QueryAccountHistoryRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Value("${sbj-api-server.balance}")
+    @Value("${sbj-api-server.history}")
     private String endPoint;
 
-    public AccountHistoryQueryResultResponse create(QueryAccountHistoryRequest request) throws JsonProcessingException {
-        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.GET);
-        WebClient.RequestBodySpec bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
+    @Value("${baas.auth.key}")
+    private String baasAuthKey;
+
+
+    public Mono<QueryAccountHistoryResult> create(QueryAccountHistoryParam request) {
+        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
+        WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
-                .queryParam("bankName", request.getBankName())
-                .queryParam("bankAccountNumber", request.getBankAccountNumber())
                 .build()
-        );
-        // ClientResponse에 응답 데이터 로드
-        Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
+        )
+                .header("Authorization", "Bearer " + baasAuthKey)
+                .body(BodyInserters.fromValue(request));
 
-        AccountHistoryQueryResultResponse formattedResponse = objectMapper.readValue(response.block(), AccountHistoryQueryResultResponse.class);
-
-        return formattedResponse;
+        String block = bodySpec.retrieve().bodyToMono(String.class).block();
+        return bodySpec.retrieve().bodyToMono(QueryAccountHistoryResult.class);
     }
 }

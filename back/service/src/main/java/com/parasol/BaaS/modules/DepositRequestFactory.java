@@ -1,16 +1,11 @@
 package com.parasol.BaaS.modules;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.parasol.BaaS.api_request.DepositRequest;
-import com.parasol.BaaS.api_request.WithdrawRequest;
-import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
-import org.apache.tomcat.util.json.JSONParser;
+import com.parasol.BaaS.api_param.DepositParam;
+import com.parasol.BaaS.api_result.DepositResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,29 +18,22 @@ public class DepositRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Value("${sbj-api-server.deposit}")
     private String endPoint;
 
-    public TransactionExecuteResultResponse create(DepositRequest request) throws JsonProcessingException {
+    @Value("${baas.auth.key}")
+    private String baasAuthKey;
+
+
+    public Mono<DepositResult> create(DepositParam request) {
         WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
                 .build()
-        ).contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters
-                .fromFormData("method", request.getMethod().toString())
-                .with("amount", request.getAmount().toString())
-                .with("accountFrom", request.getAccountFrom().toString())
-                .with("accountTo", request.getAccountTo().toString())
-        );
-        // ClientResponse에 응답 데이터 로드
-        Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
+        )
+                .header("Authorization", "Bearer " + baasAuthKey)
+                .body(BodyInserters.fromValue(request));
 
-        TransactionExecuteResultResponse formattedResponse = objectMapper.readValue(response.block(), TransactionExecuteResultResponse.class);
-
-        return formattedResponse;
+        return bodySpec.retrieve().bodyToMono(DepositResult.class);
     }
 }

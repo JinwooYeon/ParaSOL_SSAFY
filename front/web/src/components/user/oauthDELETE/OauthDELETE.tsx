@@ -8,15 +8,7 @@ export const OauthDELETE = () => {
     detail: "OAuth 회원 탈퇴",
     completed: false,
   };
-  const requestBody = {
-    token: [
-      {
-        value: "jwt",
-        type: "string",
-        required: true,
-      },
-    ],
-  };
+  const requestBody = {};
   ///////////////////////////////////
 
   return (

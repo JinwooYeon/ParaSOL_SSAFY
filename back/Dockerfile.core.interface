@@ -1,0 +1,16 @@
+FROM ubuntu:20.04
+RUN apt update
+RUN apt install build-essential unzip curl -y
+WORKDIR /app
+RUN curl -LO https://github.com/bazelbuild/bazel/releases/download/4.2.2/bazel-4.2.2-installer-linux-x86_64.sh
+RUN chmod +x bazel-4.2.2-installer-linux-x86_64.sh
+RUN ./bazel-4.2.2-installer-linux-x86_64.sh
+ADD ./core-grpc-cpp-client/BUILD .
+ADD ./core-grpc-cpp-client/WORKSPACE .
+ADD ./core/library/core-interface/src/main/proto/core_api.proto .
+RUN bazel build :core_api_cc_grpc
+ADD ./core-grpc-cpp-client/server.cpp .
+RUN bazel build :all
+WORKDIR /app/bazel-bin
+EXPOSE 9000
+ENTRYPOINT ["./core_api_server_cc"]

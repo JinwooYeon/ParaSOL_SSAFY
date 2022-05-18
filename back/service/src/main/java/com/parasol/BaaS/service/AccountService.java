@@ -1,16 +1,26 @@
 package com.parasol.BaaS.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.parasol.BaaS.api_model.AccountInfo;
+import com.parasol.BaaS.api_param.*;
 import com.parasol.BaaS.api_request.*;
-import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.BaaS.api_response.AccountHistoryQueryResultResponse;
-import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
-import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
-import com.parasol.BaaS.enums.TransactionType;
+import com.parasol.BaaS.api_response.*;
+import com.parasol.BaaS.auth.jwt.UserDetail;
+import com.parasol.BaaS.db.entity.BankConnection;
+import com.parasol.BaaS.db.entity.User;
+import com.parasol.BaaS.db.repository.BankConnectionRepository;
+import com.parasol.BaaS.db.repository.UserRepository;
 import com.parasol.BaaS.modules.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Mono;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class AccountService {
@@ -30,85 +40,253 @@ public class AccountService {
     @Autowired
     WithdrawRequestFactory withdrawRequestFactory;
 
-    public AccountBalanceQueryResultResponse getBalance(QueryAccountBalanceRequest request) {
-        String bankName = request.getBankName();
-        String accountNo = request.getBankAccountNumber();
+    @Autowired
+    UserRepository userRepository;
 
-        try {
-            if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
+    @Autowired
+    BankConnectionRepository bankConnectionRepository;
 
-            AccountBalanceQueryResultResponse response = queryAccountBalanceRequestFactory.create(request);
-            return response;
-        } catch (JsonProcessingException e) {
-            System.out.println(e.toString());
-            return null;
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return null;
+    public Mono<QueryAccountBalanceResponse> getBalance(
+            QueryAccountBalanceRequest request
+    ) {
+        Authentication authentication = request.getAuthentication();
+
+        if (authentication == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-    }
 
-    public AccountListQueryResultResponse getAccountList(QueryAccountListRequest request) {
-        String bankName = request.getBankName();
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
 
-        // TODO: DB에서 사전에 등록된 현재 사용자의 인터넷 뱅킹 계정을 얻어와야 함
-        //String accountId = request.getId();
-        //String accountPassword = request.getPassword();
-
-        try {
-            if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
-
-            AccountListQueryResultResponse response = queryAccountListRequestFactory.create(request);
-            return response;
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return null;
+        if (!StringUtils.hasText(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-    }
 
-    public AccountHistoryQueryResultResponse getAccountHistory(QueryAccountHistoryRequest request) {
+        User user = userRepository.findByUserId(id)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
+
         String bankName = request.getBankName();
         String bankAccountNumber = request.getBankAccountNumber();
 
-        try {
-            if (!bankName.equals("SBJ")) throw new IllegalArgumentException("We can support SBJ Bank only.");
+        BankConnection bankConnection = getBankConnection(user, bankName);
 
-            AccountHistoryQueryResultResponse response = queryAccountHistoryRequestFactory.create(request);
-            return response;
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return null;
-        }
+        if (!bankName.equals("SBJ"))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
+
+        QueryAccountBalanceParam param = QueryAccountBalanceParam.builder()
+                .accountNumber(bankAccountNumber)
+                .id(bankConnection.getBankId())
+                .password(bankConnection.getBankPassword())
+                .build();
+
+        return queryAccountBalanceRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
+                .map(result -> QueryAccountBalanceResponse.builder()
+                        .bankName(bankName)
+                        .bankAccountNumber(bankAccountNumber)
+                        .bankAccountBalance(result.getBalance())
+                        .build()
+                );
     }
 
-    public TransactionExecuteResultResponse deposit(DepositRequest request) {
-        TransactionType method = request.getMethod();
-        Long amount = request.getAmount();
-        AccountInfo accountFrom = request.getAccountFrom();
-        AccountInfo accountTo = request.getAccountTo();
+    public Mono<QueryAccountListResponse> getAccountList(
+            QueryAccountListRequest request
+    ) throws IllegalStateException, IllegalArgumentException, AccessDeniedException, NoSuchElementException {
+        Authentication authentication = request.getAuthentication();
 
-        try {
-            TransactionExecuteResultResponse response = depositRequestFactory.create(request);
-            return response;
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return null;
+        if (authentication == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
+        if (!StringUtils.hasText(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userRepository.findByUserId(id)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
+
+        String bankName = request.getBankName();
+
+        BankConnection bankConnection = getBankConnection(user, bankName);
+
+        if (!bankName.equals("SBJ"))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
+
+        QueryAccountListParam param = QueryAccountListParam.builder()
+                .id(bankConnection.getBankId())
+                .password(bankConnection.getBankPassword())
+                .build();
+
+        return queryAccountListRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
+                .map(result -> QueryAccountListResponse.builder()
+                        .bankName(bankName)
+                        .bankAccounts(result.getAccounts())
+                        .build()
+                );
     }
 
-    public TransactionExecuteResultResponse withdraw(WithdrawRequest request) {
-        TransactionType method = request.getMethod();
+    public Mono<QueryAccountHistoryResponse> getAccountHistory(
+            QueryAccountHistoryRequest request
+    ) throws IllegalStateException, IllegalArgumentException, AccessDeniedException, NoSuchElementException {
+        Authentication authentication = request.getAuthentication();
+
+        if (authentication == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
+        }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
+        if (!StringUtils.hasText(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userRepository.findByUserId(id)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
+
+        String bankName = request.getBankName();
+        String bankAccountNumber = request.getBankAccountNumber();
+
+        BankConnection bankConnection = getBankConnection(user, bankName);
+
+        if (!bankName.equals("SBJ"))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
+
+        QueryAccountHistoryParam param = QueryAccountHistoryParam.builder()
+                .accountNumber(bankAccountNumber)
+                .id(bankConnection.getBankId())
+                .password(bankConnection.getBankPassword())
+                .build();
+
+        return queryAccountHistoryRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
+                .map(result -> QueryAccountHistoryResponse.builder()
+                        .bankName(bankName)
+                        .bankAccountNumber(bankAccountNumber)
+                        .bankAccountHistories(result.getAccountHistories())
+                        .build()
+                );
+    }
+
+    public Mono<DepositResponse> deposit(
+            DepositRequest request
+    ) throws IllegalStateException, IllegalArgumentException, AccessDeniedException, NoSuchElementException {
+        String bankName = request.getBankName();
         Long amount = request.getAmount();
-        AccountInfo accountFrom = request.getAccountFrom();
+        String nameFrom = request.getNameFrom();
         AccountInfo accountTo = request.getAccountTo();
 
-        try {
-            TransactionExecuteResultResponse response = withdrawRequestFactory.create(request);
-            return response;
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            return null;
+        if (!bankName.equals("SBJ"))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
+
+        DepositParam param = DepositParam.builder()
+                .amount(amount)
+                .accountTo(accountTo)
+                .nameFrom(nameFrom)
+                .build();
+
+        return depositRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
+                .map(result -> DepositResponse.builder()
+                        .amount(amount)
+                        .nameFrom(nameFrom)
+                        .accountTo(accountTo)
+                        .build()
+                );
+    }
+
+    public Mono<WithdrawResponse> withdraw(
+            WithdrawRequest request
+    ) throws IllegalStateException, IllegalArgumentException, AccessDeniedException, NoSuchElementException {
+        Authentication authentication = request.getAuthentication();
+
+        if (authentication == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "give me a token");
         }
+
+        UserDetail userDetail = (UserDetail) authentication.getDetails();
+        String id = userDetail.getUsername();
+
+        if (!StringUtils.hasText(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userRepository.findByUserId(id)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
+
+        String bankName = request.getBankName();
+        String accountPassword = request.getBankAccountPassword();
+        Long amount = request.getAmount();
+        String nameTo = request.getNameTo();
+        AccountInfo accountFrom = request.getAccountFrom();
+
+        BankConnection bankConnection = getBankConnection(user, bankName);
+
+        if (!bankName.equals("SBJ"))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "We can support SBJ Bank only.");
+
+        WithdrawParam param = WithdrawParam.builder()
+                .accountPassword(accountPassword)
+                .amount(amount)
+                .accountFrom(accountFrom)
+                .nameTo(nameTo)
+                .id(bankConnection.getBankId())
+                .password(bankConnection.getBankPassword())
+                .build();
+
+        return withdrawRequestFactory.create(param)
+                .doOnError( (throwable) -> {
+                    WebClientResponseException ex = (WebClientResponseException)throwable;
+
+                    if (ex.getStatusCode().is4xxClientError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                    else if (ex.getStatusCode().is5xxServerError())
+                        throw new ResponseStatusException(ex.getStatusCode());
+                })
+                .map(result -> WithdrawResponse.builder()
+                        .amount(amount)
+                        .nameTo(nameTo)
+                        .accountFrom(accountFrom)
+                        .build()
+                );
+    }
+
+    public BankConnection getBankConnection(User user, String bankName) throws IllegalStateException {
+        return bankConnectionRepository
+                .findByUser_UserSeqAndBankName(user.getUserSeq(), bankName)
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
     }
 
 }

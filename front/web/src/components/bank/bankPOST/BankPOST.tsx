@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { BankInfo, Token } from "model/Model";
+import { BankConnectionRequest, JwtHeader } from "model/Model";
 
 export const BankPOST = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -7,11 +7,11 @@ export const BankPOST = () => {
     uri: "/bank",
     method: "POST",
     detail: "은행 연결",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
-    BankInfo,
-    Token,
+    BankConnectionRequest,
+    JwtHeader,
   };
   ///////////////////////////////////
 

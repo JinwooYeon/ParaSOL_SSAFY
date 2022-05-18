@@ -1,6 +1,18 @@
 package com.parasol.BaaS.api_request;
 
-import com.parasol.BaaS.api_model.BankInfo;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.Authentication;
 
-public class QueryAccountListRequest extends BankInfo {
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class QueryAccountListRequest {
+    private Authentication authentication;
+    private String bankName;
 }

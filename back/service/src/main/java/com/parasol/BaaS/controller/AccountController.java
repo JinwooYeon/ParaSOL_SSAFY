@@ -1,14 +1,14 @@
 package com.parasol.BaaS.controller;
 
 import com.parasol.BaaS.api_request.*;
-import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
-import com.parasol.BaaS.api_response.AccountHistoryQueryResultResponse;
-import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
-import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
+import com.parasol.BaaS.api_response.*;
 import com.parasol.BaaS.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("account")
@@ -19,59 +19,71 @@ public class AccountController {
 
     @GetMapping("balance")
     @ResponseBody
-    public AccountBalanceQueryResultResponse getBalance(
+    public Mono<ResponseEntity<QueryAccountBalanceResponse>> getBalance(
+            Authentication authentication,
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
-        QueryAccountBalanceRequest request = new QueryAccountBalanceRequest();
-        request.setBankName(bankName);
-        request.setBankAccountNumber(bankAccountNumber);
+        QueryAccountBalanceRequest request = QueryAccountBalanceRequest.builder()
+                .authentication(authentication)
+                .bankName(bankName)
+                .bankAccountNumber(bankAccountNumber)
+                .build();
 
-        AccountBalanceQueryResultResponse result = accountService.getBalance(request);
-        return result;
+        return accountService.getBalance(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
     @GetMapping
     @ResponseBody
-    public AccountListQueryResultResponse getAccountList(
+    public Mono<ResponseEntity<QueryAccountListResponse>> getAccountList(
+            Authentication authentication,
             @RequestParam("bankName") String bankName
     ) {
-        QueryAccountListRequest request = new QueryAccountListRequest();
-        request.setBankName(bankName);
+        QueryAccountListRequest request = QueryAccountListRequest.builder()
+                .authentication(authentication)
+                .bankName(bankName)
+                .build();
 
-        AccountListQueryResultResponse result = accountService.getAccountList(request);
-        return result;
+        return accountService.getAccountList(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
     @GetMapping("history")
     @ResponseBody
-    public AccountHistoryQueryResultResponse getAccountHistory(
+    public Mono<ResponseEntity<QueryAccountHistoryResponse>> getAccountHistory(
+            Authentication authentication,
             @RequestParam("bankName") String bankName,
             @RequestParam("bankAccountNumber") String bankAccountNumber
     ) {
-        QueryAccountHistoryRequest request = new QueryAccountHistoryRequest();
-        request.setBankName(bankName);
-        request.setBankAccountNumber(bankAccountNumber);
+        QueryAccountHistoryRequest request = QueryAccountHistoryRequest.builder()
+                .authentication(authentication)
+                .bankName(bankName)
+                .bankAccountNumber(bankAccountNumber)
+                .build();
 
-        AccountHistoryQueryResultResponse result = accountService.getAccountHistory(request);
-        return result;
+        return accountService.getAccountHistory(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
     @PostMapping("deposit")
     @ResponseBody
-    public TransactionExecuteResultResponse deposit(
+    public Mono<ResponseEntity<DepositResponse>> deposit(
             @RequestBody DepositRequest request
     ) {
-        TransactionExecuteResultResponse result = accountService.deposit(request);
-        return result;
+        return accountService.deposit(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
     @PostMapping("withdraw")
     @ResponseBody
-    public TransactionExecuteResultResponse withdraw(
+    public Mono<ResponseEntity<WithdrawResponse>> withdraw(
+            Authentication authentication,
             @RequestBody WithdrawRequest request
     ) {
-        TransactionExecuteResultResponse result = accountService.withdraw(request);
-        return result;
+        request.setAuthentication(authentication);
+
+        return accountService.withdraw(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 }

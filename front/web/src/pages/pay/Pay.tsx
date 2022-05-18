@@ -1,5 +1,5 @@
-import AuthBioDELETE from "components/pay/authBioDELETE";
-import AuthBioPOST from "components/pay/authBioPOST";
+// import AuthBioDELETE from "components/pay/authBioDELETE";
+// import AuthBioPOST from "components/pay/authBioPOST";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import BankPOST from "components/bank/bankPOST";
@@ -18,15 +18,18 @@ export const Pay = () => {
     <>
       <Box sx={{ width: "100%" }}>
         <Stack spacing={2}>
+          {/* 은행 연결 */}
           <Item>
             <BankPOST />
           </Item>
-          <Item>
+          {/* 생체인증(지문) 등록 및 요청 */}
+          {/* <Item>
             <AuthBioPOST />
-          </Item>
-          <Item>
+          </Item> */}
+          {/* 생체인증(지문) 삭제 */}
+          {/* <Item>
             <AuthBioDELETE />
-          </Item>
+          </Item> */}
         </Stack>
       </Box>
     </>

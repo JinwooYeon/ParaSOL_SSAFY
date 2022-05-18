@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { AccountInfo, Token } from "model/Model";
+import { QueryAccountBalanceRequest, JwtHeader } from "model/Model";
 
 export const AccountBalanceGET = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -10,8 +10,8 @@ export const AccountBalanceGET = () => {
     completed: true,
   };
   const requestBody = {
-    AccountInfo,
-    Token,
+    QueryAccountBalanceRequest,
+    JwtHeader,
   };
   ///////////////////////////////////
 

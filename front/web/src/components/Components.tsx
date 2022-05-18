@@ -12,10 +12,15 @@ interface PropsType {
 }
 
 export const Components: React.FC<PropsType> = (props: PropsType) => {
-  // const BASE_URL = "http://k6S101.p.ssafy.io:8080/";
-  const JWTtoken = localStorage.getItem("jwt")
-    ? localStorage.getItem("jwt")
+  // localStorage
+  const accessToken = localStorage.getItem("accessToken")
+    ? localStorage.getItem("accessToken")
     : "";
+  const refreshToken = localStorage.getItem("refreshToken")
+    ? localStorage.getItem("refreshToken")
+    : "";
+
+  // useState
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({});
   const [responseData, setResponseData] = useState({
@@ -23,75 +28,83 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
     output: "",
   });
 
+  // method
   const handleShow = () => {
     setShow(!show);
   };
+  const isRefresh = (detail: string) => {
+    if (detail === "새로운 인증 토큰 요청") {
+      return refreshToken;
+    } else {
+      return accessToken;
+    }
+  };
   const onSubmit = async (data: any) => {
     switch (props.API.method) {
+      // GET 요청
       case "GET":
-        await axios({
-          method: "get",
-          url: props.API.uri,
-          // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${JWTtoken}` },
-          params: data,
-        })
-          .then((response) => {
-            console.log(response);
-            setResponseData({
-              status: response.status.toString(),
-              output: JSON.stringify(response.data),
-            });
+        // 구글 로그인 (Oauth)
+        if (props.API.uri === "/user/login/google") {
+          // 수정 필요
+          console.log("login");
+          window.open("http://k6s101.p.ssafy.io:8080/user/login/google");
+          // axios({
+          //   method: "get",
+          //   url: "http://k6s101.p.ssafy.io:8080/user/login/google",
+          // })
+          //   .then((res) => console.log(res))
+          //   .catch((err) => console.log(err));
+        } else {
+          await axios({
+            method: "get",
+            url: props.API.uri,
+            headers: { Authorization: `Bearer ${isRefresh(props.API.detail)}` },
+            params: data,
           })
-          .catch((err) => {
-            setResponseData({
-              status: err.response.status.toString(),
-              output: err.toString(),
+            .then((response) => {
+              if (props.API.detail === "새로운 인증 토큰 요청") {
+                localStorage.setItem("accessToken", response.data.accessToken);
+                localStorage.setItem(
+                  "refreshToken",
+                  response.data.refreshToken
+                );
+              }
+              setResponseData({
+                status: response.status.toString(),
+                output: JSON.stringify(response.data),
+              });
+            })
+            .catch((err) => {
+              setResponseData({
+                status: err.response.status.toString(),
+                output: err.toString(),
+              });
             });
-          });
+        }
         break;
+      // POST 요청
       case "POST":
+        if (props.API.detail === "입금") {
+          data["accountTo"] = { accountNumber: data.accountNumber };
+        } else if (props.API.detail === "결제") {
+          data["accountFrom"] = { accountNumber: data.accountNumber };
+        }
         await axios({
           method: "post",
           url: props.API.uri,
-          // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${JWTtoken}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
+            if (props.API.detail === "로그인") {
+              localStorage.setItem("accessToken", response.data.accessToken);
+              localStorage.setItem("refreshToken", response.data.refreshToken);
+            }
             setResponseData({
               status: response.status.toString(),
               output: JSON.stringify(response.data),
             });
-            if (props.API.detail === "로그인") {
-              localStorage.setItem("jwt", response.data.token);
-            }
           })
-          // .catch(function (error) {
-          //   console.log(error);
-          //   if (error.response) {
-          //     // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-          //     console.log("first");
-          //     console.log(error.response.data);
-          //     console.log(error.response.status);
-          //     console.log(error.response.headers);
-          //   } else if (error.request) {
-          //     // 요청이 이루어 졌으나 응답을 받지 못했습니다.
-          //     // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
-          //     // Node.js의 http.ClientRequest 인스턴스입니다.
-          //     console.log("second");
-          //     console.log(error.request);
-          //   } else {
-          //     // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-          //     console.log("third");
-          //     console.log("Error", error.message);
-          //   }
-          //   console.log(error.config);
-          //   setResponseData({
-          //     status: error.response.status.toString(),
-          //     output: error.response.data.toString(),
-          //   });
-          // });
           .catch((err) => {
             setResponseData({
               status: err.response.status.toString(),
@@ -99,12 +112,12 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
             });
           });
         break;
+      // PATCH 요청
       case "PATCH":
         await axios({
           method: "patch",
           url: props.API.uri,
-          // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${JWTtoken}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
@@ -120,12 +133,12 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
             });
           });
         break;
+      // DELETE 요청
       case "DELETE":
         await axios({
           method: "delete",
           url: props.API.uri,
-          // baseURL: BASE_URL,
-          headers: { Authroization: `Bearer ${JWTtoken}` },
+          headers: { Authorization: `Bearer ${accessToken}` },
           data,
         })
           .then((response) => {
@@ -133,6 +146,9 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
               status: response.status.toString(),
               output: JSON.stringify(response.data),
             });
+            if (props.API.detail === "회원 탈퇴") {
+              localStorage.clear();
+            }
           })
           .catch((err) => {
             setResponseData({
@@ -148,6 +164,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
 
   return (
     <>
+      {/* 요청할 api */}
       <DropdownButton API={props.API} handleShow={handleShow} />
       {show ? (
         <Stack>
@@ -156,15 +173,18 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
             <Stack direction="column">
               <Box>
                 <Stack direction="column" spacing={3}>
+                  {/* 요청 */}
                   <Request
                     requestBody={props.requestBody}
                     formData={formData}
                     setFormData={setFormData}
                     onSubmit={onSubmit}
+                    API={props.API}
                   />
                 </Stack>
               </Box>
             </Stack>
+            {/* 응답 */}
             <Response
               responseData={responseData}
               setResponseData={setResponseData}

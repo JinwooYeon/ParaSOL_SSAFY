@@ -1,5 +1,5 @@
 import { Components } from "components/Components";
-import { BankInfo, Token } from "model/Model";
+import { QueryAccountListRequest, JwtHeader } from "model/Model";
 
 export const AccountGET = () => {
   ////////////// 입력해야하는 부분 ///////////
@@ -7,11 +7,11 @@ export const AccountGET = () => {
     uri: "/account",
     method: "GET",
     detail: "계좌 목록 조회",
-    completed: false,
+    completed: true,
   };
   const requestBody = {
-    BankInfo,
-    Token,
+    QueryAccountListRequest,
+    JwtHeader,
   };
   ///////////////////////////////////
 

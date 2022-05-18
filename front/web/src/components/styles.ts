@@ -1,5 +1,3 @@
-import { blue, red } from "@mui/material/colors";
-
 const styles = {
   api: {
     padding: "2px 40px",

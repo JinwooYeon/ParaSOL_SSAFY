@@ -2,12 +2,10 @@ package com.parasol.BaaS.modules;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.parasol.BaaS.api_request.DepositRequest;
-import com.parasol.BaaS.api_request.QueryAccountBalanceRequest;
+import com.parasol.BaaS.api_param.QueryAccountListParam;
 import com.parasol.BaaS.api_request.QueryAccountListRequest;
-import com.parasol.BaaS.api_response.AccountBalanceQueryResultResponse;
 import com.parasol.BaaS.api_response.AccountListQueryResultResponse;
-import com.parasol.BaaS.api_response.TransactionExecuteResultResponse;
+import com.parasol.BaaS.api_result.QueryAccountListResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,26 +22,21 @@ public class QueryAccountListRequestFactory {
     @Qualifier(value = "fixedText")
     private WebClient fixedText;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Value("${sbj-api-server.account-list}")
     private String endPoint;
 
-    public AccountListQueryResultResponse create(QueryAccountListRequest request) throws JsonProcessingException {
-        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.GET);
+    @Value("${baas.auth.key}")
+    private String baasAuthKey;
+
+    public Mono<QueryAccountListResult> create(QueryAccountListParam request) {
+        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = fixedText.method(HttpMethod.POST);
         WebClient.RequestHeadersSpec<?> bodySpec = uriSpec.uri(uriBuilder -> uriBuilder
                 .path(endPoint)
-                .queryParam("bankName", request.getBankName())
-                .queryParam("id", request.getId())
-                .queryParam("password", request.getPassword())
                 .build()
-        );
+        )
+                .header("Authorization", "Bearer " + baasAuthKey)
+                .body(BodyInserters.fromValue(request));
 
-        Mono<String> response = bodySpec.retrieve().bodyToMono(String.class);
-
-        AccountListQueryResultResponse formattedResponse = objectMapper.readValue(response.block(), AccountListQueryResultResponse.class);
-
-        return formattedResponse;
+        return bodySpec.retrieve().bodyToMono(QueryAccountListResult.class);
     }
 }
