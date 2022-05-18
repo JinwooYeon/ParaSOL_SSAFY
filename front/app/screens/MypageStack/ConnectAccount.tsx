@@ -95,11 +95,15 @@ const HasNotAccount: React.FC<PropsType> = ({
       headers: { Authorization: `Bearer ${accessToken}` },
       data,
     })
-      .then((res) => {
+      .then(async (res) => {
         console.log(res.data);
-        setEmpty?.(false);
-        Alert.alert("계좌 연결 성공!");
-        getMyInfo();
+        await getMyInfo();
+        if (bankInfo.bankNum !== null) {
+          setEmpty?.(false);
+          Alert.alert("계좌 연결 성공!");
+        } else {
+          Alert.alert("계좌 연결에 실패하였습니다.");
+        }
       })
       .catch(async (err) => {
         console.log(err);
@@ -120,10 +124,9 @@ const HasNotAccount: React.FC<PropsType> = ({
       headers: { Authorization: `Bearer ${accessToken}` },
       data: { bankName: "SBJ" },
     })
-      .then((res) => {
-        console.log(res);
+      .then(async (res) => {
+        console.log(res.data);
         console.log("계좌 연결 정보 삭제 성공!");
-        bankPost();
       })
       .catch(async (err) => {
         console.log(err);
@@ -132,6 +135,9 @@ const HasNotAccount: React.FC<PropsType> = ({
         } else {
           Alert.alert("계좌 연결에 실패하였습니다.");
         }
+      })
+      .finally(async () => {
+        await bankPost();
       });
   };
 
@@ -176,7 +182,8 @@ const HasNotAccount: React.FC<PropsType> = ({
           color="blue"
           text="계좌 연결"
           navigation={navigation}
-          setter={bankInfo.bankNum === null ? bankPost : bankDel}
+          // setter={bankInfo.bankNum === null ? bankPost : bankDel}
+          setter={bankDel}
         />
         <BtnBox color="white" text="뒤로" navigation={navigation} />
       </FooterContainer>
