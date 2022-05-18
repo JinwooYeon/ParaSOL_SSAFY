@@ -10,7 +10,7 @@ import {
 // Component _ Oauth
 const Oauth = ({ navigation }: any) => (
   <LayoutContainer>
-    <HeaderText>공동인증 발급/재발급</HeaderText>
+    <HeaderText>OTP 정보 등록</HeaderText>
     <ContentFooterContainer>
       <ContentContainer></ContentContainer>
       <FooterContainer>

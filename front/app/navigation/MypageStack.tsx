@@ -17,7 +17,13 @@ interface PropsType {
   // 계좌 연결 정보 set
   setBankInfo: (a: any) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
+  // 2차 인증 정보 등록 여부 확인
+  getMyAuth: () => void;
+  // 내 정보 가져오기
+  getMyInfo: () => void;
 }
 
 // Component _ MypageStack
@@ -26,6 +32,9 @@ const MypageStack: React.FC<PropsType> = ({
   bankInfo,
   setBankInfo,
   getNewToken,
+  auth,
+  getMyAuth,
+  getMyInfo,
 }) => {
   return (
     <Stack.Navigator
@@ -41,7 +50,9 @@ const MypageStack: React.FC<PropsType> = ({
         {(props) => <Mypage {...props} setLogin={setLogin} />}
       </Stack.Screen>
       {/* 회원정보 */}
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Profile">
+        {(props) => <Profile {...props} getNewToken={getNewToken} />}
+      </Stack.Screen>
       {/* 계좌 관리하기 */}
       <Stack.Screen name="ConnectAccount">
         {(props) => (
@@ -50,13 +61,23 @@ const MypageStack: React.FC<PropsType> = ({
             bankInfo={bankInfo}
             setBankInfo={setBankInfo}
             getNewToken={getNewToken}
+            getMyInfo={getMyInfo}
           />
         )}
       </Stack.Screen>
-      {/* 공동인증 발급/재발급 */}
+      {/* OTP 정보 등록 */}
       <Stack.Screen name="Oauth" component={Oauth} />
-      {/* 생체인증 발급/재발급 */}
-      <Stack.Screen name="AuthBio" component={AuthBio} />
+      {/* 생체인증 정보 등록 */}
+      <Stack.Screen name="AuthBio">
+        {(props) => (
+          <AuthBio
+            {...props}
+            auth={auth}
+            getNewToken={getNewToken}
+            getMyAuth={getMyAuth}
+          />
+        )}
+      </Stack.Screen>
       {/* 고객 문의 */}
       <Stack.Screen name="Service" component={Service} />
       {/* 회원 탈퇴 */}
