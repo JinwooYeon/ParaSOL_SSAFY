@@ -71,6 +71,10 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        if (userRepository.existsByUserId(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
         AuthToken newToken = JwtTokenUtil.getToken(id);
         String newAccessToken = newToken.getAccessToken().getAccessToken();
         String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
