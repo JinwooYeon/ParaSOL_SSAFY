@@ -5,14 +5,15 @@ interface IMyprops {
   completed: boolean;
 }
 
-export const Completed: React.FC<IMyprops> = (props: IMyprops) => {
+export const Completed: React.FC<IMyprops> = ({ completed }) => {
   return (
     <>
-      {props.completed ? (
+      {/* api 개발 완료 여부: boolean */}
+      {completed ? (
         <Box
           sx={{
             borderRadius: "50%",
-            backgroundColor: "green",
+            backgroundColor: "#53E76C",
             width: 15,
             height: 15,
           }}

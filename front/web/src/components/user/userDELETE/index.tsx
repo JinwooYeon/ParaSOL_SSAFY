@@ -1,3 +1,3 @@
-import { UserDelete } from "./UserDelete";
+import { UserDELETE } from "./UserDELETE";
 
-export default UserDelete;
+export default UserDELETE;

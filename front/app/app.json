@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "ParaSOL",
+    "slug": "ParaSOL",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "description": "",
+    "icon": "./assets/Logo.png"
+  },
+  "name": "ParaSOL"
+}
