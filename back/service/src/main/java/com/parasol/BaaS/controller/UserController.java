@@ -87,7 +87,7 @@ public class UserController {
                 .build();
 
         return userService.reissueAuthToken(request)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.NO_CONTENT));
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
     @GetMapping
