@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @GetMapping("/token")
-    private Mono<ResponseEntity<ReissueTokenResponse>> reissueToken (
+    public Mono<ResponseEntity<ReissueTokenResponse>> reissueToken (
             Authentication authentication
     ) {
         ReissueTokenRequest request = ReissueTokenRequest.builder()
