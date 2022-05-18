@@ -186,9 +186,11 @@ public class PayService {
         payLedgerRepository.save(toPayLedger);
         payHistoryRepository.save(toPayHistory);
 
+        String formattedPayLedgerBalance = String.valueOf(afterFromBalance).replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+
         return Mono.just(
                 PayTransactionResponse.builder()
-                        .balance(afterFromBalance)
+                        .balance(formattedPayLedgerBalance)
                         .build()
         );
     }
