@@ -276,7 +276,7 @@ Design : :pencil: 기획
 > 인증된 사용자 기반 서비스
 
 - 로그인, 회원가입, 비밀번호 재설정
-![로그인](README.assets/app git/01.로그인.gif)
+![로그인](README.assets/app%20gif/01로그인.gif)
 
 - 회원정보, 비밀번호 수정, 회원탈퇴
 
