@@ -316,5 +316,6 @@ Design : :pencil: 기획
 > 2차인증
 
 - 생체 인증 - 지문 인식
-- 공인 인증 - OTP
+
+![로그인](README.assets/ParaSOL%20APP/10생체인증송금.gif)
 
