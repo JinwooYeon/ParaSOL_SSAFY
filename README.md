@@ -225,17 +225,17 @@ Design : ✏️ 기획
 
 ```
 1. 함수명:
-  - Frontend: **PascalCase** 사용, 동사 형태 Create()
-  - Backend: **camelCase** 사용, 동사 형태 create()
-2. URI: **kebab-case** 사용 /kebab-eat
-3. 코드 내 변수명: **camelCase** 사용 const goodAfterNoon = AftetNoon()
-4. DB 컬럼명: **snake_case** 사용 user_id
-5. 구조체명, 클래스명: **PascalCase** 사용 class AfterNoon { }
-6. 클래스 멤버 변수명: **camelCase** 사용 private string description
-7. 인수 변수명: **camelCase** create(int userId)
-8. 인터페이스 명: I + **PascalCase** 사용 interface IGreatBread { }
-9. 열거형 객체명: E + **PascalCase** 사용 enum EGreatBread { }
-10. JAVA 패키지명: **snake_case** 사용
+  - Frontend: PascalCase 사용, 동사 형태 Create()
+  - Backend: camelCase 사용, 동사 형태 create()
+2. URI: kebab-case 사용 /kebab-eat
+3. 코드 내 변수명: camelCase 사용 const goodAfterNoon = AftetNoon()
+4. DB 컬럼명: snake_case 사용 user_id
+5. 구조체명, 클래스명: PascalCase 사용 class AfterNoon { }
+6. 클래스 멤버 변수명: camelCase 사용 private string description
+7. 인수 변수명: camelCase create(int userId)
+8. 인터페이스 명: I + PascalCase 사용 interface IGreatBread { }
+9. 열거형 객체명: E + PascalCase 사용 enum EGreatBread { }
+10. JAVA 패키지명: snake_case 사용
 ```
 
 <br>
