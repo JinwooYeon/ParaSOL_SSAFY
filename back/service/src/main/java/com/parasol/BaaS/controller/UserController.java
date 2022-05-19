@@ -19,6 +19,8 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/user")
@@ -60,6 +62,41 @@ public class UserController {
 
         return userService.loginOauth(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+    }
+
+    @PostMapping("/login/google/redirect")
+    public Mono<ResponseEntity<LoginResponse>> loginOauthRedirect (
+            @RequestBody String data
+    ) {
+        String regex = "\\?state=(?<state>.*)&code(?<code>.*)&scope=(?<scope>.*)&authuser=(?<authuser>.*)&prompt=(?<prompt>.*)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(data);
+
+        StringBuilder result = new StringBuilder();
+        if (matcher.find()) {
+            String state = matcher.group("state");
+            String code = matcher.group("code");
+            String scope = matcher.group("scope");
+            String authuser = matcher.group("authuser");
+            String prompt = matcher.group("prompt");
+
+            OAuthLoginRequest request = OAuthLoginRequest.builder()
+                    .state(state)
+                    .code(code)
+                    .scope(scope)
+                    .authuser(authuser)
+                    .prompt(prompt)
+                    .build();
+
+            return userService.loginOauthRedirect(request)
+                    .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+        }
+        else
+        {
+            return Mono.just(
+                    new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED)
+            );
+        }
     }
 
     @PostMapping("/idcheck")

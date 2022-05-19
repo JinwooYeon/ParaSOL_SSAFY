@@ -8,10 +8,7 @@ import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.*;
 import com.parasol.BaaS.auth.jwt.UserDetail;
 import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
-import com.parasol.BaaS.db.entity.PayHistory;
-import com.parasol.BaaS.db.entity.PayLedger;
-import com.parasol.BaaS.db.entity.Token;
-import com.parasol.BaaS.db.entity.User;
+import com.parasol.BaaS.db.entity.*;
 import com.parasol.BaaS.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,6 +47,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private OAuthUserRepository oAuthUserRepository;
 
     public Mono<LoginResponse> login(
             LoginRequest request
@@ -124,9 +124,56 @@ public class UserService {
 
         return Mono.just(
                 LoginResponse.builder()
-                .accessToken(newAccessToken)
-                .refreshToken(newRefreshToken)
-                .build()
+                        .accessToken(newAccessToken)
+                        .refreshToken(newRefreshToken)
+                        .build()
+        );
+    }
+    public Mono<LoginResponse> loginOauthRedirect(
+            OAuthLoginRequest request
+    ) throws IllegalArgumentException, NoSuchElementException {
+        String state = request.getState();
+        String code = request.getCode();
+        String scope = request.getScope();
+        String authuser = request.getAuthuser();
+        String prompt = request.getPrompt();
+
+        String oAuthClientId = "";
+
+        OAuthUser oAuthUser = oAuthUserRepository.findById(oAuthClientId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        User user = oAuthUser.getUser();
+
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        String userId = user.getUserId();
+
+        if (!StringUtils.hasText(userId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        AuthToken newToken = JwtTokenUtil.getToken(userId);
+        String newAccessToken = newToken.getAccessToken().getAccessToken();
+        String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
+
+        Token savedToken = tokenRepository.findByUser_UserId(userId)
+                .orElse(
+                        Token.builder()
+                                .user(user)
+                                .refreshToken(newRefreshToken)
+                                .build()
+                );
+        savedToken.setRefreshToken(newRefreshToken);
+        tokenRepository.save(savedToken);
+
+        return Mono.just(
+                LoginResponse.builder()
+                        .accessToken(newAccessToken)
+                        .refreshToken(newRefreshToken)
+                        .build()
         );
     }
 
