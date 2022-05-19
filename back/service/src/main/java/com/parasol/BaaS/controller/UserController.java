@@ -64,10 +64,31 @@ public class UserController {
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
-    @PostMapping("/login/google/redirect")
+    @GetMapping("/login/google/redirect")
     public Mono<ResponseEntity<LoginResponse>> loginOauthRedirect (
-            @RequestBody OAuthLoginRequest request
+            HttpServletRequest servletRequest,
+            @RequestParam String state,
+            @RequestParam String code,
+            @RequestParam String scope,
+            @RequestParam String authuser,
+            @RequestParam String prompt
     ) {
+        String baseUrl = ServletUriComponentsBuilder
+                .fromRequestUri(servletRequest)
+                .replacePath(null)
+                .build()
+                .toUriString();
+
+        OAuthLoginRequest request = OAuthLoginRequest.builder()
+                .state(state)
+                .code(code)
+                .scope(scope)
+                .authuser(authuser)
+                .prompt(prompt)
+                .redirectUri(baseUrl + "/user/login/google/redirect")
+                //.redirectUri("https://k6s101.p.ssafy.io:8080/user/login/google/redirect")
+                .build();
+
         return userService.loginOauthRedirect(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
