@@ -1,5 +1,8 @@
 package com.parasol.BaaS.service;
 
+import com.auth0.jwt.JWT;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parasol.BaaS.api_model.AccessToken;
 import com.parasol.BaaS.api_model.AuthToken;
 import com.parasol.BaaS.api_model.Password;
@@ -7,6 +10,7 @@ import com.parasol.BaaS.api_model.RefreshToken;
 import com.parasol.BaaS.api_param.OAuthLoginParam;
 import com.parasol.BaaS.api_request.*;
 import com.parasol.BaaS.api_response.*;
+import com.parasol.BaaS.api_result.GooglePayload;
 import com.parasol.BaaS.api_result.OAuthLoginResult;
 import com.parasol.BaaS.auth.jwt.UserDetail;
 import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
@@ -14,6 +18,7 @@ import com.parasol.BaaS.db.entity.*;
 import com.parasol.BaaS.db.repository.*;
 import com.parasol.BaaS.modules.OAuthRequestFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -27,6 +32,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
@@ -56,9 +63,6 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private OAuthUserRepository oAuthUserRepository;
-
-    @Autowired
     private OAuthRequestFactory oAuthRequestFactory;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -69,6 +73,9 @@ public class UserService {
 
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String redirectUri;
+
+    @Value("${oauth.token.uri}")
+    private String tokenUri;
 
     public Mono<LoginResponse> login(
             LoginRequest request
@@ -148,6 +155,7 @@ public class UserService {
                         .build()
         );
     }
+
     public Mono<LoginResponse> loginOauthRedirect(
             OAuthLoginRequest request
     ) throws IllegalArgumentException, NoSuchElementException {
@@ -156,9 +164,6 @@ public class UserService {
         String scope = request.getScope();
         String authuser = request.getAuthuser();
         String prompt = request.getPrompt();
-        String redirectUri = request.getRedirectUri();
-
-        final String uri = "https://oauth2.googleapis.com/token";
 
         OAuthLoginParam param = OAuthLoginParam.builder()
                 .code(code)
@@ -168,54 +173,58 @@ public class UserService {
                 .grantType("authorization_code")
                 .build();
 
-        return oAuthRequestFactory.create(uri, param)
-                .doOnError(throwable -> {
-                    throwable.printStackTrace();
-                    System.out.println("throwable.getLocalizedMessage() = " + throwable.getLocalizedMessage());
-                })
-                .flatMap(result -> {
+        return oAuthRequestFactory.create(tokenUri, param)
+                .map(result -> {
                             log.info("access_token:" + result.getAccessToken());
                             log.info("refresh_token:" + result.getRefreshToken());
                             log.info("id_token:" + result.getIdToken());
 
-                            OAuthUser oAuthUser = oAuthUserRepository.findById(result.getIdToken())
-                                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                            try {
+                                String payloadJson = JWT.decode(result.getIdToken()).getPayload();
+                                String payloadBytes = new String(Base64.decodeBase64URLSafe(payloadJson), StandardCharsets.UTF_8);
+                                log.info(payloadBytes);
 
-                            User user = oAuthUser.getUser();
+                                ObjectMapper mapper = new ObjectMapper();
+                                GooglePayload userData = mapper.readValue(payloadBytes, GooglePayload.class);
 
-//        User user = userRepository.findByUserId("test")
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-                            if (user == null) {
-                                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-                            }
-
-                            String userId = user.getUserId();
-
-                            if (!StringUtils.hasText(userId)) {
-                                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-                            }
-
-                            AuthToken newToken = JwtTokenUtil.getToken(userId);
-                            String newAccessToken = newToken.getAccessToken().getAccessToken();
-                            String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
-
-                            Token savedToken = tokenRepository.findByUser_UserId(userId)
-                                    .orElse(
-                                            Token.builder()
-                                                    .user(user)
-                                                    .refreshToken(newRefreshToken)
+                                User user = userRepository.findByUserId(userData.getEmail())
+                                        .orElse(
+                                            User.builder()
+                                                    .userId(userData.getEmail())
+                                                    .userName(userData.getName())
+                                                    .userPassword(passwordEncoder.encode(userData.getAtHash()))
                                                     .build()
-                                    );
-                            savedToken.setRefreshToken(newRefreshToken);
-                            tokenRepository.save(savedToken);
+                                        );
+                                userRepository.save(user);
 
-                            return Mono.just(
-                                    LoginResponse.builder()
-                                            .accessToken(newAccessToken)
-                                            .refreshToken(newRefreshToken)
-                                            .build()
-                            );
+                                Long userSeq = user.getUserSeq();
+                                String userId = user.getUserId();
+
+                                if (!StringUtils.hasText(userId)) {
+                                    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+                                }
+
+                                AuthToken newToken = JwtTokenUtil.getToken(userId);
+                                String newAccessToken = newToken.getAccessToken().getAccessToken();
+                                String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
+
+                                Token savedToken = tokenRepository.findByUser_UserSeq(userSeq)
+                                        .orElse(
+                                                Token.builder()
+                                                        .user(user)
+                                                        .refreshToken(newRefreshToken)
+                                                        .build()
+                                        );
+                                savedToken.setRefreshToken(newRefreshToken);
+                                tokenRepository.save(savedToken);
+
+                                return LoginResponse.builder()
+                                        .accessToken(newAccessToken)
+                                        .refreshToken(newRefreshToken)
+                                        .build();
+                            } catch (JsonProcessingException e) {
+                                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY);
+                            }
                         }
                 );
 
