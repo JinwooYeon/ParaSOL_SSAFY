@@ -197,6 +197,16 @@ public class UserService {
                                         );
                                 userRepository.save(user);
 
+                                PayLedger payLedger = payLedgerRepository.findByOwnerUserId(user.getUserId())
+                                        .orElse(
+                                                PayLedger.builder()
+                                                        .owner(user)
+                                                        .balance(0L)
+                                                        .build()
+                                        );
+
+                                payLedgerRepository.save(payLedger);
+
                                 Long userSeq = user.getUserSeq();
                                 String userId = user.getUserId();
 
@@ -227,8 +237,6 @@ public class UserService {
                             }
                         }
                 );
-
-
     }
 
     public Mono<IdCheckResponse> idCheck(
