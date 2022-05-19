@@ -92,6 +92,59 @@ BaaS 플랫폼 구축을 위한 API 서버 설계/구축
   Non-Bundled Plugins: com.intellij.ko (213.341)
 
 - Frontend
+[Web]
+![Generic badge](https://img.shields.io/badge/React-18.0.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/TypeScript-4.6.3-3178C6.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Styled_Components-5.3.5-DB7093.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Axois-0.26.1-5A29E4.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Copy_To_Clipboard-5.1.0-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Dom-17.0.2-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Scripts-17.0.2-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Web_Vitals-2.1.4-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Emotion/React-11.9.0-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Emotion/Styled-11.8.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Mui/Lab-5.0.0-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Mui/Material-5.6.2-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Testing_Library/Jest_Dom-5.16.4-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Testing_Library/React-13.1.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Testing_Library/User_Event-13.5.0-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/Jest-27.4.1-3178C6.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/Node-16.11.27-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/React-18.0.5-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/React_Dom-18.0.1-61DAFB.svg)&nbsp;
+
+[App]
+![Generic badge](https://img.shields.io/badge/React_Native-0.64.3-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Expo-44.0.2-000020.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React-17.0.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/TypeScript-4.6.4-3178C6.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Styled_Components-5.3.5-DB7093.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Axois-0.27.2-5A29E4.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@React_Native_Async_Storage/Async_Storage-1.15.0-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@React_Navigation/Bottom_Tabs-6.3.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@React_Navigation/Native-6.0.10-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@React_Navigation/Native_Stack-6.6.2-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/Styled_Components-5.1.25-DB7093.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/Styled_Components_React_Native-5.1.3-DB7093.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Native_Picker_Select-8.0.4-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Native_Qrcode_svg-6.1.2-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Native_Safe_Area_Context-3.3.2-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Native_Screens-3.10.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Native_Svg-12.1.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Native_Web-0.17.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Expo_Application-4.0.1-000020.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Expo_Barcode_Scanner-11.2.0-000020.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Expo_Camera-12.1.2-000020.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Expo_Clipboard-2.1.0-000020.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Expo_Device-4.1.0-000020.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Expo_Local_Authentication-12.1.0-000020.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Expo_Splash_Screen-0.14.1-000020.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/React_Dom-17.0.1-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Babel/Core-7.12.9-F9DC3E.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/Jest-27.5.0-3178C6.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/React-17.0.21-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/React_Native-0.67.6-61DAFB.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/@Types/React_Test_Renderer-18.0.0-61DAFB.svg)&nbsp;
 
   - React JS
   - TypeScript
