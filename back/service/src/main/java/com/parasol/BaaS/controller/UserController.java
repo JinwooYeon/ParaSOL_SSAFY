@@ -48,6 +48,7 @@ public class UserController {
                 .build()
                 .toUriString();
 
+
         String redirectUri = baseUrl + "/oauth2/authorization/google";
         response.sendRedirect(redirectUri);
     }
