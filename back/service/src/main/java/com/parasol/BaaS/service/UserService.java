@@ -507,7 +507,7 @@ public class UserService {
             String id
     ) throws NoSuchElementException {
         return userRepository.findByUserId(id)
-                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR); });
+                .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); });
     }
 
 }
