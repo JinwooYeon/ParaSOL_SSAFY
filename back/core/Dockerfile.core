@@ -4,6 +4,6 @@ COPY . .
 RUN gradle :application:core-application:build
 
 FROM openjdk:11-jre-slim
-COPY --from=builder /app/application/core-application/build/libs/*.jar app.jar
+COPY --from=builder /app/application/core-application/build/libs/core-application.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
