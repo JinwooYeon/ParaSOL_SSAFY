@@ -139,7 +139,7 @@ public class PayService {
 //        }
 
         Long price = request.getPrice();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().plusHours(9);
 
         Long beforeFromBalance = fromPayLedger.getBalance();
         Long beforeToBalance = toPayLedger.getBalance();
@@ -256,7 +256,7 @@ public class PayService {
 
                     PayHistory payHistory = PayHistory.builder()
                             .user(user)
-                            .txDatetime(LocalDateTime.now())
+                            .txDatetime(LocalDateTime.now().plusHours(9))
                             .txOpponent("ParaSOL pay")
                             .amount(price)
                             .type(TransactionType.DEPOSIT)
@@ -333,7 +333,7 @@ public class PayService {
 
                     PayHistory payHistory = PayHistory.builder()
                             .user(user)
-                            .txDatetime(LocalDateTime.now())
+                            .txDatetime(LocalDateTime.now().plusHours(9))
                             .txOpponent("ParaSOL pay")
                             .amount(price)
                             .type(TransactionType.WITHDRAW)
