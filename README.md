@@ -59,6 +59,10 @@ BaaS 플랫폼 구축을 위한 API 서버 설계/구축
 
 <br>
 
+### [📊 중간발표 PPT](README.assets/Presentation/ParaSOL_중간발표.pdf)
+
+### [📊 최종발표 PPT](README.assets/Presentation/ParaSOL_최종발표.pdf)
+
 ## 기술 스택
 
 ### 🌏 환경 버전
