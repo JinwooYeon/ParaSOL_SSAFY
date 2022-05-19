@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import BtnBox from "../../components/BtnBox";
 import ConnectedAccountBox from "../../components/ConnectedAccountBox";
 import {
+  Balance,
+  BalanceTextContainer,
+  BoxContainer,
   ContentContainer,
   ContentFooterContainer,
   FooterContainer,
@@ -34,11 +37,52 @@ const HasAccount: React.FC<PropsType> = ({
   bankInfo,
   setEmpty,
 }) => {
+  // const
+  const urlget = "/account/balance";
+
+  const [num, setNum] = useState("0");
+
+  // 세자리 수마다 콤마 찍기
+  const onChangeText = (s: string) => {
+    s = s.replace(/[^0-9]/g, "");
+    if (s === "") s = "0";
+    let temp = s.slice(0, 1);
+    if (s.length > 1 && temp === "0") {
+      s = s.substring(1);
+    }
+    let rep = s.replace(/,/g, "");
+    setNum(rep.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+  };
+
+  // Axios
+  const getAccountBalance = async (data: any) => {
+    console.log("get");
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    await axios({
+      method: "get",
+      url: urlget,
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: data,
+    })
+      .then(async (res) => {
+        console.log("getAccountBalance");
+        let stringBal = res.data.bankAccountBalance + "";
+        onChangeText(stringBal);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // useEffect
   useEffect(() => {
     if (bankInfo.bankNum === null) {
       setEmpty?.(true);
     }
+    getAccountBalance({
+      bankName: bankInfo.bankName,
+      bankAccountNumber: bankInfo.bankNum,
+    });
   }, [bankInfo.bankNum]);
 
   return (
@@ -49,6 +93,13 @@ const HasAccount: React.FC<PropsType> = ({
           navigation={navigation}
           myPage={true}
         />
+        <BoxContainer>
+          <Balance>계좌 잔액</Balance>
+          <BalanceTextContainer>
+            <Balance>{num}</Balance>
+            <Balance>원</Balance>
+          </BalanceTextContainer>
+        </BoxContainer>
       </ContentContainer>
       <FooterContainer>
         <BtnBox
@@ -73,7 +124,7 @@ const HasNotAccount: React.FC<PropsType> = ({
 }) => {
   // const
   // Axios url
-  const url = "/bank";
+  const urlPost = "/bank";
 
   // useState
   // 계좌 연결 정보
@@ -87,11 +138,10 @@ const HasNotAccount: React.FC<PropsType> = ({
   // 계좌 연결
   const bankPost = async () => {
     console.log("post");
-    console.log(data);
     const accessToken = await AsyncStorage.getItem("accessToken");
     await axios({
       method: "post",
-      url: url,
+      url: urlPost,
       headers: { Authorization: `Bearer ${accessToken}` },
       data,
     })
@@ -120,7 +170,7 @@ const HasNotAccount: React.FC<PropsType> = ({
     const accessToken = await AsyncStorage.getItem("accessToken");
     await axios({
       method: "delete",
-      url: url,
+      url: urlPost,
       headers: { Authorization: `Bearer ${accessToken}` },
       data: { bankName: "SBJ" },
     })
@@ -151,6 +201,13 @@ const HasNotAccount: React.FC<PropsType> = ({
   const setPassword = (s: string) => {
     setData({ ...data, password: s });
   };
+
+  // useEffect
+  useEffect(() => {
+    if (bankInfo.bankNum === null) {
+      setEmpty?.(true);
+    }
+  }, [bankInfo.bankNum]);
 
   return (
     <>
