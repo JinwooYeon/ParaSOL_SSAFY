@@ -20,10 +20,26 @@ function App() {
   };
 
   const oauthPost = (data: string) => {
+    const parseQuery = function () {
+      const a = window.location.search.substring(1).split('&');
+      if (a.length === 0) return {};
+      let b = {};
+
+      for (let i = 0; i < a.length; ++i) {
+          const p = a[i].split('=', 2);
+
+          b = {
+            [decodeURIComponent(p[0])]: decodeURIComponent(p[1] || ''),
+            ...b
+          }
+      }
+      return b;
+    };
+
     axios({
       method: "post",
       url: "/user/login/google/redirect",
-      data,
+      data: parseQuery(),
     })
       .then((response) => {
         console.log(response);
