@@ -67,13 +67,21 @@ BaaS 플랫폼 구축을 위한 API 서버 설계/구축
 
 ### 🌏 환경 버전
 
-- 형상관리
+- 형상관리 <br>
+<img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira software&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/gitlab-yellow?style=for-the-badge&logo=gitlab&logoColor=FC6D26">&nbsp;
+<img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/google sheets-34A853?style=for-the-badge&logo=google sheets&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/webex-316AFF?style=for-the-badge&logo=webex&logoColor=white">&nbsp;
+
   - Jira
   - GitLab
   - Mattermost
   - Webex
   - Notion
   - Google Docs
+
 - 개발 환경
   - Windows 11 10.0
   - VSCode [버전]
@@ -92,6 +100,7 @@ BaaS 플랫폼 구축을 위한 API 서버 설계/구축
   Non-Bundled Plugins: com.intellij.ko (213.341)
 
 - Frontend <br>
+
 [Web]<br>
 ![Generic badge](https://img.shields.io/badge/React-18.0.1-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/TypeScript-4.6.3-3178C6.svg)&nbsp;
