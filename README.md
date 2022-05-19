@@ -91,8 +91,8 @@ BaaS 플랫폼 구축을 위한 API 서버 설계/구축
 
   Non-Bundled Plugins: com.intellij.ko (213.341)
 
-- Frontend
-[Web]
+- Frontend <br>
+[Web]<br>
 ![Generic badge](https://img.shields.io/badge/React-18.0.1-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/TypeScript-4.6.3-3178C6.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Styled_Components-5.3.5-DB7093.svg)&nbsp;
@@ -112,8 +112,9 @@ BaaS 플랫폼 구축을 위한 API 서버 설계/구축
 ![Generic badge](https://img.shields.io/badge/@Types/Node-16.11.27-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/@Types/React-18.0.5-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/@Types/React_Dom-18.0.1-61DAFB.svg)&nbsp;
+<br>
 
-[App]
+[App]<br>
 ![Generic badge](https://img.shields.io/badge/React_Native-0.64.3-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Expo-44.0.2-000020.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/React-17.0.1-61DAFB.svg)&nbsp;
