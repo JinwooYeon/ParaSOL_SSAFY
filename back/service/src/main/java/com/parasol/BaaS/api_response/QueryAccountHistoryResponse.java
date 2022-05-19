@@ -1,5 +1,6 @@
 package com.parasol.BaaS.api_response;
 
+import com.parasol.BaaS.api_model.AccountFormattedHistory;
 import com.parasol.BaaS.api_model.AccountHistory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,5 @@ import java.util.List;
 public class QueryAccountHistoryResponse {
     private String bankName;
     private String bankAccountNumber;
-    private List<AccountHistory> bankAccountHistories;
+    private List<AccountFormattedHistory> bankAccountHistories;
 }
