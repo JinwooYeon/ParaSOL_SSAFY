@@ -1,12 +1,14 @@
 package com.parasol.BaaS.api_model;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
+@ToString
+@SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class AccessToken {
     private String accessToken;
 }

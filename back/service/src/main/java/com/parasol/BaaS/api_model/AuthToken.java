@@ -5,6 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@ToString
 @SuperBuilder
 @NoArgsConstructor
 public class AuthToken {

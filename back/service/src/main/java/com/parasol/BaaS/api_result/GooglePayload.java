@@ -2,10 +2,16 @@ package com.parasol.BaaS.api_result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@ToString
+@SuperBuilder
+@NoArgsConstructor
 public class GooglePayload {
     private String iss;
     private String azp;

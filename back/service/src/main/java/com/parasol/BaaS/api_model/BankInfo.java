@@ -1,12 +1,13 @@
 package com.parasol.BaaS.api_model;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@ToString
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 public class BankInfo {
     private String bankImg;
     private String bankName;
