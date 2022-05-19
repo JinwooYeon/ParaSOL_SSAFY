@@ -15,5 +15,4 @@ public class OAuthLoginRequest {
     private String scope;
     private String authuser;
     private String prompt;
-    private String redirectUri;
 }

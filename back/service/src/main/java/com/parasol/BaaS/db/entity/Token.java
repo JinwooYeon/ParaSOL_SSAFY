@@ -17,12 +17,12 @@ import javax.persistence.*;
 public class Token {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long tokenId;
 
     private String refreshToken;
 
     @OneToOne
-    @MapsId
     @JoinColumn(name = "user_seq")
     private User user;
 }

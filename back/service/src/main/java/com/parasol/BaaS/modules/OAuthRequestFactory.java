@@ -71,6 +71,7 @@ public class OAuthRequestFactory {
                         .with("client_secret", request.getClientSecret())
                         .with("grant_type", request.getGrantType())
                         .with("redirect_uri", request.getRedirectUri())
+                        .with("access_type", "offline")
                 );
 
         return bodySpec.retrieve().bodyToMono(OAuthLoginResult.class);
