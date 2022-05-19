@@ -195,23 +195,24 @@ feature/backend/기능명
 - 스페이스 주의
 - 이모지 추가해주세요
 - 백프론트 구분 가능한 커밋은 [FE/BE] 넣어주세요
+``ex) Feat : ✨ [BE] 새로운 기능 추가 ``
 
 ```
-Feat : :sparkles: 새로운 기능 추가
-Fix : :bug: 버그 수정
-Docs : :books: 문서 수정
-Chore : :pencil: 그 외 자잘한 작업
+Feat : ✨ 새로운 기능 추가
+Fix : 🐛 버그 수정
+Docs : 📚 문서 수정
+Chore : 📝 그 외 자잘한 작업
 Test : ☔️ 테스트 코드
-Build : :bow_and_arrow: 시스템 또는 외부 종속성에 영향을 미치는 변경사항 (npm, gulp, yarn 레벨)
-CI : :ferris_wheel: CI관련 설정
-Style : :art: 코드 의미에 영향을 주지 않는 변경사항 (포맷, 세미콜론 누락, 공백 등)
-Refactor : :bulb: 성능 개선
-Merge : :handshake: 기능 개발 후 브랜치 병합
-Docker : :whale: 도커 구성
-DB : :dolphin: MySQL 데이터베이스 특정 (마이그레이션, 스크립트, 확장 등)
-Study : :book: 공부
-Settings : :gear: 환경설정
-Design : :pencil: 기획
+Build : 🏹 시스템 또는 외부 종속성에 영향을 미치는 변경사항 (npm, gulp, yarn 레벨)
+CI : 🎡 CI관련 설정
+Style : 🎨 코드 의미에 영향을 주지 않는 변경사항 (포맷, 세미콜론 누락, 공백 등)
+Refactor : 💡 성능 개선
+Merge : 🤝 기능 개발 후 브랜치 병합
+Docker : 🐳 도커 구성
+DB : 🐬 MySQL 데이터베이스 특정 (마이그레이션, 스크립트, 확장 등)
+Study : 📖 공부
+Settings : ⚙️ 환경설정
+Design : ✏️ 기획
 ```
 
 ### 스크럼 회의
