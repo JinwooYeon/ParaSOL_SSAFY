@@ -37,9 +37,9 @@ function App() {
     };
 
     axios({
-      method: "post",
+      method: "get",
       url: "/user/login/google/redirect",
-      data: parseQuery(),
+      params: parseQuery(),
     })
       .then((response) => {
         console.log(response);
