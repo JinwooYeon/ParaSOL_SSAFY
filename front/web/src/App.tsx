@@ -3,13 +3,14 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import User from "pages/user";
 import Account from "pages/account";
 import Pay from "pages/pay";
 import Header from "pages/header";
 import Footer from "pages/footer";
 import { Container } from "@mui/material";
+import axios from "axios";
 
 function App() {
   const [value, setValue] = useState("1");
@@ -17,6 +18,26 @@ function App() {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const oauthPost = (data: string) => {
+    axios({
+      method: "post",
+      url: "/user/login/google/redirect",
+      data,
+    })
+      .then((response) => {
+        console.log(response);
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    oauthPost(window.location.search);
+  }, []);
 
   return (
     <>

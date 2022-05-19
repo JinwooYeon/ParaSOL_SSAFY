@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { GoogleLogin } from "react-google-login";
+// import { GoogleLogin } from "react-google-login";
 
 interface IMyprops {
   requestBody: any;
@@ -28,8 +28,8 @@ export const Request: React.FC<IMyprops> = ({
   API,
 }) => {
   // const
-  const REACT_APP_GOOGLE_CLIENT_ID: any =
-    process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  // const REACT_APP_GOOGLE_CLIENT_ID: any =
+  //   process.env.REACT_APP_GOOGLE_CLIENT_ID;
   // localStorage
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
@@ -166,19 +166,14 @@ export const Request: React.FC<IMyprops> = ({
             )}
           </Box>{" "}
           {API.uri === "/user/login/google" ? (
-            <GoogleLogin
-              clientId={REACT_APP_GOOGLE_CLIENT_ID}
-              buttonText="Login with Google"
-              onSuccess={(res) => {
-                console.log("success");
-                console.log(res);
-              }}
-              onFailure={(err) => {
-                console.log("fail");
-                console.log(err);
-              }}
-              cookiePolicy={"single_host_origin"}
-            />
+            <Button
+              variant="contained"
+              type="button"
+              color="primary"
+              onClick={() => onSubmit(formData)}
+            >
+              구글 로그인
+            </Button>
           ) : (
             <>
               <Button
