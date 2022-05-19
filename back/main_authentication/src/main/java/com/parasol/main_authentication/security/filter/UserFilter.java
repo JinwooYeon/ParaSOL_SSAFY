@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -30,45 +31,49 @@ public class UserFilter extends AbstractGatewayFilterFactory<UserFilter.Config> 
     }
 
     @Override
-    public GatewayFilter apply(Config config) {
+    public GatewayFilter apply(UserFilter.Config config) {
         return ((exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
             ServerHttpResponse response = exchange.getResponse();
 
-            String baseMessage = config.getBaseMessage();
             String uri = config.getUri();
 
-            logger.info("UserFilter baseMessage>>>>>>" + baseMessage);
             if (config.isPreLogger()) {
-                logger.info("UserFilter Start>>>>>>" + request);
+                log.info("UserFilter Start >>>>>>");
             }
 
-            if (!containsAuthorization(request)) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                        "Authorization: " + request.getHeaders().getOrEmpty(HttpHeaders.AUTHORIZATION).get(0));
-            }
-
-            String token = extractToken(request);
-            String method = request.getMethodValue();
             InetSocketAddress ipSocketAddr = request.getRemoteAddress();
-
-            if (ipSocketAddr == null){
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                        "Authorization: " + request.getHeaders().getOrEmpty(HttpHeaders.AUTHORIZATION).get(0));
+            if (ipSocketAddr == null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
             }
 
             String ipAddr = ipSocketAddr.getAddress().toString();
 
-            if (!hasPermission(ipAddr, method, uri, token)) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                        "Authorization: " + request.getHeaders().getOrEmpty(HttpHeaders.AUTHORIZATION).get(0) + ", IP: " + ipSocketAddr);
+            if (!containsAuthorization(request)) {
+                log.error("Unauthorized :: Authorization Header is empty [from: " + uri + " - " + ipAddr + "]");
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
             }
 
-            return chain.filter(exchange).then(Mono.fromRunnable(()->{
-                if (config.isPostLogger()) {
-                    logger.info("UserFilter End>>>>>>" + response);
-                }
-            }));
+            String token = extractToken(request);
+
+            if (token.isEmpty()) {
+                log.error("Unauthorized :: Authorization Header is empty [from: " + uri + " - " + ipAddr + "]");
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+
+            String method = request.getMethodValue();
+
+            if (!hasPermission(ipAddr, method, uri, token)) {
+                log.error("Forbidden :: [" + uri + " - " + ipAddr + " - " + token + "] has not permission");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+
+            return chain.filter(exchange)
+                    .then(Mono.fromRunnable(()->{
+                        if (config.isPostLogger()) {
+                            log.info("<<<<<< UserFilter End");
+                        }
+                    }));
         });
     }
 
@@ -81,12 +86,7 @@ public class UserFilter extends AbstractGatewayFilterFactory<UserFilter.Config> 
     }
 
     private boolean hasPermission(String ipAddr, String method, String uri, String token) {
-        if (!service.isValid(ipAddr, method, uri, token)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                    "Authorization: " + token + ", IP: " + ipAddr);
-        }
-
-        return true;
+        return service.isValid(ipAddr, method, uri, token);
     }
 
     @Data
