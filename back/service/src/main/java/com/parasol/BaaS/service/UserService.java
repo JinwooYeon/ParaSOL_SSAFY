@@ -13,6 +13,7 @@ import com.parasol.BaaS.auth.jwt.util.JwtTokenUtil;
 import com.parasol.BaaS.db.entity.*;
 import com.parasol.BaaS.db.repository.*;
 import com.parasol.BaaS.modules.OAuthRequestFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
+@Slf4j
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -64,6 +66,9 @@ public class UserService {
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
+
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    private String redirectUri;
 
     public Mono<LoginResponse> login(
             LoginRequest request
@@ -151,57 +156,70 @@ public class UserService {
         String scope = request.getScope();
         String authuser = request.getAuthuser();
         String prompt = request.getPrompt();
+        String redirectUri = request.getRedirectUri();
 
-//        final String uri = "https://oauth2.googleapis.com/token";
+        final String uri = "https://oauth2.googleapis.com/token";
 
-//        OAuthLoginParam param = OAuthLoginParam.builder()
-//                .code(code)
-//                .clientId(clientId)
-//                .clientSecret(clientSecret)
-//                .redirectUri(null)
-//                .grantType("authorization_code")
-//                .build();
-//
-//        Mono<OAuthLoginResult> oAuthResult = oAuthRequestFactory.create(uri, param);
-//
-//        OAuthUser oAuthUser = oAuthUserRepository.findById(oAuthClientId)
+        OAuthLoginParam param = OAuthLoginParam.builder()
+                .code(code)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .redirectUri(redirectUri)
+                .grantType("authorization_code")
+                .build();
+
+        return oAuthRequestFactory.create(uri, param)
+                .doOnError(throwable -> {
+                    throwable.printStackTrace();
+                    System.out.println("throwable.getLocalizedMessage() = " + throwable.getLocalizedMessage());
+                })
+                .flatMap(result -> {
+                            log.info("access_token:" + result.getAccessToken());
+                            log.info("refresh_token:" + result.getRefreshToken());
+                            log.info("id_token:" + result.getIdToken());
+
+                            OAuthUser oAuthUser = oAuthUserRepository.findById(result.getIdToken())
+                                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+                            User user = oAuthUser.getUser();
+
+//        User user = userRepository.findByUserId("test")
 //                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//
-//        User user = oAuthUser.getUser();
 
-        User user = userRepository.findByUserId("test")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                            if (user == null) {
+                                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+                            }
 
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+                            String userId = user.getUserId();
 
-        String userId = user.getUserId();
+                            if (!StringUtils.hasText(userId)) {
+                                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+                            }
 
-        if (!StringUtils.hasText(userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+                            AuthToken newToken = JwtTokenUtil.getToken(userId);
+                            String newAccessToken = newToken.getAccessToken().getAccessToken();
+                            String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
 
-        AuthToken newToken = JwtTokenUtil.getToken(userId);
-        String newAccessToken = newToken.getAccessToken().getAccessToken();
-        String newRefreshToken = newToken.getRefreshToken().getRefreshToken();
+                            Token savedToken = tokenRepository.findByUser_UserId(userId)
+                                    .orElse(
+                                            Token.builder()
+                                                    .user(user)
+                                                    .refreshToken(newRefreshToken)
+                                                    .build()
+                                    );
+                            savedToken.setRefreshToken(newRefreshToken);
+                            tokenRepository.save(savedToken);
 
-        Token savedToken = tokenRepository.findByUser_UserId(userId)
-                .orElse(
-                        Token.builder()
-                                .user(user)
-                                .refreshToken(newRefreshToken)
-                                .build()
+                            return Mono.just(
+                                    LoginResponse.builder()
+                                            .accessToken(newAccessToken)
+                                            .refreshToken(newRefreshToken)
+                                            .build()
+                            );
+                        }
                 );
-        savedToken.setRefreshToken(newRefreshToken);
-        tokenRepository.save(savedToken);
 
-        return Mono.just(
-                LoginResponse.builder()
-                        .accessToken(newAccessToken)
-                        .refreshToken(newRefreshToken)
-                        .build()
-        );
+
     }
 
     public Mono<IdCheckResponse> idCheck(

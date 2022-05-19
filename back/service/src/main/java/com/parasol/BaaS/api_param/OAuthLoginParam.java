@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class OAuthLoginParam {
+    @JsonProperty(value="code")
     private String code;
     @JsonProperty(value="client_id")
     private String clientId;
