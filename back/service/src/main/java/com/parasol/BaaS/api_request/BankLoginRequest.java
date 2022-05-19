@@ -6,6 +6,8 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@ToString(callSuper = true)
 @SuperBuilder
+@NoArgsConstructor
 public class BankLoginRequest extends LoginInfo {
 }
