@@ -307,12 +307,6 @@ Design : :pencil: 기획
 
 ![로그인](README.assets/ParaSOL%20APP/06송금하기.gif)
 
-> 혜택
-
-- 이벤트 목록 출력
-
-![image-20220518163832145](README.assets/image-27.png)
-
 > 2차인증
 
 - 생체 인증 - 지문 인식
