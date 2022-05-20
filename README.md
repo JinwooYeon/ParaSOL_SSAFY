@@ -64,6 +64,23 @@
 
 - Backend
 
+![Generic badge](https://img.shields.io/badge/Java-11.0.2-007396.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/SpringBoot-2.6.6-6DB33F.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/QueryDSL-5.0.0-0089CF.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/JPA-2.4-BAAE85.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Lombok-213.7172.25-B23B23.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Spring_Webflux-2.6.6-6DB33F.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Spring_Cloud_Gateway-3.1.2-6DB33F.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/GRPC-1.3.5-244B5A.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/MySQL-5.7-4479A1.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/C++-20-00599C.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Java_Net_Socket-20-007396.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Java_JWT-3.10.3-000000.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/OAuth2_Client-2.5.4-000000.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Spring_Security-4.3.18-6DB33F.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Gradle-7.4.1-02303A.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Docker-20.10.16-2496ED.svg)&nbsp;
+
   - Java 1.8.0_192
   - Python 3.9.7
   - Intellij JetBrains Client 2021.3 Build
