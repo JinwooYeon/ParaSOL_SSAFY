@@ -1,12 +1,13 @@
 package com.parasol.BaaS.api_response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@ToString
+@SuperBuilder
+@NoArgsConstructor
 public class LoginResponse {
     private String accessToken;
     private String refreshToken;

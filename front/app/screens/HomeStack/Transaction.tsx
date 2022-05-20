@@ -31,7 +31,7 @@ interface PropsType {
   // 잔액 set
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
 }
 
 // Component _ Transaction
@@ -50,10 +50,10 @@ const Transaction: React.FC<PropsType> = ({
   const transactionData = { info, price };
 
   // method
-  const fetchCopiedText = async () => {
-    const text = await Clipboard.getStringAsync();
-    setInfo(text);
-  };
+  // const fetchCopiedText = async () => {
+  //   const text = await Clipboard.getStringAsync();
+  //   setInfo(text);
+  // };
   const onChangeText = (s: string) => {
     setInfo(s);
   };
@@ -62,9 +62,9 @@ const Transaction: React.FC<PropsType> = ({
   };
 
   // useEffect
-  useEffect(() => {
-    fetchCopiedText;
-  }, []);
+  // useEffect(() => {
+  //   fetchCopiedText;
+  // }, []);
 
   return (
     <LayoutContainer>
@@ -83,7 +83,7 @@ const Transaction: React.FC<PropsType> = ({
               placeholder="송금할 주소를 입력해주세요."
               value={info}
               onChangeText={onChangeText}
-              onFocus={fetchCopiedText}
+              // onFocus={fetchCopiedText}
             />
             <TransactionTextDelTouchableOpacity onPress={onPress}>
               <TransactionTextDel>X</TransactionTextDel>

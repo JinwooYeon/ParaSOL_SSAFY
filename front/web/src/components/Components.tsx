@@ -39,6 +39,7 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
       return accessToken;
     }
   };
+
   const onSubmit = async (data: any) => {
     switch (props.API.method) {
       // GET 요청
@@ -47,13 +48,8 @@ export const Components: React.FC<PropsType> = (props: PropsType) => {
         if (props.API.uri === "/user/login/google") {
           // 수정 필요
           console.log("login");
-          window.open("http://k6s101.p.ssafy.io:8080/user/login/google");
-          // axios({
-          //   method: "get",
-          //   url: "http://k6s101.p.ssafy.io:8080/user/login/google",
-          // })
-          //   .then((res) => console.log(res))
-          //   .catch((err) => console.log(err));
+          window.location.href =
+            "https://k6s101.p.ssafy.io:8080/user/login/google";
         } else {
           await axios({
             method: "get",

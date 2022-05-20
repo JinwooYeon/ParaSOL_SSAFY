@@ -22,9 +22,9 @@ interface PropsType {
 const Register: React.FC<PropsType> = ({ navigation }) => {
   // const
   // Axios 회원가입 url
-  const registUrl = "http://k6S101.p.ssafy.io:8080/user/register";
+  const registUrl = "/user/register";
   // Axios 아이디 중복 체크 url
-  const idcheckUrl = "http://k6S101.p.ssafy.io:8080/user/idcheck";
+  const idcheckUrl = "/user/idcheck";
 
   // useState
   const [id, setId] = useState("");
@@ -37,12 +37,38 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
   // Axios
   // 회원가입
   const onSubmit = async () => {
-    if (password !== passwordConfirm) {
-      Alert.alert("비밀번호가 일치하지 않습니다.");
+    // [Error] 빈 입력값
+    if (!id) {
+      Alert.alert("아이디를 입력해주세요.");
+      console.log("아이디를 입력해주세요.");
       return;
     }
+    if (!password) {
+      Alert.alert("비밀번호를 입력해주세요.");
+      console.log("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!passwordConfirm) {
+      Alert.alert("비밀번호 확인을 입력해주세요.");
+      console.log("비밀번호 확인을 입력해주세요.");
+      return;
+    }
+    if (!name) {
+      Alert.alert("이름을 입력해주세요.");
+      console.log("이름을 입력해주세요.");
+      return;
+    }
+    // [Error] 빈 입력값
+    if (password !== passwordConfirm) {
+      Alert.alert("비밀번호 확인이 일치하지 않습니다.");
+      console.log("비밀번호 확인이 일치하지 않습니다.");
+      return;
+    }
+    // [Error] 아이디 중복 확인 안함
     if (!idCheck) {
       Alert.alert("중복된 아이디가 있는지 확인해주세요.");
+      console.log("중복된 아이디가 있는지 확인해주세요.");
+      return;
     }
     const data = {
       id: id,
@@ -52,13 +78,13 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
     await axios
       .post(registUrl, data)
       .then((res) => {
-        if (idCheck && res.data) {
+        if (res.data) {
           setId("");
           setPassword("");
           setPasswordConfirm("");
           setName("");
-        } else {
-          Alert.alert("입력 정보를 확인해주세요.");
+          Alert.alert("회원가입 성공!");
+          navigation.navigate("Login");
         }
       })
       .catch((err) => {
@@ -66,33 +92,36 @@ const Register: React.FC<PropsType> = ({ navigation }) => {
         Alert.alert("에러가 발생했습니다. 잠시 후에 다시 시도해주세요.");
       });
   };
+
   // 아이디 중복 체크
   const checkId = async () => {
     if (!id) {
       Alert.alert("아이디를 입력해주세요.");
+      console.log("아이디를 입력해주세요.");
       return;
     }
     await axios
       .post(idcheckUrl, { id: id })
       .then((res) => {
-        if (res.data) {
-          Alert.alert("사용가능한 아이디입니다.");
-          setIdcheck(true);
-          setConfirmId(id);
-        } else {
+        Alert.alert("사용가능한 아이디입니다.");
+        console.log("사용가능한 아이디입니다.");
+        setIdcheck(true);
+        setConfirmId(id);
+      })
+      .catch((err) => {
+        // [Error] 존재하는 아이디
+        if (err.response.status === 400) {
           Alert.alert("이미 존재하는 아이디입니다.");
+          console.log("이미 존재하는 아이디입니다.");
           setIdcheck(false);
           setConfirmId("");
         }
-      })
-      .catch((err) => {
         console.log(err);
       });
   };
 
   // method
   const handleIdCheck = () => {
-    console.log(id);
     if (confirmId !== id) {
       setIdcheck(false);
     }

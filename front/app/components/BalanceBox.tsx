@@ -17,7 +17,7 @@ interface PropsType {
   // 잔액 set
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
 }
 
 // Component _ BalanceBox
@@ -29,7 +29,7 @@ const BalanceBox: React.FC<PropsType> = ({
 }) => {
   // const
   // Axios 내 정보 조회 url
-  const getMyInfoUrl = "http://k6S101.p.ssafy.io:8080/pay";
+  const getMyInfoUrl = "/pay";
 
   // useState
   // 리프레쉬
@@ -42,20 +42,19 @@ const BalanceBox: React.FC<PropsType> = ({
     await axios({
       method: "get",
       url: getMyInfoUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setBalance(res.data.balance);
-        setTimeout(() => setRefreshing(false), 2000);
+        setRefreshing(false);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken?.();
+        if (err.response.status === 401 && (await getNewToken?.())) {
           getMyInfo();
         } else {
-          setTimeout(() => setRefreshing(false), 2000);
+          setRefreshing(false);
         }
       });
   };

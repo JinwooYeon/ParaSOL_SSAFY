@@ -33,13 +33,13 @@ const MypageMenuBox: React.FC<PropsType> = ({
       case "계좌 관리하기":
         navigate("ConnectAccount");
         break;
-      // 공동인증 발급/재발급
-      case "공동인증 발급/재발급":
+      // OTP 정보 등록
+      case "OTP 정보 등록":
         // navigate("Oauth");
         break;
-      // 생체인증 발급/재발급
-      case "생체인증 발급/재발급":
-        // navigate("AuthBio");
+      // 생체인증 정보 등록
+      case "생체인증 정보 등록":
+        navigate("AuthBio");
         break;
       // 고객 문의
       case "고객 문의":
@@ -51,7 +51,8 @@ const MypageMenuBox: React.FC<PropsType> = ({
         break;
       // 로그아웃
       case "로그아웃":
-        AsyncStorage.clear();
+        AsyncStorage.removeItem("accessToken");
+        AsyncStorage.removeItem("refreshToken");
         setLogin(false);
         break;
       default:
@@ -62,23 +63,13 @@ const MypageMenuBox: React.FC<PropsType> = ({
   return (
     <MypageMenuBtn onPress={onPress}>
       <MypageMenuTextContainer>
-        <MypageMenuText
-          able={
-            menu === "생체인증 발급/재발급" || menu === "공동인증 발급/재발급"
-              ? false
-              : true
-          }
-        >
+        <MypageMenuText able={menu === "OTP 정보 등록" ? false : true}>
           {menu}
         </MypageMenuText>
         <MaterialCommunityIcons
           name="chevron-right"
           size={35}
-          color={
-            menu === "생체인증 발급/재발급" || menu === "공동인증 발급/재발급"
-              ? "grey"
-              : "black"
-          }
+          color={menu === "OTP 정보 등록" ? "grey" : "black"}
         />
       </MypageMenuTextContainer>
     </MypageMenuBtn>

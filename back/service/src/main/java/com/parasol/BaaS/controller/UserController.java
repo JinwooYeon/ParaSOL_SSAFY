@@ -19,6 +19,8 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/user")
@@ -46,6 +48,7 @@ public class UserController {
                 .build()
                 .toUriString();
 
+
         String redirectUri = baseUrl + "/oauth2/authorization/google";
         response.sendRedirect(redirectUri);
     }
@@ -59,6 +62,26 @@ public class UserController {
                 .build();
 
         return userService.loginOauth(request)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
+    }
+
+    @GetMapping("/login/google/redirect")
+    public Mono<ResponseEntity<LoginResponse>> loginOauthRedirect (
+            @RequestParam String state,
+            @RequestParam String code,
+            @RequestParam String scope,
+            @RequestParam String authuser,
+            @RequestParam String prompt
+    ) {
+        OAuthLoginRequest request = OAuthLoginRequest.builder()
+                .state(state)
+                .code(code)
+                .scope(scope)
+                .authuser(authuser)
+                .prompt(prompt)
+                .build();
+
+        return userService.loginOauthRedirect(request)
                 .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
@@ -79,7 +102,7 @@ public class UserController {
     }
 
     @GetMapping("/token")
-    private Mono<ResponseEntity<ReissueTokenResponse>> reissueToken (
+    public Mono<ResponseEntity<ReissueTokenResponse>> reissueToken (
             Authentication authentication
     ) {
         ReissueTokenRequest request = ReissueTokenRequest.builder()
@@ -87,7 +110,7 @@ public class UserController {
                 .build();
 
         return userService.reissueAuthToken(request)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.NO_CONTENT));
+                .map(response -> new ResponseEntity<>(response, HttpStatus.OK));
     }
 
     @GetMapping

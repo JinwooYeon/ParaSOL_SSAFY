@@ -1,6 +1,0 @@
-FROM gradle:7.4.1-jdk11
-WORKDIR /app
-COPY . .
-RUN gradle build
-EXPOSE 8080 9090
-ENTRYPOINT ["gradle","-b","/app/build.gradle","bootRun"]

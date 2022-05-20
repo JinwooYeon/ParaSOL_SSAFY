@@ -21,7 +21,11 @@ interface PropsType {
   // stack navigation
   navigation: any;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
+  // 잔액 set
+  setBalance: (a: string) => void;
 }
 
 // Component _ TransactionConfirm
@@ -30,10 +34,12 @@ const TransactionConfirm: React.FC<PropsType> = ({
   info,
   price,
   getNewToken,
+  auth,
+  setBalance,
 }) => {
   // const
   // Axios url
-  const url = "http://k6s101.p.ssafy.io:8080/pay/transaction";
+  const url = "/pay/transaction";
 
   // useState
   // 로딩
@@ -50,28 +56,30 @@ const TransactionConfirm: React.FC<PropsType> = ({
     await axios({
       method: "post",
       url: url,
-      headers: { Authroization: `Bearer ${accessToken}` },
-      data: { method: "transaction", price: delPrice, transactionTo: info },
+      headers: { Authorization: `Bearer ${accessToken}` },
+      data: {
+        method: "transaction",
+        price: delPrice,
+        transactionTo: info,
+      },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        setBalance(res.data.balance);
         Alert.alert("송금 완료!");
         setTimeout(() => {
           setLoading(false);
           navigate?.("HomeMain");
-        }, 2000);
+        }, 1500);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken();
+        if (err.response.status === 401 && (await getNewToken())) {
           transationPost();
         } else {
+          setLoading(false);
+          navigate?.("HomeMain");
           Alert.alert("송금에 실패하였습니다.");
-          setTimeout(() => {
-            setLoading(false);
-            navigate?.("HomeMain");
-          }, 2000);
         }
       });
   };
@@ -117,7 +125,17 @@ const TransactionConfirm: React.FC<PropsType> = ({
           <ConfirmBtnTouchableOpacity onPress={onPressCancel} ok={false}>
             <ConfirmBtnText>취소</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
-          <ConfirmBtnTouchableOpacity onPress={biometricsAuth} ok={true}>
+          <ConfirmBtnTouchableOpacity
+            onPress={
+              auth.bio
+                ? biometricsAuth
+                : () => {
+                    setLoading(true);
+                    transationPost();
+                  }
+            }
+            ok={true}
+          >
             <ConfirmBtnText>확인</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
         </ConfirmBtnContainer>

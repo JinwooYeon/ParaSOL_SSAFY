@@ -27,7 +27,9 @@ interface PropsType {
   // 잔액 set
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
 }
 interface PayConfirmPropsType {
   // 충전 or 출금
@@ -39,7 +41,11 @@ interface PayConfirmPropsType {
   // stack navigation
   navigation: any;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
+  // 2차 인증 정보 등록 여부
+  auth: any;
+  // 잔액 set
+  setBalance: (a: string) => void;
 }
 
 // Component _ PayConfirm
@@ -49,11 +55,13 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
   price,
   bankInfo,
   getNewToken,
+  auth,
+  setBalance,
 }) => {
   // const
   // Axios url
-  const chargeUrl = "http://k6s101.p.ssafy.io:8080/pay/charge";
-  const withdrawUrl = "http://k6s101.p.ssafy.io:8080/pay/withdraw";
+  const chargeUrl = "/pay/charge";
+  const withdrawUrl = "/pay/withdraw";
 
   // let
   // 콤마 제거
@@ -69,28 +77,24 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
     await axios({
       method: "post",
       url: chargeUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       data: { method: "charge", price: delPrice },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        setBalance(res.data.balance);
+        setLoading(false);
+        navigate?.("PayMain");
         Alert.alert("충전 완료!");
-        setTimeout(() => {
-          setLoading(false);
-          navigate?.("PayMain");
-        }, 2000);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken();
+        if (err.response.status === 401 && (await getNewToken())) {
           chargePost();
         } else {
+          setLoading(false);
+          navigate?.("PayMain");
           Alert.alert("충전에 실패하였습니다.");
-          setTimeout(() => {
-            setLoading(false);
-            navigate?.("PayMain");
-          }, 2000);
         }
       });
   };
@@ -100,28 +104,25 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
     await axios({
       method: "post",
       url: withdrawUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
       data: { method: "withdraw", price: delPrice },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        setBalance(res.data.balance);
+        setLoading(false);
+        navigate?.("PayMain");
+
         Alert.alert("출금 완료!");
-        setTimeout(() => {
-          setLoading(false);
-          navigate?.("PayMain");
-        }, 2000);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken();
+        if (err.response.status === 401 && (await getNewToken())) {
           withdrawPost();
         } else {
+          setLoading(false);
+          navigate?.("PayMain");
           Alert.alert("출금에 실패하였습니다.");
-          setTimeout(() => {
-            setLoading(false);
-            navigate?.("PayMain");
-          }, 2000);
         }
       });
   };
@@ -164,8 +165,10 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
     return (
       <ConfirmContainer>
         <ConfirmTargetContainer>
-          <ConfirmTargetText>{bankInfo.bankName}</ConfirmTargetText>
-          <ConfirmTargetText>{bankInfo.bankNum} 으로</ConfirmTargetText>
+          <ConfirmTargetText>은행명: {bankInfo.bankName}</ConfirmTargetText>
+          <ConfirmTargetText>
+            {bankInfo.bankNum} {charge ? "에서 페이로" : "으로"}
+          </ConfirmTargetText>
           <ConfirmTargetText>
             {price}원을 {charge ? "충전" : "출금"}하시겠습니까?
           </ConfirmTargetText>
@@ -174,7 +177,21 @@ const PayConfirm: React.FC<PayConfirmPropsType> = ({
           <ConfirmBtnTouchableOpacity onPress={onPressCancel} ok={false}>
             <ConfirmBtnText>취소</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
-          <ConfirmBtnTouchableOpacity onPress={biometricsAuth} ok={true}>
+          <ConfirmBtnTouchableOpacity
+            onPress={
+              auth.bio
+                ? biometricsAuth
+                : () => {
+                    setLoading(true);
+                    if (charge) {
+                      chargePost();
+                    } else {
+                      withdrawPost();
+                    }
+                  }
+            }
+            ok={true}
+          >
             <ConfirmBtnText>확인</ConfirmBtnText>
           </ConfirmBtnTouchableOpacity>
         </ConfirmBtnContainer>
@@ -190,6 +207,7 @@ const PayStack: React.FC<PropsType> = ({
   navigation,
   setBalance,
   getNewToken,
+  auth,
 }) => {
   // useState
   // 충전 or 출금
@@ -230,6 +248,8 @@ const PayStack: React.FC<PropsType> = ({
             bankInfo={bankInfo}
             price={price}
             getNewToken={getNewToken}
+            auth={auth}
+            setBalance={setBalance}
           />
         )}
       </Stack.Screen>

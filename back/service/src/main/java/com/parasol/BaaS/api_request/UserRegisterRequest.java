@@ -1,14 +1,13 @@
 package com.parasol.BaaS.api_request;
 
 import com.parasol.BaaS.api_model.UserInfo;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@ToString(callSuper = true)
 @SuperBuilder
-@AllArgsConstructor
+@NoArgsConstructor
 public class UserRegisterRequest extends UserInfo {
 }

@@ -1,5 +1,6 @@
 package com.parasol.BaaS.service;
 
+import com.parasol.BaaS.api_model.AccountFormattedHistory;
 import com.parasol.BaaS.api_model.AccountInfo;
 import com.parasol.BaaS.api_param.*;
 import com.parasol.BaaS.api_request.*;
@@ -20,7 +21,11 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
@@ -188,7 +193,19 @@ public class AccountService {
                 .map(result -> QueryAccountHistoryResponse.builder()
                         .bankName(bankName)
                         .bankAccountNumber(bankAccountNumber)
-                        .bankAccountHistories(result.getAccountHistories())
+                        .bankAccountHistories(
+                                result.getAccountHistories()
+                                        .stream()
+                                        .map(history ->
+                                            AccountFormattedHistory.builder()
+                                                    .txId(history.getId())
+                                                    .txDateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(history.getDate()), TimeZone.getTimeZone("Asia/Seoul").toZoneId()))
+                                                    .type(history.getType())
+                                                    .amount(history.getAmount())
+                                                    .build()
+                                        )
+                                        .collect(Collectors.toList())
+                        )
                         .build()
                 );
     }

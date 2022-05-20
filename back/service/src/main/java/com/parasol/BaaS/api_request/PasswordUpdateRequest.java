@@ -1,15 +1,14 @@
 package com.parasol.BaaS.api_request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.Authentication;
 
 @Getter
 @Setter
+@ToString
 @SuperBuilder
-@AllArgsConstructor
+@NoArgsConstructor
 public class PasswordUpdateRequest {
     private Authentication authentication;
     private String password;

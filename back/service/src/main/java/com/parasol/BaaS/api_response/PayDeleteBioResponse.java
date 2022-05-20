@@ -1,17 +1,14 @@
 package com.parasol.BaaS.api_response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@ToString
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 public class PayDeleteBioResponse {
     @JsonProperty(value="isSuccess")
     private boolean isSuccess;

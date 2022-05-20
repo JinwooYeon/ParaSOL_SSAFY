@@ -20,7 +20,9 @@ interface PropsType {
   // 잔액 set
   setBalance: (a: string) => void;
   // 새로운 인증 토큰 발급
-  getNewToken: () => void;
+  getNewToken: () => Promise<any>;
+  // 내 정보 조회
+  getMyInfo: () => void;
 }
 interface ItemPropsType {
   // 거래내역 정보
@@ -58,10 +60,15 @@ const Item: React.FC<ItemPropsType> = ({ item }) => (
 );
 
 // Component _ History
-const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
+const History: React.FC<PropsType> = ({
+  balance,
+  setBalance,
+  getNewToken,
+  getMyInfo,
+}) => {
   // const
   // Axios 거래 내역 조회 url
-  const getHistoryUrl = "http://k6S101.p.ssafy.io:8080/pay/history";
+  const getHistoryUrl = "/pay/history";
 
   // useState
   // 리프레쉬
@@ -129,26 +136,22 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
     await axios({
       method: "get",
       url: getHistoryUrl,
-      headers: { Authroization: `Bearer ${accessToken}` },
-      params: month,
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: { month },
     })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setTotal(res.data.total);
         setData(res.data.data);
-        setTimeout(() => {
-          setRefreshing(false);
-        }, 2000);
+        getMyInfo();
+        setRefreshing(false);
       })
-      .catch((err) => {
+      .catch(async (err) => {
         console.log(err);
-        if (err.response.status === "401") {
-          getNewToken?.();
+        if (err.response.status === 401 && (await getNewToken?.())) {
           getHistory();
         } else {
-          setTimeout(() => {
-            setRefreshing(false);
-          }, 2000);
+          setRefreshing(false);
         }
       });
   };
@@ -181,7 +184,6 @@ const History: React.FC<PropsType> = ({ balance, setBalance, getNewToken }) => {
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          marginVertical: "5%",
           alignItems: "center",
         }}
       >
@@ -249,7 +251,7 @@ const styles = StyleSheet.create({
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 24,
-    paddingVertical: 12,
+    // paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: "gray",
@@ -260,7 +262,7 @@ const pickerSelectStyles = StyleSheet.create({
   inputAndroid: {
     fontSize: 24,
     paddingHorizontal: 10,
-    paddingVertical: 8,
+    // paddingVertical: 8,
     borderWidth: 0.5,
     borderColor: "purple",
     borderRadius: 8,
@@ -270,7 +272,7 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const HistoryHeaderContainer = styled(HeaderContainer)`
-  flex: 0.2;
+  flex: 0.3;
 `;
 
 export default History;

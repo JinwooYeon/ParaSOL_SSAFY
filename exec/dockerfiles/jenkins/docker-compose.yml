@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  jenkins:
+    image: jenkins/jenkins
+    restart: always
+    container_name: jenkins
+    user: root
+    ports:
+      - 4000:8080
+    volumes:
+      - /home/ubuntu/jenkins/home:/var/jenkins_home
+      - /home/ubuntu/jenkins/keys:/var/keys
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      TZ: "Asia/Seoul"

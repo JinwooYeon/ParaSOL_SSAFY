@@ -40,7 +40,7 @@ const ConnectedAccountBox: React.FC<PropsType> = ({
 
   // useEffect
   useEffect(() => {
-    if (bankImg + bankName + bankNum !== "") setEmpty(false);
+    if (bankNum !== null) setEmpty(false);
   }, []);
 
   return (

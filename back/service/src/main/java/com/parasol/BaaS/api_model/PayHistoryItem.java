@@ -1,15 +1,16 @@
 package com.parasol.BaaS.api_model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
+@ToString
+@SuperBuilder
+@NoArgsConstructor
 public class PayHistoryItem {
     @NotNull
     private String id; // 날짜데이터

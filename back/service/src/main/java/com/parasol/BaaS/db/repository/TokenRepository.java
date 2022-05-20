@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface TokenRepository extends JpaRepository <Token, Long> {
     Optional<Token> findByUser_UserId(String id);
+    Optional<Token> findByUser_UserSeq(Long id);
 
     Long deleteByUserUserId(String id);
 }
