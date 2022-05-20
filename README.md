@@ -220,13 +220,15 @@ Design : ✏️ 기획
 
 ![오토스케일링](README.assets/오토스케일링.gif)
 
-### ERD
-
-[ERD](README.assets/Parasol ERD)
+### 🎨 스토리보드
+![app](README.assets/storyboard/App.png)
+![web](README.assets/storyboard/Web.png)
 
 ### [📂 와이어 프레임](https://www.figma.com/file/AojpGMxBn5gG9AP9ntbfTF/ParaSOL?node-id=157%3A2379)
 
-### [📝 명세서 작성](https://docs.google.com/spreadsheets/d/1EJGdwgTLKDMG2TD3CdbwNqSU4w2ebX2s2LZdYw5q3yg/edit?usp=sharing)
+### [📘 ERD](README.assets/Parasol%20ERD/README.md)
+
+### [📝 명세서](https://docs.google.com/spreadsheets/d/1EJGdwgTLKDMG2TD3CdbwNqSU4w2ebX2s2LZdYw5q3yg/edit?usp=sharing)
 
 ### 시퀀스다이어그램
 
