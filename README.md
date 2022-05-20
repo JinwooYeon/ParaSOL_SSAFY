@@ -263,43 +263,43 @@ Design : ✏️ 기획
 
 고객정보 등록
 
-![고객정보등록](README.assets/고객정보등록.JPG)
+![고객정보등록](README.assets/Parasol Sequence Diagram/고객정보등록.JPG)
 
 계좌 등록
 
-![계좌등록](README.assets/계좌등록.JPG)
+![계좌등록](README.assets/Parasol Sequence Diagram/계좌등록.JPG)
 
 계좌정보 등록
 
-![계좌정보등록](README.assets/계좌정보등록.JPG)
+![계좌정보등록](README.assets/Parasol Sequence Diagram/계좌정보등록.JPG)
 
 뱅킹정보 등록
 
-![뱅킹정보등록](README.assets/뱅킹정보등록.JPG)
+![뱅킹정보등록](README.assets/Parasol Sequence Diagram/뱅킹정보등록.JPG)
 
 은행 연결 [백엔드]
 
-![은행연결](README.assets/은행연결.JPG)
+![은행연결](README.assets/Parasol Sequence Diagram/은행연결.JPG)
 
 은행 연결 [프론트엔드]
 
-![은행연결_프론트](README.assets/은행연결_프론트.JPG)
+![은행연결_프론트](README.assets/Parasol Sequence Diagram/은행연결_프론트.JPG)
 
 입금
 
-![입금](README.assets/입금.JPG)
+![입금](README.assets/Parasol Sequence Diagram/입금.JPG)
 
 결제
 
-![결제](README.assets/결제.JPG)
+![결제](README.assets/Parasol Sequence Diagram/결제.JPG)
 
 계좌목록 조회
 
-![계좌목록조회](README.assets/계좌목록조회.JPG)
+![계좌목록조회](README.assets/Parasol Sequence Diagram/계좌목록조회.JPG)
 
 거래내역 조회
 
-![거래내역조회](README.assets/거래내역조회.JPG)
+![거래내역조회](README.assets/Parasol Sequence Diagram/거래내역조회.JPG)
 
 ### Gateway
 
