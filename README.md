@@ -292,7 +292,7 @@ Core 서버
 
 ![젠킨스-2](README.assets/Parasol Sequence Diagram/젠킨스-2.PNG)
 
-Core 서버
+Gitlab 파이프라인 연결
 
 ![젠킨스-3](README.assets/Parasol Sequence Diagram/젠킨스-3.PNG)
 
