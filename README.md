@@ -69,7 +69,7 @@
 ![Generic badge](https://img.shields.io/badge/SpringBoot-2.6.6-6DB33F.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/QueryDSL-5.0.0-0089CF.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/JPA-2.4-BAAE85.svg)&nbsp;
-![Generic badge](https://img.shields.io/badge/Lombok-213.7172.25-B23B23.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Lombok-1.18.24-B23B23.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Spring_Webflux-2.6.6-6DB33F.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Spring_Cloud_Gateway-3.1.2-6DB33F.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/GRPC-1.3.5-244B5A.svg)&nbsp;
