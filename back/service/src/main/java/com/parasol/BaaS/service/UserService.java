@@ -233,7 +233,7 @@ public class UserService {
                                         .refreshToken(newRefreshToken)
                                         .build();
                             } catch (JsonProcessingException e) {
-                                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY);
+                                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
                             }
                         }
                 );

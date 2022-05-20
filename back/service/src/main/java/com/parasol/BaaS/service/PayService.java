@@ -370,10 +370,6 @@ public class PayService {
         PayLedger payLedger = payLedgerRepository.findByOwnerUserId(id)
                 .orElseThrow(() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND); } );
 
-        if(payLedger.getBankAccountNumber() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주거래계좌 등록");
-        }
-
         List<PayHistory> payHistories = payHistoryRepository.findByUser_UserId(id).parallelStream()
                 .filter(payHistory -> payHistory.getTxDatetime().getMonthValue() == Long.parseLong(request.getMonth().trim()))
                 .collect(Collectors.toList());
