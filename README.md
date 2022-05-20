@@ -227,7 +227,7 @@ Design : ✏️ 기획
 
 ### ERD
 
-[ERD](README.assets\Parasol ERD)
+[ERD](README.assets/Parasol ERD)
 
 ### [📂 와이어 프레임](https://www.figma.com/file/AojpGMxBn5gG9AP9ntbfTF/ParaSOL?node-id=157%3A2379)
 
