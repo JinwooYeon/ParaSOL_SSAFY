@@ -72,8 +72,7 @@
 ![Generic badge](https://img.shields.io/badge/Docker-20.10.16-2496ED.svg)&nbsp;
 
 
-#### Frontend <br>
-
+#### Frontend 
 **[Web]**<br>
 ![Generic badge](https://img.shields.io/badge/React-18.0.1-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/TypeScript-4.6.3-3178C6.svg)&nbsp;
