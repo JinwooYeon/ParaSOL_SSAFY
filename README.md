@@ -91,7 +91,7 @@
 ![Generic badge](https://img.shields.io/badge/React-18.0.1-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/TypeScript-4.6.3-3178C6.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Styled_Components-5.3.5-DB7093.svg)&nbsp;
-![Generic badge](https://img.shields.io/badge/Axois-0.26.1-5A29E4.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Axios-0.26.1-5A29E4.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/React_Copy_To_Clipboard-5.1.0-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/React_Dom-17.0.2-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/React_Scripts-17.0.2-61DAFB.svg)&nbsp;
@@ -115,7 +115,7 @@
 ![Generic badge](https://img.shields.io/badge/React-17.0.1-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/TypeScript-4.6.4-3178C6.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Styled_Components-5.3.5-DB7093.svg)&nbsp;
-![Generic badge](https://img.shields.io/badge/Axois-0.27.2-5A29E4.svg)&nbsp;
+![Generic badge](https://img.shields.io/badge/Axios-0.27.2-5A29E4.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/@React_Native_Async_Storage/Async_Storage-1.15.0-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/@React_Navigation/Bottom_Tabs-6.3.1-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/@React_Navigation/Native-6.0.10-61DAFB.svg)&nbsp;
