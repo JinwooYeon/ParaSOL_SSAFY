@@ -39,7 +39,7 @@
 
 ### 🌏 환경 버전
 
-- 형상관리 <br>
+#### 형상관리 <br>
 <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira software&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/gitlab-yellow?style=for-the-badge&logo=gitlab&logoColor=FC6D26">&nbsp;
 <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white">&nbsp;
@@ -48,22 +48,11 @@
 <img src="https://img.shields.io/badge/google sheets-34A853?style=for-the-badge&logo=google sheets&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/code_with_me-000000?style=for-the-badge&logo=IntelliJ idea&logoColor=white">&nbsp;
 
-  - Jira
-  - GitLab
-  - Mattermost
-  - Webex
-  - Notion
-  - Google Docs
-  - Code With Me
-
-- 개발 환경
-  - Windows 11 10.0
-  - VSCode [버전]
-  - Linter는 Prettier 사용 (기본값)
+<br>
 
 ### ⛏ 기술 스택
 
-- Backend
+#### Backend
 
 ![Generic badge](https://img.shields.io/badge/Java-11.0.2-007396.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/SpringBoot-2.6.6-6DB33F.svg)&nbsp;
@@ -82,13 +71,10 @@
 ![Generic badge](https://img.shields.io/badge/Gradle-7.4.1-02303A.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Docker-20.10.16-2496ED.svg)&nbsp;
 
-  - Java 1.8.0_192
-  - Python 3.9.7
-  - Intellij JetBrains Client 2021.3 Build
 
-- Frontend <br>
+#### Frontend <br>
 
-[Web]<br>
+**[Web]**<br>
 ![Generic badge](https://img.shields.io/badge/React-18.0.1-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/TypeScript-4.6.3-3178C6.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Styled_Components-5.3.5-DB7093.svg)&nbsp;
@@ -108,9 +94,9 @@
 ![Generic badge](https://img.shields.io/badge/@Types/Node-16.11.27-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/@Types/React-18.0.5-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/@Types/React_Dom-18.0.1-61DAFB.svg)&nbsp;
-<br>
 
-[App]<br>
+
+**[App]**<br>
 ![Generic badge](https://img.shields.io/badge/React_Native-0.64.3-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/Expo-44.0.2-000020.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/React-17.0.1-61DAFB.svg)&nbsp;
@@ -143,14 +129,6 @@
 ![Generic badge](https://img.shields.io/badge/@Types/React_Native-0.67.6-61DAFB.svg)&nbsp;
 ![Generic badge](https://img.shields.io/badge/@Types/React_Test_Renderer-18.0.0-61DAFB.svg)&nbsp;
 
-  - React JS
-  - TypeScript
-  - HTML5, CSS
-  - Node.js 16.13.0
-  - React Native
-  - Expo
-
-- DevOps
 
 <br>
 
