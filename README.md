@@ -292,6 +292,10 @@ Core 서버
 
 ![젠킨스-2](README.assets/Parasol Sequence Diagram/젠킨스-2.PNG)
 
+Core 서버
+
+![젠킨스-3](README.assets/Parasol Sequence Diagram/젠킨스-3.PNG)
+
 ### Kubernetes
 
 쿠버네티스 콘솔
