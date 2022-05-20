@@ -246,29 +246,33 @@ Design : ✏️ 기획
 
 ![뱅킹정보등록](README.assets/Parasol Sequence Diagram/뱅킹정보등록.JPG)
 
-은행 연결 [백엔드]
+은행 연결
 
-![은행연결](README.assets/Parasol Sequence Diagram/은행연결.JPG)
+![은행연결](README.assets/Parasol Sequence Diagram/은행연결.PNG)
 
-은행 연결 [프론트엔드]
+서비스 인증
 
-![은행연결_프론트](README.assets/Parasol Sequence Diagram/은행연결_프론트.JPG)
-
-입금
-
-![입금](README.assets/Parasol Sequence Diagram/입금.JPG)
-
-결제
-
-![결제](README.assets/Parasol Sequence Diagram/결제.JPG)
+![서비스인증](README.assets/Parasol Sequence Diagram/서비스인증.PNG)
 
 계좌목록 조회
 
-![계좌목록조회](README.assets/Parasol Sequence Diagram/계좌목록조회.JPG)
+![계좌목록조회](README.assets/Parasol Sequence Diagram/계좌목록조회.PNG)
+
+계좌잔액 조회
+
+![계좌잔액조회](README.assets/Parasol Sequence Diagram/계좌잔액조회.PNG)
 
 거래내역 조회
 
-![거래내역조회](README.assets/Parasol Sequence Diagram/거래내역조회.JPG)
+![거래내역조회](README.assets/Parasol Sequence Diagram/거래내역조회.PNG)
+
+페이충전
+
+![페이충전](README.assets/Parasol Sequence Diagram/페이충전.PNG)
+
+페이출금
+
+![페이출금](README.assets/Parasol Sequence Diagram/페이출금.PNG)
 
 ### Gateway
 
