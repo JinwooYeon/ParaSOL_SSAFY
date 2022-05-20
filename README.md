@@ -81,6 +81,7 @@ BaaS 플랫폼 구축을 위한 API 서버 설계/구축
   - Webex
   - Notion
   - Google Docs
+  - Code With Me
 
 - 개발 환경
   - Windows 11 10.0
@@ -93,11 +94,7 @@ BaaS 플랫폼 구축을 위한 API 서버 설계/구축
 
   - Java 1.8.0_192
   - Python 3.9.7
-  - Intellij
-
-  JetBrains Client 2021.3 Build #JBC-213.7172.25, built on March 16, 2022 Runtime version: 11.0.14.1+1-b1751.46 amd64 VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o. Code With Me상의 게스트 GC: G1 Young Generation, G1 Old Generation Memory: 1500M Cores: 6 Registry: rdclient.backend.actionHandlers=false
-
-  Non-Bundled Plugins: com.intellij.ko (213.341)
+  - Intellij JetBrains Client 2021.3 Build
 
 - Frontend <br>
 
