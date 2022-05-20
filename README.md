@@ -43,9 +43,10 @@
 <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira software&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/gitlab-yellow?style=for-the-badge&logo=gitlab&logoColor=FC6D26">&nbsp;
 <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/webex-316AFF?style=for-the-badge&logo=cisco&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">&nbsp;
 <img src="https://img.shields.io/badge/google sheets-34A853?style=for-the-badge&logo=google sheets&logoColor=white">&nbsp;
-<img src="https://img.shields.io/badge/webex-316AFF?style=for-the-badge&logo=webex&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/code_with_me-000000?style=for-the-badge&logo=IntelliJ idea&logoColor=white">&nbsp;
 
   - Jira
   - GitLab
