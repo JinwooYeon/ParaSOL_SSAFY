@@ -280,6 +280,22 @@ Design : ✏️ 기획
 
 <br>
 
+### Jenkins
+
+REST API 서버 Jenkins Pipeline
+
+![젠킨스-1](README.assets/Parasol Sequence Diagram/젠킨스-1.PNG)
+
+Core 서버
+
+![젠킨스-2](README.assets/Parasol Sequence Diagram/젠킨스-2.PNG)
+
+### Kubernetes
+
+쿠버네티스 콘솔
+
+![쿠버네티스](README.assets/Parasol Sequence Diagram/쿠버네티스.PNG)
+
 ## 구현 기능
 
 - 각종 뱅킹서비스를 제공할 수 있는 거래 별 API 구현
