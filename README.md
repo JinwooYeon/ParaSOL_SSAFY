@@ -23,6 +23,12 @@
 
 <br>
 
+## 프로젝트 소개 UCC
+
+[<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/512px-YouTube_Logo_2017.svg.png">](https://youtu.be/Lts_HfPpUf0)
+
+<br>
+
 ## 프로젝트 목표
 
 - 뱅킹서비스 제공에 필요한 기능별로 API 목록화하여 정의하고 해당 목록별 API 서버 서비스를 구현
